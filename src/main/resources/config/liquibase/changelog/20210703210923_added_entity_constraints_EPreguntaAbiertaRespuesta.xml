@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <!--
+        Added the constraints for entity EPreguntaAbiertaRespuesta.
+    -->
+    <changeSet id="20210703210923-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="e_pregunta_abierta_id"
+                                 baseTableName="e_pregunta_abierta_respuesta"
+                                 constraintName="fk_e_pregunta_abierta_respuesta__e_pregunta_abierta_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="e_pregunta_abierta"/>
+    </changeSet>
+</databaseChangeLog>

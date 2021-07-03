@@ -1,0 +1,133 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-usuario-encuesta-heading"
+        data-cy="UsuarioEncuestaCreateUpdateHeading"
+        jhiTranslate="dataSurveyApp.usuarioEncuesta.home.createOrEditLabel"
+      >
+        Create or edit a Usuario Encuesta
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioEncuesta.rol" for="field_rol">Rol</label>
+          <select class="form-control" name="rol" formControlName="rol" id="field_rol" data-cy="rol">
+            <option [ngValue]="null">{{ 'dataSurveyApp.RolColaborador.null' | translate }}</option>
+            <option value="READ">{{ 'dataSurveyApp.RolColaborador.READ' | translate }}</option>
+            <option value="WRITE">{{ 'dataSurveyApp.RolColaborador.WRITE' | translate }}</option>
+          </select>
+          <div *ngIf="editForm.get('rol')!.invalid && (editForm.get('rol')!.dirty || editForm.get('rol')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('rol')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioEncuesta.estado" for="field_estado">Estado</label>
+          <select class="form-control" name="estado" formControlName="estado" id="field_estado" data-cy="estado">
+            <option [ngValue]="null">{{ 'dataSurveyApp.EstadoColaborador.null' | translate }}</option>
+            <option value="PENDING">{{ 'dataSurveyApp.EstadoColaborador.PENDING' | translate }}</option>
+            <option value="ACTIVE">{{ 'dataSurveyApp.EstadoColaborador.ACTIVE' | translate }}</option>
+          </select>
+          <div *ngIf="editForm.get('estado')!.invalid && (editForm.get('estado')!.dirty || editForm.get('estado')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('estado')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioEncuesta.fechaAgregado" for="field_fechaAgregado"
+            >Fecha Agregado</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_fechaAgregado"
+              data-cy="fechaAgregado"
+              type="datetime-local"
+              class="form-control"
+              name="fechaAgregado"
+              formControlName="fechaAgregado"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          <div
+            *ngIf="
+              editForm.get('fechaAgregado')!.invalid && (editForm.get('fechaAgregado')!.dirty || editForm.get('fechaAgregado')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('fechaAgregado')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('fechaAgregado')?.errors?.ZonedDateTimelocal"
+              jhiTranslate="entity.validation.ZonedDateTimelocal"
+            >
+              This field should be a date and time.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioEncuesta.usuarioExtra" for="field_usuarioExtra"
+            >Usuario Extra</label
+          >
+          <select class="form-control" id="field_usuarioExtra" data-cy="usuarioExtra" name="usuarioExtra" formControlName="usuarioExtra">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                usuarioExtraOption.id === editForm.get('usuarioExtra')!.value?.id ? editForm.get('usuarioExtra')!.value : usuarioExtraOption
+              "
+              *ngFor="let usuarioExtraOption of usuarioExtrasSharedCollection; trackBy: trackUsuarioExtraById"
+            >
+              {{ usuarioExtraOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioEncuesta.encuesta" for="field_encuesta">Encuesta</label>
+          <select class="form-control" id="field_encuesta" data-cy="encuesta" name="encuesta" formControlName="encuesta">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="encuestaOption.id === editForm.get('encuesta')!.value?.id ? editForm.get('encuesta')!.value : encuestaOption"
+              *ngFor="let encuestaOption of encuestasSharedCollection; trackBy: trackEncuestaById"
+            >
+              {{ encuestaOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

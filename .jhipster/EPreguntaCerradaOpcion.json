@@ -1,0 +1,40 @@
+{
+  "name": "EPreguntaCerradaOpcion",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength", "minlength"],
+      "fieldValidateRulesMaxlength": "500",
+      "fieldValidateRulesMinlength": "1"
+    },
+    {
+      "fieldName": "orden",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "cantidad",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "ePreguntaCerrada",
+      "otherEntityRelationshipName": "ePreguntaCerradaOpcion",
+      "relationshipName": "ePreguntaCerrada"
+    }
+  ],
+  "entityTableName": "e_pregunta_cerrada_opcion",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210703210925"
+}

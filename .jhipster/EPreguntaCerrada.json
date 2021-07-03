@@ -1,0 +1,52 @@
+{
+  "name": "EPreguntaCerrada",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength", "minlength"],
+      "fieldValidateRulesMaxlength": "500",
+      "fieldValidateRulesMinlength": "1"
+    },
+    {
+      "fieldName": "tipo",
+      "fieldType": "PreguntaCerradaTipo",
+      "fieldValues": "SINGLE,MULTIPLE",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "opcional",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "orden",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "ePreguntaCerradaOpcion",
+      "otherEntityRelationshipName": "ePreguntaCerrada",
+      "relationshipName": "ePreguntaCerradaOpcion"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "encuesta",
+      "otherEntityRelationshipName": "ePreguntaCerrada",
+      "relationshipName": "encuesta"
+    }
+  ],
+  "entityTableName": "e_pregunta_cerrada",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210703210924"
+}

@@ -1,0 +1,52 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="pPreguntaCerrada">
+      <h2 data-cy="pPreguntaCerradaDetailsHeading">
+        <span jhiTranslate="dataSurveyApp.pPreguntaCerrada.detail.title">P Pregunta Cerrada</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ pPreguntaCerrada.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.pPreguntaCerrada.nombre">Nombre</span></dt>
+        <dd>
+          <span>{{ pPreguntaCerrada.nombre }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.pPreguntaCerrada.tipo">Tipo</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'dataSurveyApp.PreguntaCerradaTipo.' + pPreguntaCerrada.tipo }}">{{ pPreguntaCerrada.tipo }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.pPreguntaCerrada.opcional">Opcional</span></dt>
+        <dd>
+          <span>{{ pPreguntaCerrada.opcional }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.pPreguntaCerrada.orden">Orden</span></dt>
+        <dd>
+          <span>{{ pPreguntaCerrada.orden }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.pPreguntaCerrada.plantilla">Plantilla</span></dt>
+        <dd>
+          <div *ngIf="pPreguntaCerrada.plantilla">
+            <a [routerLink]="['/plantilla', pPreguntaCerrada.plantilla?.id, 'view']">{{ pPreguntaCerrada.plantilla?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/p-pregunta-cerrada', pPreguntaCerrada.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

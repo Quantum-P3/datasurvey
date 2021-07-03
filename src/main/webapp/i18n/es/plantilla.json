@@ -1,0 +1,33 @@
+{
+  "dataSurveyApp": {
+    "plantilla": {
+      "home": {
+        "title": "Plantillas",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Plantilla",
+        "createOrEditLabel": "Crear o editar Plantilla",
+        "notFound": "Ningún Plantillas encontrado"
+      },
+      "created": "Un nuevo Plantilla ha sido creado con el identificador {{ param }}",
+      "updated": "Un Plantilla ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Plantilla ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Plantilla {{ id }}?"
+      },
+      "detail": {
+        "title": "Plantilla"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "descripcion": "Descripcion",
+      "fechaCreacion": "Fecha Creacion",
+      "fechaPublicacionTienda": "Fecha Publicacion Tienda",
+      "estado": "Estado",
+      "precio": "Precio",
+      "pPreguntaCerrada": "P Pregunta Cerrada",
+      "pPreguntaAbierta": "P Pregunta Abierta",
+      "categoria": "Categoria",
+      "usuarioExtra": "Usuario Extra"
+    }
+  }
+}

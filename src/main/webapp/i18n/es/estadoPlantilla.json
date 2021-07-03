@@ -1,0 +1,11 @@
+{
+  "dataSurveyApp": {
+    "EstadoPlantilla": {
+      "null": "",
+      "DRAFT": "DRAFT",
+      "ACTIVE": "ACTIVE",
+      "DELETED": "DELETED",
+      "DISABLED": "DISABLED"
+    }
+  }
+}

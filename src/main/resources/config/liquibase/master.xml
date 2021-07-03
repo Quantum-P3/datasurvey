@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <property name="now" value="now()" dbms="h2"/>
+    <property name="now" value="now()" dbms="mysql, mariadb"/>
+    <property name="floatType" value="float4" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle, mssql, mariadb"/>
+    <property name="clobType" value="clob" dbms="h2"/>
+    <property name="clobType" value="clob" dbms="mysql, oracle, mssql, mariadb, postgresql"/>
+    <property name="uuidType" value="varchar(36)" dbms="h2, mysql, mariadb"/>
+    <property name="datetimeType" value="datetime(6)" dbms="mysql, mariadb"/>
+    <property name="datetimeType" value="datetime" dbms="oracle, mssql, postgresql, h2"/>
+
+    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210919_added_entity_ParametroAplicacion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210920_added_entity_UsuarioExtra.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210921_added_entity_Encuesta.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210922_added_entity_EPreguntaAbierta.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210923_added_entity_EPreguntaAbiertaRespuesta.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210924_added_entity_EPreguntaCerrada.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210925_added_entity_EPreguntaCerradaOpcion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210926_added_entity_UsuarioEncuesta.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210927_added_entity_Categoria.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210928_added_entity_Factura.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210929_added_entity_Plantilla.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210930_added_entity_PPreguntaAbierta.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210931_added_entity_PPreguntaCerrada.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210932_added_entity_PPreguntaCerradaOpcion.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20210703210920_added_entity_constraints_UsuarioExtra.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210921_added_entity_constraints_Encuesta.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210922_added_entity_constraints_EPreguntaAbierta.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210923_added_entity_constraints_EPreguntaAbiertaRespuesta.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210924_added_entity_constraints_EPreguntaCerrada.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210925_added_entity_constraints_EPreguntaCerradaOpcion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210926_added_entity_constraints_UsuarioEncuesta.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210929_added_entity_constraints_Plantilla.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210930_added_entity_constraints_PPreguntaAbierta.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210931_added_entity_constraints_PPreguntaCerrada.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210703210932_added_entity_constraints_PPreguntaCerradaOpcion.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
+</databaseChangeLog>

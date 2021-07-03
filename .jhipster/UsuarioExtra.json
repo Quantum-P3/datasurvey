@@ -1,0 +1,62 @@
+{
+  "name": "UsuarioExtra",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "iconoPerfil",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fechaNacimiento",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "estado",
+      "fieldType": "EstadoUsuario",
+      "fieldValues": "ACTIVE,SUSPENDED",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "usuarioExtra",
+      "relationshipName": "user",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "encuesta",
+      "otherEntityRelationshipName": "usuarioExtra",
+      "relationshipName": "encuesta"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "usuarioEncuesta",
+      "otherEntityRelationshipName": "usuarioExtra",
+      "relationshipName": "usuarioEncuesta"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "plantilla",
+      "otherEntityRelationshipName": "usuarioExtra",
+      "relationshipName": "plantilla",
+      "ownerSide": true
+    }
+  ],
+  "entityTableName": "usuario_extra",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210703210920"
+}

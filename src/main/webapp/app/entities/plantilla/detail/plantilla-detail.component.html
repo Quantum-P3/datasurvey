@@ -1,0 +1,58 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="plantilla">
+      <h2 data-cy="plantillaDetailsHeading"><span jhiTranslate="dataSurveyApp.plantilla.detail.title">Plantilla</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ plantilla.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.plantilla.nombre">Nombre</span></dt>
+        <dd>
+          <span>{{ plantilla.nombre }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.plantilla.descripcion">Descripcion</span></dt>
+        <dd>
+          <span>{{ plantilla.descripcion }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.plantilla.fechaCreacion">Fecha Creacion</span></dt>
+        <dd>
+          <span>{{ plantilla.fechaCreacion | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.plantilla.fechaPublicacionTienda">Fecha Publicacion Tienda</span></dt>
+        <dd>
+          <span>{{ plantilla.fechaPublicacionTienda | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.plantilla.estado">Estado</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'dataSurveyApp.EstadoPlantilla.' + plantilla.estado }}">{{ plantilla.estado }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.plantilla.precio">Precio</span></dt>
+        <dd>
+          <span>{{ plantilla.precio }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.plantilla.categoria">Categoria</span></dt>
+        <dd>
+          <div *ngIf="plantilla.categoria">
+            <a [routerLink]="['/categoria', plantilla.categoria?.id, 'view']">{{ plantilla.categoria?.nombre }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/plantilla', plantilla.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

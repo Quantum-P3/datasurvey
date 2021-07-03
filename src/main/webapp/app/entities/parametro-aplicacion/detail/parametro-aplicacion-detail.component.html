@@ -1,0 +1,46 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="parametroAplicacion">
+      <h2 data-cy="parametroAplicacionDetailsHeading">
+        <span jhiTranslate="dataSurveyApp.parametroAplicacion.detail.title">Parametro Aplicacion</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ parametroAplicacion.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.parametroAplicacion.maxDiasEncuesta">Max Dias Encuesta</span></dt>
+        <dd>
+          <span>{{ parametroAplicacion.maxDiasEncuesta }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.parametroAplicacion.minDiasEncuesta">Min Dias Encuesta</span></dt>
+        <dd>
+          <span>{{ parametroAplicacion.minDiasEncuesta }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.parametroAplicacion.maxCantidadPreguntas">Max Cantidad Preguntas</span></dt>
+        <dd>
+          <span>{{ parametroAplicacion.maxCantidadPreguntas }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.parametroAplicacion.minCantidadPreguntas">Min Cantidad Preguntas</span></dt>
+        <dd>
+          <span>{{ parametroAplicacion.minCantidadPreguntas }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/parametro-aplicacion', parametroAplicacion.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

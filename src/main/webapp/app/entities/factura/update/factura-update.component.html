@@ -1,0 +1,129 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-factura-heading" data-cy="FacturaCreateUpdateHeading" jhiTranslate="dataSurveyApp.factura.home.createOrEditLabel">
+        Create or edit a Factura
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="dataSurveyApp.factura.nombreUsuario" for="field_nombreUsuario"
+            >Nombre Usuario</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="nombreUsuario"
+            id="field_nombreUsuario"
+            data-cy="nombreUsuario"
+            formControlName="nombreUsuario"
+          />
+          <div
+            *ngIf="
+              editForm.get('nombreUsuario')!.invalid && (editForm.get('nombreUsuario')!.dirty || editForm.get('nombreUsuario')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('nombreUsuario')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="dataSurveyApp.factura.nombrePlantilla" for="field_nombrePlantilla"
+            >Nombre Plantilla</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="nombrePlantilla"
+            id="field_nombrePlantilla"
+            data-cy="nombrePlantilla"
+            formControlName="nombrePlantilla"
+          />
+          <div
+            *ngIf="
+              editForm.get('nombrePlantilla')!.invalid &&
+              (editForm.get('nombrePlantilla')!.dirty || editForm.get('nombrePlantilla')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('nombrePlantilla')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="dataSurveyApp.factura.costo" for="field_costo">Costo</label>
+          <input type="number" class="form-control" name="costo" id="field_costo" data-cy="costo" formControlName="costo" />
+          <div *ngIf="editForm.get('costo')!.invalid && (editForm.get('costo')!.dirty || editForm.get('costo')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('costo')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('costo')?.errors?.number" jhiTranslate="entity.validation.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="dataSurveyApp.factura.fecha" for="field_fecha">Fecha</label>
+          <div class="d-flex">
+            <input
+              id="field_fecha"
+              data-cy="fecha"
+              type="datetime-local"
+              class="form-control"
+              name="fecha"
+              formControlName="fecha"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          <div *ngIf="editForm.get('fecha')!.invalid && (editForm.get('fecha')!.dirty || editForm.get('fecha')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('fecha')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('fecha')?.errors?.ZonedDateTimelocal"
+              jhiTranslate="entity.validation.ZonedDateTimelocal"
+            >
+              This field should be a date and time.
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

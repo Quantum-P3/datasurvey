@@ -1,0 +1,196 @@
+
+
+DEFAULT_MIN_LENGTH = 1
+DEFAULT_MAX_LENGTH = 999
+
+ENCUESTA_MAX_NOMBRE = 50
+ENCUESTA_MIN_NOMBRE = 1
+PREGUNTA_MAX_NOMBRE = 500
+PREGUNTA_MIN_NOMBRE = 1
+
+// ENUMS
+enum EstadoUsuario {
+	ACTIVE, SUSPENDED
+}
+
+enum PreguntaCerradaTipo {
+	SINGLE, MULTIPLE
+}
+
+enum EstadoEncuesta {
+	DRAFT, ACTIVE, FINISHED, DELETED
+}
+
+enum EstadoPlantilla {
+	DRAFT, ACTIVE, DELETED, DISABLED
+}
+
+enum RolColaborador {
+	READ, WRITE
+}
+
+enum EstadoColaborador {
+	PENDING, ACTIVE
+}
+
+enum EstadoCategoria {
+	ACTIVE, INACTIVE
+}
+
+enum AccesoEncuesta {
+	PUBLIC, PRIVATE
+}
+
+// ENTITIES
+entity ParametroAplicacion {
+	maxDiasEncuesta Integer required,
+    minDiasEncuesta Integer required,
+    maxCantidadPreguntas Integer required,
+    minCantidadPreguntas Integer required
+}
+
+entity UsuarioExtra {
+	nombre String required,
+    iconoPerfil String,
+    fechaNacimiento ZonedDateTime,
+    estado EstadoUsuario required,
+    // JHI_USER
+}
+
+// ENCUESTA
+entity Encuesta {
+	nombre String required maxlength(ENCUESTA_MAX_NOMBRE) minlength(ENCUESTA_MIN_NOMBRE),
+    descripcion String,
+    fechaCreacion ZonedDateTime required,
+    fechaPublicacion ZonedDateTime,
+    fechaFinalizar ZonedDateTime,
+    fechaFinalizada ZonedDateTime,
+    calificacion Double required,
+    acceso AccesoEncuesta required,
+    contrasenna String,
+    estado EstadoEncuesta required
+    // ID_CATEGORIA
+}
+
+entity EPreguntaAbierta {
+	nombre String required maxlength(PREGUNTA_MAX_NOMBRE) minlength(PREGUNTA_MIN_NOMBRE),
+    opcional Boolean required,
+    orden Integer required
+    // ID_ENCUESTA
+}
+
+entity EPreguntaAbiertaRespuesta {
+	respuesta String required
+    // ID_ENCUESTA_PREGUNTA_ABIERTA
+}
+
+entity EPreguntaCerrada {
+	nombre String required maxlength(PREGUNTA_MAX_NOMBRE) minlength(PREGUNTA_MIN_NOMBRE),
+    tipo PreguntaCerradaTipo required
+    opcional Boolean required,
+    orden Integer required
+    // ID_ENCUESTA
+}
+
+entity EPreguntaCerradaOpcion {
+	nombre String required maxlength(PREGUNTA_MAX_NOMBRE) minlength(PREGUNTA_MIN_NOMBRE),
+    orden Integer required,
+    cantidad Integer required
+    // ID_ENCUESTA_PREGUNTA_CERRADA
+}
+
+entity UsuarioEncuesta {
+	rol RolColaborador required,
+    estado EstadoColaborador required,
+    fechaAgregado ZonedDateTime required
+}
+// -----------------------------------------
+
+entity Categoria {
+	nombre String required
+    estado EstadoCategoria required
+}
+
+entity Factura {
+	nombreUsuario String required,
+	nombrePlantilla String required,
+    costo Double required,
+    fecha ZonedDateTime required,
+    // ID_USUARIO_EXTRA
+}
+
+// PLANTILLAS
+entity Plantilla {
+	nombre String maxlength(ENCUESTA_MAX_NOMBRE) minlength(ENCUESTA_MIN_NOMBRE),
+    descripcion String,
+    fechaCreacion ZonedDateTime required,
+    fechaPublicacionTienda ZonedDateTime,
+    estado EstadoPlantilla required,
+    precio Double required
+    // ID_CATEGORIA
+}
+
+entity PPreguntaAbierta {
+	nombre String required maxlength(PREGUNTA_MAX_NOMBRE) minlength(PREGUNTA_MIN_NOMBRE),
+    opcional Boolean required,
+    orden Integer required
+    // ID_PLANTILLA
+}
+
+entity PPreguntaCerrada {
+	nombre String required maxlength(PREGUNTA_MAX_NOMBRE) minlength(PREGUNTA_MIN_NOMBRE),
+    tipo PreguntaCerradaTipo required,
+    opcional Boolean required,
+    orden Integer required
+    // ID_PLANTILLA
+}
+
+entity PPreguntaCerradaOpcion {
+	nombre String required maxlength(PREGUNTA_MAX_NOMBRE) minlength(PREGUNTA_MIN_NOMBRE),
+    orden Integer required
+    // ID_PLANTILLA_PREGUNTA_CERRADA
+}
+// -----------------------------------------
+
+// Filters
+filter ParametroAplicacion, UsuarioExtra, Encuesta, EPreguntaAbierta, EPreguntaAbiertaRespuesta
+filter EPreguntaCerrada, EPreguntaCerradaOpcion, UsuarioEncuesta, Categoria, Factura
+filter Plantilla, PPreguntaAbierta, PPreguntaCerrada, PPreguntaCerradaOpcion
+
+// Relationship between UsuarioExtra and default User table to extend fields
+relationship OneToOne {
+	UsuarioExtra to User
+}
+
+// UsuarioExtra
+relationship OneToMany {
+	Categoria to Encuesta{categoria(nombre)}
+    Categoria to Plantilla{categoria(nombre)}
+
+    // Encuesta
+    UsuarioExtra to Encuesta
+    UsuarioExtra to UsuarioEncuesta
+    Encuesta to UsuarioEncuesta
+    
+    Encuesta to EPreguntaAbierta
+    Encuesta to EPreguntaCerrada
+    
+    EPreguntaAbierta to EPreguntaAbiertaRespuesta
+    EPreguntaCerrada to EPreguntaCerradaOpcion
+    
+    // Plantilla
+    Plantilla to PPreguntaCerrada
+    Plantilla to PPreguntaAbierta
+    
+    PPreguntaCerrada to PPreguntaCerradaOpcion
+}
+
+relationship ManyToMany {
+	UsuarioExtra to Plantilla
+}
+// -----------------------------------------
+
+
+
+
+

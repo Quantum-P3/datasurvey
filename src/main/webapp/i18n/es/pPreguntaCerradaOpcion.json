@@ -1,0 +1,26 @@
+{
+  "dataSurveyApp": {
+    "pPreguntaCerradaOpcion": {
+      "home": {
+        "title": "P Pregunta Cerrada Opcions",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo P Pregunta Cerrada Opcion",
+        "createOrEditLabel": "Crear o editar P Pregunta Cerrada Opcion",
+        "notFound": "Ningún P Pregunta Cerrada Opcions encontrado"
+      },
+      "created": "Un nuevo P Pregunta Cerrada Opcion ha sido creado con el identificador {{ param }}",
+      "updated": "Un P Pregunta Cerrada Opcion ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un P Pregunta Cerrada Opcion ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar P Pregunta Cerrada Opcion {{ id }}?"
+      },
+      "detail": {
+        "title": "P Pregunta Cerrada Opcion"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "orden": "Orden",
+      "pPreguntaCerrada": "P Pregunta Cerrada"
+    }
+  }
+}

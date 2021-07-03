@@ -1,0 +1,46 @@
+{
+  "name": "EPreguntaAbierta",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength", "minlength"],
+      "fieldValidateRulesMaxlength": "500",
+      "fieldValidateRulesMinlength": "1"
+    },
+    {
+      "fieldName": "opcional",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "orden",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "ePreguntaAbiertaRespuesta",
+      "otherEntityRelationshipName": "ePreguntaAbierta",
+      "relationshipName": "ePreguntaAbiertaRespuesta"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "encuesta",
+      "otherEntityRelationshipName": "ePreguntaAbierta",
+      "relationshipName": "encuesta"
+    }
+  ],
+  "entityTableName": "e_pregunta_abierta",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210703210922"
+}

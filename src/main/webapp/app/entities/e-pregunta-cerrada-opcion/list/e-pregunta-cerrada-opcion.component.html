@@ -1,0 +1,90 @@
+<div>
+  <h2 id="page-heading" data-cy="EPreguntaCerradaOpcionHeading">
+    <span jhiTranslate="dataSurveyApp.ePreguntaCerradaOpcion.home.title">E Pregunta Cerrada Opcions</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="dataSurveyApp.ePreguntaCerradaOpcion.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-e-pregunta-cerrada-opcion"
+        [routerLink]="['/e-pregunta-cerrada-opcion/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="dataSurveyApp.ePreguntaCerradaOpcion.home.createLabel"> Create a new E Pregunta Cerrada Opcion </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="ePreguntaCerradaOpcions?.length === 0">
+    <span jhiTranslate="dataSurveyApp.ePreguntaCerradaOpcion.home.notFound">No ePreguntaCerradaOpcions found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="ePreguntaCerradaOpcions && ePreguntaCerradaOpcions.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.ePreguntaCerradaOpcion.nombre">Nombre</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.ePreguntaCerradaOpcion.orden">Orden</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.ePreguntaCerradaOpcion.cantidad">Cantidad</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.ePreguntaCerradaOpcion.ePreguntaCerrada">E Pregunta Cerrada</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ePreguntaCerradaOpcion of ePreguntaCerradaOpcions; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/e-pregunta-cerrada-opcion', ePreguntaCerradaOpcion.id, 'view']">{{ ePreguntaCerradaOpcion.id }}</a>
+          </td>
+          <td>{{ ePreguntaCerradaOpcion.nombre }}</td>
+          <td>{{ ePreguntaCerradaOpcion.orden }}</td>
+          <td>{{ ePreguntaCerradaOpcion.cantidad }}</td>
+          <td>
+            <div *ngIf="ePreguntaCerradaOpcion.ePreguntaCerrada">
+              <a [routerLink]="['/e-pregunta-cerrada', ePreguntaCerradaOpcion.ePreguntaCerrada?.id, 'view']">{{
+                ePreguntaCerradaOpcion.ePreguntaCerrada?.id
+              }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/e-pregunta-cerrada-opcion', ePreguntaCerradaOpcion.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/e-pregunta-cerrada-opcion', ePreguntaCerradaOpcion.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(ePreguntaCerradaOpcion)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

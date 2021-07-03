@@ -1,0 +1,97 @@
+{
+  "name": "Encuesta",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength", "minlength"],
+      "fieldValidateRulesMaxlength": "50",
+      "fieldValidateRulesMinlength": "1"
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fechaCreacion",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fechaPublicacion",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "fechaFinalizar",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "fechaFinalizada",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "calificacion",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "acceso",
+      "fieldType": "AccesoEncuesta",
+      "fieldValues": "PUBLIC,PRIVATE",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "contrasenna",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "estado",
+      "fieldType": "EstadoEncuesta",
+      "fieldValues": "DRAFT,ACTIVE,FINISHED,DELETED",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "usuarioEncuesta",
+      "otherEntityRelationshipName": "encuesta",
+      "relationshipName": "usuarioEncuesta"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "ePreguntaAbierta",
+      "otherEntityRelationshipName": "encuesta",
+      "relationshipName": "ePreguntaAbierta"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "ePreguntaCerrada",
+      "otherEntityRelationshipName": "encuesta",
+      "relationshipName": "ePreguntaCerrada"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "categoria",
+      "otherEntityRelationshipName": "encuesta",
+      "relationshipName": "categoria",
+      "otherEntityField": "nombre"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "usuarioExtra",
+      "otherEntityRelationshipName": "encuesta",
+      "relationshipName": "usuarioExtra"
+    }
+  ],
+  "entityTableName": "encuesta",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210703210921"
+}

@@ -1,0 +1,27 @@
+{
+  "dataSurveyApp": {
+    "pPreguntaAbierta": {
+      "home": {
+        "title": "P Pregunta Abiertas",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo P Pregunta Abierta",
+        "createOrEditLabel": "Crear o editar P Pregunta Abierta",
+        "notFound": "Ningún P Pregunta Abiertas encontrado"
+      },
+      "created": "Un nuevo P Pregunta Abierta ha sido creado con el identificador {{ param }}",
+      "updated": "Un P Pregunta Abierta ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un P Pregunta Abierta ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar P Pregunta Abierta {{ id }}?"
+      },
+      "detail": {
+        "title": "P Pregunta Abierta"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "opcional": "Opcional",
+      "orden": "Orden",
+      "plantilla": "Plantilla"
+    }
+  }
+}

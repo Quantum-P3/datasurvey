@@ -1,0 +1,40 @@
+{
+  "name": "Categoria",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "estado",
+      "fieldType": "EstadoCategoria",
+      "fieldValues": "ACTIVE,INACTIVE",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "encuesta",
+      "otherEntityRelationshipName": "categoria",
+      "relationshipName": "encuesta"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "plantilla",
+      "otherEntityRelationshipName": "categoria",
+      "relationshipName": "plantilla"
+    }
+  ],
+  "entityTableName": "categoria",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210703210927"
+}

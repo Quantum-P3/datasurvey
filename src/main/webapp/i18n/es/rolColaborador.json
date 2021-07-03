@@ -1,0 +1,9 @@
+{
+  "dataSurveyApp": {
+    "RolColaborador": {
+      "null": "",
+      "READ": "READ",
+      "WRITE": "WRITE"
+    }
+  }
+}

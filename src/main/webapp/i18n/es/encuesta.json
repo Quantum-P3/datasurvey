@@ -1,0 +1,38 @@
+{
+  "dataSurveyApp": {
+    "encuesta": {
+      "home": {
+        "title": "Encuestas",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Encuesta",
+        "createOrEditLabel": "Crear o editar Encuesta",
+        "notFound": "Ningún Encuestas encontrado"
+      },
+      "created": "Un nuevo Encuesta ha sido creado con el identificador {{ param }}",
+      "updated": "Un Encuesta ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Encuesta ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Encuesta {{ id }}?"
+      },
+      "detail": {
+        "title": "Encuesta"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "descripcion": "Descripcion",
+      "fechaCreacion": "Fecha Creacion",
+      "fechaPublicacion": "Fecha Publicacion",
+      "fechaFinalizar": "Fecha Finalizar",
+      "fechaFinalizada": "Fecha Finalizada",
+      "calificacion": "Calificacion",
+      "acceso": "Acceso",
+      "contrasenna": "Contrasenna",
+      "estado": "Estado",
+      "usuarioEncuesta": "Usuario Encuesta",
+      "ePreguntaAbierta": "E Pregunta Abierta",
+      "ePreguntaCerrada": "E Pregunta Cerrada",
+      "categoria": "Categoria",
+      "usuarioExtra": "Usuario Extra"
+    }
+  }
+}

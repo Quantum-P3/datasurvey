@@ -1,0 +1,31 @@
+{
+  "dataSurveyApp": {
+    "usuarioExtra": {
+      "home": {
+        "title": "Usuario Extras",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Usuario Extra",
+        "createOrEditLabel": "Crear o editar Usuario Extra",
+        "notFound": "Ningún Usuario Extras encontrado"
+      },
+      "created": "Un nuevo Usuario Extra ha sido creado con el identificador {{ param }}",
+      "updated": "Un Usuario Extra ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Usuario Extra ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Usuario Extra {{ id }}?"
+      },
+      "detail": {
+        "title": "Usuario Extra"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "iconoPerfil": "Icono Perfil",
+      "fechaNacimiento": "Fecha Nacimiento",
+      "estado": "Estado",
+      "user": "User",
+      "encuesta": "Encuesta",
+      "usuarioEncuesta": "Usuario Encuesta",
+      "plantilla": "Plantilla"
+    }
+  }
+}

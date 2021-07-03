@@ -1,0 +1,88 @@
+<div>
+  <h2 id="page-heading" data-cy="PPreguntaCerradaOpcionHeading">
+    <span jhiTranslate="dataSurveyApp.pPreguntaCerradaOpcion.home.title">P Pregunta Cerrada Opcions</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="dataSurveyApp.pPreguntaCerradaOpcion.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-p-pregunta-cerrada-opcion"
+        [routerLink]="['/p-pregunta-cerrada-opcion/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="dataSurveyApp.pPreguntaCerradaOpcion.home.createLabel"> Create a new P Pregunta Cerrada Opcion </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="pPreguntaCerradaOpcions?.length === 0">
+    <span jhiTranslate="dataSurveyApp.pPreguntaCerradaOpcion.home.notFound">No pPreguntaCerradaOpcions found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="pPreguntaCerradaOpcions && pPreguntaCerradaOpcions.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.pPreguntaCerradaOpcion.nombre">Nombre</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.pPreguntaCerradaOpcion.orden">Orden</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.pPreguntaCerradaOpcion.pPreguntaCerrada">P Pregunta Cerrada</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pPreguntaCerradaOpcion of pPreguntaCerradaOpcions; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/p-pregunta-cerrada-opcion', pPreguntaCerradaOpcion.id, 'view']">{{ pPreguntaCerradaOpcion.id }}</a>
+          </td>
+          <td>{{ pPreguntaCerradaOpcion.nombre }}</td>
+          <td>{{ pPreguntaCerradaOpcion.orden }}</td>
+          <td>
+            <div *ngIf="pPreguntaCerradaOpcion.pPreguntaCerrada">
+              <a [routerLink]="['/p-pregunta-cerrada', pPreguntaCerradaOpcion.pPreguntaCerrada?.id, 'view']">{{
+                pPreguntaCerradaOpcion.pPreguntaCerrada?.id
+              }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/p-pregunta-cerrada-opcion', pPreguntaCerradaOpcion.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/p-pregunta-cerrada-opcion', pPreguntaCerradaOpcion.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(pPreguntaCerradaOpcion)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

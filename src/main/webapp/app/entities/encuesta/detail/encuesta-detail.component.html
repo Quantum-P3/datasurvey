@@ -1,0 +1,80 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="encuesta">
+      <h2 data-cy="encuestaDetailsHeading"><span jhiTranslate="dataSurveyApp.encuesta.detail.title">Encuesta</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ encuesta.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.encuesta.nombre">Nombre</span></dt>
+        <dd>
+          <span>{{ encuesta.nombre }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.encuesta.descripcion">Descripcion</span></dt>
+        <dd>
+          <span>{{ encuesta.descripcion }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaCreacion">Fecha Creacion</span></dt>
+        <dd>
+          <span>{{ encuesta.fechaCreacion | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaPublicacion">Fecha Publicacion</span></dt>
+        <dd>
+          <span>{{ encuesta.fechaPublicacion | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaFinalizar">Fecha Finalizar</span></dt>
+        <dd>
+          <span>{{ encuesta.fechaFinalizar | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaFinalizada">Fecha Finalizada</span></dt>
+        <dd>
+          <span>{{ encuesta.fechaFinalizada | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.encuesta.calificacion">Calificacion</span></dt>
+        <dd>
+          <span>{{ encuesta.calificacion }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.encuesta.acceso">Acceso</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'dataSurveyApp.AccesoEncuesta.' + encuesta.acceso }}">{{ encuesta.acceso }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.encuesta.contrasenna">Contrasenna</span></dt>
+        <dd>
+          <span>{{ encuesta.contrasenna }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.encuesta.estado">Estado</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'dataSurveyApp.EstadoEncuesta.' + encuesta.estado }}">{{ encuesta.estado }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.encuesta.categoria">Categoria</span></dt>
+        <dd>
+          <div *ngIf="encuesta.categoria">
+            <a [routerLink]="['/categoria', encuesta.categoria?.id, 'view']">{{ encuesta.categoria?.nombre }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.encuesta.usuarioExtra">Usuario Extra</span></dt>
+        <dd>
+          <div *ngIf="encuesta.usuarioExtra">
+            <a [routerLink]="['/usuario-extra', encuesta.usuarioExtra?.id, 'view']">{{ encuesta.usuarioExtra?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/encuesta', encuesta.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

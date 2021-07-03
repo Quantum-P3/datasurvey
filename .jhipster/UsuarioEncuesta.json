@@ -1,0 +1,46 @@
+{
+  "name": "UsuarioEncuesta",
+  "fields": [
+    {
+      "fieldName": "rol",
+      "fieldType": "RolColaborador",
+      "fieldValues": "READ,WRITE",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "estado",
+      "fieldType": "EstadoColaborador",
+      "fieldValues": "PENDING,ACTIVE",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fechaAgregado",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "usuarioExtra",
+      "otherEntityRelationshipName": "usuarioEncuesta",
+      "relationshipName": "usuarioExtra"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "encuesta",
+      "otherEntityRelationshipName": "usuarioEncuesta",
+      "relationshipName": "encuesta"
+    }
+  ],
+  "entityTableName": "usuario_encuesta",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210703210926"
+}

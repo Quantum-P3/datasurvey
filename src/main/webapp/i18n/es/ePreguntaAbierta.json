@@ -1,0 +1,28 @@
+{
+  "dataSurveyApp": {
+    "ePreguntaAbierta": {
+      "home": {
+        "title": "E Pregunta Abiertas",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo E Pregunta Abierta",
+        "createOrEditLabel": "Crear o editar E Pregunta Abierta",
+        "notFound": "Ningún E Pregunta Abiertas encontrado"
+      },
+      "created": "Un nuevo E Pregunta Abierta ha sido creado con el identificador {{ param }}",
+      "updated": "Un E Pregunta Abierta ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un E Pregunta Abierta ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar E Pregunta Abierta {{ id }}?"
+      },
+      "detail": {
+        "title": "E Pregunta Abierta"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "opcional": "Opcional",
+      "orden": "Orden",
+      "ePreguntaAbiertaRespuesta": "E Pregunta Abierta Respuesta",
+      "encuesta": "Encuesta"
+    }
+  }
+}

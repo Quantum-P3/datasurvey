@@ -1,0 +1,54 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="usuarioEncuesta">
+      <h2 data-cy="usuarioEncuestaDetailsHeading">
+        <span jhiTranslate="dataSurveyApp.usuarioEncuesta.detail.title">Usuario Encuesta</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ usuarioEncuesta.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.usuarioEncuesta.rol">Rol</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'dataSurveyApp.RolColaborador.' + usuarioEncuesta.rol }}">{{ usuarioEncuesta.rol }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.usuarioEncuesta.estado">Estado</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'dataSurveyApp.EstadoColaborador.' + usuarioEncuesta.estado }}">{{ usuarioEncuesta.estado }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.usuarioEncuesta.fechaAgregado">Fecha Agregado</span></dt>
+        <dd>
+          <span>{{ usuarioEncuesta.fechaAgregado | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.usuarioEncuesta.usuarioExtra">Usuario Extra</span></dt>
+        <dd>
+          <div *ngIf="usuarioEncuesta.usuarioExtra">
+            <a [routerLink]="['/usuario-extra', usuarioEncuesta.usuarioExtra?.id, 'view']">{{ usuarioEncuesta.usuarioExtra?.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.usuarioEncuesta.encuesta">Encuesta</span></dt>
+        <dd>
+          <div *ngIf="usuarioEncuesta.encuesta">
+            <a [routerLink]="['/encuesta', usuarioEncuesta.encuesta?.id, 'view']">{{ usuarioEncuesta.encuesta?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/usuario-encuesta', usuarioEncuesta.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

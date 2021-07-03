@@ -1,0 +1,55 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="usuarioExtra">
+      <h2 data-cy="usuarioExtraDetailsHeading"><span jhiTranslate="dataSurveyApp.usuarioExtra.detail.title">Usuario Extra</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ usuarioExtra.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.usuarioExtra.nombre">Nombre</span></dt>
+        <dd>
+          <span>{{ usuarioExtra.nombre }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.usuarioExtra.iconoPerfil">Icono Perfil</span></dt>
+        <dd>
+          <span>{{ usuarioExtra.iconoPerfil }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.usuarioExtra.fechaNacimiento">Fecha Nacimiento</span></dt>
+        <dd>
+          <span>{{ usuarioExtra.fechaNacimiento | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.usuarioExtra.estado">Estado</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'dataSurveyApp.EstadoUsuario.' + usuarioExtra.estado }}">{{ usuarioExtra.estado }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.usuarioExtra.user">User</span></dt>
+        <dd>
+          <span>{{ usuarioExtra.user?.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.usuarioExtra.plantilla">Plantilla</span></dt>
+        <dd>
+          <span *ngFor="let plantilla of usuarioExtra.plantillas; let last = last">
+            <a [routerLink]="['/plantilla', plantilla?.id, 'view']">{{ plantilla.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/usuario-extra', usuarioExtra.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

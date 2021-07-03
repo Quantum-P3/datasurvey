@@ -1,0 +1,21 @@
+version: 2.1
+
+jobs:
+  build-and-test:
+    environment:
+      _JAVA_OPTIONS: '-Dspring.profiles.active=prod'
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+      - checkout
+      - run:
+          name: Build
+          command: mvn -B -DskipTests clean package -P prod
+      - run:
+          name: Test
+          command: mvn test -P prod
+
+workflows:
+  datasurvey:
+    jobs:
+      - build-and-test

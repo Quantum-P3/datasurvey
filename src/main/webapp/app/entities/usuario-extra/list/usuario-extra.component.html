@@ -1,0 +1,95 @@
+<div>
+  <h2 id="page-heading" data-cy="UsuarioExtraHeading">
+    <span jhiTranslate="dataSurveyApp.usuarioExtra.home.title">Usuario Extras</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="dataSurveyApp.usuarioExtra.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-usuario-extra"
+        [routerLink]="['/usuario-extra/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="dataSurveyApp.usuarioExtra.home.createLabel"> Create a new Usuario Extra </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="usuarioExtras?.length === 0">
+    <span jhiTranslate="dataSurveyApp.usuarioExtra.home.notFound">No usuarioExtras found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="usuarioExtras && usuarioExtras.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.nombre">Nombre</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.iconoPerfil">Icono Perfil</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.fechaNacimiento">Fecha Nacimiento</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.estado">Estado</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.user">User</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.plantilla">Plantilla</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuarioExtra of usuarioExtras; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/usuario-extra', usuarioExtra.id, 'view']">{{ usuarioExtra.id }}</a>
+          </td>
+          <td>{{ usuarioExtra.nombre }}</td>
+          <td>{{ usuarioExtra.iconoPerfil }}</td>
+          <td>{{ usuarioExtra.fechaNacimiento | formatMediumDatetime }}</td>
+          <td jhiTranslate="{{ 'dataSurveyApp.EstadoUsuario.' + usuarioExtra.estado }}">{{ usuarioExtra.estado }}</td>
+          <td>
+            {{ usuarioExtra.user?.id }}
+          </td>
+          <td>
+            <span *ngFor="let plantilla of usuarioExtra.plantillas; let last = last">
+              <a class="form-control-static" [routerLink]="['/plantilla', plantilla.id, 'view']">{{ plantilla.id }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/usuario-extra', usuarioExtra.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/usuario-extra', usuarioExtra.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(usuarioExtra)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

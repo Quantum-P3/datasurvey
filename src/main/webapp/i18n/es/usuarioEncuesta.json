@@ -1,0 +1,28 @@
+{
+  "dataSurveyApp": {
+    "usuarioEncuesta": {
+      "home": {
+        "title": "Usuario Encuestas",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Usuario Encuesta",
+        "createOrEditLabel": "Crear o editar Usuario Encuesta",
+        "notFound": "Ningún Usuario Encuestas encontrado"
+      },
+      "created": "Un nuevo Usuario Encuesta ha sido creado con el identificador {{ param }}",
+      "updated": "Un Usuario Encuesta ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Usuario Encuesta ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Usuario Encuesta {{ id }}?"
+      },
+      "detail": {
+        "title": "Usuario Encuesta"
+      },
+      "id": "ID",
+      "rol": "Rol",
+      "estado": "Estado",
+      "fechaAgregado": "Fecha Agregado",
+      "usuarioExtra": "Usuario Extra",
+      "encuesta": "Encuesta"
+    }
+  }
+}

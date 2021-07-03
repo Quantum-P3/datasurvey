@@ -1,0 +1,27 @@
+{
+  "dataSurveyApp": {
+    "parametroAplicacion": {
+      "home": {
+        "title": "Parametro Aplicacions",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Parametro Aplicacion",
+        "createOrEditLabel": "Crear o editar Parametro Aplicacion",
+        "notFound": "Ningún Parametro Aplicacions encontrado"
+      },
+      "created": "Un nuevo Parametro Aplicacion ha sido creado con el identificador {{ param }}",
+      "updated": "Un Parametro Aplicacion ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Parametro Aplicacion ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Parametro Aplicacion {{ id }}?"
+      },
+      "detail": {
+        "title": "Parametro Aplicacion"
+      },
+      "id": "ID",
+      "maxDiasEncuesta": "Max Dias Encuesta",
+      "minDiasEncuesta": "Min Dias Encuesta",
+      "maxCantidadPreguntas": "Max Cantidad Preguntas",
+      "minCantidadPreguntas": "Min Cantidad Preguntas"
+    }
+  }
+}

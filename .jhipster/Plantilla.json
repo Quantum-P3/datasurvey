@@ -1,0 +1,74 @@
+{
+  "name": "Plantilla",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength", "minlength"],
+      "fieldValidateRulesMaxlength": "50",
+      "fieldValidateRulesMinlength": "1"
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fechaCreacion",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fechaPublicacionTienda",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "estado",
+      "fieldType": "EstadoPlantilla",
+      "fieldValues": "DRAFT,ACTIVE,DELETED,DISABLED",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "precio",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "pPreguntaCerrada",
+      "otherEntityRelationshipName": "plantilla",
+      "relationshipName": "pPreguntaCerrada"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "pPreguntaAbierta",
+      "otherEntityRelationshipName": "plantilla",
+      "relationshipName": "pPreguntaAbierta"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "categoria",
+      "otherEntityRelationshipName": "plantilla",
+      "relationshipName": "categoria",
+      "otherEntityField": "nombre"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "usuarioExtra",
+      "otherEntityRelationshipName": "plantilla",
+      "relationshipName": "usuarioExtra",
+      "ownerSide": false
+    }
+  ],
+  "entityTableName": "plantilla",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210703210929"
+}

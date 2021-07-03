@@ -1,0 +1,27 @@
+{
+  "dataSurveyApp": {
+    "ePreguntaCerradaOpcion": {
+      "home": {
+        "title": "E Pregunta Cerrada Opcions",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo E Pregunta Cerrada Opcion",
+        "createOrEditLabel": "Crear o editar E Pregunta Cerrada Opcion",
+        "notFound": "Ningún E Pregunta Cerrada Opcions encontrado"
+      },
+      "created": "Un nuevo E Pregunta Cerrada Opcion ha sido creado con el identificador {{ param }}",
+      "updated": "Un E Pregunta Cerrada Opcion ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un E Pregunta Cerrada Opcion ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar E Pregunta Cerrada Opcion {{ id }}?"
+      },
+      "detail": {
+        "title": "E Pregunta Cerrada Opcion"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "orden": "Orden",
+      "cantidad": "Cantidad",
+      "ePreguntaCerrada": "E Pregunta Cerrada"
+    }
+  }
+}

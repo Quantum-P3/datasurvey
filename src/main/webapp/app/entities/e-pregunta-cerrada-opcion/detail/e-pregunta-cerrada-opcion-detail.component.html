@@ -1,0 +1,50 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="ePreguntaCerradaOpcion">
+      <h2 data-cy="ePreguntaCerradaOpcionDetailsHeading">
+        <span jhiTranslate="dataSurveyApp.ePreguntaCerradaOpcion.detail.title">E Pregunta Cerrada Opcion</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ ePreguntaCerradaOpcion.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.ePreguntaCerradaOpcion.nombre">Nombre</span></dt>
+        <dd>
+          <span>{{ ePreguntaCerradaOpcion.nombre }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.ePreguntaCerradaOpcion.orden">Orden</span></dt>
+        <dd>
+          <span>{{ ePreguntaCerradaOpcion.orden }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.ePreguntaCerradaOpcion.cantidad">Cantidad</span></dt>
+        <dd>
+          <span>{{ ePreguntaCerradaOpcion.cantidad }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.ePreguntaCerradaOpcion.ePreguntaCerrada">E Pregunta Cerrada</span></dt>
+        <dd>
+          <div *ngIf="ePreguntaCerradaOpcion.ePreguntaCerrada">
+            <a [routerLink]="['/e-pregunta-cerrada', ePreguntaCerradaOpcion.ePreguntaCerrada?.id, 'view']">{{
+              ePreguntaCerradaOpcion.ePreguntaCerrada?.id
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/e-pregunta-cerrada-opcion', ePreguntaCerradaOpcion.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

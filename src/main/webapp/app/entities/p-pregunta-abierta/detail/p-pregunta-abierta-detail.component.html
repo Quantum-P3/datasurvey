@@ -1,0 +1,48 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="pPreguntaAbierta">
+      <h2 data-cy="pPreguntaAbiertaDetailsHeading">
+        <span jhiTranslate="dataSurveyApp.pPreguntaAbierta.detail.title">P Pregunta Abierta</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ pPreguntaAbierta.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.pPreguntaAbierta.nombre">Nombre</span></dt>
+        <dd>
+          <span>{{ pPreguntaAbierta.nombre }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.pPreguntaAbierta.opcional">Opcional</span></dt>
+        <dd>
+          <span>{{ pPreguntaAbierta.opcional }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.pPreguntaAbierta.orden">Orden</span></dt>
+        <dd>
+          <span>{{ pPreguntaAbierta.orden }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.pPreguntaAbierta.plantilla">Plantilla</span></dt>
+        <dd>
+          <div *ngIf="pPreguntaAbierta.plantilla">
+            <a [routerLink]="['/plantilla', pPreguntaAbierta.plantilla?.id, 'view']">{{ pPreguntaAbierta.plantilla?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/p-pregunta-abierta', pPreguntaAbierta.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

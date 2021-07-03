@@ -1,0 +1,52 @@
+{
+  "name": "PPreguntaCerrada",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength", "minlength"],
+      "fieldValidateRulesMaxlength": "500",
+      "fieldValidateRulesMinlength": "1"
+    },
+    {
+      "fieldName": "tipo",
+      "fieldType": "PreguntaCerradaTipo",
+      "fieldValues": "SINGLE,MULTIPLE",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "opcional",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "orden",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "pPreguntaCerradaOpcion",
+      "otherEntityRelationshipName": "pPreguntaCerrada",
+      "relationshipName": "pPreguntaCerradaOpcion"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "plantilla",
+      "otherEntityRelationshipName": "pPreguntaCerrada",
+      "relationshipName": "plantilla"
+    }
+  ],
+  "entityTableName": "p_pregunta_cerrada",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210703210931"
+}

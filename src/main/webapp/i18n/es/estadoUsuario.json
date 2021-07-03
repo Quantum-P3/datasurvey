@@ -1,0 +1,9 @@
+{
+  "dataSurveyApp": {
+    "EstadoUsuario": {
+      "null": "",
+      "ACTIVE": "ACTIVE",
+      "SUSPENDED": "SUSPENDED"
+    }
+  }
+}
