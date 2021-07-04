@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { SessionStorageService } from 'ngx-webstorage';
+import { Component, OnInit, Renderer2, ViewChild, ElementRef, Directive } from '@angular/core';
+// import { ROUTES } from '../.././sidebar/sidebar.component';
+import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
+import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { Subscription } from 'rxjs';
 
-import { VERSION } from 'app/app.constants';
-import { LANGUAGES } from 'app/config/language.constants';
-import { Account } from 'app/core/auth/account.model';
-import { AccountService } from 'app/core/auth/account.service';
-import { LoginService } from 'app/login/login.service';
-import { ProfileService } from 'app/layouts/profiles/profile.service';
+var misc: any = {
+  navbar_menu_visible: 0,
+  active_collapse: true,
+  disabled_collapse_init: 0,
+};
 
 @Component({
   selector: 'jhi-navbar',
@@ -16,54 +16,130 @@ import { ProfileService } from 'app/layouts/profiles/profile.service';
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent implements OnInit {
-  inProduction?: boolean;
-  isNavbarCollapsed = true;
-  languages = LANGUAGES;
-  openAPIEnabled?: boolean;
-  version = '';
-  account: Account | null = null;
+  private listTitles: any[] = [];
+  location: Location;
+  private nativeElement: Node;
+  private toggleButton: any;
+  private sidebarVisible: boolean;
+  // private _router: Subscription;
+  public open: boolean = false;
 
-  constructor(
-    private loginService: LoginService,
-    private translateService: TranslateService,
-    private sessionStorageService: SessionStorageService,
-    private accountService: AccountService,
-    private profileService: ProfileService,
-    private router: Router
-  ) {
-    if (VERSION) {
-      this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION;
+  @ViewChild('jhi-navbar', { static: false }) button: any;
+
+  constructor(location: Location, private renderer: Renderer2, private element: ElementRef, private router: Router) {
+    this.location = location;
+    this.nativeElement = element.nativeElement;
+    this.sidebarVisible = false;
+  }
+
+  ngOnInit() {
+    // this.listTitles = ROUTES.filter(listTitle => listTitle);
+
+    const navbar: HTMLElement = this.element.nativeElement;
+    const body = document.getElementsByTagName('body')[0];
+    this.toggleButton = navbar.getElementsByClassName('navbar-toggler')[0];
+    if (body.classList.contains('sidebar-mini')) {
+      misc.sidebar_mini_active = true;
+    }
+    // this._router = this.router.events.filter(event => event instanceof NavigationEnd).subscribe((event: NavigationEnd) => {
+    //   const $layer = document.getElementsByClassName('close-layer')[0];
+    //   if ($layer) {
+    //     $layer.remove();
+    //   }
+    // });
+  }
+
+  minimizeSidebar() {
+    const body = document.getElementsByTagName('body')[0];
+
+    if (misc.sidebar_mini_active === true) {
+      body.classList.remove('sidebar-mini');
+      misc.sidebar_mini_active = false;
+    } else {
+      setTimeout(function () {
+        body.classList.add('sidebar-mini');
+
+        misc.sidebar_mini_active = true;
+      }, 300);
+    }
+
+    // we simulate the window Resize so the charts will get updated in realtime.
+    const simulateWindowResize = setInterval(function () {
+      window.dispatchEvent(new Event('resize'));
+    }, 180);
+
+    // we stop the simulation of Window Resize after the animations are completed
+    setTimeout(function () {
+      clearInterval(simulateWindowResize);
+    }, 1000);
+  }
+
+  isMobileMenu() {
+    if (window.outerWidth < 991) {
+      return false;
+    }
+    return true;
+  }
+
+  sidebarOpen() {
+    var toggleButton = this.toggleButton;
+    var html = document.getElementsByTagName('html')[0];
+    setTimeout(function () {
+      toggleButton.classList.add('toggled');
+    }, 500);
+    const mainPanel = <HTMLElement>document.getElementsByClassName('main-panel')[0];
+    if (window.innerWidth < 991) {
+      mainPanel.style.position = 'fixed';
+    }
+    html.classList.add('nav-open');
+    this.sidebarVisible = true;
+  }
+  sidebarClose() {
+    var html = document.getElementsByTagName('html')[0];
+    this.toggleButton.classList.remove('toggled');
+    this.sidebarVisible = false;
+    html.classList.remove('nav-open');
+    const mainPanel = <HTMLElement>document.getElementsByClassName('main-panel')[0];
+
+    if (window.innerWidth < 991) {
+      setTimeout(function () {
+        mainPanel.style.position = '';
+      }, 500);
+    }
+  }
+  sidebarToggle() {
+    // var toggleButton = this.toggleButton;
+    // var body = document.getElementsByTagName('body')[0];
+    if (this.sidebarVisible == false) {
+      this.sidebarOpen();
+    } else {
+      this.sidebarClose();
     }
   }
 
-  ngOnInit(): void {
-    this.profileService.getProfileInfo().subscribe(profileInfo => {
-      this.inProduction = profileInfo.inProduction;
-      this.openAPIEnabled = profileInfo.openAPIEnabled;
-    });
-    this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
+  getTitle() {
+    var titlee = this.location.prepareExternalUrl(this.location.path());
+    if (titlee.charAt(0) === '#') {
+      titlee = titlee.slice(1);
+    }
+    for (var item = 0; item < this.listTitles.length; item++) {
+      var parent = this.listTitles[item];
+      if (parent.path === titlee) {
+        return parent.title;
+      } else if (parent.children) {
+        var children_from_url = titlee.split('/')[2];
+        for (var current = 0; current < parent.children.length; current++) {
+          if (parent.children[current].path === children_from_url) {
+            return parent.children[current].title;
+          }
+        }
+      }
+    }
+    return 'Dashboard';
   }
 
-  changeLanguage(languageKey: string): void {
-    this.sessionStorageService.store('locale', languageKey);
-    this.translateService.use(languageKey);
-  }
-
-  collapseNavbar(): void {
-    this.isNavbarCollapsed = true;
-  }
-
-  login(): void {
-    this.router.navigate(['/login']);
-  }
-
-  logout(): void {
-    this.collapseNavbar();
-    this.loginService.logout();
-    this.router.navigate(['']);
-  }
-
-  toggleNavbar(): void {
-    this.isNavbarCollapsed = !this.isNavbarCollapsed;
+  getPath() {
+    // console.log(this.location);
+    return this.location.prepareExternalUrl(this.location.path());
   }
 }

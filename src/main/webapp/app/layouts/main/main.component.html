@@ -1,13 +1,21 @@
-<jhi-page-ribbon></jhi-page-ribbon>
-
-<div>
-  <router-outlet name="navbar"></router-outlet>
-</div>
-
-<div class="container-fluid">
-  <div class="card jh-card">
+<!-- Guest (not logged in) -->
+<ng-template [ngIf]="!isAuthenticated()" [ngIfElse]="authenticated">
+  <div class="" style="overflow-x: hidden">
     <router-outlet></router-outlet>
   </div>
+</ng-template>
 
-  <jhi-footer></jhi-footer>
-</div>
+<!-- Authenticated (logged in) -->
+<ng-template #authenticated>
+  <div class="wrapper">
+    <div class="sidebar" data-color="brown" data-active-color="yellow">
+      <jhi-sidebar></jhi-sidebar>
+    </div>
+    <div class="main-panel" style="overflow-x: hidden">
+      <jhi-navbar></jhi-navbar>
+      <div class="p-5">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</ng-template>

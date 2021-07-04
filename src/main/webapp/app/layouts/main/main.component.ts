@@ -9,6 +9,7 @@ import { AccountService } from 'app/core/auth/account.service';
 @Component({
   selector: 'jhi-main',
   templateUrl: './main.component.html',
+  styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
   private renderer: Renderer2;
@@ -54,5 +55,13 @@ export class MainComponent implements OnInit {
       pageTitle = 'global.title';
     }
     this.translateService.get(pageTitle).subscribe(title => this.titleService.setTitle(title));
+  }
+
+  isAdmin(): boolean {
+    return this.accountService.hasAnyAuthority('ROLE_ADMIN');
+  }
+
+  isAuthenticated(): boolean {
+    return this.accountService.isAuthenticated();
   }
 }

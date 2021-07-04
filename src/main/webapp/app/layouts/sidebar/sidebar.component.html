@@ -1,1 +1,115 @@
-<p>sidebar works!</p>
+<div class="logo">
+  <a routerLink="/" class="simple-text">
+    <div class="logo-image-small">
+      <img src="../../../content/img_datasurvey/datasurvey-logo-text.svg" />
+    </div>
+  </a>
+</div>
+
+<div class="sidebar-wrapper">
+  <div class="user" routerLink="/account/settings">
+    <div class="photo mb-2">
+      <img src="../../../content/profile_icons/C2.png" />
+    </div>
+    <div class="info">
+      <a data-toggle="collapse" class="collapsed">
+        <span>
+          Pablo Bonilla
+          <!-- <b class="caret"></b> -->
+        </span>
+      </a>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+  <!-- <div *ngIf="isNotMobileMenu()">
+        <form class="navbar-form navbar-left navbar-search-form" role="search">
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                <input type="text" value="" class="form-control" placeholder="Search...">
+            </div>
+        </form>
+        <ul class="nav nav-mobile-menu">
+            <li>
+                <a href="#stats" class="dropdown-toggle btn-magnify" data-toggle="dropdown">
+                    <i class="ti-panel"></i>
+                    <p>Stats</p>
+                </a>
+            </li>
+            <li class="dropdown">
+                <a href="#notifications" class="dropdown-toggle btn-rotate" data-toggle="dropdown">
+                    <i class="ti-bell"></i>
+                    <span class="notification">5</span>
+                    <p class="hidden-md hidden-lg">
+                        Notifications
+                        <b class="caret"></b>
+                    </p>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#not1">Notification 1</a></li>
+                    <li><a href="#not2">Notification 2</a></li>
+                    <li><a href="#not3">Notification 3</a></li>
+                    <li><a href="#not4">Notification 4</a></li>
+                    <li><a href="#another">Another notification</a></li>
+                </ul>
+            </li>
+            <li>
+                <a class="btn-rotate">
+                    <i class="ti-settings"></i>
+                    <p class="hidden-md hidden-lg">
+                        Settings
+                    </p>
+                </a>
+            </li>
+        </ul>
+    </div> -->
+
+  <!-- Admin Navigation -->
+  <ul class="nav" *ngIf="isAdmin() && isAuthenticated()">
+    <li routerLinkActive="active" *ngFor="let menuitem of menuAdmin">
+      <!--If is a single link-->
+      <a [routerLink]="[menuitem.path]" *ngIf="menuitem.type === 'link'">
+        <i class="{{ menuitem.icontype }}"></i>
+        <p>{{ menuitem.title }}</p>
+      </a>
+    </li>
+
+    <!-- Logout -->
+    <li class="position-absolute fixed-bottom w-100 mb-5">
+      <a (click)="logout()" class="p-3 w-100 m-0 text-center">
+        <!-- <i class="nc-icon nc-user-run"></i> -->
+        <p style="letter-spacing: 0.3rem">Cerrar Sesion</p>
+      </a>
+    </li>
+    <li class="position-absolute fixed-bottom w-100 mb-5" style="bottom: -4rem">
+      <a class="p-3 w-100 m-0 text-center">
+        <p style="letter-spacing: 0.1rem; font-size: 0.6rem; font-weight: 400">© 2021 DataSurvey</p>
+      </a>
+    </li>
+  </ul>
+
+  <!-- Copyright © DataSurvey por Quantum 2021 -->
+
+  <!-- User Navigation -->
+  <ul class="nav" *ngIf="!isAdmin() && isAuthenticated()">
+    <li routerLinkActive="active" *ngFor="let menuitem of menuUser">
+      <!--If is a single link-->
+      <a [routerLink]="[menuitem.path]" *ngIf="menuitem.type === 'link'">
+        <i class="{{ menuitem.icontype }}"></i>
+        <p>{{ menuitem.title }}</p>
+      </a>
+    </li>
+
+    <!-- Logout -->
+    <li class="position-absolute fixed-bottom w-100 mb-5">
+      <a (click)="logout()" class="p-3 w-100 m-0 text-center">
+        <!-- <i class="nc-icon nc-user-run"></i> -->
+        <p style="letter-spacing: 0.3rem">Cerrar Sesion</p>
+      </a>
+    </li>
+    <li class="position-absolute fixed-bottom w-100 mb-5" style="bottom: -4rem">
+      <a class="p-3 w-100 m-0 text-center">
+        <p style="letter-spacing: 0.1rem; font-size: 0.6rem; font-weight: 400">© 2021 DataSurvey</p>
+      </a>
+    </li>
+  </ul>
+</div>
