@@ -43,8 +43,31 @@
               { "glob": "axios.min.js", "input": "./node_modules/axios/dist", "output": "swagger-ui" },
               { "glob": "**/*", "input": "src/main/webapp/swagger-ui/", "output": "swagger-ui" }
             ],
-            "styles": ["src/main/webapp/content/scss/vendor.scss", "src/main/webapp/content/scss/global.scss"],
-            "scripts": []
+            "styles": ["src/main/webapp/content/scss/paper-dashboard.scss", "./node_modules/swiper/swiper-bundle.min.css"],
+            "scripts": [
+              "src/main/webapp/content/js/bootstrap.min.js",
+              "src/main/webapp/content/js/bootstrap-datetimepicker.js",
+              "src/main/webapp/content/js/bootstrap-notify.js",
+              "src/main/webapp/content/js/bootstrap-selectpicker.js",
+              "src/main/webapp/content/js/bootstrap-switch-tags.js",
+              "src/main/webapp/content/js/bootstrap-table.js",
+              "src/main/webapp/content/js/chartist.min.js",
+              "src/main/webapp/content/js/es6-promise-auto.min.js",
+              "src/main/webapp/content/js/fullcalendar.min.js",
+              "src/main/webapp/content/js/jquery.bootstrap.wizard.min.js",
+              "src/main/webapp/content/js/jquery.datatables.js",
+              "src/main/webapp/content/js/jquery.easypiechart.min.js",
+              "src/main/webapp/content/js/jquery.validate.min.js",
+              "src/main/webapp/content/js/jquery-3.1.1.min.js",
+              "src/main/webapp/content/js/jquery-jvectormap.js",
+              "src/main/webapp/content/js/jquery-ui.min.js",
+              "src/main/webapp/content/js/moment.min.js",
+              "src/main/webapp/content/js/nouislider.min.js",
+              "src/main/webapp/content/js/paper-dashboard.js",
+              "src/main/webapp/content/js/perfect-scrollbar.min.js",
+              "src/main/webapp/content/js/sweetalert2.js",
+              "./node_modules/swiper/swiper-bundle.min.js"
+            ]
           },
           "configurations": {
             "production": {

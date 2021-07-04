@@ -87,6 +87,7 @@
     "rxjs": "6.6.7",
     "sockjs-client": "1.5.0",
     "swagger-ui-dist": "3.50.0",
+    "swiper": "^6.7.5",
     "tslib": "2.3.0",
     "webstomp-client": "1.2.6",
     "zone.js": "0.11.4"
