@@ -7,8 +7,11 @@ import java.util.stream.Collectors;
 import org.datasurvey.config.Constants;
 import org.datasurvey.domain.Authority;
 import org.datasurvey.domain.User;
+import org.datasurvey.domain.UsuarioExtra;
+import org.datasurvey.domain.enumeration.EstadoUsuario;
 import org.datasurvey.repository.AuthorityRepository;
 import org.datasurvey.repository.UserRepository;
+import org.datasurvey.repository.UsuarioExtraRepository;
 import org.datasurvey.security.AuthoritiesConstants;
 import org.datasurvey.security.SecurityUtils;
 import org.datasurvey.service.dto.AdminUserDTO;
@@ -41,16 +44,20 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final UsuarioExtraRepository usuarioExtraRepository;
+
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
-        CacheManager cacheManager
+        CacheManager cacheManager,
+        UsuarioExtraRepository usuarioExtraRepository
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.usuarioExtraRepository = usuarioExtraRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -142,6 +149,68 @@ public class UserService {
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
+        return newUser;
+    }
+
+    /*
+     * Modified to register extra user data
+     * name, iconoPerfil, fechaNacimiento, estado, pais
+     */
+    public User registerUser(AdminUserDTO userDTO, String password, String name, Integer profileIcon) {
+        System.out.println(name);
+        userRepository
+            .findOneByLogin(userDTO.getLogin().toLowerCase())
+            .ifPresent(
+                existingUser -> {
+                    boolean removed = removeNonActivatedUser(existingUser);
+                    if (!removed) {
+                        throw new UsernameAlreadyUsedException();
+                    }
+                }
+            );
+        userRepository
+            .findOneByEmailIgnoreCase(userDTO.getEmail())
+            .ifPresent(
+                existingUser -> {
+                    boolean removed = removeNonActivatedUser(existingUser);
+                    if (!removed) {
+                        throw new EmailAlreadyUsedException();
+                    }
+                }
+            );
+        User newUser = new User();
+        String encryptedPassword = passwordEncoder.encode(password);
+        newUser.setLogin(userDTO.getLogin().toLowerCase());
+        // new user gets initially a generated password
+        newUser.setPassword(encryptedPassword);
+        newUser.setFirstName(userDTO.getFirstName());
+        newUser.setLastName(userDTO.getLastName());
+        if (userDTO.getEmail() != null) {
+            newUser.setEmail(userDTO.getEmail().toLowerCase());
+        }
+        newUser.setImageUrl(userDTO.getImageUrl());
+        newUser.setLangKey(userDTO.getLangKey());
+        // new user is not active
+        newUser.setActivated(false);
+        // new user gets registration key
+        newUser.setActivationKey(RandomUtil.generateActivationKey());
+        Set<Authority> authorities = new HashSet<>();
+        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+        newUser.setAuthorities(authorities);
+        userRepository.save(newUser);
+        this.clearUserCaches(newUser);
+        log.debug("Created Information for User: {}", newUser);
+
+        // Create and save the UsuarioExtra entity
+        // nombre, iconoPerfil 1-28, fechaNacimiento, estado ACTIVE
+        UsuarioExtra usuarioExtra = new UsuarioExtra();
+        usuarioExtra.setId(newUser.getId());
+        usuarioExtra.setUser(newUser);
+        usuarioExtra.setNombre(name);
+        usuarioExtra.setEstado(EstadoUsuario.ACTIVE);
+        usuarioExtra.setIconoPerfil(profileIcon.toString());
+
+        usuarioExtraRepository.save(usuarioExtra);
         return newUser;
     }
 
