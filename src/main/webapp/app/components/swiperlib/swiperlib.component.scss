@@ -1,0 +1,30 @@
+.mySwiper {
+  padding: 1rem;
+}
+
+.mySwiper img {
+  width: 100px;
+  height: auto;
+  border-radius: 50%;
+  padding: 0rem;
+  margin: 0.4rem;
+  border: 3px solid #fff;
+  transition: transform 0.1s ease-in-out, border 0.1s ease-in-out;
+}
+
+.mySwiper img::selection {
+  background-color: transparent;
+}
+
+.mySwiper img:hover {
+  // border: 4px solid #cdd8e7 !important;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px;
+  cursor: pointer;
+  // transform: scale(1.1);
+}
+
+.active {
+  border: 4px solid #1072e8 !important;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 5px 15px;
+  transform: scale(1.1);
+}
