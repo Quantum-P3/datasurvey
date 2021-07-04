@@ -9,11 +9,18 @@ import org.datasurvey.service.dto.AdminUserDTO;
 public class ManagedUserVM extends AdminUserDTO {
 
     public static final int PASSWORD_MIN_LENGTH = 4;
+    public static final int NAME_MIN_LENGTH = 2;
 
     public static final int PASSWORD_MAX_LENGTH = 100;
+    public static final int NAME_MAX_LENGTH = 100;
 
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
+
+    @Size(min = NAME_MIN_LENGTH, max = NAME_MAX_LENGTH)
+    private String name;
+
+    private Integer profileIcon;
 
     public ManagedUserVM() {
         // Empty constructor needed for Jackson.
@@ -25,6 +32,22 @@ public class ManagedUserVM extends AdminUserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getProfileIcon() {
+        return profileIcon;
+    }
+
+    public void setProfileIcon(Integer profileIcon) {
+        this.profileIcon = profileIcon;
     }
 
     // prettier-ignore
