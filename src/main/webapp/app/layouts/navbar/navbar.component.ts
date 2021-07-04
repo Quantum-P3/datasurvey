@@ -3,6 +3,7 @@ import { Component, OnInit, Renderer2, ViewChild, ElementRef, Directive } from '
 import { Router, ActivatedRoute, NavigationEnd, NavigationStart } from '@angular/router';
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { Account } from 'app/core/auth/account.model';
 
 var misc: any = {
   navbar_menu_visible: 0,
@@ -23,6 +24,7 @@ export class NavbarComponent implements OnInit {
   private sidebarVisible: boolean;
   // private _router: Subscription;
   public open: boolean = false;
+  account: Account | null = null;
 
   @ViewChild('jhi-navbar', { static: false }) button: any;
 
