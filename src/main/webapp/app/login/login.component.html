@@ -1,4 +1,4 @@
-<div>
+<!-- <div>
   <div class="row justify-content-center">
     <div class="col-lg-6 col-md-8 col-sm-10">
       <h1 jhiTranslate="login.title" data-cy="loginTitle">Sign in</h1>
@@ -54,4 +54,100 @@
       </div>
     </div>
   </div>
+</div> -->
+
+<div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5" style="height: 100vh; background-color: #f1f5f9">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-xxl-4 col-lg-5">
+        <div class="card mt-5">
+          <!-- Logo -->
+          <div class="pl-4 pt-4 pr-4 pb-1 text-center">
+            <img src="../../content/img_datasurvey/datasurvey-logo-text-black.svg" alt="" />
+          </div>
+
+          <div class="card-body p-4">
+            <div class="text-center w-75 m-auto">
+              <h4 class="text-dark-50 text-center pb-0 fw-bold p-0 m-0" style="color: #727070; font-weight: 700; font-size: 1.3rem">
+                INICIAR SESION
+              </h4>
+              <p class="mb-4" style="color: rgba(146, 146, 146, 0.664)">Ingrese su correo electrónico y contraseña.</p>
+            </div>
+
+            <div
+              class="alert alert-danger"
+              *ngIf="authenticationError"
+              jhiTranslate="login.messages.error.authentication"
+              data-cy="loginError"
+            >
+              <strong>Failed to sign in!</strong> Please check your credentials and try again.
+            </div>
+            <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
+              <div class="mb-3">
+                <div class="form-group">
+                  <label for="emailaddress" class="form-label">Correo electrónico</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="username"
+                    id="username"
+                    placeholder="{{ 'global.form.email.placeholder' | translate }}"
+                    formControlName="username"
+                    #username
+                    data-cy="username"
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <div class="form-group">
+                  <label for="password" jhiTranslate="login.form.password">Password</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    name="password"
+                    id="password"
+                    placeholder="{{ 'login.form.password.placeholder' | translate }}"
+                    formControlName="password"
+                    data-cy="password"
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3 mb-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe" />
+                  <label class="form-check-label" for="checkbox-signin" jhiTranslate="login.form.rememberme">Remember me</label>
+                </div>
+                <a routerLink="/account/reset/request" class="text-muted float-end"
+                  ><small jhiTranslate="login.password.forgot">Forgot your password?</small></a
+                >
+              </div>
+
+              <div class="mb-3 mb-0 text-center">
+                <button type="submit" class="btn btn-primary w-100" data-cy="submit">Iniciar sesion</button>
+              </div>
+            </form>
+          </div>
+          <!-- end card-body -->
+        </div>
+        <!-- end card -->
+
+        <div class="row mt-3">
+          <div class="col-12 text-center">
+            <p class="text-muted">
+              ¿Listo para explorar?
+              <a routerLink="/account/register" class="text-muted ms-1"><b>Crea una cuenta</b></a>
+            </p>
+          </div>
+          <!-- end col -->
+        </div>
+        <!-- end row -->
+      </div>
+      <!-- end col -->
+    </div>
+    <!-- end row -->
+  </div>
+  <!-- end container -->
 </div>
+<!-- end page -->
