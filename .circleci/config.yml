@@ -11,9 +11,9 @@ jobs:
       - run:
           name: Build
           command: mvn -B -DskipTests clean package -P prod
-      - run:
-          name: Test
-          command: mvn test -P prod
+      # - run:
+      #     name: Test
+      #     command: mvn test -P prod
 
 workflows:
   datasurvey:

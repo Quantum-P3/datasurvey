@@ -1,0 +1,20 @@
+<swiper
+  [slidesPerView]="3"
+  [spaceBetween]="30"
+  [pagination]="{
+    dynamicBullets: true
+  }"
+  [loop]="true"
+  class="mySwiper"
+>
+  <!-- [scrollbar]="{ draggable: true, hide: true }" -->
+  <ng-template swiperSlide *ngFor="let items of data; index as i">
+    <img
+      class="{{ items.class }}"
+      src="./../../../content/profile_icons/{{ items.name }}.png"
+      alt=""
+      (click)="onSelect($event)"
+      [attr.id]="i"
+    />
+  </ng-template>
+</swiper>
