@@ -11,11 +11,16 @@ jobs:
       - run:
           name: Build
           command: mvn -B -DskipTests clean package -P prod
-      # - run:
-      #     name: Test
-      #     command: mvn test -P prod
+      - run:
+          name: Test
+          command: mvn test -P prod
 
 workflows:
   datasurvey:
     jobs:
-      - build-and-test
+      - build-and-test:
+          filters:
+            branches:
+              only:
+                - main
+                - qa
