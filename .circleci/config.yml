@@ -18,7 +18,7 @@ jobs:
 workflows:
   datasurvey:
     jobs:
-      - build-and-test
+      - build-and-test:
         filters:
           branches:
             only:
