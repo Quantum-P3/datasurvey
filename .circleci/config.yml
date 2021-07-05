@@ -19,8 +19,8 @@ workflows:
   datasurvey:
     jobs:
       - build-and-test:
-        filters:
-          branches:
-            only:
-              - main
-              - qa
+          filters:
+            branches:
+              only:
+                - main
+                - qa
