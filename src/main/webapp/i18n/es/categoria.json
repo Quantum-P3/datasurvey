@@ -2,20 +2,20 @@
   "dataSurveyApp": {
     "categoria": {
       "home": {
-        "title": "Categorias",
+        "title": "Categorías",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Categoria",
-        "createOrEditLabel": "Crear o editar Categoria",
-        "notFound": "Ningún Categorias encontrado"
+        "createLabel": "Crear nueva Categoría",
+        "createOrEditLabel": "Crear o editar Categoría",
+        "notFound": "Ninguna Categoría encontrada"
       },
-      "created": "Un nuevo Categoria ha sido creado con el identificador {{ param }}",
-      "updated": "Un Categoria ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Categoria ha sido eliminado con el identificador {{ param }}",
+      "created": "Una nueva Categoría ha sido creada con el identificador {{ param }}",
+      "updated": "Una Categoría ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Una Categoría ha sido eliminado con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Categoria {{ id }}?"
+        "question": "¿Seguro que quiere eliminar Categoría {{ id }}?"
       },
       "detail": {
-        "title": "Categoria"
+        "title": "Categoría"
       },
       "id": "ID",
       "nombre": "Nombre",
