@@ -1,7 +1,8 @@
-import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
 import { RegisterService } from './register.service';
@@ -11,7 +12,7 @@ import { RegisterService } from './register.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent implements AfterViewInit {
+export class RegisterComponent implements OnInit, AfterViewInit {
   // @ViewChild('name', { static: false })
   // name?: ElementRef;
 
@@ -52,6 +53,7 @@ export class RegisterComponent implements AfterViewInit {
   errorEmailExists = false;
   errorUserExists = false;
   success = false;
+  isAdmin: number = 0;
 
   // Login will be used to store the email as well.
   // login: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]]
@@ -63,6 +65,10 @@ export class RegisterComponent implements AfterViewInit {
   });
 
   constructor(private translateService: TranslateService, private registerService: RegisterService, private fb: FormBuilder) {}
+
+  ngOnInit(): void {
+    this.isAdmin = window.location.href.includes('/account/register') ? 0 : 1;
+  }
 
   ngAfterViewInit(): void {
     //   if (this.name) {
@@ -86,7 +92,15 @@ export class RegisterComponent implements AfterViewInit {
       console.log(name);
 
       this.registerService
-        .save({ login, email, password, langKey: this.translateService.currentLang, name, profileIcon: this.profileIcon })
+        .save({
+          login,
+          email,
+          password,
+          langKey: this.translateService.currentLang,
+          name,
+          profileIcon: this.profileIcon,
+          isAdmin: this.isAdmin,
+        })
         .subscribe(
           () => (this.success = true),
           response => this.processError(response)
