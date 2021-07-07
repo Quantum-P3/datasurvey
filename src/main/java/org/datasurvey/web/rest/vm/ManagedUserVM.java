@@ -22,6 +22,8 @@ public class ManagedUserVM extends AdminUserDTO {
 
     private Integer profileIcon;
 
+    private Integer isAdmin;
+
     public ManagedUserVM() {
         // Empty constructor needed for Jackson.
     }
@@ -48,6 +50,14 @@ public class ManagedUserVM extends AdminUserDTO {
 
     public void setProfileIcon(Integer profileIcon) {
         this.profileIcon = profileIcon;
+    }
+
+    public Integer getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(Integer isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     // prettier-ignore

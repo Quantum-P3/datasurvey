@@ -1,118 +1,246 @@
-<div class="row justify-content-center">
-  <div class="col-8">
-    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2
-        id="jhi-usuario-extra-heading"
-        data-cy="UsuarioExtraCreateUpdateHeading"
-        jhiTranslate="dataSurveyApp.usuarioExtra.home.createOrEditLabel"
-      >
-        Create or edit a Usuario Extra
-      </h2>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-xxl-8 col-lg-6">
+      <div class="card mt-1">
+        <!-- <div class="pl-4 pt-4 pr-4 pb-1 text-center">
+          <img src="../../content/img_datasurvey/datasurvey-logo-text-black.svg" alt="" />
+        </div> -->
 
-      <div>
-        <jhi-alert-error></jhi-alert-error>
-
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioExtra.nombre" for="field_nombre">Nombre</label>
-          <input type="text" class="form-control" name="nombre" id="field_nombre" data-cy="nombre" formControlName="nombre" />
-          <div *ngIf="editForm.get('nombre')!.invalid && (editForm.get('nombre')!.dirty || editForm.get('nombre')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('nombre')?.errors?.required" jhiTranslate="entity.validation.required">
-              This field is required.
-            </small>
+        <div class="card-body p-4">
+          <div class="text-center w-75 m-auto">
+            <h4 class="text-dark-50 text-center pb-0 fw-bold p-0 m-0" style="color: #727070; font-weight: 700; font-size: 1.3rem">
+              REGISTRAR ADMIN
+            </h4>
+            <p class="mb-4" style="color: rgba(146, 146, 146, 0.664)">Ingrese los datos para registrar a un admin.</p>
           </div>
-        </div>
 
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioExtra.iconoPerfil" for="field_iconoPerfil"
-            >Icono Perfil</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="iconoPerfil"
-            id="field_iconoPerfil"
-            data-cy="iconoPerfil"
-            formControlName="iconoPerfil"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioExtra.fechaNacimiento" for="field_fechaNacimiento"
-            >Fecha Nacimiento</label
-          >
-          <div class="d-flex">
-            <input
-              id="field_fechaNacimiento"
-              data-cy="fechaNacimiento"
-              type="datetime-local"
-              class="form-control"
-              name="fechaNacimiento"
-              formControlName="fechaNacimiento"
-              placeholder="YYYY-MM-DD HH:mm"
-            />
+          <div class="alert alert-success" *ngIf="success" jhiTranslate="register.messages.adminsuccess">
+            <strong>Registration saved!</strong> Please check your email for confirmation.
           </div>
-        </div>
 
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioExtra.estado" for="field_estado">Estado</label>
-          <select class="form-control" name="estado" formControlName="estado" id="field_estado" data-cy="estado">
-            <option [ngValue]="null">{{ 'dataSurveyApp.EstadoUsuario.null' | translate }}</option>
-            <option value="ACTIVE">{{ 'dataSurveyApp.EstadoUsuario.ACTIVE' | translate }}</option>
-            <option value="SUSPENDED">{{ 'dataSurveyApp.EstadoUsuario.SUSPENDED' | translate }}</option>
-          </select>
-          <div *ngIf="editForm.get('estado')!.invalid && (editForm.get('estado')!.dirty || editForm.get('estado')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('estado')?.errors?.required" jhiTranslate="entity.validation.required">
-              This field is required.
-            </small>
+          <div class="alert alert-danger" *ngIf="error" jhiTranslate="register.messages.error.fail">
+            <strong>Registration failed!</strong> Please try again later.
           </div>
-        </div>
 
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioExtra.user" for="field_user">User</label>
-          <select class="form-control" id="field_user" data-cy="user" name="user" formControlName="user">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="userOption.id === editForm.get('user')!.value?.id ? editForm.get('user')!.value : userOption"
-              *ngFor="let userOption of usersSharedCollection; trackBy: trackUserById"
-            >
-              {{ userOption.id }}
-            </option>
-          </select>
-        </div>
+          <div class="alert alert-danger" *ngIf="errorEmailExists" jhiTranslate="register.messages.error.emailexists">
+            <strong>Email is already in use!</strong> Please choose another one.
+          </div>
 
-        <div class="form-group">
-          <label jhiTranslate="dataSurveyApp.usuarioExtra.plantilla" for="field_plantillas">Plantilla</label>
-          <select class="form-control" id="field_plantillas" data-cy="plantilla" multiple name="plantillas" formControlName="plantillas">
-            <option
-              [ngValue]="getSelectedPlantilla(plantillaOption, editForm.get('plantillas')!.value)"
-              *ngFor="let plantillaOption of plantillasSharedCollection; trackBy: trackPlantillaById"
-            >
-              {{ plantillaOption.id }}
-            </option>
-          </select>
+          <div class="alert alert-danger" *ngIf="doNotMatch" jhiTranslate="global.messages.error.dontmatch">
+            The password and its confirmation do not match!
+          </div>
+
+          <form name="form" role="form" class="form" (ngSubmit)="register()" [formGroup]="registerForm" *ngIf="!success" autocomplete="off">
+            <div class="mb-3">
+              <div class="form-group">
+                <label for="name" class="form-label">Nombre</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  name="name"
+                  placeholder="{{ 'global.form.name.placeholder' | translate }}"
+                  formControlName="name"
+                  data-cy="name"
+                />
+
+                <div *ngIf="registerForm.get('name')!.invalid && (registerForm.get('name')!.dirty || registerForm.get('name')!.touched)">
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="registerForm.get('name')?.errors?.required"
+                    jhiTranslate="global.messages.validate.name.required"
+                  >
+                    Your name is required.
+                  </small>
+
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="registerForm.get('name')?.errors?.invalid"
+                    jhiTranslate="global.messages.validate.name.invalid"
+                  >
+                    Your name is invalid.
+                  </small>
+
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="registerForm.get('name')?.errors?.minlength"
+                    jhiTranslate="global.messages.validate.name.minlength"
+                  >
+                    Your name is required to be at least 2 characters.
+                  </small>
+
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="registerForm.get('name')?.errors?.maxlength"
+                    jhiTranslate="global.messages.validate.name.maxlength"
+                  >
+                    Your name cannot be longer than 50 characters.
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="form-group">
+                <label for="emailaddress" class="form-label">Correo electrónico</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  name="email"
+                  placeholder="{{ 'global.form.email.placeholder' | translate }}"
+                  formControlName="email"
+                  data-cy="email"
+                />
+
+                <div *ngIf="registerForm.get('email')!.invalid && (registerForm.get('email')!.dirty || registerForm.get('email')!.touched)">
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="registerForm.get('email')?.errors?.required"
+                    jhiTranslate="global.messages.validate.email.required"
+                  >
+                    Your email is required.
+                  </small>
+
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="registerForm.get('email')?.errors?.invalid"
+                    jhiTranslate="global.messages.validate.email.invalid"
+                  >
+                    Your email is invalid.
+                  </small>
+
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="registerForm.get('email')?.errors?.minlength"
+                    jhiTranslate="global.messages.validate.email.minlength"
+                  >
+                    Your email is required to be at least 5 characters.
+                  </small>
+
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="registerForm.get('email')?.errors?.maxlength"
+                    jhiTranslate="global.messages.validate.email.maxlength"
+                  >
+                    Your email cannot be longer than 100 characters.
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="form-group">
+                <label for="password" jhiTranslate="global.form.newpassword.label">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  name="password"
+                  placeholder="{{ 'global.form.newpassword.placeholder' | translate }}"
+                  formControlName="password"
+                  data-cy="firstPassword"
+                />
+
+                <div
+                  *ngIf="
+                    registerForm.get('password')!.invalid && (registerForm.get('password')!.dirty || registerForm.get('password')!.touched)
+                  "
+                >
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="registerForm.get('password')?.errors?.required"
+                    jhiTranslate="global.messages.validate.newpassword.required"
+                  >
+                    Your password is required.
+                  </small>
+
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="registerForm.get('password')?.errors?.minlength"
+                    jhiTranslate="global.messages.validate.newpassword.minlength"
+                  >
+                    Your password is required to be at least 4 characters.
+                  </small>
+
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="registerForm.get('password')?.errors?.maxlength"
+                    jhiTranslate="global.messages.validate.newpassword.maxlength"
+                  >
+                    Your password cannot be longer than 50 characters.
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="form-group">
+                <label for="password" jhiTranslate="global.form.newpassword.label">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  placeholder="{{ 'global.form.confirmpassword.placeholder' | translate }}"
+                  formControlName="confirmPassword"
+                  data-cy="secondPassword"
+                />
+
+                <div
+                  *ngIf="
+                    registerForm.get('confirmPassword')!.invalid &&
+                    (registerForm.get('confirmPassword')!.dirty || registerForm.get('confirmPassword')!.touched)
+                  "
+                >
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="registerForm.get('confirmPassword')?.errors?.required"
+                    jhiTranslate="global.messages.validate.confirmpassword.required"
+                  >
+                    Your confirmation password is required.
+                  </small>
+
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="registerForm.get('confirmPassword')?.errors?.minlength"
+                    jhiTranslate="global.messages.validate.confirmpassword.minlength"
+                  >
+                    Your confirmation password is required to be at least 4 characters.
+                  </small>
+
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="registerForm.get('confirmPassword')?.errors?.maxlength"
+                    jhiTranslate="global.messages.validate.confirmpassword.maxlength"
+                  >
+                    Your confirmation password cannot be longer than 50 characters.
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <div class="form-group">
+                <label for="password">Ícono de perfil</label>
+                <jhi-swiper [data]="profileIcons" (onSelectEvent)="selectIcon($event)"></jhi-swiper>
+              </div>
+            </div>
+
+            <div class="mb-3 mb-0 text-center">
+              <button
+                type="submit"
+                [disabled]="registerForm.invalid"
+                class="btn btn-primary w-100"
+                jhiTranslate="register.form.button"
+                data-cy="submit"
+              >
+                Register
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-
-      <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-        </button>
-
-        <button
-          type="submit"
-          id="save-entity"
-          data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
-        >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-        </button>
-      </div>
-    </form>
+    </div>
   </div>
 </div>

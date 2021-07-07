@@ -66,7 +66,8 @@ public class AccountResource {
             managedUserVM,
             managedUserVM.getPassword(),
             managedUserVM.getName(),
-            managedUserVM.getProfileIcon()
+            managedUserVM.getProfileIcon(),
+            managedUserVM.getIsAdmin()
         );
         mailService.sendActivationEmail(user);
     }
