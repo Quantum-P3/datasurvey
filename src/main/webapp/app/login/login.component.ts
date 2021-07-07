@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 
 import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
+import { SocialAuthService } from 'angularx-social-login';
+import { GoogleLoginProvider } from 'angularx-social-login';
 
 @Component({
   selector: 'jhi-login',
@@ -26,10 +28,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private accountService: AccountService,
     private loginService: LoginService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private authService: SocialAuthService
   ) {}
 
   ngOnInit(): void {
+    //console.log("Google ID: "+ GoogleLoginProvider.PROVIDER_ID)
     // if already authenticated then navigate to home page
     this.accountService.identity().subscribe(() => {
       if (this.accountService.isAuthenticated()) {
@@ -40,6 +44,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.username.nativeElement.focus();
+  }
+
+  signInWithGoogle(): void {
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
 
   login(): void {

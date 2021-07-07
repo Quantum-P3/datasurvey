@@ -9,12 +9,12 @@
 <div class="sidebar-wrapper">
   <div class="user" routerLink="/account/settings">
     <div class="photo mb-2">
-      <img src="../../../content/profile_icons/C2.png" />
+      <img src="../../../content/profile_icons/C{{ usuarioExtra?.iconoPerfil }}.png" />
     </div>
     <div class="info">
       <a data-toggle="collapse" class="collapsed">
         <span>
-          Pablo Bonilla
+          {{ usuarioExtra?.nombre }}
           <!-- <b class="caret"></b> -->
         </span>
       </a>
