@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
-import { SocialAuthService } from 'angularx-social-login';
+import { SocialAuthService, SocialUser } from 'angularx-social-login';
 import { GoogleLoginProvider } from 'angularx-social-login';
 
 @Component({
@@ -24,6 +24,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
     rememberMe: [false],
   });
 
+  user: SocialUser = new SocialUser();
+  loggedIn: boolean = false;
+
   constructor(
     private accountService: AccountService,
     private loginService: LoginService,
@@ -33,7 +36,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    //console.log("Google ID: "+ GoogleLoginProvider.PROVIDER_ID)
+    //Servicio para verificar si el usuario se encuentra loggeado
+    this.authService.authState.subscribe(user => {
+      this.user = user;
+      this.loggedIn = user != null;
+    });
+
     // if already authenticated then navigate to home page
     this.accountService.identity().subscribe(() => {
       if (this.accountService.isAuthenticated()) {
@@ -46,8 +54,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.username.nativeElement.focus();
   }
 
+  //Inicio Google
   signInWithGoogle(): void {
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+  refreshToken(): void {
+    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
   }
 
   login(): void {
