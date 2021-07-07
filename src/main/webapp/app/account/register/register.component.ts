@@ -12,7 +12,7 @@ import { RegisterService } from './register.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent implements OnInit, AfterViewInit {
+export class RegisterComponent implements AfterViewInit {
   // @ViewChild('name', { static: false })
   // name?: ElementRef;
 
@@ -53,7 +53,6 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   errorEmailExists = false;
   errorUserExists = false;
   success = false;
-  isAdmin: number = 0;
 
   // Login will be used to store the email as well.
   // login: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]]
@@ -65,10 +64,6 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   });
 
   constructor(private translateService: TranslateService, private registerService: RegisterService, private fb: FormBuilder) {}
-
-  ngOnInit(): void {
-    this.isAdmin = window.location.href.includes('/account/register') ? 0 : 1;
-  }
 
   ngAfterViewInit(): void {
     //   if (this.name) {
@@ -99,7 +94,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
           langKey: this.translateService.currentLang,
           name,
           profileIcon: this.profileIcon,
-          isAdmin: this.isAdmin,
+          isAdmin: 0,
         })
         .subscribe(
           () => (this.success = true),

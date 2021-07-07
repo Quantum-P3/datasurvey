@@ -5,9 +5,10 @@ import { UsuarioExtraDetailComponent } from './detail/usuario-extra-detail.compo
 import { UsuarioExtraUpdateComponent } from './update/usuario-extra-update.component';
 import { UsuarioExtraDeleteDialogComponent } from './delete/usuario-extra-delete-dialog.component';
 import { UsuarioExtraRoutingModule } from './route/usuario-extra-routing.module';
+import { ComponentsModule } from 'app/components/components.module';
 
 @NgModule({
-  imports: [SharedModule, UsuarioExtraRoutingModule],
+  imports: [SharedModule, UsuarioExtraRoutingModule, ComponentsModule],
   declarations: [UsuarioExtraComponent, UsuarioExtraDetailComponent, UsuarioExtraUpdateComponent, UsuarioExtraDeleteDialogComponent],
   entryComponents: [UsuarioExtraDeleteDialogComponent],
 })
