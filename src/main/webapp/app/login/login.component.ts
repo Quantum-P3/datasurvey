@@ -6,6 +6,9 @@ import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { SocialAuthService, SocialUser } from 'angularx-social-login';
 import { GoogleLoginProvider } from 'angularx-social-login';
+import { RegisterService } from '../account/register/register.service';
+import { TranslateService } from '@ngx-translate/core';
+import { RegisterComponent } from '../account/register/register.component';
 
 @Component({
   selector: 'jhi-login',
@@ -26,13 +29,17 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   user: SocialUser = new SocialUser();
   loggedIn: boolean = false;
+  success = false;
 
   constructor(
     private accountService: AccountService,
     private loginService: LoginService,
     private router: Router,
     private fb: FormBuilder,
-    private authService: SocialAuthService
+    private authService: SocialAuthService,
+    private registerService: RegisterService,
+    private translateService: TranslateService,
+    private registerAuth: RegisterComponent
   ) {}
 
   ngOnInit(): void {
@@ -40,6 +47,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.authService.authState.subscribe(user => {
       this.user = user;
       this.loggedIn = user != null;
+
+      console.log('correo: ' + user.email);
+      console.log('correo: ' + user.name);
+      console.log('ID: ' + this.user.id);
+
+      this.authenticacionGoogle();
     });
 
     // if already authenticated then navigate to home page
@@ -57,6 +70,37 @@ export class LoginComponent implements OnInit, AfterViewInit {
   //Inicio Google
   signInWithGoogle(): void {
     this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+  authenticacionGoogle(): void {
+    this.loginService.login({ username: this.user.email, password: this.user.id, rememberMe: true }).subscribe(
+      () => {
+        this.authenticationError = false;
+        if (!this.router.getCurrentNavigation()) {
+          // There were no routing during login (eg from navigationToStoredUrl)
+          this.router.navigate(['']);
+        }
+        console.log('SI existe');
+      },
+      () =>
+        this.registerService
+          .save({
+            login: this.user.email,
+            email: this.user.email,
+            password: this.user.idToken,
+            langKey: this.translateService.currentLang,
+            name: this.user.name,
+            profileIcon: this.randomProfilePic(),
+          })
+          .subscribe(
+            () => (this.success = true),
+            response => this.registerAuth.processError(response)
+          ) //console.log("Numero random: " + this.randomProfilePic())
+    );
+  }
+
+  randomProfilePic(): number {
+    return Math.floor(Math.random() * (28 - 1 + 1)) + 1;
   }
 
   refreshToken(): void {
