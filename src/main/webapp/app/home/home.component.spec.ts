@@ -17,6 +17,7 @@ describe('Component Tests', () => {
     let mockAccountService: AccountService;
     let mockRouter: Router;
     const account: Account = {
+      id: 0,
       activated: true,
       authorities: [],
       email: '',

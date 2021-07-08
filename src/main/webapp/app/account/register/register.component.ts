@@ -1,7 +1,8 @@
-import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
 import { RegisterService } from './register.service';
@@ -86,7 +87,15 @@ export class RegisterComponent implements AfterViewInit {
       console.log(name);
 
       this.registerService
-        .save({ login, email, password, langKey: this.translateService.currentLang, name, profileIcon: this.profileIcon })
+        .save({
+          login,
+          email,
+          password,
+          langKey: this.translateService.currentLang,
+          name,
+          profileIcon: this.profileIcon,
+          isAdmin: 0,
+        })
         .subscribe(
           () => (this.success = true),
           response => this.processError(response)

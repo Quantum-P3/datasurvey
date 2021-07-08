@@ -156,8 +156,7 @@ public class UserService {
      * Modified to register extra user data
      * name, iconoPerfil, fechaNacimiento, estado, pais
      */
-    public User registerUser(AdminUserDTO userDTO, String password, String name, Integer profileIcon) {
-        System.out.println(name);
+    public User registerUser(AdminUserDTO userDTO, String password, String name, Integer profileIcon, Integer isAdmin) {
         userRepository
             .findOneByLogin(userDTO.getLogin().toLowerCase())
             .ifPresent(
@@ -195,7 +194,12 @@ public class UserService {
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
+        // Check whether it's an ADMIN or USER and apply authorities
+        if (isAdmin == 1) {
+            authorityRepository.findById(AuthoritiesConstants.ADMIN).ifPresent(authorities::add);
+        }
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
