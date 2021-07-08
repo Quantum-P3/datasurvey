@@ -8,7 +8,8 @@ import { SocialAuthService, SocialUser } from 'angularx-social-login';
 import { GoogleLoginProvider } from 'angularx-social-login';
 import { RegisterService } from '../account/register/register.service';
 import { TranslateService } from '@ngx-translate/core';
-import { RegisterComponent } from '../account/register/register.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '../config/error.constants';
 
 @Component({
   selector: 'jhi-login',
@@ -20,6 +21,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
   username!: ElementRef;
 
   authenticationError = false;
+  error = false;
+  errorEmailExists = false;
+  errorUserExists = false;
 
   loginForm = this.fb.group({
     username: [null, [Validators.required]],
@@ -38,8 +42,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private fb: FormBuilder,
     private authService: SocialAuthService,
     private registerService: RegisterService,
-    private translateService: TranslateService,
-    private registerAuth: RegisterComponent
+    private translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -94,13 +97,23 @@ export class LoginComponent implements OnInit, AfterViewInit {
           })
           .subscribe(
             () => (this.success = true),
-            response => this.registerAuth.processError(response)
+            response => this.processError(response)
           ) //console.log("Numero random: " + this.randomProfilePic())
     );
   }
 
   randomProfilePic(): number {
     return Math.floor(Math.random() * (28 - 1 + 1)) + 1;
+  }
+
+  processError(response: HttpErrorResponse): void {
+    if (response.status === 400 && response.error.type === LOGIN_ALREADY_USED_TYPE) {
+      this.errorUserExists = true;
+    } else if (response.status === 400 && response.error.type === EMAIL_ALREADY_USED_TYPE) {
+      this.errorEmailExists = true;
+    } else {
+      this.error = true;
+    }
   }
 
   refreshToken(): void {
