@@ -35,7 +35,6 @@
 // Core CSS
 @import 'paper-dashboard/nucleo-outline';
 @import 'paper-dashboard/buttons';
-@import 'paper-dashboard/datasurvey-buttons';
 @import 'paper-dashboard/social-buttons';
 @import 'paper-dashboard/animated-buttons';
 @import 'paper-dashboard/inputs';
@@ -90,3 +89,8 @@
 
 @import 'paper-dashboard/responsive';
 @import 'paper-dashboard/media-queries';
+
+// Data Survey
+@import 'paper-dashboard/datasurvey-buttons';
+@import 'paper-dashboard/datasurvey-form';
+@import 'paper-dashboard/datasurvey-global';

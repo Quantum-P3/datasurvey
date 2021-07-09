@@ -172,16 +172,24 @@
     <div class="col-lg-4 mr-lg-5">
       <div class="row">
         <div class="w-100">
-          <p><b>Perfil</b></p>
+          <p class="ds-title">Perfil</p>
         </div>
         <div>
-          <p>Información general de su usuario, el correo electrónico es su identificador en DataSurvey.</p>
+          <p class="ds-subtitle">Información general de su usuario, el correo electrónico es su identificador en DataSurvey.</p>
         </div>
       </div>
     </div>
 
     <!-- Form -->
-    <form class="col-lg ml-lg-5 mr-lg-5 pr-lg-5" name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+    <form
+      autocomplete="off"
+      class="ds-form col-lg ml-lg-5 mr-lg-5 pr-lg-5"
+      name="editForm"
+      role="form"
+      novalidate
+      (ngSubmit)="save()"
+      [formGroup]="editForm"
+    >
       <div class="row mb-2">
         <div class="form-group w-100">
           <label class="form-control-label" for="field_email">Correo electrónico</label>
@@ -258,16 +266,26 @@
     <div class="col-lg-4 mr-lg-5">
       <div class="row">
         <div class="w-100">
-          <p><b>Contraseña</b></p>
+          <p class="ds-title">Contraseña</p>
         </div>
         <div>
-          <p>Utilice una contraseña segura al realizar el cambio, este dato debe ser secreto ya que provee acceso a su cuenta.</p>
+          <p class="ds-subtitle">
+            Utilice una contraseña segura al realizar el cambio, este dato debe ser secreto ya que provee acceso a su cuenta.
+          </p>
         </div>
       </div>
     </div>
 
     <!-- Form -->
-    <form class="col-lg ml-lg-5 mr-lg-5 pr-lg-5" name="passwordForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="passwordForm">
+    <form
+      autocomplete="off"
+      class="ds-form col-lg ml-lg-5 mr-lg-5 pr-lg-5"
+      name="passwordForm"
+      role="form"
+      novalidate
+      (ngSubmit)="save()"
+      [formGroup]="passwordForm"
+    >
       <div class="row mb-3 pb-3" style="border-bottom: 1px solid #e7ebf3">
         <div class="form-group w-100">
           <label class="form-control-label" for="field_password">Contraseña actual</label>
@@ -359,7 +377,7 @@
           class="ds-btn ds-btn--secondary"
           (click)="previousState()"
         >
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
 
         <button
