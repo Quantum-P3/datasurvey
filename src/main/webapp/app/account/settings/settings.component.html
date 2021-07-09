@@ -169,8 +169,8 @@
 
 <div>
   <div class="row justify-content-center">
-    <div class="row pb-lg-5 pr-lg-5" style="border-bottom: 1px solid #e7ebf3">
-      <div class="col-lg mr-lg-5">
+    <div class="row w-75 pb-lg-5 pr-lg-5 mb-5" style="border-bottom: 1px solid #e7ebf3">
+      <div class="col-lg-4 mr-lg-5">
         <div class="row">
           <div class="w-100">
             <p><b>Perfil</b></p>
@@ -181,6 +181,7 @@
         </div>
       </div>
 
+      <!-- Form -->
       <div class="col-lg ml-lg-5 mr-lg-5 pr-lg-5" name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
         <div class="row">
           <div class="form-group w-100">
@@ -238,126 +239,124 @@
             </div>
           </div>
         </div>
+        <div>
+          <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+            <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+          </button>
+
+          <button
+            type="submit"
+            id="save-entity"
+            data-cy="entityCreateSaveButton"
+            [disabled]="editForm.invalid || isSaving"
+            class="btn btn-primary"
+          >
+            <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row w-75 pb-lg-5 pr-lg-5">
+      <div class="col-lg-4 mr-lg-5">
+        <div class="row">
+          <div class="w-100">
+            <p><b>Contraseña</b></p>
+          </div>
+          <div>
+            <p>Utilice una contraseña segura al realizar el cambio, este dato debe ser secreto ya que provee acceso a su cuenta.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="col-lg ml-lg-5 mr-lg-5 pr-lg-5" name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+        <div class="row">
+          <div class="form-group w-100">
+            <label class="form-control-label" for="field_password">Contraseña actual</label>
+            <input type="text" class="form-control" name="password" id="field_password" data-cy="password" formControlName="password" />
+            <div *ngIf="editForm.get('password')!.invalid && (editForm.get('password')!.dirty || editForm.get('password')!.touched)">
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('password')?.errors?.required"
+                jhiTranslate="entity.validation.required"
+              >
+                This field is required.
+              </small>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group w-100">
+            <label class="form-control-label" for="field_passwordNew">Contraseña nueva</label>
+            <input
+              type="text"
+              class="form-control"
+              name="passwordNew"
+              id="field_passwordNew"
+              data-cy="passwordNew"
+              formControlName="passwordNew"
+              [readonly]="true"
+            />
+            <div
+              *ngIf="editForm.get('passwordNew')!.invalid && (editForm.get('passwordNew')!.dirty || editForm.get('passwordNew')!.touched)"
+            >
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('passwordNew')?.errors?.required"
+                jhiTranslate="entity.validation.required"
+              >
+                This field is required.
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group w-100">
+            <label class="form-control-label" for="field_passwordNewConfirm">Confirmar contraseña nueva</label>
+            <input
+              type="text"
+              class="form-control"
+              name="passwordNewConfirm"
+              id="field_passwordNewConfirm"
+              data-cy="passwordNewConfirm"
+              formControlName="passwordNewConfirm"
+              [readonly]="true"
+            />
+            <div
+              *ngIf="
+                editForm.get('passwordNewConfirm')!.invalid &&
+                (editForm.get('passwordNewConfirm')!.dirty || editForm.get('passwordNewConfirm')!.touched)
+              "
+            >
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('passwordNewConfirm')?.errors?.required"
+                jhiTranslate="entity.validation.required"
+              >
+                This field is required.
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+            <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+          </button>
+
+          <button
+            type="submit"
+            id="save-entity"
+            data-cy="entityCreateSaveButton"
+            [disabled]="editForm.invalid || isSaving"
+            class="btn btn-primary"
+          >
+            <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
-<!-- <div class="row justify-content-center">
-  <div class="col-8">
-    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2
-        id="jhi-usuario-extra-heading"
-        data-cy="UsuarioExtraCreateUpdateHeading"
-        jhiTranslate="dataSurveyApp.usuarioExtra.home.createOrEditLabel"
-      >
-        Create or edit a Usuario Extra
-      </h2>
-
-      <div>
-        <jhi-alert-error></jhi-alert-error>
-
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioExtra.nombre" for="field_nombre">Nombre</label>
-          <input type="text" class="form-control" name="nombre" id="field_nombre" data-cy="nombre" formControlName="nombre" />
-          <div *ngIf="editForm.get('nombre')!.invalid && (editForm.get('nombre')!.dirty || editForm.get('nombre')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('nombre')?.errors?.required" jhiTranslate="entity.validation.required">
-              This field is required.
-            </small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioExtra.iconoPerfil" for="field_iconoPerfil"
-            >Icono Perfil</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="iconoPerfil"
-            id="field_iconoPerfil"
-            data-cy="iconoPerfil"
-            formControlName="iconoPerfil"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioExtra.fechaNacimiento" for="field_fechaNacimiento"
-            >Fecha Nacimiento</label
-          >
-          <div class="d-flex">
-            <input
-              id="field_fechaNacimiento"
-              data-cy="fechaNacimiento"
-              type="datetime-local"
-              class="form-control"
-              name="fechaNacimiento"
-              formControlName="fechaNacimiento"
-              placeholder="YYYY-MM-DD HH:mm"
-            />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioExtra.estado" for="field_estado">Estado</label>
-          <select class="form-control" name="estado" formControlName="estado" id="field_estado" data-cy="estado">
-            <option [ngValue]="null">{{ 'dataSurveyApp.EstadoUsuario.null' | translate }}</option>
-            <option value="ACTIVE">{{ 'dataSurveyApp.EstadoUsuario.ACTIVE' | translate }}</option>
-            <option value="SUSPENDED">{{ 'dataSurveyApp.EstadoUsuario.SUSPENDED' | translate }}</option>
-          </select>
-          <div *ngIf="editForm.get('estado')!.invalid && (editForm.get('estado')!.dirty || editForm.get('estado')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('estado')?.errors?.required" jhiTranslate="entity.validation.required">
-              This field is required.
-            </small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioExtra.user" for="field_user">User</label>
-          <select class="form-control" id="field_user" data-cy="user" name="user" formControlName="user">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="userOption.id === editForm.get('user')!.value?.id ? editForm.get('user')!.value : userOption"
-              *ngFor="let userOption of usersSharedCollection; trackBy: trackUserById"
-            >
-              {{ userOption.id }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label jhiTranslate="dataSurveyApp.usuarioExtra.plantilla" for="field_plantillas">Plantilla</label>
-          <select class="form-control" id="field_plantillas" data-cy="plantilla" multiple name="plantillas" formControlName="plantillas">
-            <option
-              [ngValue]="getSelectedPlantilla(plantillaOption, editForm.get('plantillas')!.value)"
-              *ngFor="let plantillaOption of plantillasSharedCollection; trackBy: trackPlantillaById"
-            >
-              {{ plantillaOption.id }}
-            </option>
-          </select>
-        </div>
-      </div>
-
-      <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-        </button>
-
-        <button
-          type="submit"
-          id="save-entity"
-          data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
-        >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-        </button>
-      </div>
-    </form>
-  </div>
-</div> -->
