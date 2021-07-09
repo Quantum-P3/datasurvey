@@ -32,34 +32,36 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.nombre">Nombre</span></th>
+          <th scope="col"><span>Rol</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.iconoPerfil">Icono Perfil</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.fechaNacimiento">Fecha Nacimiento</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.nombre">Nombre Usuario</span></th>
+          <th scope="col"><span>Correo electrónico</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.estado">Estado</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.user">User</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.plantilla">Plantilla</span></th>
+          <!--<th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.plantilla">Plantilla</span></th>-->
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let usuarioExtra of usuarioExtras; trackBy: trackId" data-cy="entityTable">
+          <td *ngIf="usuarioExtra.user">
+            <ul class="listRoles">
+              <li *ngFor="let userRole of usuarioExtra.user.authorities">
+                <p>{{ userRole }}</p>
+              </li>
+            </ul>
+          </td>
           <td>
-            <a [routerLink]="['/usuario-extra', usuarioExtra.id, 'view']">{{ usuarioExtra.id }}</a>
+            <div class="photo mb-2"><img src="../../../../content/profile_icons/C{{ usuarioExtra.iconoPerfil }}.png" /></div>
           </td>
           <td>{{ usuarioExtra.nombre }}</td>
-          <td>{{ usuarioExtra.iconoPerfil }}</td>
-          <td>{{ usuarioExtra.fechaNacimiento | formatMediumDatetime }}</td>
+          <td *ngIf="usuarioExtra.user">{{ usuarioExtra.user.email }}</td>
           <td jhiTranslate="{{ 'dataSurveyApp.EstadoUsuario.' + usuarioExtra.estado }}">{{ usuarioExtra.estado }}</td>
-          <td>
-            {{ usuarioExtra.user?.id }}
-          </td>
-          <td>
+          <!--<td>
             <span *ngFor="let plantilla of usuarioExtra.plantillas; let last = last">
               <a class="form-control-static" [routerLink]="['/plantilla', plantilla.id, 'view']">{{ plantilla.id }}</a
               >{{ last ? '' : ', ' }}
             </span>
-          </td>
+          </td>-->
           <td class="text-right">
             <div class="btn-group">
               <button
@@ -70,16 +72,6 @@
               >
                 <fa-icon icon="eye"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-              </button>
-
-              <button
-                type="submit"
-                [routerLink]="['/usuario-extra', usuarioExtra.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
-              >
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>
 
               <button type="submit" (click)="delete(usuarioExtra)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">

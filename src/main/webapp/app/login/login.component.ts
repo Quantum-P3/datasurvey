@@ -94,6 +94,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
             langKey: this.translateService.currentLang,
             name: this.user.name,
             profileIcon: this.randomProfilePic(),
+            isAdmin: 0,
           })
           .subscribe(
             () => (this.success = true),
