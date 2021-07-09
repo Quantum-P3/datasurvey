@@ -95,6 +95,7 @@ export class RegisterComponent implements AfterViewInit {
           name,
           profileIcon: this.profileIcon,
           isAdmin: 0,
+          isGoogle: 0,
         })
         .subscribe(
           () => (this.success = true),

@@ -47,17 +47,17 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     //Servicio para verificar si el usuario se encuentra loggeado
-    this.authService.authState.subscribe(user => {
+    /*this.authService.authState.subscribe(user => {
       this.user = user;
       this.loggedIn = user != null;
 
-      console.log('correo: ' + user.email);
+     /!* console.log('correo: ' + user.email);
       console.log('correo: ' + user.name);
-      console.log('ID: ' + this.user.id);
+      console.log('ID: ' + this.user.id);*!/
 
       this.authenticacionGoogle();
     });
-
+*/
     // if already authenticated then navigate to home page
     this.accountService.identity().subscribe(() => {
       if (this.accountService.isAuthenticated()) {
@@ -72,7 +72,18 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   //Inicio Google
   signInWithGoogle(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then(() => {
+      this.authService.authState.subscribe(user => {
+        this.user = user;
+        this.loggedIn = user != null;
+
+        /* console.log('correo: ' + user.email);
+         console.log('correo: ' + user.name);
+         console.log('ID: ' + this.user.id);*/
+
+        this.authenticacionGoogle();
+      });
+    });
   }
 
   authenticacionGoogle(): void {
@@ -83,9 +94,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
           // There were no routing during login (eg from navigationToStoredUrl)
           this.router.navigate(['']);
         }
-        console.log('SI existe');
       },
-      () => (this.authenticationError = true)
+      () => this.activateGoogle()
       /*this.registerService
           .save({
             login: this.user.email,
@@ -131,9 +141,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
         name: this.user.name,
         profileIcon: this.randomProfilePic(),
         isAdmin: 0,
+        isGoogle: 1,
       })
       .subscribe(
-        () => (this.success = true),
+        () => {
+          this.success = true;
+          this.authenticacionGoogle();
+        },
         response => this.processError(response)
       );
   }

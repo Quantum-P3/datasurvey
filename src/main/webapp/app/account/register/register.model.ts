@@ -6,6 +6,7 @@ export class Registration {
     public langKey: string,
     public name: string,
     public profileIcon: number,
-    public isAdmin: number
+    public isAdmin: number,
+    public isGoogle: number
   ) {}
 }
