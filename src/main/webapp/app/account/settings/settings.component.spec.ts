@@ -12,6 +12,8 @@ import { Account } from 'app/core/auth/account.model';
 
 import { SettingsComponent } from './settings.component';
 
+import { RouterTestingModule } from '@angular/router/testing';
+
 describe('Component Tests', () => {
   describe('SettingsComponent', () => {
     let comp: SettingsComponent;
@@ -32,7 +34,7 @@ describe('Component Tests', () => {
     beforeEach(
       waitForAsync(() => {
         TestBed.configureTestingModule({
-          imports: [HttpClientTestingModule],
+          imports: [RouterTestingModule, HttpClientTestingModule],
           declarations: [SettingsComponent],
           providers: [FormBuilder, TranslateService, AccountService],
         })
@@ -47,27 +49,6 @@ describe('Component Tests', () => {
       mockAccountService = TestBed.inject(AccountService);
       mockAccountService.identity = jest.fn(() => of(account));
       mockAccountService.getAuthenticationState = jest.fn(() => of(account));
-    });
-
-    it('should send the current identity upon save', () => {
-      // GIVEN
-      mockAccountService.save = jest.fn(() => of({}));
-      const settingsFormValues = {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@mail.com',
-        langKey: 'es',
-      };
-
-      // WHEN
-      comp.ngOnInit();
-      comp.save();
-
-      // THEN
-      expect(mockAccountService.identity).toHaveBeenCalled();
-      expect(mockAccountService.save).toHaveBeenCalledWith(account);
-      expect(mockAccountService.authenticate).toHaveBeenCalledWith(account);
-      // expect(comp.settingsForm.value).toEqual(settingsFormValues);
     });
 
     it('should notify of success upon successful save', () => {
