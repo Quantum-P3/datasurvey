@@ -36,7 +36,44 @@ export class SettingsComponent implements OnInit {
     plantillas: [],
   });
 
+  passwordForm = this.fb.group({
+    password: [null, [Validators.required]],
+    passwordNew: [null, [Validators.required]],
+    passwordNewConfirm: [null, [Validators.required]],
+  });
+
   usuarioExtra: UsuarioExtra | null = null;
+  profileIcon: number = 1;
+  profileIcons: any[] = [
+    { name: 'C1' },
+    { name: 'C2' },
+    { name: 'C3' },
+    { name: 'C4' },
+    { name: 'C5' },
+    { name: 'C6' },
+    { name: 'C7' },
+    { name: 'C8' },
+    { name: 'C9' },
+    { name: 'C10' },
+    { name: 'C11' },
+    { name: 'C12' },
+    { name: 'C13' },
+    { name: 'C14' },
+    { name: 'C15' },
+    { name: 'C16' },
+    { name: 'C17' },
+    { name: 'C18' },
+    { name: 'C19' },
+    { name: 'C20' },
+    { name: 'C21' },
+    { name: 'C22' },
+    { name: 'C23' },
+    { name: 'C24' },
+    { name: 'C25' },
+    { name: 'C26' },
+    { name: 'C27' },
+    { name: 'C28' },
+  ];
 
   constructor(
     protected usuarioExtraService: UsuarioExtraService,
@@ -135,6 +172,15 @@ export class SettingsComponent implements OnInit {
       plantillas: usuarioExtra.plantillas,
     });
 
+    // Update swiper
+    this.profileIcon = parseInt(usuarioExtra.iconoPerfil!);
+    this.profileIcons.forEach(icon => {
+      if (parseInt(icon.name.split('C')[1]) === this.profileIcon) {
+        icon.class = 'active';
+      }
+    });
+    console.log(this.profileIcons);
+
     this.usersSharedCollection = this.userService.addUserToCollectionIfMissing(this.usersSharedCollection, usuarioExtra.user);
     this.plantillasSharedCollection = this.plantillaService.addPlantillaToCollectionIfMissing(
       this.plantillasSharedCollection,
@@ -173,5 +219,13 @@ export class SettingsComponent implements OnInit {
       user: this.editForm.get(['user'])!.value,
       plantillas: this.editForm.get(['plantillas'])!.value,
     };
+  }
+
+  selectIcon(event: MouseEvent): void {
+    if (event.target instanceof Element) {
+      document.querySelectorAll('.active').forEach(e => e.classList.remove('active'));
+      event.target.classList.add('active');
+      this.profileIcon = +event.target.getAttribute('id')! + 1;
+    }
   }
 }

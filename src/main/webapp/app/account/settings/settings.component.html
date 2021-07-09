@@ -183,7 +183,7 @@
 
       <!-- Form -->
       <div class="col-lg ml-lg-5 mr-lg-5 pr-lg-5" name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-        <div class="row">
+        <div class="row mb-2">
           <div class="form-group w-100">
             <label class="form-control-label" for="field_email">Correo electrónico</label>
             <input
@@ -206,7 +206,7 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row mb-2">
           <div class="form-group w-100">
             <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioExtra.nombre" for="field_nombre">Nombre</label>
             <input type="text" class="form-control" name="nombre" id="field_nombre" data-cy="nombre" formControlName="nombre" />
@@ -221,7 +221,7 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row mb-2">
           <div class="form-group w-100">
             <label class="form-control-label" jhiTranslate="dataSurveyApp.usuarioExtra.fechaNacimiento" for="field_fechaNacimiento"
               >Fecha de nacimiento</label
@@ -239,7 +239,15 @@
             </div>
           </div>
         </div>
-        <div>
+        <div class="row mb-2">
+          <div class="form-group w-100">
+            <label for="iconoPerfil">Ícono de perfil</label>
+            <div class="d-flex">
+              <jhi-swiper style="width: 22.5rem !important" [data]="profileIcons" (onSelectEvent)="selectIcon($event)"></jhi-swiper>
+            </div>
+          </div>
+        </div>
+        <div class="row">
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
             <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
           </button>
@@ -270,15 +278,27 @@
       </div>
 
       <!-- Form -->
-      <div class="col-lg ml-lg-5 mr-lg-5 pr-lg-5" name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-        <div class="row">
+      <div class="col-lg ml-lg-5 mr-lg-5 pr-lg-5" name="passwordForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="passwordForm">
+        <div class="row mb-3 pb-3" style="border-bottom: 1px solid #e7ebf3">
           <div class="form-group w-100">
             <label class="form-control-label" for="field_password">Contraseña actual</label>
-            <input type="text" class="form-control" name="password" id="field_password" data-cy="password" formControlName="password" />
-            <div *ngIf="editForm.get('password')!.invalid && (editForm.get('password')!.dirty || editForm.get('password')!.touched)">
+            <input
+              type="text"
+              class="form-control"
+              name="password"
+              id="field_password"
+              data-cy="password"
+              formControlName="password"
+              placeholder="Su contraseña actual"
+            />
+            <div
+              *ngIf="
+                passwordForm.get('password')!.invalid && (passwordForm.get('password')!.dirty || passwordForm.get('password')!.touched)
+              "
+            >
               <small
                 class="form-text text-danger"
-                *ngIf="editForm.get('password')?.errors?.required"
+                *ngIf="passwordForm.get('password')?.errors?.required"
                 jhiTranslate="entity.validation.required"
               >
                 This field is required.
@@ -286,7 +306,7 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row mb-2">
           <div class="form-group w-100">
             <label class="form-control-label" for="field_passwordNew">Contraseña nueva</label>
             <input
@@ -296,14 +316,17 @@
               id="field_passwordNew"
               data-cy="passwordNew"
               formControlName="passwordNew"
-              [readonly]="true"
+              placeholder="Contraseña nueva"
             />
             <div
-              *ngIf="editForm.get('passwordNew')!.invalid && (editForm.get('passwordNew')!.dirty || editForm.get('passwordNew')!.touched)"
+              *ngIf="
+                passwordForm.get('passwordNew')!.invalid &&
+                (passwordForm.get('passwordNew')!.dirty || passwordForm.get('passwordNew')!.touched)
+              "
             >
               <small
                 class="form-text text-danger"
-                *ngIf="editForm.get('passwordNew')?.errors?.required"
+                *ngIf="passwordForm.get('passwordNew')?.errors?.required"
                 jhiTranslate="entity.validation.required"
               >
                 This field is required.
@@ -312,7 +335,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row mb-2">
           <div class="form-group w-100">
             <label class="form-control-label" for="field_passwordNewConfirm">Confirmar contraseña nueva</label>
             <input
@@ -322,17 +345,17 @@
               id="field_passwordNewConfirm"
               data-cy="passwordNewConfirm"
               formControlName="passwordNewConfirm"
-              [readonly]="true"
+              placeholder="Contraseña nueva"
             />
             <div
               *ngIf="
-                editForm.get('passwordNewConfirm')!.invalid &&
-                (editForm.get('passwordNewConfirm')!.dirty || editForm.get('passwordNewConfirm')!.touched)
+                passwordForm.get('passwordNewConfirm')!.invalid &&
+                (passwordForm.get('passwordNewConfirm')!.dirty || passwordForm.get('passwordNewConfirm')!.touched)
               "
             >
               <small
                 class="form-text text-danger"
-                *ngIf="editForm.get('passwordNewConfirm')?.errors?.required"
+                *ngIf="passwordForm.get('passwordNewConfirm')?.errors?.required"
                 jhiTranslate="entity.validation.required"
               >
                 This field is required.
@@ -341,7 +364,7 @@
           </div>
         </div>
 
-        <div>
+        <div class="row">
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
             <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
           </button>
@@ -350,7 +373,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            [disabled]="editForm.invalid || isSaving"
+            [disabled]="passwordForm.invalid || isSaving"
             class="btn btn-primary"
           >
             <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
