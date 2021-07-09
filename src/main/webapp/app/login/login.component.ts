@@ -85,20 +85,21 @@ export class LoginComponent implements OnInit, AfterViewInit {
         }
         console.log('SI existe');
       },
-      () =>
-        this.registerService
+      () => (this.authenticationError = true)
+      /*this.registerService
           .save({
             login: this.user.email,
             email: this.user.email,
-            password: this.user.idToken,
+            password: this.user.id,
             langKey: this.translateService.currentLang,
             name: this.user.name,
             profileIcon: this.randomProfilePic(),
+            isAdmin: 0,
           })
           .subscribe(
             () => (this.success = true),
             response => this.processError(response)
-          ) //console.log("Numero random: " + this.randomProfilePic())
+          ) */ //console.log("Usuario no existe")
     );
   }
 
@@ -118,6 +119,23 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   refreshToken(): void {
     this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+  activateGoogle(): void {
+    this.registerService
+      .save({
+        login: this.user.email,
+        email: this.user.email,
+        password: this.user.id,
+        langKey: this.translateService.currentLang,
+        name: this.user.name,
+        profileIcon: this.randomProfilePic(),
+        isAdmin: 0,
+      })
+      .subscribe(
+        () => (this.success = true),
+        response => this.processError(response)
+      );
   }
 
   login(): void {
