@@ -91,6 +91,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       () => {
         this.authenticationError = false;
         if (!this.router.getCurrentNavigation()) {
+          window.localStorage.setItem('IsGoogle', 'true');
           // There were no routing during login (eg from navigationToStoredUrl)
           this.router.navigate(['']);
         }
