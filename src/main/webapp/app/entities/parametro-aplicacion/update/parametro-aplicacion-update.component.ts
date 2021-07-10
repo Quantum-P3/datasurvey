@@ -11,6 +11,7 @@ import { ParametroAplicacionService } from '../service/parametro-aplicacion.serv
 @Component({
   selector: 'jhi-parametro-aplicacion-update',
   templateUrl: './parametro-aplicacion-update.component.html',
+  styleUrls: ['./parametro-aplicacion-update.component.scss'],
 })
 export class ParametroAplicacionUpdateComponent implements OnInit {
   isSaving = false;

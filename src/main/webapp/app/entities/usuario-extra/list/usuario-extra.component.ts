@@ -11,7 +11,6 @@ import { finalize } from 'rxjs/operators';
 @Component({
   selector: 'jhi-usuario-extra',
   templateUrl: './usuario-extra.component.html',
-  styleUrls: ['./usuario-extra.component.scss'],
 })
 export class UsuarioExtraComponent implements OnInit {
   usuarioExtras?: IUsuarioExtra[];

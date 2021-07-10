@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<!--<div class="row justify-content-center">
   <div class="col-8">
     <div *ngIf="parametroAplicacion">
       <h2 data-cy="parametroAplicacionDetailsHeading">
@@ -39,6 +39,82 @@
       </button>
 
       <button type="button" [routerLink]="['/parametro-aplicacion', parametroAplicacion.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>-->
+<div class="row justify-content-center ds-form">
+  <div class="w-75 pb-lg-5 pr-lg-5 mb-5" style="border-bottom: 1px solid #e7ebf3">
+    <div class="col-lg-8 mr-lg-5">
+      <div class="row">
+        <div class="w-100">
+          <p class="ds-title">Parámetros de la aplicación</p>
+        </div>
+        <div>
+          <p class="ds-subtitle">
+            Parámetros necesarios para los datos mínimos y máximos que permitirá para las diferentes encuestas dentro de DataSurvey.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<jhi-alert-error></jhi-alert-error>
+
+<jhi-alert></jhi-alert>
+<div *ngIf="parametroAplicacion" class="ds-form">
+  <div class="row justify-content-center info-parametros">
+    <div class="w-100">
+      <h4 class="text-dark text-center fw-bold">Dias para encuestas</h4>
+    </div>
+    <div class="row w-100 pb-lg-2 mb-5 justify-content-center">
+      <div class="col-lg-4 mr-lg-5">
+        <div class="row">
+          <div class="form-group w-100">
+            <p class="form-control-label">Cantidad mínima</p>
+            <p class="form-control text-center" style="border-bottom: 1px solid #e7ebf3">{{ parametroAplicacion.minDiasEncuesta }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 mr-lg-5">
+        <div class="row">
+          <div class="form-group w-100">
+            <p class="form-control-label">Cantidad máxima</p>
+            <p class="form-control text-center" style="border-bottom: 1px solid #e7ebf3">{{ parametroAplicacion.maxDiasEncuesta }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center info-parametros">
+    <div class="w-100">
+      <h4 class="text-dark text-center fw-bold">Preguntas para encuestas</h4>
+    </div>
+    <div class="row w-100 pb-lg-2 mb-5 justify-content-center">
+      <div class="col-lg-4 mr-lg-5">
+        <div class="row">
+          <div class="form-group w-100">
+            <p class="form-control-label">Cantidad mínima</p>
+            <p class="form-control text-center" style="border-bottom: 1px solid #e7ebf3">{{ parametroAplicacion.minCantidadPreguntas }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 mr-lg-5">
+        <div class="row">
+          <div class="form-group w-100">
+            <p class="form-control-label">Cantidad máxima</p>
+            <p class="form-control text-center">{{ parametroAplicacion.maxCantidadPreguntas }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <button class="ds-btn ds-btn--secondary" type="submit" (click)="previousState()" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button class="ds-btn ds-btn--primary" type="button" [routerLink]="['/parametro-aplicacion', parametroAplicacion.id, 'edit']">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
       </button>
     </div>
