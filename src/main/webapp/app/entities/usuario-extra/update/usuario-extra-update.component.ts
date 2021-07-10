@@ -93,6 +93,7 @@ export class UsuarioExtraUpdateComponent {
           name,
           profileIcon: this.profileIcon,
           isAdmin: 1,
+          isGoogle: 0,
         })
         .subscribe(
           () => (this.success = true),

@@ -95,6 +95,7 @@ export class RegisterComponent implements AfterViewInit {
           name,
           profileIcon: this.profileIcon,
           isAdmin: 0,
+          isGoogle: 0,
         })
         .subscribe(
           () => (this.success = true),
@@ -103,7 +104,7 @@ export class RegisterComponent implements AfterViewInit {
     }
   }
 
-  private processError(response: HttpErrorResponse): void {
+  processError(response: HttpErrorResponse): void {
     if (response.status === 400 && response.error.type === LOGIN_ALREADY_USED_TYPE) {
       this.errorUserExists = true;
     } else if (response.status === 400 && response.error.type === EMAIL_ALREADY_USED_TYPE) {
