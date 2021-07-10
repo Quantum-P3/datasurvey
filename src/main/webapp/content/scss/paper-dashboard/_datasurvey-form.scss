@@ -29,8 +29,9 @@ $form-background: #f1f5f9;
     }
 
     &:read-only {
-      background-color: $form-background;
+      background-color: #eaebee;
       cursor: default;
+      color: #9aa2b8;
 
       &:focus,
       &:active {
