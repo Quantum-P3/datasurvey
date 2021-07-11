@@ -13,7 +13,8 @@ $form-background: #f1f5f9;
     }
   }
 
-  input {
+  input,
+  select {
     background-color: $form-background;
     border-radius: 15px;
     border: 1.75px solid transparent;
@@ -25,7 +26,6 @@ $form-background: #f1f5f9;
     &:active {
       background-color: $form-background;
       border: 1.75px solid #2962ff;
-      // color: #313747;
     }
 
     &:read-only {
@@ -37,6 +37,37 @@ $form-background: #f1f5f9;
       &:active {
         border: 1.75px solid transparent;
         color: #757d94;
+      }
+    }
+  }
+
+  select {
+    background-color: $form-background !important;
+    appearance: none;
+    cursor: pointer !important;
+    border: none;
+    outline: 0;
+
+    background: url(./../../img_datasurvey/down-arrow.svg) no-repeat right;
+    background-size: 3.5%;
+    -webkit-appearance: none;
+    background-position-x: 94%;
+
+    &:focus,
+    &:active {
+      background-color: $form-background !important;
+      border: 1.75px solid #2962ff !important;
+    }
+
+    option {
+      background-color: #fff !important;
+      color: #313747 !important;
+      padding: 1rem !important;
+
+      &:hover,
+      &:focus,
+      &:active {
+        background-color: #efefef !important;
       }
     }
   }

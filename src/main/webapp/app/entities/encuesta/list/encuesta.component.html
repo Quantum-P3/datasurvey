@@ -123,7 +123,7 @@
 >
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <form class="ds-form" name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <form autocomplete="off" class="ds-form" name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
         <div class="modal-header">
           <h1 class="modal-title" id="exampleModalLongTitle">Crear Encuesta</h1>
         </div>
@@ -219,7 +219,13 @@
           <button type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal">
             <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
           </button>
-          <button type="button" class="ds-btn ds-btn--primary">
+          <button
+            type="submit"
+            id="save-entity"
+            data-cy="entityCreateSaveButton"
+            [disabled]="editForm.invalid || isSaving"
+            class="ds-btn ds-btn--primary"
+          >
             <span jhiTranslate="entity.action.create">Create</span>
           </button>
         </div>
