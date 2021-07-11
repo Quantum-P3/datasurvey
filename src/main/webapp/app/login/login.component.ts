@@ -10,6 +10,7 @@ import { RegisterService } from '../account/register/register.service';
 import { TranslateService } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '../config/error.constants';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'jhi-login',
@@ -26,8 +27,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
   errorUserExists = false;
 
   loginForm = this.fb.group({
-    username: [null, [Validators.required]],
-    password: [null, [Validators.required]],
+    username: [null, [Validators.required, Validators.email, Validators.minLength(5), Validators.maxLength(254)]],
+    password: [null, [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
     rememberMe: [false],
   });
 
@@ -36,6 +37,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   success = false;
 
   constructor(
+    private localStorageService: LocalStorageService,
     private accountService: AccountService,
     private loginService: LoginService,
     private router: Router,
@@ -91,7 +93,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       () => {
         this.authenticationError = false;
         if (!this.router.getCurrentNavigation()) {
-          window.localStorage.setItem('IsGoogle', 'true');
+          this.localStorageService.store('IsGoogle', 'true');
           // There were no routing during login (eg from navigationToStoredUrl)
           this.router.navigate(['']);
         }
