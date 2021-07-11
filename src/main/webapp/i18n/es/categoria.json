@@ -5,7 +5,7 @@
         "title": "Categorías",
         "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nueva Categoría",
-        "createOrEditLabel": "Crear o editar Categoría",
+        "createOrEditLabel": "Datos de Categoría",
         "notFound": "Ninguna Categoría encontrada"
       },
       "created": "Una nueva Categoría ha sido creada con el identificador {{ param }}",
