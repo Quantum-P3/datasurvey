@@ -29,6 +29,12 @@
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="categorias && categorias.length > 0">
+    <form class="ds-form">
+      <div class="input-group">
+        <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+        <input type="text" class="form-control" name="searchString" placeholder="Type to search..." [(ngModel)]="searchString" />
+      </div>
+    </form>
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
