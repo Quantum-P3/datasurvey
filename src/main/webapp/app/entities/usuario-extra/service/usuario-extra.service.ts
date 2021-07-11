@@ -8,13 +8,17 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IUsuarioExtra, getUsuarioExtraIdentifier } from '../usuario-extra.model';
+import { IUser } from '../../user/user.model';
 
 export type EntityResponseType = HttpResponse<IUsuarioExtra>;
 export type EntityArrayResponseType = HttpResponse<IUsuarioExtra[]>;
 
+export type EntityArrayUserPublicResponseType = HttpResponse<IUser[]>;
+
 @Injectable({ providedIn: 'root' })
 export class UsuarioExtraService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/usuario-extras');
+  protected resourceUrlPublicUser = this.applicationConfigService.getEndpointFor('api');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -43,6 +47,10 @@ export class UsuarioExtraService {
     return this.http
       .get<IUsuarioExtra>(`${this.resourceUrl}/${id}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  retrieveAllPublicUsers(): Observable<IUser[]> {
+    return this.http.get<IUser[]>(this.resourceUrlPublicUser + '/admin/users');
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {

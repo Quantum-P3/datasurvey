@@ -1,161 +1,122 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
-import * as dayjs from 'dayjs';
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
-
-import { IUsuarioExtra, UsuarioExtra } from '../usuario-extra.model';
-import { UsuarioExtraService } from '../service/usuario-extra.service';
-import { IUser } from 'app/entities/user/user.model';
-import { UserService } from 'app/entities/user/user.service';
-import { IPlantilla } from 'app/entities/plantilla/plantilla.model';
-import { PlantillaService } from 'app/entities/plantilla/service/plantilla.service';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
+import { RegisterService } from 'app/account/register/register.service';
 
 @Component({
   selector: 'jhi-usuario-extra-update',
   templateUrl: './usuario-extra-update.component.html',
 })
-export class UsuarioExtraUpdateComponent implements OnInit {
-  isSaving = false;
+export class UsuarioExtraUpdateComponent {
+  // @ViewChild('name', { static: false })
+  // name?: ElementRef;
 
-  usersSharedCollection: IUser[] = [];
-  plantillasSharedCollection: IPlantilla[] = [];
+  profileIcon: number = 1;
+  profileIcons: any[] = [
+    { name: 'C1', class: 'active' },
+    { name: 'C2' },
+    { name: 'C3' },
+    { name: 'C4' },
+    { name: 'C5' },
+    { name: 'C6' },
+    { name: 'C7' },
+    { name: 'C8' },
+    { name: 'C9' },
+    { name: 'C10' },
+    { name: 'C11' },
+    { name: 'C12' },
+    { name: 'C13' },
+    { name: 'C14' },
+    { name: 'C15' },
+    { name: 'C16' },
+    { name: 'C17' },
+    { name: 'C18' },
+    { name: 'C19' },
+    { name: 'C20' },
+    { name: 'C21' },
+    { name: 'C22' },
+    { name: 'C23' },
+    { name: 'C24' },
+    { name: 'C25' },
+    { name: 'C26' },
+    { name: 'C27' },
+    { name: 'C28' },
+  ];
 
-  editForm = this.fb.group({
-    id: [],
-    nombre: [null, [Validators.required]],
-    iconoPerfil: [],
-    fechaNacimiento: [],
-    estado: [null, [Validators.required]],
-    user: [],
-    plantillas: [],
+  doNotMatch = false;
+  error = false;
+  errorEmailExists = false;
+  errorUserExists = false;
+  success = false;
+
+  // Login will be used to store the email as well.
+  // login: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]]
+  registerForm = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(254)]],
+    email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
+    confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
   });
 
-  constructor(
-    protected usuarioExtraService: UsuarioExtraService,
-    protected userService: UserService,
-    protected plantillaService: PlantillaService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
+  constructor(private translateService: TranslateService, private registerService: RegisterService, private fb: FormBuilder) {}
 
-  ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ usuarioExtra }) => {
-      if (usuarioExtra.id === undefined) {
-        const today = dayjs().startOf('day');
-        usuarioExtra.fechaNacimiento = today;
-      }
-
-      this.updateForm(usuarioExtra);
-
-      this.loadRelationshipsOptions();
-    });
+  ngAfterViewInit(): void {
+    //   if (this.name) {
+    //     this.name.nativeElement.focus();
+    //   }
   }
 
-  previousState(): void {
-    window.history.back();
-  }
+  register(): void {
+    this.doNotMatch = false;
+    this.error = false;
+    this.errorEmailExists = false;
+    this.errorUserExists = false;
 
-  save(): void {
-    this.isSaving = true;
-    const usuarioExtra = this.createFromForm();
-    if (usuarioExtra.id !== undefined) {
-      this.subscribeToSaveResponse(this.usuarioExtraService.update(usuarioExtra));
+    const password = this.registerForm.get(['password'])!.value;
+    if (password !== this.registerForm.get(['confirmPassword'])!.value) {
+      this.doNotMatch = true;
     } else {
-      this.subscribeToSaveResponse(this.usuarioExtraService.create(usuarioExtra));
+      const login = this.registerForm.get(['email'])!.value;
+      const email = this.registerForm.get(['email'])!.value;
+      const name = this.registerForm.get(['name'])!.value;
+      console.log(name);
+
+      this.registerService
+        .save({
+          login,
+          email,
+          password,
+          langKey: this.translateService.currentLang,
+          name,
+          profileIcon: this.profileIcon,
+          isAdmin: 1,
+          isGoogle: 0,
+        })
+        .subscribe(
+          () => (this.success = true),
+          response => this.processError(response)
+        );
     }
   }
 
-  trackUserById(index: number, item: IUser): number {
-    return item.id!;
-  }
-
-  trackPlantillaById(index: number, item: IPlantilla): number {
-    return item.id!;
-  }
-
-  getSelectedPlantilla(option: IPlantilla, selectedVals?: IPlantilla[]): IPlantilla {
-    if (selectedVals) {
-      for (const selectedVal of selectedVals) {
-        if (option.id === selectedVal.id) {
-          return selectedVal;
-        }
-      }
+  private processError(response: HttpErrorResponse): void {
+    if (response.status === 400 && response.error.type === LOGIN_ALREADY_USED_TYPE) {
+      this.errorUserExists = true;
+    } else if (response.status === 400 && response.error.type === EMAIL_ALREADY_USED_TYPE) {
+      this.errorEmailExists = true;
+    } else {
+      this.error = true;
     }
-    return option;
   }
 
-  protected subscribeToSaveResponse(result: Observable<HttpResponse<IUsuarioExtra>>): void {
-    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
-    );
-  }
-
-  protected onSaveSuccess(): void {
-    this.previousState();
-  }
-
-  protected onSaveError(): void {
-    // Api for inheritance.
-  }
-
-  protected onSaveFinalize(): void {
-    this.isSaving = false;
-  }
-
-  protected updateForm(usuarioExtra: IUsuarioExtra): void {
-    this.editForm.patchValue({
-      id: usuarioExtra.id,
-      nombre: usuarioExtra.nombre,
-      iconoPerfil: usuarioExtra.iconoPerfil,
-      fechaNacimiento: usuarioExtra.fechaNacimiento ? usuarioExtra.fechaNacimiento.format(DATE_TIME_FORMAT) : null,
-      estado: usuarioExtra.estado,
-      user: usuarioExtra.user,
-      plantillas: usuarioExtra.plantillas,
-    });
-
-    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing(this.usersSharedCollection, usuarioExtra.user);
-    this.plantillasSharedCollection = this.plantillaService.addPlantillaToCollectionIfMissing(
-      this.plantillasSharedCollection,
-      ...(usuarioExtra.plantillas ?? [])
-    );
-  }
-
-  protected loadRelationshipsOptions(): void {
-    this.userService
-      .query()
-      .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
-      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing(users, this.editForm.get('user')!.value)))
-      .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
-
-    this.plantillaService
-      .query()
-      .pipe(map((res: HttpResponse<IPlantilla[]>) => res.body ?? []))
-      .pipe(
-        map((plantillas: IPlantilla[]) =>
-          this.plantillaService.addPlantillaToCollectionIfMissing(plantillas, ...(this.editForm.get('plantillas')!.value ?? []))
-        )
-      )
-      .subscribe((plantillas: IPlantilla[]) => (this.plantillasSharedCollection = plantillas));
-  }
-
-  protected createFromForm(): IUsuarioExtra {
-    return {
-      ...new UsuarioExtra(),
-      id: this.editForm.get(['id'])!.value,
-      nombre: this.editForm.get(['nombre'])!.value,
-      iconoPerfil: this.editForm.get(['iconoPerfil'])!.value,
-      fechaNacimiento: this.editForm.get(['fechaNacimiento'])!.value
-        ? dayjs(this.editForm.get(['fechaNacimiento'])!.value, DATE_TIME_FORMAT)
-        : undefined,
-      estado: this.editForm.get(['estado'])!.value,
-      user: this.editForm.get(['user'])!.value,
-      plantillas: this.editForm.get(['plantillas'])!.value,
-    };
+  selectIcon(event: MouseEvent): void {
+    if (event.target instanceof Element) {
+      document.querySelectorAll('.active').forEach(e => e.classList.remove('active'));
+      event.target.classList.add('active');
+      this.profileIcon = +event.target.getAttribute('id')! + 1;
+    }
   }
 }
