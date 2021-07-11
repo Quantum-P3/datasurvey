@@ -106,3 +106,35 @@
     </table>
   </div>
 </div>
+
+<!-- --------------------------------------------------------------------------------------------- -->
+
+<!-- Button trigger modal -->
+<button type="button" class="ds-btn ds-btn--primary" data-toggle="modal" data-target="#crearEncuesta">Crear encuesta</button>
+
+<!-- Modal -->
+<div
+  class="modal fade ds-modal"
+  id="crearEncuesta"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="exampleModalLongTitle">Crear Encuesta</h1>
+      </div>
+      <div class="modal-body">Registrar Encuesta</div>
+      <div class="modal-footer">
+        <button type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="button" class="ds-btn ds-btn--primary">
+          <span jhiTranslate="entity.action.create">Create</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
