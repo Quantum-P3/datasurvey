@@ -3,11 +3,6 @@
     <span jhiTranslate="dataSurveyApp.categoria.home.title">Categorias</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2 ds-btn" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="dataSurveyApp.categoria.home.refreshListLabel">Refresh List</span>
-      </button>
-
       <button
         id="jh-create-entity"
         data-cy="entityCreateButton"
