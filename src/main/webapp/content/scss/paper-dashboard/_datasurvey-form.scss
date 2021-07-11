@@ -8,8 +8,9 @@ $form-background: #f1f5f9;
 
   .form-group:focus-within {
     label,
-    input {
-      color: #313747;
+    input,
+    select {
+      color: #313747 !important;
     }
   }
 
@@ -20,7 +21,7 @@ $form-background: #f1f5f9;
     border: 1.75px solid transparent;
     outline: 0;
     padding: 1rem !important;
-    color: #757d94;
+    color: #757d94 !important;
 
     &:focus,
     &:active {

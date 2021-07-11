@@ -16,14 +16,21 @@ import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 
 import { ICategoria } from 'app/entities/categoria/categoria.model';
 import { CategoriaService } from 'app/entities/categoria/service/categoria.service';
-import { IUsuarioExtra } from 'app/entities/usuario-extra/usuario-extra.model';
+import { IUsuarioExtra, UsuarioExtra } from 'app/entities/usuario-extra/usuario-extra.model';
 import { UsuarioExtraService } from 'app/entities/usuario-extra/service/usuario-extra.service';
+import { EstadoEncuesta } from 'app/entities/enumerations/estado-encuesta.model';
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/auth/account.model';
+import { $ } from 'dom7';
 
 @Component({
   selector: 'jhi-encuesta',
   templateUrl: './encuesta.component.html',
 })
 export class EncuestaComponent implements OnInit {
+  account: Account | null = null;
+  usuarioExtra: UsuarioExtra | null = null;
+
   encuestas?: IEncuesta[];
   isLoading = false;
 
@@ -36,16 +43,16 @@ export class EncuestaComponent implements OnInit {
     id: [],
     nombre: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
     descripcion: [],
-    fechaCreacion: [null, [Validators.required]],
-    fechaPublicacion: [],
-    fechaFinalizar: [],
-    fechaFinalizada: [],
-    calificacion: [null, [Validators.required]],
+    // fechaCreacion: [null, [Validators.required]],
+    // fechaPublicacion: [],
+    // fechaFinalizar: [],
+    // fechaFinalizada: [],
+    // calificacion: [null, [Validators.required]],
     acceso: [null, [Validators.required]],
-    contrasenna: [],
-    estado: [null, [Validators.required]],
-    categoria: [],
-    usuarioExtra: [],
+    // contrasenna: [],
+    // estado: [null, [Validators.required]],
+    categoria: [null, [Validators.required]],
+    // usuarioExtra: [],
   });
 
   constructor(
@@ -54,7 +61,8 @@ export class EncuestaComponent implements OnInit {
     protected categoriaService: CategoriaService,
     protected usuarioExtraService: UsuarioExtraService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected accountService: AccountService
   ) {}
 
   loadAll(): void {
@@ -91,6 +99,23 @@ export class EncuestaComponent implements OnInit {
     //   this.updateForm(encuesta);
 
     // });
+
+    // Get jhi_user and usuario_extra information
+    this.accountService.getAuthenticationState().subscribe(account => {
+      if (account !== null) {
+        this.usuarioExtraService.find(account.id).subscribe(usuarioExtra => {
+          this.usuarioExtra = usuarioExtra.body;
+          if (this.usuarioExtra !== null) {
+            if (this.usuarioExtra.id === undefined) {
+              const today = dayjs().startOf('day');
+              this.usuarioExtra.fechaNacimiento = today;
+            }
+          }
+
+          // this.loadRelationshipsOptions();
+        });
+      }
+    });
   }
 
   trackId(index: number, item: IEncuesta): number {
@@ -117,7 +142,7 @@ export class EncuestaComponent implements OnInit {
     const encuesta = this.createFromForm();
     console.log(encuesta);
 
-    if (encuesta.id !== null) {
+    if (encuesta.id !== undefined) {
       this.subscribeToSaveResponse(this.encuestaService.update(encuesta));
     } else {
       this.subscribeToSaveResponse(this.encuestaService.create(encuesta));
@@ -140,7 +165,8 @@ export class EncuestaComponent implements OnInit {
   }
 
   protected onSaveSuccess(): void {
-    this.previousState();
+    // this.previousState();
+    // $('#crearEncuesta').modal('hide')
   }
 
   protected onSaveError(): void {
@@ -201,29 +227,20 @@ export class EncuestaComponent implements OnInit {
   }
 
   protected createFromForm(): IEncuesta {
+    const now = dayjs();
+
     return {
       ...new Encuesta(),
-      id: this.editForm.get(['id'])!.value,
+      id: undefined,
       nombre: this.editForm.get(['nombre'])!.value,
       descripcion: this.editForm.get(['descripcion'])!.value,
-      fechaCreacion: this.editForm.get(['fechaCreacion'])!.value
-        ? dayjs(this.editForm.get(['fechaCreacion'])!.value, DATE_TIME_FORMAT)
-        : undefined,
-      fechaPublicacion: this.editForm.get(['fechaPublicacion'])!.value
-        ? dayjs(this.editForm.get(['fechaPublicacion'])!.value, DATE_TIME_FORMAT)
-        : undefined,
-      fechaFinalizar: this.editForm.get(['fechaFinalizar'])!.value
-        ? dayjs(this.editForm.get(['fechaFinalizar'])!.value, DATE_TIME_FORMAT)
-        : undefined,
-      fechaFinalizada: this.editForm.get(['fechaFinalizada'])!.value
-        ? dayjs(this.editForm.get(['fechaFinalizada'])!.value, DATE_TIME_FORMAT)
-        : undefined,
-      calificacion: this.editForm.get(['calificacion'])!.value,
+      fechaCreacion: dayjs(now, DATE_TIME_FORMAT),
+      calificacion: 5,
       acceso: this.editForm.get(['acceso'])!.value,
-      contrasenna: this.editForm.get(['contrasenna'])!.value,
-      estado: this.editForm.get(['estado'])!.value,
+      contrasenna: undefined,
+      estado: EstadoEncuesta.DRAFT,
       categoria: this.editForm.get(['categoria'])!.value,
-      usuarioExtra: this.editForm.get(['usuarioExtra'])!.value,
+      usuarioExtra: this.usuarioExtra,
     };
   }
 }
