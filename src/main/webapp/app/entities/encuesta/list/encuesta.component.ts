@@ -21,7 +21,8 @@ import { UsuarioExtraService } from 'app/entities/usuario-extra/service/usuario-
 import { EstadoEncuesta } from 'app/entities/enumerations/estado-encuesta.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
-import { $ } from 'dom7';
+
+import * as $ from 'jquery';
 
 @Component({
   selector: 'jhi-encuesta',
@@ -140,7 +141,6 @@ export class EncuestaComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const encuesta = this.createFromForm();
-    console.log(encuesta);
 
     if (encuesta.id !== undefined) {
       this.subscribeToSaveResponse(this.encuestaService.update(encuesta));
@@ -166,7 +166,10 @@ export class EncuestaComponent implements OnInit {
 
   protected onSaveSuccess(): void {
     // this.previousState();
-    // $('#crearEncuesta').modal('hide')
+    //  ($('#crearEncuesta') as any).modal('hide');
+    this.encuestas = [];
+    this.loadAll();
+    $('#cancelBtn').click();
   }
 
   protected onSaveError(): void {
