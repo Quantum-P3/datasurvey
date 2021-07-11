@@ -3,7 +3,7 @@
     <span jhiTranslate="dataSurveyApp.categoria.home.title">Categorias</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+      <button class="btn btn-info mr-2 ds-btn" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="dataSurveyApp.categoria.home.refreshListLabel">Refresh List</span>
       </button>
@@ -11,7 +11,7 @@
       <button
         id="jh-create-entity"
         data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-categoria"
+        class="btn btn-primary jh-create-entity create-categoria ds-btn ds-btn-primary"
         [routerLink]="['/categoria/new']"
       >
         <fa-icon icon="plus"></fa-icon>
@@ -56,7 +56,7 @@
               <button
                 type="submit"
                 [routerLink]="['/categoria', categoria.id, 'view']"
-                class="btn btn-info btn-sm"
+                class="btn btn-info btn-sm ds-btn"
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
@@ -66,14 +66,19 @@
               <button
                 type="submit"
                 [routerLink]="['/categoria', categoria.id, 'edit']"
-                class="btn btn-primary btn-sm"
+                class="btn btn-primary btn-sm ds-btn ds-btn-primary"
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>
 
-              <button type="submit" (click)="delete(categoria)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              <button
+                type="submit"
+                (click)="delete(categoria)"
+                class="btn btn-danger btn-sm ds-btn ds-btn-danger"
+                data-cy="entityDeleteButton"
+              >
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>
