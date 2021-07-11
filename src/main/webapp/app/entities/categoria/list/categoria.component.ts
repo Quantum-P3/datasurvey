@@ -13,8 +13,11 @@ import { CategoriaDeleteDialogComponent } from '../delete/categoria-delete-dialo
 export class CategoriaComponent implements OnInit {
   categorias?: ICategoria[];
   isLoading = false;
+  public searchString: string;
 
-  constructor(protected categoriaService: CategoriaService, protected modalService: NgbModal) {}
+  constructor(protected categoriaService: CategoriaService, protected modalService: NgbModal) {
+    this.searchString = '';
+  }
 
   loadAll(): void {
     this.isLoading = true;
@@ -31,6 +34,7 @@ export class CategoriaComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.searchString = '';
     this.loadAll();
   }
 
