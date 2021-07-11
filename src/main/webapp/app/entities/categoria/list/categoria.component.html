@@ -45,7 +45,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let categoria of categorias; trackBy: trackId" data-cy="entityTable">
+        <tr *ngFor="let categoria of categorias | filter: 'nombre':searchString; trackBy: trackId" data-cy="entityTable">
           <td>
             <a [routerLink]="['/categoria', categoria.id, 'view']">{{ categoria.id }}</a>
           </td>
