@@ -128,6 +128,19 @@
                 <button type="submit" class="btn btn-primary w-100" data-cy="submit">Iniciar sesion</button>
               </div>
             </form>
+
+            <div class="google-btn w-80 m-auto">
+              <div class="google-icon-wrapper">
+                <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
+              </div>
+              <button class="btn-text" (click)="signInWithGoogle()">Iniciar con Google</button>
+            </div>
+
+            <!--<div class="mb-3 mb-0">
+              <button class="btn" (click)="signInWithGoogle()">
+                <i class="fa fa-Google">Iniciar con Google</i>
+              </button>
+            </div>-->
           </div>
           <!-- end card-body -->
         </div>
