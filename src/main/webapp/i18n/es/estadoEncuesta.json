@@ -2,10 +2,10 @@
   "dataSurveyApp": {
     "EstadoEncuesta": {
       "null": "",
-      "DRAFT": "DRAFT",
-      "ACTIVE": "ACTIVE",
-      "FINISHED": "FINISHED",
-      "DELETED": "DELETED"
+      "DRAFT": "Borrador",
+      "ACTIVE": "Activa",
+      "FINISHED": "Finalizada",
+      "DELETED": "Eliminada"
     }
   }
 }
