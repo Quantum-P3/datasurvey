@@ -34,7 +34,15 @@
             The password and its confirmation do not match!
           </div>
 
-          <form name="form" role="form" class="form" (ngSubmit)="register()" [formGroup]="registerForm" *ngIf="!success" autocomplete="off">
+          <form
+            name="form"
+            role="form"
+            class="ds-form"
+            (ngSubmit)="register()"
+            [formGroup]="registerForm"
+            *ngIf="!success"
+            autocomplete="off"
+          >
             <div class="mb-3">
               <div class="form-group">
                 <label for="name" class="form-label">Nombre completo</label>
@@ -86,7 +94,7 @@
 
             <div class="mb-3">
               <div class="form-group">
-                <label for="emailaddress" class="form-label">Correo electrónico</label>
+                <label for="email" class="form-label">Correo electrónico</label>
                 <input
                   type="email"
                   class="form-control"
@@ -239,7 +247,7 @@
               <button
                 type="submit"
                 [disabled]="registerForm.invalid"
-                class="btn btn-primary w-100"
+                class="ds-btn ds-btn--primary w-100"
                 jhiTranslate="register.form.button"
                 data-cy="submit"
               >
