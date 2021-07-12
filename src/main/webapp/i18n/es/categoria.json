@@ -5,7 +5,7 @@
         "title": "Categorías",
         "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nueva Categoría",
-        "createOrEditLabel": "Crear o editar Categoría",
+        "createOrEditLabel": "Datos de Categoría",
         "notFound": "Ninguna Categoría encontrada"
       },
       "created": "Una nueva Categoría ha sido creada con el identificador {{ param }}",
@@ -21,7 +21,10 @@
       "nombre": "Nombre",
       "estado": "Estado",
       "encuesta": "Encuesta",
-      "plantilla": "Plantilla"
+      "plantilla": "Plantilla",
+      "errors": {
+        "duplicateName": "Ya existe una categoría con ese nombre."
+      }
     }
   }
 }

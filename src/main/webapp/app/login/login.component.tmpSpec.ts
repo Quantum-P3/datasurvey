@@ -12,6 +12,7 @@ import { AccountService } from 'app/core/auth/account.service';
 
 import { LoginService } from './login.service';
 import { LoginComponent } from './login.component';
+import { SocialAuthService } from 'angularx-social-login';
 
 describe('Component Tests', () => {
   describe('LoginComponent', () => {
