@@ -69,7 +69,7 @@
           <div class="card-body p-4">
             <div class="text-center w-75 m-auto">
               <h4 class="text-dark-50 text-center pb-0 fw-bold p-0 m-0" style="color: #727070; font-weight: 700; font-size: 1.3rem">
-                INICIAR SESION
+                INICIAR SESIÓN
               </h4>
               <p class="mb-4" style="color: rgba(146, 146, 146, 0.664)">Ingrese su correo electrónico y contraseña</p>
             </div>
@@ -83,7 +83,7 @@
               <strong>Failed to sign in!</strong> Please check your credentials and try again.
             </div>
 
-            <form class="form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
+            <form class="ds-form" role="form" (ngSubmit)="login()" [formGroup]="loginForm">
               <div class="mb-3">
                 <div class="form-group">
                   <label for="username" class="form-label">Correo electrónico</label>
@@ -188,16 +188,27 @@
               </div>
 
               <div class="mb-3 mb-0 text-center">
-                <button type="submit" class="btn btn-primary w-100" data-cy="submit">Iniciar sesion</button>
+                <button type="submit" class="ds-btn ds-btn--primary w-100" data-cy="submit">Iniciar sesión</button>
+              </div>
+
+              <div class="mb-3 mb-0 text-center">
+                <button
+                  type="button"
+                  class="ds-btn ds-btn--google w-100 d-flex align-items-center justify-content-center"
+                  (click)="signInWithGoogle()"
+                >
+                  <img class="mr-2" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
+                  Iniciar con Google
+                </button>
               </div>
             </form>
 
-            <div class="google-btn w-80 m-auto">
+            <!-- <div class="google-btn w-80 m-auto">
               <div class="google-icon-wrapper">
                 <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
               </div>
               <button class="btn-text" (click)="signInWithGoogle()">Iniciar con Google</button>
-            </div>
+            </div> -->
 
             <!--<div class="mb-3 mb-0">
               <button class="btn" (click)="signInWithGoogle()">

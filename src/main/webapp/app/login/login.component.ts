@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.username.nativeElement.focus();
+    // this.username.nativeElement.focus();
   }
 
   //Inicio Google

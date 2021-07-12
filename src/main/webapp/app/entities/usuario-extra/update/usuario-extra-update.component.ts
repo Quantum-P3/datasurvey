@@ -82,7 +82,6 @@ export class UsuarioExtraUpdateComponent {
       const login = this.registerForm.get(['email'])!.value;
       const email = this.registerForm.get(['email'])!.value;
       const name = this.registerForm.get(['name'])!.value;
-      console.log(name);
 
       this.registerService
         .save({

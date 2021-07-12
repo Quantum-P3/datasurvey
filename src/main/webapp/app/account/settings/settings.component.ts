@@ -179,7 +179,6 @@ export class SettingsComponent implements OnInit {
         icon.class = 'active';
       }
     });
-    console.log(this.profileIcons);
 
     this.usersSharedCollection = this.userService.addUserToCollectionIfMissing(this.usersSharedCollection, usuarioExtra.user);
     this.plantillasSharedCollection = this.plantillaService.addPlantillaToCollectionIfMissing(
