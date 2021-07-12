@@ -57,8 +57,8 @@ export class UsuarioExtraUpdateComponent {
   registerForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(254)]],
     email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
-    confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
+    password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
+    confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
   });
 
   constructor(private translateService: TranslateService, private registerService: RegisterService, private fb: FormBuilder) {}
