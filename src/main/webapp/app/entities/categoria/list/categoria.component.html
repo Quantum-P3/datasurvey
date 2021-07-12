@@ -6,7 +6,7 @@
       <button
         id="jh-create-entity"
         data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-categoria ds-btn ds-btn-primary"
+        class="jh-create-entity create-categoria ds-btn ds-btn--primary"
         [routerLink]="['/categoria/new']"
       >
         <fa-icon icon="plus"></fa-icon>
@@ -33,7 +33,6 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.categoria.nombre">Nombre</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.categoria.estado">Estado</span></th>
           <th scope="col"></th>
@@ -41,9 +40,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let categoria of categorias | filter: 'nombre':searchString; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/categoria', categoria.id, 'view']">{{ categoria.id }}</a>
-          </td>
           <td>{{ categoria.nombre }}</td>
           <td jhiTranslate="{{ 'dataSurveyApp.EstadoCategoria.' + categoria.estado }}">{{ categoria.estado }}</td>
           <td class="text-right">
@@ -51,19 +47,14 @@
               <button
                 type="submit"
                 [routerLink]="['/categoria', categoria.id, 'edit']"
-                class="btn btn-primary btn-sm ds-btn ds-btn-primary"
+                class="btn-sm ds-btn ds-btn--primary"
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>
 
-              <button
-                type="submit"
-                (click)="delete(categoria)"
-                class="btn btn-danger btn-sm ds-btn ds-btn-danger"
-                data-cy="entityDeleteButton"
-              >
+              <button type="submit" (click)="delete(categoria)" class="btn-sm ds-btn ds-btn--danger" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>

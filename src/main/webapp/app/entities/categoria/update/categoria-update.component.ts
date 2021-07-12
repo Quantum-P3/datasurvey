@@ -64,7 +64,7 @@ export class CategoriaUpdateComponent implements OnInit {
 
   protected categoryExists(categoria: ICategoria): boolean {
     this.loadAll();
-    var condicion = this.categorias!.some(cat => cat.nombre === categoria.nombre);
+    var condicion = this.categorias!.some(cat => cat.nombre!.toLowerCase() === categoria.nombre!.toLowerCase());
     return condicion;
   }
 
