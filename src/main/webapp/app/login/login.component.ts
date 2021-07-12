@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   loginForm = this.fb.group({
     username: [null, [Validators.required, Validators.email, Validators.minLength(5), Validators.maxLength(254)]],
-    password: [null, [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
+    password: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
     rememberMe: [false],
   });
 
@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.username.nativeElement.focus();
+    // this.username.nativeElement.focus();
   }
 
   //Inicio Google

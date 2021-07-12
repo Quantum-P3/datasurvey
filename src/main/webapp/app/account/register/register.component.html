@@ -23,6 +23,10 @@
               <strong>Registration failed!</strong> Please try again later.
             </div>
 
+            <div class="alert alert-danger" *ngIf="errorUserExists" jhiTranslate="register.messages.error.userexists">
+              <strong>Login name already registered!</strong> Please choose another one.
+            </div>
+
             <div class="alert alert-danger" *ngIf="errorEmailExists" jhiTranslate="register.messages.error.emailexists">
               <strong>Email is already in use!</strong> Please choose another one.
             </div>
@@ -34,7 +38,7 @@
             <form
               name="form"
               role="form"
-              class="form"
+              class="ds-form"
               (ngSubmit)="register()"
               [formGroup]="registerForm"
               *ngIf="!success"
@@ -42,7 +46,7 @@
             >
               <div class="mb-3">
                 <div class="form-group">
-                  <label for="name" class="form-label">Nombre</label>
+                  <label for="name" class="form-label">Nombre completo</label>
                   <input
                     type="text"
                     class="form-control"
@@ -136,13 +140,17 @@
                     >
                       Your email cannot be longer than 100 characters.
                     </small>
+
+                    <small class="form-text text-danger" *ngIf="registerForm.get('email')?.errors?.email">
+                      Se requiere un correo electrónico válido.
+                    </small>
                   </div>
                 </div>
               </div>
 
               <div class="mb-3">
                 <div class="form-group">
-                  <label for="password" jhiTranslate="global.form.newpassword.label">Password</label>
+                  <label for="password">Nueva contraseña</label>
                   <input
                     type="password"
                     class="form-control"
@@ -188,7 +196,7 @@
 
               <div class="mb-3">
                 <div class="form-group">
-                  <label for="password" jhiTranslate="global.form.newpassword.label">Password</label>
+                  <label for="password">Repetir nueva contraseña</label>
                   <input
                     type="password"
                     class="form-control"
@@ -243,7 +251,7 @@
                 <button
                   type="submit"
                   [disabled]="registerForm.invalid"
-                  class="btn btn-primary w-100"
+                  class="ds-btn ds-btn--primary w-100"
                   jhiTranslate="register.form.button"
                   data-cy="submit"
                 >

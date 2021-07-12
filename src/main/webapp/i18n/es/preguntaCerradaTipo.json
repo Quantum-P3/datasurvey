@@ -2,8 +2,8 @@
   "dataSurveyApp": {
     "PreguntaCerradaTipo": {
       "null": "",
-      "SINGLE": "SINGLE",
-      "MULTIPLE": "MULTIPLE"
+      "SINGLE": "Única",
+      "MULTIPLE": "Múltiple"
     }
   }
 }
