@@ -2,8 +2,8 @@
   "dataSurveyApp": {
     "AccesoEncuesta": {
       "null": "",
-      "PUBLIC": "PUBLIC",
-      "PRIVATE": "PRIVATE"
+      "PUBLIC": "Pública",
+      "PRIVATE": "Privada"
     }
   }
 }

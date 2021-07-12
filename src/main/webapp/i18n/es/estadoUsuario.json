@@ -2,8 +2,8 @@
   "dataSurveyApp": {
     "EstadoUsuario": {
       "null": "",
-      "ACTIVE": "ACTIVE",
-      "SUSPENDED": "SUSPENDED"
+      "ACTIVE": "Activo",
+      "SUSPENDED": "Bloqueado"
     }
   }
 }

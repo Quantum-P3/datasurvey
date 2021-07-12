@@ -2,27 +2,29 @@
   "dataSurveyApp": {
     "usuarioExtra": {
       "home": {
-        "title": "Usuario Extras",
+        "title": "Usuarios",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Usuario Extra",
-        "createOrEditLabel": "Crear o editar Usuario Extra",
-        "notFound": "Ningún Usuario Extras encontrado"
+        "createLabel": "Crear nuevo administrador",
+        "createOrEditLabel": "Crear o editar usuario",
+        "notFound": "Ningún usuario encontrado"
       },
-      "created": "Un nuevo Usuario Extra ha sido creado con el identificador {{ param }}",
-      "updated": "Un Usuario Extra ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Usuario Extra ha sido eliminado con el identificador {{ param }}",
+      "created": "Un nuevo usuario ha sido creado",
+      "updated": "El usuario con el identificador {{ param }} ha sido actualizado",
+      "deleted": "El usuario con el identificador {{ param }} ha sido eliminado",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Usuario Extra {{ id }}?"
+        "question": "¿Seguro que quiere eliminar el usuario {{ id }}?"
       },
       "detail": {
-        "title": "Usuario Extra"
+        "title": "Usuario"
       },
       "id": "ID",
+      "rol": "Rol",
       "nombre": "Nombre",
-      "iconoPerfil": "Icono Perfil",
-      "fechaNacimiento": "Fecha Nacimiento",
+      "iconoPerfil": "Icono",
+      "fechaNacimiento": "Fecha de Nacimiento",
       "estado": "Estado",
-      "user": "User",
+      "user": "Usuario",
+      "correo": "Correo electrónico",
       "encuesta": "Encuesta",
       "usuarioEncuesta": "Usuario Encuesta",
       "plantilla": "Plantilla"
