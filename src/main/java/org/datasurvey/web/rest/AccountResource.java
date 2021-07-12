@@ -66,9 +66,14 @@ public class AccountResource {
             managedUserVM,
             managedUserVM.getPassword(),
             managedUserVM.getName(),
-            managedUserVM.getProfileIcon()
+            managedUserVM.getProfileIcon(),
+            managedUserVM.getIsAdmin(),
+            managedUserVM.getIsGoogle()
         );
-        mailService.sendActivationEmail(user);
+
+        if (managedUserVM.getIsGoogle() != 1) {
+            mailService.sendActivationEmail(user);
+        }
     }
 
     /**

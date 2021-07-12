@@ -1,0 +1,65 @@
+.ds-btn {
+  border-width: $border-thick;
+  font-weight: 400;
+  font-size: 0.9rem;
+  line-height: $line-height;
+  // text-transform: uppercase;
+  border: none;
+  margin: 10px 5px;
+  border-radius: $border-radius-small;
+  padding: $padding-btn-vertical $padding-btn-horizontal;
+  cursor: pointer;
+
+  border-radius: 5px;
+  font-weight: 500;
+  letter-spacing: 0.025rem;
+
+  position: relative;
+  top: 0;
+  transition: all 0.1s ease-in-out;
+
+  &:hover {
+    top: -3px;
+    box-shadow: rgba(80, 80, 80, 0.15) 0px 5px 15px;
+  }
+}
+
+.ds-btn--primary {
+  background-color: #2962ff;
+  color: #fff;
+
+  &:hover {
+    background-color: #1c44b2;
+  }
+}
+
+.ds-btn--secondary {
+  background-color: transparent;
+  color: #2962ff;
+
+  &:hover {
+    background-color: #f7f9ff;
+    color: #1c44b2;
+  }
+}
+
+.ds-btn--danger {
+  background-color: transparent;
+  color: #e73636;
+
+  &:hover {
+    background-color: #f7f9ff;
+    color: #d33232;
+  }
+}
+
+.ds-btn--google {
+  background-color: transparent;
+  color: #787878;
+  border: 1px solid #e6e6e6;
+
+  img {
+    width: 20px;
+    height: 20px;
+  }
+}

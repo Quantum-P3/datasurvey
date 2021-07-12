@@ -2,8 +2,8 @@
   "dataSurveyApp": {
     "EstadoCategoria": {
       "null": "",
-      "ACTIVE": "ACTIVE",
-      "INACTIVE": "INACTIVE"
+      "ACTIVE": "Activa",
+      "INACTIVE": "Inactiva"
     }
   }
 }

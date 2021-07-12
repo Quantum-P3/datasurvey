@@ -6,8 +6,10 @@ import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
-import { SessionStorageService } from 'ngx-webstorage';
+import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { Router } from '@angular/router';
+import { UsuarioExtraService } from 'app/entities/usuario-extra/service/usuario-extra.service';
+import { UsuarioExtra } from 'app/entities/usuario-extra/usuario-extra.model';
 
 @Component({
   selector: 'jhi-sidebar',
@@ -24,12 +26,16 @@ export class SidebarComponent {
   version = '';
   account: Account | null = null;
 
+  usuarioExtra: UsuarioExtra | null = null;
+
   constructor(
     private loginService: LoginService,
     private sessionStorageService: SessionStorageService,
+    private localStorageService: LocalStorageService,
     private accountService: AccountService,
     private profileService: ProfileService,
-    private router: Router
+    private router: Router,
+    private usuarioExtraService: UsuarioExtraService
   ) {
     if (VERSION) {
       this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION;
@@ -48,7 +54,16 @@ export class SidebarComponent {
       this.inProduction = profileInfo.inProduction;
       this.openAPIEnabled = profileInfo.openAPIEnabled;
     });
-    this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
+
+    // Get jhi_user and usuario_extra information
+    this.accountService.getAuthenticationState().subscribe(account => {
+      this.account = account;
+      if (account !== null) {
+        this.usuarioExtraService.find(account.id).subscribe(usuarioExtra => {
+          this.usuarioExtra = usuarioExtra.body;
+        });
+      }
+    });
   }
 
   ngAfterViewInit() {}
@@ -73,6 +88,7 @@ export class SidebarComponent {
     this.collapseNavbar();
     this.loginService.logout();
     this.router.navigate(['']);
+    this.localStorageService.clear('IsGoogle');
   }
 
   toggleNavbar(): void {

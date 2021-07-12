@@ -5,29 +5,58 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IUsuarioExtra } from '../usuario-extra.model';
 import { UsuarioExtraService } from '../service/usuario-extra.service';
 import { UsuarioExtraDeleteDialogComponent } from '../delete/usuario-extra-delete-dialog.component';
+import { IUser } from '../../user/user.model';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-usuario-extra',
   templateUrl: './usuario-extra.component.html',
+  styleUrls: ['./usuario-extra.component.scss'],
 })
 export class UsuarioExtraComponent implements OnInit {
   usuarioExtras?: IUsuarioExtra[];
+  publicUsers?: IUser[];
   isLoading = false;
 
   constructor(protected usuarioExtraService: UsuarioExtraService, protected modalService: NgbModal) {}
 
-  loadAll(): void {
-    this.isLoading = true;
+  loadPublicUser(): void {
+    this.usuarioExtraService
+      .retrieveAllPublicUsers()
+      .pipe(finalize(() => this.loadUserExtras()))
+      .subscribe(res => {
+        res.forEach(user => {
+          let rolList: string[] | undefined;
+          rolList = user.authorities;
+          let a = rolList?.pop();
+          if (a == 'ROLE_ADMIN') {
+            user.authorities = ['Admin'];
+          } else if (a == 'ROLE_USER') {
+            user.authorities = ['Usuario'];
+          }
+        });
+        this.publicUsers = res;
+      });
+  }
 
+  loadUserExtras() {
     this.usuarioExtraService.query().subscribe(
       (res: HttpResponse<IUsuarioExtra[]>) => {
         this.isLoading = false;
         this.usuarioExtras = res.body ?? [];
+        this.usuarioExtras.forEach(uE => {
+          uE.user = this.publicUsers?.find(pU => pU.id == uE.user?.id);
+        });
       },
       () => {
         this.isLoading = false;
       }
     );
+  }
+
+  loadAll(): void {
+    this.isLoading = true;
+    this.loadPublicUser();
   }
 
   ngOnInit(): void {

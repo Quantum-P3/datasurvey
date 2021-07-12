@@ -1,7 +1,8 @@
-import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { Router } from '@angular/router';
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
 import { RegisterService } from './register.service';
@@ -58,8 +59,8 @@ export class RegisterComponent implements AfterViewInit {
   registerForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(254)]],
     email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
-    confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
+    password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
+    confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
   });
 
   constructor(private translateService: TranslateService, private registerService: RegisterService, private fb: FormBuilder) {}
@@ -83,10 +84,18 @@ export class RegisterComponent implements AfterViewInit {
       const login = this.registerForm.get(['email'])!.value;
       const email = this.registerForm.get(['email'])!.value;
       const name = this.registerForm.get(['name'])!.value;
-      console.log(name);
 
       this.registerService
-        .save({ login, email, password, langKey: this.translateService.currentLang, name, profileIcon: this.profileIcon })
+        .save({
+          login,
+          email,
+          password,
+          langKey: this.translateService.currentLang,
+          name,
+          profileIcon: this.profileIcon,
+          isAdmin: 0,
+          isGoogle: 0,
+        })
         .subscribe(
           () => (this.success = true),
           response => this.processError(response)
@@ -94,7 +103,7 @@ export class RegisterComponent implements AfterViewInit {
     }
   }
 
-  private processError(response: HttpErrorResponse): void {
+  processError(response: HttpErrorResponse): void {
     if (response.status === 400 && response.error.type === LOGIN_ALREADY_USED_TYPE) {
       this.errorUserExists = true;
     } else if (response.status === 400 && response.error.type === EMAIL_ALREADY_USED_TYPE) {
