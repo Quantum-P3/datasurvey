@@ -9,17 +9,21 @@
         <div class="card-body p-4">
           <div class="text-center w-75 m-auto">
             <h4 class="text-dark-50 text-center pb-0 fw-bold p-0 m-0" style="color: #727070; font-weight: 700; font-size: 1.3rem">
-              REGISTRAR ADMIN
+              REGISTRAR ADMINISTRADOR
             </h4>
             <p class="mb-4" style="color: rgba(146, 146, 146, 0.664)">Ingrese los datos para registrar a un admin.</p>
           </div>
 
-          <div class="alert alert-success" *ngIf="success" jhiTranslate="register.messages.adminsuccess">
+          <div class="alert alert-success" *ngIf="success" jhiTranslate="register.messages.success">
             <strong>Registration saved!</strong> Please check your email for confirmation.
           </div>
 
           <div class="alert alert-danger" *ngIf="error" jhiTranslate="register.messages.error.fail">
             <strong>Registration failed!</strong> Please try again later.
+          </div>
+
+          <div class="alert alert-danger" *ngIf="errorUserExists" jhiTranslate="register.messages.error.userexists">
+            <strong>Login name already registered!</strong> Please choose another one.
           </div>
 
           <div class="alert alert-danger" *ngIf="errorEmailExists" jhiTranslate="register.messages.error.emailexists">
@@ -33,13 +37,13 @@
           <form name="form" role="form" class="form" (ngSubmit)="register()" [formGroup]="registerForm" *ngIf="!success" autocomplete="off">
             <div class="mb-3">
               <div class="form-group">
-                <label for="name" class="form-label">Nombre</label>
+                <label for="name" class="form-label">Nombre completo</label>
                 <input
                   type="text"
                   class="form-control"
                   id="name"
                   name="name"
-                  placeholder="{{ 'global.form.name.placeholder' | translate }}"
+                  placeholder="Nombre completo"
                   formControlName="name"
                   data-cy="name"
                 />
@@ -88,7 +92,7 @@
                   class="form-control"
                   id="email"
                   name="email"
-                  placeholder="{{ 'global.form.email.placeholder' | translate }}"
+                  placeholder="Correo electrónico"
                   formControlName="email"
                   data-cy="email"
                 />
@@ -125,13 +129,17 @@
                   >
                     Your email cannot be longer than 100 characters.
                   </small>
+
+                  <small class="form-text text-danger" *ngIf="registerForm.get('email')?.errors?.email">
+                    Se requiere un correo electrónico válido.
+                  </small>
                 </div>
               </div>
             </div>
 
             <div class="mb-3">
               <div class="form-group">
-                <label for="password" jhiTranslate="global.form.newpassword.label">Password</label>
+                <label for="password">Nueva contraseña</label>
                 <input
                   type="password"
                   class="form-control"
@@ -176,7 +184,7 @@
 
             <div class="mb-3">
               <div class="form-group">
-                <label for="password" jhiTranslate="global.form.newpassword.label">Password</label>
+                <label for="password">Repetir nueva contraseña</label>
                 <input
                   type="password"
                   class="form-control"
