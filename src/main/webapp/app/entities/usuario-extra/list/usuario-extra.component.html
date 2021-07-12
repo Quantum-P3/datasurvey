@@ -3,12 +3,7 @@
     <span jhiTranslate="dataSurveyApp.usuarioExtra.home.title">Usuarios</span>
 
     <div class="d-flex justify-content-end">
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-usuario-extra"
-        [routerLink]="['/usuario-extra/new']"
-      >
+      <button id="jh-create-entity" data-cy="entityCreateButton" class="ds-btn ds-btn--primary" [routerLink]="['/usuario-extra/new']">
         <fa-icon icon="plus"></fa-icon>
         <span jhiTranslate="dataSurveyApp.usuarioExtra.home.createLabel"> Create a new administrador </span>
       </button>
@@ -62,14 +57,14 @@
               <button
                 type="submit"
                 [routerLink]="['/usuario-extra', usuarioExtra.id, 'view']"
-                class="btn btn-info btn-sm"
+                class="ds-btn ds-btn--primary btn-sm"
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
               </button>
               &nbsp;&nbsp;
-              <button type="submit" (click)="delete(usuarioExtra)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              <button type="submit" (click)="delete(usuarioExtra)" class="ds-btn ds-btn--danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>
