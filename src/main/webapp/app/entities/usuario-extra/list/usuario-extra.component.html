@@ -1,21 +1,11 @@
 <div>
   <h2 id="page-heading" data-cy="UsuarioExtraHeading">
-    <span jhiTranslate="dataSurveyApp.usuarioExtra.home.title">Usuario Extras</span>
+    <span jhiTranslate="dataSurveyApp.usuarioExtra.home.title">Usuarios</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="dataSurveyApp.usuarioExtra.home.refreshListLabel">Refresh List</span>
-      </button>
-
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-usuario-extra"
-        [routerLink]="['/usuario-extra/new']"
-      >
+      <button id="jh-create-entity" data-cy="entityCreateButton" class="ds-btn ds-btn--primary" [routerLink]="['/usuario-extra/new']">
         <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="dataSurveyApp.usuarioExtra.home.createLabel"> Create a new Usuario Extra </span>
+        <span jhiTranslate="dataSurveyApp.usuarioExtra.home.createLabel"> Create a new administrador </span>
       </button>
     </div>
   </h2>
@@ -32,10 +22,10 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span>Rol</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.iconoPerfil">Icono Perfil</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.rol">Rol</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.iconoPerfil">Icono</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.nombre">Nombre Usuario</span></th>
-          <th scope="col"><span>Correo electrónico</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.correo">Correo electrónico</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.estado">Estado</span></th>
           <!--<th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.plantilla">Plantilla</span></th>-->
           <th scope="col"></th>
@@ -62,19 +52,19 @@
               >{{ last ? '' : ', ' }}
             </span>
           </td>-->
-          <td class="text-right">
+          <td class="text-center">
             <div class="btn-group">
               <button
                 type="submit"
                 [routerLink]="['/usuario-extra', usuarioExtra.id, 'view']"
-                class="btn btn-info btn-sm"
+                class="ds-btn ds-btn--primary btn-sm"
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
               </button>
-
-              <button type="submit" (click)="delete(usuarioExtra)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              &nbsp;&nbsp;
+              <button type="submit" (click)="delete(usuarioExtra)" class="ds-btn ds-btn--danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>

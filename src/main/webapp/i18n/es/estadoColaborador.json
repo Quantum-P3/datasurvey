@@ -2,8 +2,8 @@
   "dataSurveyApp": {
     "EstadoColaborador": {
       "null": "",
-      "PENDING": "PENDING",
-      "ACTIVE": "ACTIVE"
+      "PENDING": "Pendiente",
+      "ACTIVE": "Activo"
     }
   }
 }
