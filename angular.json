@@ -66,7 +66,8 @@
               "src/main/webapp/content/js/paper-dashboard.js",
               "src/main/webapp/content/js/perfect-scrollbar.min.js",
               "src/main/webapp/content/js/sweetalert2.js",
-              "./node_modules/swiper/swiper-bundle.min.js"
+              "./node_modules/swiper/swiper-bundle.min.js",
+              "src/main/webapp/content/js/api-google-platform.js"
             ]
           },
           "configurations": {
