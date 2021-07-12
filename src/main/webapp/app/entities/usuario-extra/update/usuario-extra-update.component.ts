@@ -82,7 +82,6 @@ export class UsuarioExtraUpdateComponent {
       const login = this.registerForm.get(['email'])!.value;
       const email = this.registerForm.get(['email'])!.value;
       const name = this.registerForm.get(['name'])!.value;
-      console.log(name);
 
       this.registerService
         .save({
@@ -93,6 +92,7 @@ export class UsuarioExtraUpdateComponent {
           name,
           profileIcon: this.profileIcon,
           isAdmin: 1,
+          isGoogle: 0,
         })
         .subscribe(
           () => (this.success = true),

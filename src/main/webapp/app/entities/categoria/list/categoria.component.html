@@ -29,6 +29,12 @@
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="categorias && categorias.length > 0">
+    <form class="ds-form">
+      <div class="input-group">
+        <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+        <input type="text" class="form-control" name="searchString" placeholder="Type to search..." [(ngModel)]="searchString" />
+      </div>
+    </form>
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
@@ -39,7 +45,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let categoria of categorias; trackBy: trackId" data-cy="entityTable">
+        <tr *ngFor="let categoria of categorias | filter: 'nombre':searchString; trackBy: trackId" data-cy="entityTable">
           <td>
             <a [routerLink]="['/categoria', categoria.id, 'view']">{{ categoria.id }}</a>
           </td>

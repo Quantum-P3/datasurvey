@@ -6,7 +6,7 @@ import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
-import { SessionStorageService } from 'ngx-webstorage';
+import { LocalStorageService, SessionStorageService } from 'ngx-webstorage';
 import { Router } from '@angular/router';
 import { UsuarioExtraService } from 'app/entities/usuario-extra/service/usuario-extra.service';
 import { UsuarioExtra } from 'app/entities/usuario-extra/usuario-extra.model';
@@ -31,6 +31,7 @@ export class SidebarComponent {
   constructor(
     private loginService: LoginService,
     private sessionStorageService: SessionStorageService,
+    private localStorageService: LocalStorageService,
     private accountService: AccountService,
     private profileService: ProfileService,
     private router: Router,
@@ -87,6 +88,7 @@ export class SidebarComponent {
     this.collapseNavbar();
     this.loginService.logout();
     this.router.navigate(['']);
+    this.localStorageService.clear('IsGoogle');
   }
 
   toggleNavbar(): void {

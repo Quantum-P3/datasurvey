@@ -32,10 +32,9 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span>Rol de usuario</span></th>
+          <th scope="col"><span>Rol</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.iconoPerfil">Icono Perfil</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.nombre">Nombre Usuario</span></th>
-          <th scope="col"><span>Nombre Completo</span></th>
           <th scope="col"><span>Correo electrónico</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.estado">Estado</span></th>
           <!--<th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.plantilla">Plantilla</span></th>-->
@@ -55,7 +54,6 @@
             <div class="photo mb-2"><img src="../../../../content/profile_icons/C{{ usuarioExtra.iconoPerfil }}.png" /></div>
           </td>
           <td>{{ usuarioExtra.nombre }}</td>
-          <td *ngIf="usuarioExtra.user">{{ usuarioExtra.user.firstName }} {{ usuarioExtra.user.lastName }}</td>
           <td *ngIf="usuarioExtra.user">{{ usuarioExtra.user.email }}</td>
           <td jhiTranslate="{{ 'dataSurveyApp.EstadoUsuario.' + usuarioExtra.estado }}">{{ usuarioExtra.estado }}</td>
           <!--<td>

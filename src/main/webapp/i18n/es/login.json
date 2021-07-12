@@ -9,7 +9,7 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>¡El inicio de sesión ha fallado!</strong> Por favor, revise las credenciales e intente de nuevo."
+        "authentication": "Revise las credenciales e intente de nuevo "
       }
     },
     "password": {

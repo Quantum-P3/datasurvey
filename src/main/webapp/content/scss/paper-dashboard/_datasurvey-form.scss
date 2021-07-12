@@ -1,0 +1,55 @@
+// Form variables
+$form-background: #f1f5f9;
+
+.ds-form {
+  .form-group label {
+    transition: all 0.1s ease-in-out;
+  }
+
+  .form-group:focus-within {
+    label,
+    input {
+      color: #313747;
+    }
+  }
+
+  input,
+  input:-webkit-autofill {
+    background-color: $form-background;
+    border-radius: 15px;
+    border: 1.75px solid transparent;
+    outline: 0;
+    padding: 1rem !important;
+    color: #757d94;
+
+    &:focus,
+    &:active {
+      background-color: $form-background;
+      border: 1.75px solid #2962ff;
+      // color: #313747;
+    }
+
+    &:read-only {
+      background-color: $form-background;
+      cursor: default;
+
+      &:focus,
+      &:active {
+        border: 1.75px solid transparent;
+        color: #757d94;
+      }
+    }
+  }
+
+  label {
+    color: #757d94;
+  }
+}
+
+input:-internal-autofill-selected,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  background-color: $form-background !important;
+}
