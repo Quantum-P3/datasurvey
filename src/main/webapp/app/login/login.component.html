@@ -110,19 +110,19 @@
 
                     <small
                       class="form-text text-danger"
-                      *ngIf="loginForm.get('username')?.errors?.invalid"
+                      *ngIf="loginForm.get('username')?.errors?.email"
                       jhiTranslate="global.messages.validate.email.invalid"
                     >
                       Your email is invalid
                     </small>
 
-                    <small
+                    <!--<small
                       class="form-text text-danger"
                       *ngIf="loginForm.get('username')?.errors?.minlength"
                       jhiTranslate="global.messages.validate.email.minlength"
                     >
                       Your email is required to be at least 5 characters
-                    </small>
+                    </small> -->
 
                     <small
                       class="form-text text-danger"
