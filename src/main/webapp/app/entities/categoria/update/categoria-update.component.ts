@@ -21,8 +21,10 @@ export class CategoriaUpdateComponent implements OnInit {
     nombre: [null, [Validators.required]],
     estado: [null, [Validators.required]],
   });
+  public duplicateName: boolean;
 
   constructor(protected categoriaService: CategoriaService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {
+    this.duplicateName = false;
     this.categorias = [];
     this.loadAll();
   }
@@ -55,14 +57,14 @@ export class CategoriaUpdateComponent implements OnInit {
         this.subscribeToSaveResponse(this.categoriaService.create(categoria));
       }
     } else {
-      this.previousState();
+      this.duplicateName = true;
+      this.isSaving = false;
     }
   }
 
   protected categoryExists(categoria: ICategoria): boolean {
     this.loadAll();
     var condicion = this.categorias!.some(cat => cat.nombre === categoria.nombre);
-    debugger;
     return condicion;
   }
 

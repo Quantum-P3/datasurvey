@@ -21,7 +21,10 @@
       "nombre": "Nombre",
       "estado": "Estado",
       "encuesta": "Encuesta",
-      "plantilla": "Plantilla"
+      "plantilla": "Plantilla",
+      "errors": {
+        "duplicateName": "Ya existe una categoría con ese nombre."
+      }
     }
   }
 }
