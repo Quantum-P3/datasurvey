@@ -110,7 +110,9 @@
 <!-- --------------------------------------------------------------------------------------------- -->
 
 <!-- Button trigger modal -->
-<button type="button" class="ds-btn ds-btn--primary" data-toggle="modal" data-target="#crearEncuesta">Crear encuesta</button>
+<button type="button" class="ds-btn ds-btn--primary" (click)="resetForm()" data-toggle="modal" data-target="#crearEncuesta">
+  Crear encuesta
+</button>
 
 <!-- Modal -->
 <div
@@ -131,11 +133,6 @@
           <!-- Survey Registration Modal -->
           <div>
             <jhi-alert-error></jhi-alert-error>
-
-            <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-              <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-              <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-            </div>
 
             <div class="form-group">
               <label class="form-control-label" jhiTranslate="dataSurveyApp.encuesta.nombre" for="field_nombre">Nombre</label>
@@ -202,7 +199,7 @@
             <div class="form-group">
               <label class="form-control-label" jhiTranslate="dataSurveyApp.encuesta.categoria" for="field_categoria">Categoría</label>
               <select class="form-control" id="field_categoria" data-cy="categoria" name="categoria" formControlName="categoria">
-                <option [ngValue]="null"></option>
+                <option [ngValue]="null" selected></option>
                 <option
                   [ngValue]="
                     categoriaOption.id === editForm.get('categoria')!.value?.id ? editForm.get('categoria')!.value : categoriaOption
@@ -212,10 +209,21 @@
                   {{ categoriaOption.nombre }}
                 </option>
               </select>
+              <div *ngIf="editForm.get('categoria')!.invalid && (editForm.get('categoria')!.dirty || editForm.get('categoria')!.touched)">
+                <small
+                  class="form-text text-danger"
+                  *ngIf="editForm.get('categoria')?.errors?.required"
+                  jhiTranslate="entity.validation.required"
+                >
+                  This field is required.
+                </small>
+              </div>
             </div>
           </div>
         </div>
         <div class="modal-footer">
+          <input id="createAnother" type="checkbox" (change)="createAnotherChange($event)" />
+          <label for="createAnother">Crear otra</label>
           <button id="cancelBtn" type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal">
             <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
           </button>
@@ -223,8 +231,8 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            [disabled]="editForm.invalid || isSaving"
             class="ds-btn ds-btn--primary"
+            [disabled]="editForm.invalid || isSaving"
           >
             <span jhiTranslate="entity.action.create">Create</span>
           </button>

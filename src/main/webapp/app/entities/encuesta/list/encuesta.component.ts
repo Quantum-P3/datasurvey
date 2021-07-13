@@ -56,6 +56,8 @@ export class EncuestaComponent implements OnInit {
     // usuarioExtra: [],
   });
 
+  createAnother: Boolean = false;
+
   constructor(
     protected encuestaService: EncuestaService,
     protected modalService: NgbModal,
@@ -65,6 +67,10 @@ export class EncuestaComponent implements OnInit {
     protected fb: FormBuilder,
     protected accountService: AccountService
   ) {}
+
+  resetForm(): void {
+    this.editForm.reset();
+  }
 
   loadAll(): void {
     this.isLoading = true;
@@ -164,12 +170,19 @@ export class EncuestaComponent implements OnInit {
     );
   }
 
+  createAnotherChange(event: any) {
+    this.createAnother = event.target.checked;
+  }
+
   protected onSaveSuccess(): void {
     // this.previousState();
     //  ($('#crearEncuesta') as any).modal('hide');
+    this.resetForm();
     this.encuestas = [];
     this.loadAll();
-    $('#cancelBtn').click();
+    if (!this.createAnother) {
+      $('#cancelBtn').click();
+    }
   }
 
   protected onSaveError(): void {
