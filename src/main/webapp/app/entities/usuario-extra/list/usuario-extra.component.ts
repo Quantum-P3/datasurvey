@@ -30,9 +30,9 @@ export class UsuarioExtraComponent implements OnInit {
           rolList = user.authorities;
           let a = rolList?.pop();
           if (a == 'ROLE_ADMIN') {
-            user.authorities = ['ADMIN'];
+            user.authorities = ['Admin'];
           } else if (a == 'ROLE_USER') {
-            user.authorities = ['USUARIO'];
+            user.authorities = ['Usuario'];
           }
         });
         this.publicUsers = res;

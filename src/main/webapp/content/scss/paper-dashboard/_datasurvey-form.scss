@@ -15,6 +15,7 @@ $form-background: #f1f5f9;
   }
 
   input,
+  input:-webkit-autofill,
   select {
     background-color: $form-background;
     border-radius: 15px;
@@ -76,4 +77,12 @@ $form-background: #f1f5f9;
   label {
     color: #757d94;
   }
+}
+
+input:-internal-autofill-selected,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  background-color: $form-background !important;
 }

@@ -14,18 +14,31 @@ import { CategoriaService } from '../service/categoria.service';
 })
 export class CategoriaUpdateComponent implements OnInit {
   isSaving = false;
+  public categorias?: ICategoria[];
 
   editForm = this.fb.group({
     id: [],
     nombre: [null, [Validators.required]],
     estado: [null, [Validators.required]],
   });
+  public duplicateName: boolean;
 
-  constructor(protected categoriaService: CategoriaService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
+  constructor(protected categoriaService: CategoriaService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {
+    this.duplicateName = false;
+    this.categorias = [];
+    this.loadAll();
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ categoria }) => {
       this.updateForm(categoria);
+    });
+    this.loadAll();
+  }
+
+  loadAll(): void {
+    this.categoriaService.query().subscribe(res => {
+      this.categorias = res.body ?? [];
     });
   }
 
@@ -36,11 +49,23 @@ export class CategoriaUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const categoria = this.createFromForm();
-    if (categoria.id !== undefined) {
-      this.subscribeToSaveResponse(this.categoriaService.update(categoria));
+    const condicion = this.categoryExists(categoria);
+    if (!condicion) {
+      if (categoria.id !== undefined) {
+        this.subscribeToSaveResponse(this.categoriaService.update(categoria));
+      } else {
+        this.subscribeToSaveResponse(this.categoriaService.create(categoria));
+      }
     } else {
-      this.subscribeToSaveResponse(this.categoriaService.create(categoria));
+      this.duplicateName = true;
+      this.isSaving = false;
     }
+  }
+
+  protected categoryExists(categoria: ICategoria): boolean {
+    this.loadAll();
+    var condicion = this.categorias!.some(cat => cat.nombre!.toLowerCase() === categoria.nombre!.toLowerCase());
+    return condicion;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ICategoria>>): void {

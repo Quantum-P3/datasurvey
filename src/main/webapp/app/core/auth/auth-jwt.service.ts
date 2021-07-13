@@ -36,6 +36,7 @@ export class AuthServerProvider {
     return new Observable(observer => {
       this.localStorageService.clear('authenticationToken');
       this.sessionStorageService.clear('authenticationToken');
+      this.localStorageService.clear('IsGoogle');
       observer.complete();
     });
   }
