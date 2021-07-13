@@ -163,7 +163,7 @@
       </form>
     </div>
   </div>
-</div> 
+</div>
 -------------------------------------------------------------------------------
 -->
 
@@ -273,6 +273,8 @@
             Utilice una contraseña segura al realizar el cambio, este dato debe ser secreto ya que provee acceso a su cuenta.
           </p>
         </div>
+
+        <div class="alert alert-danger" *ngIf="isGoogle" jhiTranslate="login.messages.error.isGoogle" data-cy="loginError"></div>
       </div>
     </div>
 
@@ -297,9 +299,14 @@
             data-cy="password"
             formControlName="password"
             placeholder="Su contraseña actual"
+            [readOnly]="isGoogle"
           />
           <div
-            *ngIf="passwordForm.get('password')!.invalid && (passwordForm.get('password')!.dirty || passwordForm.get('password')!.touched)"
+            *ngIf="
+              passwordForm.get('password')!.invalid &&
+              (passwordForm.get('password')!.dirty || passwordForm.get('password')!.touched) &&
+              !isGoogle
+            "
           >
             <small
               class="form-text text-danger"
@@ -322,11 +329,13 @@
             data-cy="passwordNew"
             formControlName="passwordNew"
             placeholder="Contraseña nueva"
+            [readOnly]="isGoogle"
           />
           <div
             *ngIf="
               passwordForm.get('passwordNew')!.invalid &&
-              (passwordForm.get('passwordNew')!.dirty || passwordForm.get('passwordNew')!.touched)
+              (passwordForm.get('passwordNew')!.dirty || passwordForm.get('passwordNew')!.touched) &&
+              !isGoogle
             "
           >
             <small
@@ -351,11 +360,13 @@
             data-cy="passwordNewConfirm"
             formControlName="passwordNewConfirm"
             placeholder="Contraseña nueva"
+            [readOnly]="isGoogle"
           />
           <div
             *ngIf="
               passwordForm.get('passwordNewConfirm')!.invalid &&
-              (passwordForm.get('passwordNewConfirm')!.dirty || passwordForm.get('passwordNewConfirm')!.touched)
+              (passwordForm.get('passwordNewConfirm')!.dirty || passwordForm.get('passwordNewConfirm')!.touched) &&
+              !isGoogle
             "
           >
             <small

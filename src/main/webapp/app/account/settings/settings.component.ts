@@ -14,6 +14,7 @@ import { PlantillaService } from 'app/entities/plantilla/service/plantilla.servi
 import { IUsuarioExtra, UsuarioExtra } from 'app/entities/usuario-extra/usuario-extra.model';
 import { UsuarioExtraService } from 'app/entities/usuario-extra/service/usuario-extra.service';
 import { AccountService } from 'app/core/auth/account.service';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'jhi-settings',
@@ -25,6 +26,9 @@ export class SettingsComponent implements OnInit {
   usersSharedCollection: IUser[] = [];
   plantillasSharedCollection: IPlantilla[] = [];
 
+  isGoogle = this.localStorageService.retrieve('IsGoogle');
+
+  //Form info del usuario
   editForm = this.fb.group({
     email: [null, [Validators.required]],
     id: [],
@@ -36,6 +40,7 @@ export class SettingsComponent implements OnInit {
     plantillas: [],
   });
 
+  //form de la contraseña
   passwordForm = this.fb.group({
     password: [null, [Validators.required]],
     passwordNew: [null, [Validators.required]],
@@ -81,7 +86,8 @@ export class SettingsComponent implements OnInit {
     protected plantillaService: PlantillaService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected accountService: AccountService
+    protected accountService: AccountService,
+    private localStorageService: LocalStorageService
   ) {}
 
   ngOnInit(): void {
@@ -102,6 +108,8 @@ export class SettingsComponent implements OnInit {
         });
       }
     });
+
+    console.log(this.isGoogle);
 
     // this.activatedRoute.data.subscribe(({ usuarioExtra }) => {
 
@@ -160,6 +168,7 @@ export class SettingsComponent implements OnInit {
     this.isSaving = false;
   }
 
+  //Llena el formulario para que se vea en pantalla
   protected updateForm(usuarioExtra: IUsuarioExtra): void {
     this.editForm.patchValue({
       email: usuarioExtra.user?.login,
