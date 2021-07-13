@@ -24,6 +24,8 @@ public class ManagedUserVM extends AdminUserDTO {
 
     private Integer isAdmin;
 
+    private Integer isGoogle;
+
     public ManagedUserVM() {
         // Empty constructor needed for Jackson.
     }
@@ -58,6 +60,14 @@ public class ManagedUserVM extends AdminUserDTO {
 
     public void setIsAdmin(Integer isAdmin) {
         this.isAdmin = isAdmin;
+    }
+
+    public Integer getIsGoogle() {
+        return isGoogle;
+    }
+
+    public void setIsGoogle(Integer isGoogle) {
+        this.isGoogle = isGoogle;
     }
 
     // prettier-ignore

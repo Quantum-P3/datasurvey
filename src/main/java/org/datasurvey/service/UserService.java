@@ -156,7 +156,7 @@ public class UserService {
      * Modified to register extra user data
      * name, iconoPerfil, fechaNacimiento, estado, pais
      */
-    public User registerUser(AdminUserDTO userDTO, String password, String name, Integer profileIcon, Integer isAdmin) {
+    public User registerUser(AdminUserDTO userDTO, String password, String name, Integer profileIcon, Integer isAdmin, Integer isGoogle) {
         userRepository
             .findOneByLogin(userDTO.getLogin().toLowerCase())
             .ifPresent(
@@ -190,7 +190,13 @@ public class UserService {
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
         // new user is not active
-        newUser.setActivated(false);
+
+        if (isGoogle == 1) {
+            newUser.setActivated(true);
+        } else {
+            newUser.setActivated(false);
+        }
+
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();

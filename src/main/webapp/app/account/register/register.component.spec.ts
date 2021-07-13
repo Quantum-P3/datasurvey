@@ -65,6 +65,7 @@ describe('Component Tests', () => {
           name: '',
           profileIcon: 1,
           isAdmin: 0,
+          isGoogle: 0,
         });
         expect(comp.success).toBe(true);
         expect(comp.errorUserExists).toBe(false);
