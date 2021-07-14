@@ -390,6 +390,7 @@
 
       <div class="row">
         <button
+          *ngIf="!isGoogle"
           type="button"
           id="cancel-save"
           data-cy="entityCreateCancelButton"
@@ -400,6 +401,7 @@
         </button>
 
         <button
+          *ngIf="!isGoogle"
           type="submit"
           id="save-entity"
           data-cy="entityCreateSaveButton"

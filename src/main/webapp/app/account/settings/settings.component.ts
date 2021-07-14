@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
 import * as dayjs from 'dayjs';
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
+import { DATE_FORMAT, DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/user.service';
 import { IPlantilla } from 'app/entities/plantilla/plantilla.model';
@@ -183,7 +183,7 @@ export class SettingsComponent implements OnInit {
       id: usuarioExtra.id,
       nombre: usuarioExtra.nombre,
       iconoPerfil: usuarioExtra.iconoPerfil,
-      fechaNacimiento: usuarioExtra.fechaNacimiento ? usuarioExtra.fechaNacimiento.format(DATE_TIME_FORMAT) : null,
+      fechaNacimiento: usuarioExtra.fechaNacimiento ? usuarioExtra.fechaNacimiento.format(DATE_FORMAT) : null,
       estado: usuarioExtra.estado,
       user: usuarioExtra.user,
       plantillas: usuarioExtra.plantillas,
@@ -229,7 +229,7 @@ export class SettingsComponent implements OnInit {
       nombre: this.editForm.get(['nombre'])!.value,
       iconoPerfil: this.profileIcon,
       fechaNacimiento: this.editForm.get(['fechaNacimiento'])!.value
-        ? dayjs(this.editForm.get(['fechaNacimiento'])!.value, DATE_TIME_FORMAT)
+        ? dayjs(this.editForm.get(['fechaNacimiento'])!.value, DATE_FORMAT)
         : undefined,
       estado: this.editForm.get(['estado'])!.value,
       user: this.editForm.get(['user'])!.value,
