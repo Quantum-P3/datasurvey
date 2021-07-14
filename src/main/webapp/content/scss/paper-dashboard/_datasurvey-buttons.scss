@@ -22,6 +22,14 @@
     top: -3px;
     box-shadow: rgba(80, 80, 80, 0.15) 0px 5px 15px;
   }
+
+  &:disabled,
+  &[disabled],
+  &.disabled {
+    background-color: #f7f9ff;
+    pointer-events: none;
+    color: #171820;
+  }
 }
 
 .ds-btn--primary {
