@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -21,6 +21,7 @@ import { UsuarioExtraService } from 'app/entities/usuario-extra/service/usuario-
 import { EstadoEncuesta } from 'app/entities/enumerations/estado-encuesta.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
+import { Router } from '@angular/router';
 
 import * as $ from 'jquery';
 
@@ -28,7 +29,7 @@ import * as $ from 'jquery';
   selector: 'jhi-encuesta',
   templateUrl: './encuesta.component.html',
 })
-export class EncuestaComponent implements OnInit {
+export class EncuestaComponent implements OnInit, AfterViewInit {
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;
 
@@ -65,7 +66,8 @@ export class EncuestaComponent implements OnInit {
     protected usuarioExtraService: UsuarioExtraService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected accountService: AccountService
+    protected accountService: AccountService,
+    protected router: Router
   ) {}
 
   resetForm(): void {
@@ -123,6 +125,11 @@ export class EncuestaComponent implements OnInit {
         });
       }
     });
+  }
+
+  ngAfterViewInit(): void {
+    let surveys = document.querySelectorAll('.ds-list--entity');
+    console.log(surveys);
   }
 
   trackId(index: number, item: IEncuesta): number {
@@ -258,5 +265,27 @@ export class EncuestaComponent implements OnInit {
       categoria: this.editForm.get(['categoria'])!.value,
       usuarioExtra: this.usuarioExtra,
     };
+  }
+
+  isAdmin(): boolean {
+    return this.accountService.hasAnyAuthority('ROLE_ADMIN');
+  }
+
+  isAuthenticated(): boolean {
+    return this.accountService.isAuthenticated();
+  }
+
+  openSurvey(event: any): void {
+    const surveyId = event.target.getAttribute('data-id');
+    this.router.navigate(['/encuesta', surveyId, 'edit']);
+
+    // document.querySelectorAll(".ds-list--entity").forEach(ele => {
+    //   console.log(ele);
+
+    //   ele.addEventListener('dblclick', e => {
+    //     console.log(e.target);
+
+    //   });
+    // });
   }
 }

@@ -61,6 +61,8 @@ export class SidebarComponent {
       if (account !== null) {
         this.usuarioExtraService.find(account.id).subscribe(usuarioExtra => {
           this.usuarioExtra = usuarioExtra.body;
+          this.usuarioExtra!.nombre =
+            usuarioExtra.body!.nombre!.trim().split(' ')[0] + ' ' + usuarioExtra.body!.nombre!.trim().split(' ')[1];
         });
       }
     });

@@ -1,22 +1,29 @@
 <div>
   <h2 id="page-heading" data-cy="EncuestaHeading">
-    <span jhiTranslate="dataSurveyApp.encuesta.home.title">Encuestas</span>
+    <div class="d-flex flex-sm-row flex-column justify-content-between align-items-center">
+      <div>
+        <span class="ds-title" jhiTranslate="dataSurveyApp.encuesta.home.title">Encuestas</span>
+        <p class="ds-subtitle">Cree encuestas y publiquelas mundialmente.</p>
+      </div>
 
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="dataSurveyApp.encuesta.home.refreshListLabel">Refresh List</span>
-      </button>
+      <div>
+        <button type="button" class="ds-btn ds-btn--secondary" (click)="loadAll()" [disabled]="isLoading">
+          <fa-icon icon="sync" [spin]="isLoading"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="dataSurveyApp.encuesta.home.refreshListLabel"
+            >Refresh List</span
+          >
+        </button>
 
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-encuesta"
-        [routerLink]="['/encuesta/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="dataSurveyApp.encuesta.home.createLabel"> Create a new Encuesta </span>
-      </button>
+        <button
+          *ngIf="!isAdmin() && isAuthenticated()"
+          type="button"
+          class="ds-btn ds-btn--primary"
+          (click)="resetForm()"
+          data-toggle="modal"
+          data-target="#crearEncuesta"
+        >
+          Crear encuesta
+        </button>
+      </div>
     </div>
   </h2>
 
@@ -26,6 +33,70 @@
 
   <div class="alert alert-warning" id="no-result" *ngIf="encuestas?.length === 0">
     <span jhiTranslate="dataSurveyApp.encuesta.home.notFound">No encuestas found</span>
+  </div>
+
+  <!-- Lista de Encuestas del Usuario -->
+  <div class="ds-list">
+    <div
+      class="ds-list--entity"
+      *ngFor="let encuesta of encuestas; trackBy: trackId"
+      (dblclick)="openSurvey($event)"
+      [attr.data-id]="encuesta.id"
+    >
+      <span>{{ encuesta.nombre }}</span>
+
+      <!-- <p>
+        <a [routerLink]="['/encuesta', encuesta.id, 'view']">{{ encuesta.id }}</a>
+      </p>
+      <p>{{ encuesta.nombre }}</p>
+      <p>{{ encuesta.descripcion }}</p>
+      <p>{{ encuesta.fechaCreacion | formatMediumDatetime }}</p>
+      <p>{{ encuesta.fechaPublicacion | formatMediumDatetime }}</p>
+      <p>{{ encuesta.fechaFinalizar | formatMediumDatetime }}</p>
+      <p>{{ encuesta.fechaFinalizada | formatMediumDatetime }}</p>
+      <p>{{ encuesta.calificacion }}</p>
+      <p jhiTranslate="{{ 'dataSurveyApp.AccesoEncuesta.' + encuesta.acceso }}">{{ encuesta.acceso }}</p>
+      <p>{{ encuesta.contrasenna }}</p>
+      <p jhiTranslate="{{ 'dataSurveyApp.EstadoEncuesta.' + encuesta.estado }}">{{ encuesta.estado }}</p>
+      <div>
+        <div *ngIf="encuesta.categoria">
+          <a [routerLink]="['/categoria', encuesta.categoria?.id, 'view']">{{ encuesta.categoria?.nombre }}</a>
+        </div>
+      </div>
+      <div>
+        <div *ngIf="encuesta.usuarioExtra">
+          <a [routerLink]="['/usuario-extra', encuesta.usuarioExtra?.id, 'view']">{{ encuesta.usuarioExtra?.id }}</a>
+        </div>
+      </div>
+      <div class="text-right">
+        <div class="btn-group">
+          <button
+            type="submit"
+            [routerLink]="['/encuesta', encuesta.id, 'view']"
+            class="btn btn-info btn-sm"
+            data-cy="entityDetailsButton"
+          >
+            <fa-icon icon="eye"></fa-icon>
+            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+          </button>
+
+          <button
+            type="submit"
+            [routerLink]="['/encuesta', encuesta.id, 'edit']"
+            class="btn btn-primary btn-sm"
+            data-cy="entityEditButton"
+          >
+            <fa-icon icon="pencil-alt"></fa-icon>
+            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+          </button>
+
+          <button type="submit" (click)="delete(encuesta)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+            <fa-icon icon="times"></fa-icon>
+            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+          </button>
+        </div>
+      </div> -->
+    </div>
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="encuestas && encuestas.length > 0">
@@ -108,11 +179,6 @@
 </div>
 
 <!-- --------------------------------------------------------------------------------------------- -->
-
-<!-- Button trigger modal -->
-<button type="button" class="ds-btn ds-btn--primary" (click)="resetForm()" data-toggle="modal" data-target="#crearEncuesta">
-  Crear encuesta
-</button>
 
 <!-- Modal -->
 <div

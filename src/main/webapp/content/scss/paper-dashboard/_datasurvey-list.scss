@@ -1,0 +1,25 @@
+.ds-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: minmax(12.5rem, auto);
+  border: 2px dashed #e6e6e6;
+  border-radius: $border-radius-x-large;
+  padding: 1rem;
+  width: 100%;
+  user-select: none;
+  box-sizing: border-box;
+
+  .ds-list--entity {
+    border: 2px solid #e6e6e6;
+    border-radius: $border-radius-small;
+    padding: 0.5rem;
+    margin: 1rem;
+    transition: all 0.1s ease-in-out;
+    word-wrap: break-word;
+
+    &:hover {
+      background-color: #e8f0fe;
+      cursor: pointer;
+    }
+  }
+}

@@ -434,6 +434,10 @@
 }
 
 @media screen and (max-width: 767px) {
+  .ds-list {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
   .nav-tabs-navigation.vertical-navs {
     padding: 0 28px;
   }
@@ -506,6 +510,10 @@
 }
 
 @media screen and (max-width: 576px) {
+  .ds-list {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
   .navbar[class*='navbar-toggleable-'] .container {
     margin-left: 0;
     margin-right: 0;
