@@ -1,3 +1,15 @@
+@media screen and (max-width: 1280px) {
+  .ds-list {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media screen and (max-width: 880px) {
+  .ds-list {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
 @media screen and (max-width: 991px) {
   .navbar {
     padding: 0;
@@ -434,10 +446,6 @@
 }
 
 @media screen and (max-width: 767px) {
-  .ds-list {
-    grid-template-columns: repeat(3, 1fr) !important;
-  }
-
   .nav-tabs-navigation.vertical-navs {
     padding: 0 28px;
   }
@@ -511,7 +519,7 @@
 
 @media screen and (max-width: 576px) {
   .ds-list {
-    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: repeat(1, 1fr) !important;
   }
 
   .navbar[class*='navbar-toggleable-'] .container {

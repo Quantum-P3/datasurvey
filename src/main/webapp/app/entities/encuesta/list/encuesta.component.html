@@ -36,14 +36,23 @@
   </div>
 
   <!-- Lista de Encuestas del Usuario -->
-  <div class="ds-list">
+  <div class="ds-list" oncontextmenu="return false;">
     <div
       class="ds-list--entity"
       *ngFor="let encuesta of encuestas; trackBy: trackId"
       (dblclick)="openSurvey($event)"
+      (click)="selectSurvey($event)"
       [attr.data-id]="encuesta.id"
     >
       <span>{{ encuesta.nombre }}</span>
+      <br />
+      <span>{{ encuesta.descripcion }}</span>
+      <br />
+      <span>{{ encuesta.fechaCreacion | formatMediumDatetime }}</span>
+      <br />
+      <span>{{ encuesta.calificacion }}</span>
+      <br />
+      <span><fa-icon [icon]="faShareAlt"></fa-icon></span>
 
       <!-- <p>
         <a [routerLink]="['/encuesta', encuesta.id, 'view']">{{ encuesta.id }}</a>

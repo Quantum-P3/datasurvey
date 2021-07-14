@@ -23,6 +23,8 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { Router } from '@angular/router';
 
+import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
+
 import * as $ from 'jquery';
 
 @Component({
@@ -30,6 +32,9 @@ import * as $ from 'jquery';
   templateUrl: './encuesta.component.html',
 })
 export class EncuestaComponent implements OnInit, AfterViewInit {
+  // Icons
+  faShareAlt = faShareAlt;
+
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;
 
@@ -80,7 +85,8 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     this.encuestaService.query().subscribe(
       (res: HttpResponse<IEncuesta[]>) => {
         this.isLoading = false;
-        this.encuestas = res.body ?? [];
+        const tmpEncuestas = res.body ?? [];
+        this.encuestas = tmpEncuestas.filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id);
       },
       () => {
         this.isLoading = false;
@@ -89,12 +95,15 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.loadAll();
-
-    // Call upon selecting a survey to edit
-    // this.updateForm(encuesta);
-
-    this.loadRelationshipsOptions();
+    document.body.addEventListener('click', e => {
+      if (e.target) {
+        if (!(e.target as HTMLElement).classList.contains('ds-list--entity')) {
+          document.querySelectorAll('.ds-list--entity').forEach(e => {
+            e.classList.remove('active');
+          });
+        }
+      }
+    });
 
     // this.activatedRoute.data.subscribe(({ encuesta }) => {
     //   if (encuesta.id === undefined) {
@@ -114,6 +123,8 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       if (account !== null) {
         this.usuarioExtraService.find(account.id).subscribe(usuarioExtra => {
           this.usuarioExtra = usuarioExtra.body;
+          this.loadAll();
+          this.loadRelationshipsOptions();
           if (this.usuarioExtra !== null) {
             if (this.usuarioExtra.id === undefined) {
               const today = dayjs().startOf('day');
@@ -127,10 +138,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    let surveys = document.querySelectorAll('.ds-list--entity');
-    console.log(surveys);
-  }
+  ngAfterViewInit(): void {}
 
   trackId(index: number, item: IEncuesta): number {
     return item.id!;
@@ -278,14 +286,12 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   openSurvey(event: any): void {
     const surveyId = event.target.getAttribute('data-id');
     this.router.navigate(['/encuesta', surveyId, 'edit']);
+  }
 
-    // document.querySelectorAll(".ds-list--entity").forEach(ele => {
-    //   console.log(ele);
-
-    //   ele.addEventListener('dblclick', e => {
-    //     console.log(e.target);
-
-    //   });
-    // });
+  selectSurvey(event: any): void {
+    document.querySelectorAll('.ds-list--entity').forEach(e => {
+      e.classList.remove('active');
+    });
+    event.target.classList.add('active');
   }
 }
