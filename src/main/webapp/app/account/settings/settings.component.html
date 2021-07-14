@@ -180,7 +180,7 @@
       </div>
     </div>
 
-    <!-- Form -->
+    <!-- Form de info usuario -->
     <form
       autocomplete="off"
       class="ds-form col-lg ml-lg-5 mr-lg-5 pr-lg-5"
@@ -190,6 +190,14 @@
       (ngSubmit)="save()"
       [formGroup]="editForm"
     >
+      <div class="alert alert-danger" *ngIf="error" jhiTranslate="global.messages.info.authenticated.updateForm" data-cy="loginError"></div>
+
+      <div *ngIf="success" class="alert alert-success alert-dismissible fade show" role="alert">
+        Sus datos fueron actualizados de manera exitosa
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       <div class="row mb-2">
         <div class="form-group w-100">
           <label class="form-control-label" for="field_email">Correo electrónico</label>
@@ -221,7 +229,7 @@
             <input
               id="field_fechaNacimiento"
               data-cy="fechaNacimiento"
-              type="datetime-local"
+              type="date"
               class="form-control"
               name="fechaNacimiento"
               formControlName="fechaNacimiento"
@@ -278,7 +286,7 @@
       </div>
     </div>
 
-    <!-- Form -->
+    <!-- Form de password-->
     <form
       autocomplete="off"
       class="ds-form col-lg ml-lg-5 mr-lg-5 pr-lg-5"

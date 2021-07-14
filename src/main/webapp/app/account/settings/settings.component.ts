@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -15,6 +15,7 @@ import { IUsuarioExtra, UsuarioExtra } from 'app/entities/usuario-extra/usuario-
 import { UsuarioExtraService } from 'app/entities/usuario-extra/service/usuario-extra.service';
 import { AccountService } from 'app/core/auth/account.service';
 import { LocalStorageService } from 'ngx-webstorage';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '../../config/error.constants';
 
 @Component({
   selector: 'jhi-settings',
@@ -22,7 +23,8 @@ import { LocalStorageService } from 'ngx-webstorage';
 })
 export class SettingsComponent implements OnInit {
   isSaving = false;
-
+  success = false;
+  error = false;
   usersSharedCollection: IUser[] = [];
   plantillasSharedCollection: IPlantilla[] = [];
 
@@ -120,14 +122,15 @@ export class SettingsComponent implements OnInit {
     window.history.back();
   }
 
+  //Se manda la info a guardar
   save(): void {
     this.isSaving = true;
     const usuarioExtra = this.createFromForm();
-    if (usuarioExtra.id !== undefined) {
-      this.subscribeToSaveResponse(this.usuarioExtraService.update(usuarioExtra));
-    } else {
-      this.subscribeToSaveResponse(this.usuarioExtraService.create(usuarioExtra));
-    }
+
+    console.log(usuarioExtra.iconoPerfil);
+    console.log(usuarioExtra.fechaNacimiento);
+
+    this.subscribeToSaveResponse(this.usuarioExtraService.update(usuarioExtra));
   }
 
   trackUserById(index: number, item: IUser): number {
@@ -151,9 +154,14 @@ export class SettingsComponent implements OnInit {
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IUsuarioExtra>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
+      () => (this.success = true),
+      response => this.processError(response)
     );
+  }
+  processError(response: HttpErrorResponse): void {
+    if (response.status === 400) {
+      this.error = true;
+    }
   }
 
   protected onSaveSuccess(): void {
@@ -182,7 +190,7 @@ export class SettingsComponent implements OnInit {
     });
 
     // Update swiper
-    this.profileIcon = parseInt(usuarioExtra.iconoPerfil!);
+    this.profileIcon = usuarioExtra.iconoPerfil!;
     this.profileIcons.forEach(icon => {
       if (parseInt(icon.name.split('C')[1]) === this.profileIcon) {
         icon.class = 'active';
@@ -219,7 +227,7 @@ export class SettingsComponent implements OnInit {
       ...new UsuarioExtra(),
       id: this.editForm.get(['id'])!.value,
       nombre: this.editForm.get(['nombre'])!.value,
-      iconoPerfil: this.editForm.get(['iconoPerfil'])!.value,
+      iconoPerfil: this.profileIcon,
       fechaNacimiento: this.editForm.get(['fechaNacimiento'])!.value
         ? dayjs(this.editForm.get(['fechaNacimiento'])!.value, DATE_TIME_FORMAT)
         : undefined,
@@ -234,6 +242,8 @@ export class SettingsComponent implements OnInit {
       document.querySelectorAll('.active').forEach(e => e.classList.remove('active'));
       event.target.classList.add('active');
       this.profileIcon = +event.target.getAttribute('id')! + 1;
+
+      console.log(this.profileIcon);
     }
   }
 }

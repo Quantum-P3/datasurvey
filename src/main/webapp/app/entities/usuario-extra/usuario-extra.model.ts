@@ -8,7 +8,7 @@ import { EstadoUsuario } from 'app/entities/enumerations/estado-usuario.model';
 export interface IUsuarioExtra {
   id?: number;
   nombre?: string;
-  iconoPerfil?: string | null;
+  iconoPerfil?: number | null;
   fechaNacimiento?: dayjs.Dayjs | null;
   estado?: EstadoUsuario;
   user?: IUser | null;
@@ -21,7 +21,7 @@ export class UsuarioExtra implements IUsuarioExtra {
   constructor(
     public id?: number,
     public nombre?: string,
-    public iconoPerfil?: string | null,
+    public iconoPerfil?: number | null,
     public fechaNacimiento?: dayjs.Dayjs | null,
     public estado?: EstadoUsuario,
     public user?: IUser | null,

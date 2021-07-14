@@ -65,7 +65,8 @@
         "authenticated": {
           "prefix": "Si desea ",
           "link": "iniciar sesión",
-          "suffix": ", puede intentar con las cuentas predeterminadas:<br/>- Administrador (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\")."
+          "suffix": ", puede intentar con las cuentas predeterminadas:<br/>- Administrador (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\").",
+          "updateForm": "Ocurrió un error al actualizar su información, favor revisar los campos e intentar de nuevo"
         },
         "register": {
           "noaccount": "¿Aún no tienes una cuenta?",
