@@ -237,6 +237,8 @@ export class SettingsComponent implements OnInit {
     };
   }
 
+  protected CreateFormPassword();
+
   selectIcon(event: MouseEvent): void {
     if (event.target instanceof Element) {
       document.querySelectorAll('.active').forEach(e => e.classList.remove('active'));
