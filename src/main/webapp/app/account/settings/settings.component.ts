@@ -25,7 +25,9 @@ import { PasswordService } from '../password/password.service';
 export class SettingsComponent implements OnInit {
   isSaving = false;
   success = false;
+  successPassword = false;
   error = false;
+  errorPassword = false;
   doNotMatch = false;
   usersSharedCollection: IUser[] = [];
   plantillasSharedCollection: IPlantilla[] = [];
@@ -135,17 +137,17 @@ export class SettingsComponent implements OnInit {
 
     this.subscribeToSaveResponse(this.usuarioExtraService.update(usuarioExtra));
 
-    window.location.reload();
+    //reload
   }
 
   savePassword(): void {
-    const password = this.passwordForm.get(['password'])!.value;
-    if (password !== this.passwordForm.get(['passwordNew'])!.value) {
+    const passwordNew = this.passwordForm.get(['passwordNew'])!.value;
+    if (passwordNew !== this.passwordForm.get(['passwordNewConfirm'])!.value) {
       this.doNotMatch = true;
     } else {
-      this.passwordService.save(this.passwordForm.get(['passwordNew'])!.value, password).subscribe(
-        () => (this.success = true),
-        () => (this.error = true)
+      this.passwordService.save(this.passwordForm.get(['passwordNew'])!.value, this.passwordForm.get(['password'])!.value).subscribe(
+        () => (this.successPassword = true),
+        () => (this.errorPassword = true)
       );
     }
   }
