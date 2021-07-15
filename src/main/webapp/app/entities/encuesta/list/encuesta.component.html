@@ -42,17 +42,52 @@
       *ngFor="let encuesta of encuestas; trackBy: trackId"
       (dblclick)="openSurvey($event)"
       (click)="selectSurvey($event)"
+      (contextmenu)="openContextMenu($event)"
       [attr.data-id]="encuesta.id"
     >
-      <span>{{ encuesta.nombre }}</span>
-      <br />
-      <span>{{ encuesta.descripcion }}</span>
+      <div class="entity-header">
+        <div>
+          <div
+            class="entity-state"
+            [ngClass]="
+              encuesta.estado == 'DRAFT' ? 'entity-state--blue' : encuesta.estado == 'ACTIVE' ? 'entity-state--green' : 'entity-state--red'
+            "
+            style="animation-delay: 0s"
+          ></div>
+          <div
+            class="entity-state"
+            [ngClass]="
+              encuesta.estado == 'DRAFT' ? 'entity-state--blue' : encuesta.estado == 'ACTIVE' ? 'entity-state--green' : 'entity-state--red'
+            "
+            style="animation-delay: 1s"
+          ></div>
+          <div
+            class="entity-state entity-state--blue"
+            [ngClass]="
+              encuesta.estado == 'DRAFT' ? 'entity-state--blue' : encuesta.estado == 'ACTIVE' ? 'entity-state--green' : 'entity-state--red'
+            "
+            style="animation-delay: 2s"
+          ></div>
+          <div
+            class="entity-state entity-state--blue"
+            [ngClass]="
+              encuesta.estado == 'DRAFT' ? 'entity-state--blue' : encuesta.estado == 'ACTIVE' ? 'entity-state--green' : 'entity-state--red'
+            "
+            style="animation-delay: 3s"
+          ></div>
+        </div>
+        <div class="entity-share">
+          <span><fa-icon [icon]="faShareAlt"></fa-icon></span>
+        </div>
+      </div>
+
       <br />
       <span>{{ encuesta.fechaCreacion | formatMediumDatetime }}</span>
-      <br />
       <span>{{ encuesta.calificacion }}</span>
-      <br />
-      <span><fa-icon [icon]="faShareAlt"></fa-icon></span>
+      <span>{{ encuesta.acceso }}</span>
+
+      <span class="title">{{ encuesta.nombre }}</span>
+      <span class="subtitle">{{ encuesta.descripcion }}</span>
 
       <!-- <p>
         <a [routerLink]="['/encuesta', encuesta.id, 'view']">{{ encuesta.id }}</a>

@@ -292,6 +292,23 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     document.querySelectorAll('.ds-list--entity').forEach(e => {
       e.classList.remove('active');
     });
-    event.target.classList.add('active');
+    if (event.target.classList.contains('ds-list--entity')) {
+      event.target.classList.add('active');
+    }
+  }
+
+  openContextMenu(event: any): void {
+    document.querySelectorAll('.ds-list--entity').forEach(e => {
+      e.classList.remove('active');
+    });
+    if (event.target.classList.contains('ds-list--entity')) {
+      event.target.classList.add('active');
+    }
+
+    // Open Context Menu
+    // Edit
+    // Delete
+    // Copy
+    // Rename
   }
 }

@@ -1,3 +1,14 @@
+@keyframes scaleIn {
+  from {
+    transform: scale(0.5, 0.5);
+    opacity: 0.5;
+  }
+  to {
+    transform: scale(2.5, 2.5);
+    opacity: 0;
+  }
+}
+
 .ds-list {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -10,15 +21,76 @@
   box-sizing: border-box;
 
   .ds-list--entity {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
     border: 1px solid #dadce0;
     border-radius: $border-radius-small;
     padding: 0.5rem;
     margin: 1rem;
-    // transition: all 0.1s ease-in-out;
     word-wrap: break-word;
+    position: relative;
+
+    *:not(div) {
+      pointer-events: none;
+    }
+
+    .title {
+      color: rgba(0, 0, 0, 0.72);
+      font-size: 0.9rem;
+    }
+
+    .subtitle {
+      color: rgba(0, 0, 0, 0.54);
+    }
+
+    .entity-header {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      width: 100%;
+    }
+
+    .entity-share {
+      border-radius: 50%;
+      background-color: #f1f5f9;
+      cursor: pointer;
+      width: 25px;
+      height: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.2s ease-in-out;
+      color: #313747;
+    }
+
+    .entity-share:hover {
+      background-color: #e3e6e9;
+    }
+
+    .entity-state {
+      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+      position: absolute;
+      opacity: 0;
+      animation: scaleIn 4s infinite cubic-bezier(0.36, 0.11, 0.89, 0.32);
+    }
+
+    .entity-state--blue {
+      background-color: #2962ff;
+    }
+    .entity-state--green {
+      background-color: #3ead7f;
+    }
+    .entity-state--red {
+      background-color: #e73636;
+    }
   }
 
   .active {
-    background-color: #e8f0fe;
+    background-color: #e8f0fe !important;
   }
 }
