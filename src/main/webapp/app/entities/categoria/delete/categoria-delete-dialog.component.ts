@@ -16,8 +16,8 @@ export class CategoriaDeleteDialogComponent {
     this.activeModal.dismiss();
   }
 
-  confirmDelete(id: number): void {
-    this.categoriaService.delete(id).subscribe(() => {
+  confirmDelete(categoria: ICategoria): void {
+    this.categoriaService.delete(categoria.id!).subscribe(() => {
       this.activeModal.close('deleted');
     });
   }
