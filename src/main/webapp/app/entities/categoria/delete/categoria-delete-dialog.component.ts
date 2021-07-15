@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { EstadoCategoria } from 'app/entities/enumerations/estado-categoria.model';
 
 import { ICategoria } from '../categoria.model';
 import { CategoriaService } from '../service/categoria.service';
@@ -17,7 +18,8 @@ export class CategoriaDeleteDialogComponent {
   }
 
   confirmDelete(categoria: ICategoria): void {
-    this.categoriaService.delete(categoria.id!).subscribe(() => {
+    categoria.estado = EstadoCategoria.INACTIVE;
+    this.categoriaService.update(categoria).subscribe(() => {
       this.activeModal.close('deleted');
     });
   }
