@@ -1,61 +1,51 @@
-<div class="row justify-content-center">
-  <div class="col-8">
-    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2
-        id="jhi-parametro-aplicacion-heading"
-        data-cy="ParametroAplicacionCreateUpdateHeading"
-        jhiTranslate="dataSurveyApp.parametroAplicacion.home.createOrEditLabel"
-      >
-        Create or edit a Parametro Aplicacion
-      </h2>
-
-      <div>
-        <jhi-alert-error></jhi-alert-error>
-
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+<div class="row justify-content-center ds-form">
+  <div class="row w-75 mb-5" style="border-bottom: 1px solid #e7ebf3">
+    <div class="col-lg-10 mr-lg-5">
+      <div class="row">
+        <div class="w-100">
+          <p class="ds-title">Parámetros de la aplicación</p>
         </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="dataSurveyApp.parametroAplicacion.maxDiasEncuesta" for="field_maxDiasEncuesta"
-            >Max Dias Encuesta</label
-          >
-          <input
-            type="number"
-            class="form-control"
-            name="maxDiasEncuesta"
-            id="field_maxDiasEncuesta"
-            data-cy="maxDiasEncuesta"
-            formControlName="maxDiasEncuesta"
-          />
-          <div
-            *ngIf="
-              editForm.get('maxDiasEncuesta')!.invalid &&
-              (editForm.get('maxDiasEncuesta')!.dirty || editForm.get('maxDiasEncuesta')!.touched)
-            "
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('maxDiasEncuesta')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              This field is required.
-            </small>
-            <small
-              class="form-text text-danger"
-              [hidden]="!editForm.get('maxDiasEncuesta')?.errors?.number"
-              jhiTranslate="entity.validation.number"
-            >
-              This field should be a number.
-            </small>
-          </div>
+        <div>
+          <p class="ds-subtitle">Edición de los parámetros que se permiten para la creación de las encuestas dentro de DataSurvey.</p>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="dataSurveyApp.parametroAplicacion.minDiasEncuesta" for="field_minDiasEncuesta"
-            >Min Dias Encuesta</label
-          >
+<div class="alert alert-danger" *ngIf="minDiasIncorrect">La cantidad mínima de los días, debe ser inferior a la cantidad máxima</div>
+<div class="alert alert-danger" *ngIf="minPreguntasIncorrect">
+  La cantidad mínima de las preguntas, debe ser inferior a la cantidad máxima
+</div>
+<div class="alert alert-danger" *ngIf="notNumbers">Los valores digitadas deben ser numéricas y enteras</div>
+<div class="alert alert-danger" *ngIf="notPositive">Los valores ingresados deben ser mayores que 0</div>
+<!-- Form -->
+<form
+  autocomplete="off"
+  class="ds-form row justify-content-center"
+  name="editForm"
+  role="form"
+  novalidate
+  (ngSubmit)="save()"
+  [formGroup]="editForm"
+>
+  <div class="row w-75 pb-lg-5 pr-lg-5 mb-5" style="border-bottom: 1px solid #e7ebf3">
+    <div class="col-lg-4 mr-lg-5">
+      <div class="row">
+        <div class="w-100">
+          <p class="ds-title">Edición Días para Encuestas</p>
+        </div>
+        <div>
+          <p class="ds-subtitle">
+            Editar la cantidad mínima y máxima de los días que se permitirá para la creación de las encuestas dentro de DataSurvey.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg ml-lg-5 mr-lg-5 pr-lg-5">
+      <div class="row mb-2">
+        <div class="form-group w-100">
+          <label class="form-control-label" for="field_minDiasEncuesta">Cantidad mínima</label>
           <input
             type="number"
             class="form-control"
@@ -79,59 +69,72 @@
             </small>
             <small
               class="form-text text-danger"
-              [hidden]="!editForm.get('minDiasEncuesta')?.errors?.number"
-              jhiTranslate="entity.validation.number"
+              [hidden]="!editForm.get('minDiasEncuesta')?.errors?.pattern"
+              jhiTranslate="entity.validation.integerNumber"
             >
               This field should be a number.
             </small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label
-            class="form-control-label"
-            jhiTranslate="dataSurveyApp.parametroAplicacion.maxCantidadPreguntas"
-            for="field_maxCantidadPreguntas"
-            >Max Cantidad Preguntas</label
-          >
-          <input
-            type="number"
-            class="form-control"
-            name="maxCantidadPreguntas"
-            id="field_maxCantidadPreguntas"
-            data-cy="maxCantidadPreguntas"
-            formControlName="maxCantidadPreguntas"
-          />
-          <div
-            *ngIf="
-              editForm.get('maxCantidadPreguntas')!.invalid &&
-              (editForm.get('maxCantidadPreguntas')!.dirty || editForm.get('maxCantidadPreguntas')!.touched)
-            "
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('maxCantidadPreguntas')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              This field is required.
-            </small>
-            <small
-              class="form-text text-danger"
-              [hidden]="!editForm.get('maxCantidadPreguntas')?.errors?.number"
-              jhiTranslate="entity.validation.number"
-            >
-              This field should be a number.
+            <small class="form-text text-danger" [hidden]="!editForm.get('minDiasEncuesta')?.errors?.min">
+              Este campo no puede ser mayor que 1
             </small>
           </div>
+          <div class="form-group w-100">
+            <label class="form-control-label" for="field_maxDiasEncuesta">Cantidad máxima</label>
+            <input
+              type="number"
+              class="form-control"
+              name="maxDiasEncuesta"
+              id="field_maxDiasEncuesta"
+              data-cy="maxDiasEncuesta"
+              formControlName="maxDiasEncuesta"
+            />
+            <div
+              *ngIf="
+                editForm.get('maxDiasEncuesta')!.invalid &&
+                (editForm.get('maxDiasEncuesta')!.dirty || editForm.get('maxDiasEncuesta')!.touched)
+              "
+            >
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('maxDiasEncuesta')?.errors?.required"
+                jhiTranslate="entity.validation.required"
+              >
+                This field is required.
+              </small>
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('maxDiasEncuesta')?.errors?.pattern"
+                jhiTranslate="entity.validation.integerNumber"
+              >
+                This field should be a number.
+              </small>
+              <small class="form-text text-danger" [hidden]="!editForm.get('maxDiasEncuesta')?.errors?.min">
+                Este campo no puede ser mayor que 1
+              </small>
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <div class="form-group">
-          <label
-            class="form-control-label"
-            jhiTranslate="dataSurveyApp.parametroAplicacion.minCantidadPreguntas"
-            for="field_minCantidadPreguntas"
-            >Min Cantidad Preguntas</label
-          >
+  <div class="row w-75 pb-lg-5 pr-lg-5 mb-5" style="border-bottom: 1px solid #e7ebf3">
+    <div class="col-lg-4 mr-lg-5">
+      <div class="row">
+        <div class="w-100">
+          <p class="ds-title">Edición Preguntas para Encuestas</p>
+        </div>
+        <div>
+          <p class="ds-subtitle">
+            Editar la cantidad mínima y máxima de las preguntas que se permitirán para la creación de las encuestas dentro de DataSurvey.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg ml-lg-5 mr-lg-5 pr-lg-5">
+      <div class="row mb-2">
+        <div class="form-group w-100">
+          <label class="form-control-label" for="field_minCantidadPreguntas">Cantidad mínima</label>
           <input
             type="number"
             class="form-control"
@@ -155,18 +158,61 @@
             </small>
             <small
               class="form-text text-danger"
-              [hidden]="!editForm.get('minCantidadPreguntas')?.errors?.number"
-              jhiTranslate="entity.validation.number"
+              [hidden]="!editForm.get('minCantidadPreguntas')?.errors?.pattern"
+              jhiTranslate="entity.validation.integerNumber"
             >
               This field should be a number.
             </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('minCantidadPreguntas')?.errors?.min">
+              Este campo no puede ser mayor que 1
+            </small>
+          </div>
+          <div class="form-group w-100">
+            <label class="form-control-label" for="field_maxCantidadPreguntas">Cantidad máxima</label>
+            <input
+              type="number"
+              class="form-control"
+              name="maxCantidadPreguntas"
+              id="field_maxCantidadPreguntas"
+              data-cy="maxCantidadPreguntas"
+              formControlName="maxCantidadPreguntas"
+            />
+            <div
+              *ngIf="
+                editForm.get('maxCantidadPreguntas')!.invalid &&
+                (editForm.get('maxCantidadPreguntas')!.dirty || editForm.get('maxCantidadPreguntas')!.touched)
+              "
+            >
+              <small
+                class="form-text text-danger"
+                *ngIf="editForm.get('maxCantidadPreguntas')?.errors?.required"
+                jhiTranslate="entity.validation.required"
+              >
+                This field is required.
+              </small>
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('maxCantidadPreguntas')?.errors?.pattern"
+                jhiTranslate="entity.validation.integerNumber"
+              >
+                This field should be a integer number.
+              </small>
+              <small class="form-text text-danger" [hidden]="!editForm.get('minCantidadPreguntas')?.errors?.min">
+                Este campo no puede ser mayor que 1
+              </small>
+            </div>
           </div>
         </div>
       </div>
-
-      <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+      <div class="row">
+        <button
+          type="button"
+          id="cancel-save"
+          data-cy="entityCreateCancelButton"
+          class="ds-btn ds-btn--secondary"
+          (click)="previousState()"
+        >
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
 
         <button
@@ -174,11 +220,11 @@
           id="save-entity"
           data-cy="entityCreateSaveButton"
           [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
+          class="ds-btn ds-btn--primary"
         >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+          &nbsp;<span jhiTranslate="entity.action.save">Save</span>
         </button>
       </div>
-    </form>
+    </div>
   </div>
-</div>
+</form>
