@@ -1,16 +1,51 @@
-<div>
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <h1 jhiTranslate="activate.title">Activation</h1>
+<div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5" style="height: 100vh; background-color: #f1f5f9">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-xxl-4 col-lg-5">
+        <div class="card mt-5">
+          <!-- Logo -->
+          <div class="pl-4 pt-4 pr-4 pb-1 text-center">
+            <img src="../../content/img_datasurvey/datasurvey-logo-text-black.svg" alt="" />
+          </div>
 
-      <div class="alert alert-success" *ngIf="success">
-        <span jhiTranslate="activate.messages.success"><strong>Your user account has been activated.</strong> Please </span>
-        <a class="alert-link" routerLink="/login" jhiTranslate="global.messages.info.authenticated.link">sign in</a>.
-      </div>
+          <div class="card-body p-4">
+            <div class="text-center w-75 m-auto">
+              <h4 class="text-dark-50 text-center pb-0 fw-bold p-0 m-0" style="color: #727070; font-weight: 700; font-size: 1.3rem">
+                ACTIVACION DE CUENTA
+              </h4>
+            </div>
+            <div>
+              <div class="alert alert-success text-center my-2">
+                <span jhiTranslate="activate.messages.success"><strong>Your user account has been activated.</strong></span>
+                <span jhiTranslate="global.messages.info.authenticated.link">sign in</span>
+              </div>
+              <div class="d-flex justify-content-center">
+                <button class="ds-btn ds-btn--primary" routerLink="/login" jhiTranslate="global.messages.info.authenticated.link">
+                  sign in</button
+                >.
+              </div>
+            </div>
+            <div *ngIf="error">
+              <div class="alert alert-danger text-center my-2" jhiTranslate="activate.messages.error">
+                <strong>Your user could not be activated.</strong> Please use the registration form to sign up.
+              </div>
+              <div class="d-flex justify-content-center">
+                <button class="ds-btn ds-btn--primary" routerLink="/account/register" jhiTranslate="global.registerLink">
+                  create account</button
+                >.
+              </div>
+            </div>
+          </div>
+          <!-- end card-body -->
+        </div>
+        <!-- end card -->
 
-      <div class="alert alert-danger" *ngIf="error" jhiTranslate="activate.messages.error">
-        <strong>Your user could not be activated.</strong> Please use the registration form to sign up.
+        <!-- end row -->
       </div>
+      <!-- end col -->
     </div>
+    <!-- end row -->
   </div>
+  <!-- end container -->
 </div>
+<!-- end page -->
