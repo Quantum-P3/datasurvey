@@ -7,16 +7,6 @@
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="dataSurveyApp.parametroAplicacion.home.refreshListLabel">Refresh List</span>
       </button>
-
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-parametro-aplicacion"
-        [routerLink]="['/parametro-aplicacion/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="dataSurveyApp.parametroAplicacion.home.createLabel"> Create a new Parametro Aplicacion </span>
-      </button>
     </div>
   </h2>
 
@@ -33,10 +23,10 @@
       <thead>
         <tr>
           <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.parametroAplicacion.maxDiasEncuesta">Max Dias Encuesta</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.parametroAplicacion.minDiasEncuesta">Min Dias Encuesta</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.parametroAplicacion.maxCantidadPreguntas">Max Cantidad Preguntas</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.parametroAplicacion.maxDiasEncuesta">Max Dias Encuesta</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.parametroAplicacion.minCantidadPreguntas">Min Cantidad Preguntas</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.parametroAplicacion.maxCantidadPreguntas">Max Cantidad Preguntas</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -45,10 +35,10 @@
           <td>
             <a [routerLink]="['/parametro-aplicacion', parametroAplicacion.id, 'view']">{{ parametroAplicacion.id }}</a>
           </td>
-          <td>{{ parametroAplicacion.maxDiasEncuesta }}</td>
           <td>{{ parametroAplicacion.minDiasEncuesta }}</td>
-          <td>{{ parametroAplicacion.maxCantidadPreguntas }}</td>
+          <td>{{ parametroAplicacion.maxDiasEncuesta }}</td>
           <td>{{ parametroAplicacion.minCantidadPreguntas }}</td>
+          <td>{{ parametroAplicacion.maxCantidadPreguntas }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button

@@ -140,6 +140,7 @@
       "maxbytes": "Este campo no puede tener más de {{max}} bytes.",
       "pattern": "Este campo debe seguir el patrón {{pattern}}.",
       "number": "Este campo debe ser un número.",
+      "integerNumber": "Este campo debe ser un número entero.",
       "datetimelocal": "Este campo debe ser una fecha y hora."
     }
   },
