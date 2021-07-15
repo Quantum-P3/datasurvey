@@ -16,6 +16,7 @@ import { UsuarioExtraService } from 'app/entities/usuario-extra/service/usuario-
 import { AccountService } from 'app/core/auth/account.service';
 import { LocalStorageService } from 'ngx-webstorage';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '../../config/error.constants';
+import { PasswordService } from '../password/password.service';
 
 @Component({
   selector: 'jhi-settings',
@@ -25,6 +26,7 @@ export class SettingsComponent implements OnInit {
   isSaving = false;
   success = false;
   error = false;
+  doNotMatch = false;
   usersSharedCollection: IUser[] = [];
   plantillasSharedCollection: IPlantilla[] = [];
 
@@ -44,9 +46,9 @@ export class SettingsComponent implements OnInit {
 
   //form de la contraseña
   passwordForm = this.fb.group({
-    password: [null, [Validators.required]],
-    passwordNew: [null, [Validators.required]],
-    passwordNewConfirm: [null, [Validators.required]],
+    password: [null, [Validators.required], Validators.minLength(8), Validators.maxLength(50)],
+    passwordNew: [null, [Validators.required], Validators.minLength(8), Validators.maxLength(50)],
+    passwordNewConfirm: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
   });
 
   usuarioExtra: UsuarioExtra | null = null;
@@ -89,7 +91,8 @@ export class SettingsComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
     protected accountService: AccountService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    protected passwordService: PasswordService
   ) {}
 
   ngOnInit(): void {
@@ -131,6 +134,20 @@ export class SettingsComponent implements OnInit {
     console.log(usuarioExtra.fechaNacimiento);
 
     this.subscribeToSaveResponse(this.usuarioExtraService.update(usuarioExtra));
+
+    window.location.reload();
+  }
+
+  savePassword(): void {
+    const password = this.passwordForm.get(['password'])!.value;
+    if (password !== this.passwordForm.get(['passwordNew'])!.value) {
+      this.doNotMatch = true;
+    } else {
+      this.passwordService.save(this.passwordForm.get(['passwordNew'])!.value, password).subscribe(
+        () => (this.success = true),
+        () => (this.error = true)
+      );
+    }
   }
 
   trackUserById(index: number, item: IUser): number {
@@ -236,8 +253,6 @@ export class SettingsComponent implements OnInit {
       plantillas: this.editForm.get(['plantillas'])!.value,
     };
   }
-
-  protected CreateFormPassword();
 
   selectIcon(event: MouseEvent): void {
     if (event.target instanceof Element) {
