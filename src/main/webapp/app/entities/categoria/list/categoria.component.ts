@@ -38,7 +38,7 @@ export class CategoriaComponent implements OnInit {
     this.loadAll();
   }
 
-  trackId(index: number, item: ICategoria): number {
+  trackId(_index: number, item: ICategoria): number {
     return item.id!;
   }
 
