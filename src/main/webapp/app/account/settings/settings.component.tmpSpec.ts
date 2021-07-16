@@ -1,3 +1,5 @@
+import { LocalStorageService } from 'ngx-webstorage';
+
 jest.mock('@ngx-translate/core');
 jest.mock('app/core/auth/account.service');
 
@@ -19,6 +21,7 @@ describe('Component Tests', () => {
     let comp: SettingsComponent;
     let fixture: ComponentFixture<SettingsComponent>;
     let mockAccountService: AccountService;
+    let localStorage: LocalStorageService;
     const account: Account = {
       id: 0,
       firstName: 'John',
@@ -36,17 +39,23 @@ describe('Component Tests', () => {
         TestBed.configureTestingModule({
           imports: [RouterTestingModule, HttpClientTestingModule],
           declarations: [SettingsComponent],
-          providers: [FormBuilder, TranslateService, AccountService],
+          providers: [FormBuilder, TranslateService, AccountService, LocalStorageService],
         })
           .overrideTemplate(SettingsComponent, '')
           .compileComponents();
+        localStorage = TestBed.inject(LocalStorageService);
       })
     );
+
+    it('should be created', () => {
+      expect(localStorage).toBeTruthy();
+    });
 
     beforeEach(() => {
       fixture = TestBed.createComponent(SettingsComponent);
       comp = fixture.componentInstance;
       mockAccountService = TestBed.inject(AccountService);
+      localStorage = TestBed.inject(LocalStorageService);
       mockAccountService.identity = jest.fn(() => of(account));
       mockAccountService.getAuthenticationState = jest.fn(() => of(account));
     });
@@ -61,6 +70,10 @@ describe('Component Tests', () => {
 
       // THEN
       // expect(comp.success).toBe(true);
+    });
+
+    it('should be created', () => {
+      expect(localStorage).toBeTruthy();
     });
 
     it('should notify of error upon failed save', () => {

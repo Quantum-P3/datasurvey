@@ -9,7 +9,7 @@ import { TranslateModule, TranslateService, TranslateLoader, MissingTranslationH
 import { NgxWebstorageModule, SessionStorageService } from 'ngx-webstorage';
 import * as dayjs from 'dayjs';
 import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
-
+import { LocalStorageService } from 'ngx-webstorage';
 import { SERVER_API_URL } from './app.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import './config/dayjs';
@@ -35,6 +35,7 @@ import { SidebarComponent } from './layouts/sidebar/sidebar.component';
 
 @NgModule({
   imports: [
+    NgxWebstorageModule.forRoot(),
     BrowserModule,
     SharedModule,
     HomeModule,
@@ -59,6 +60,7 @@ import { SidebarComponent } from './layouts/sidebar/sidebar.component';
     }),
   ],
   providers: [
+    LocalStorageService,
     Title,
     { provide: LOCALE_ID, useValue: 'es' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
