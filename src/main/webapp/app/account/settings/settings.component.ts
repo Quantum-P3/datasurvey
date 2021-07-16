@@ -20,6 +20,7 @@ import { PasswordService } from '../password/password.service';
 @Component({
   selector: 'jhi-settings',
   templateUrl: './settings.component.html',
+  providers: [LocalStorageService],
 })
 export class SettingsComponent implements OnInit {
   currentUrl = this.router.url;
