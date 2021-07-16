@@ -60,7 +60,6 @@ import { SidebarComponent } from './layouts/sidebar/sidebar.component';
     }),
   ],
   providers: [
-    LocalStorageService,
     Title,
     { provide: LOCALE_ID, useValue: 'es' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
