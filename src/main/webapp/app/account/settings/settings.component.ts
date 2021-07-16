@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ContentChild, OnInit } from '@angular/core';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
-
 import * as dayjs from 'dayjs';
 import { DATE_FORMAT, DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { IUser } from 'app/entities/user/user.model';
@@ -23,6 +22,7 @@ import { PasswordService } from '../password/password.service';
   templateUrl: './settings.component.html',
 })
 export class SettingsComponent implements OnInit {
+  currentUrl = this.router.url;
   isSaving = false;
   success = false;
   successPassword = false;
@@ -31,6 +31,7 @@ export class SettingsComponent implements OnInit {
   doNotMatch = false;
   usersSharedCollection: IUser[] = [];
   plantillasSharedCollection: IPlantilla[] = [];
+  showPassword = false;
 
   isGoogle = this.localStorageService.retrieve('IsGoogle');
 
@@ -86,6 +87,8 @@ export class SettingsComponent implements OnInit {
     { name: 'C28' },
   ];
 
+  /*  @ContentChild(IonInput) input: IonInput;*/
+
   constructor(
     protected usuarioExtraService: UsuarioExtraService,
     protected userService: UserService,
@@ -94,7 +97,8 @@ export class SettingsComponent implements OnInit {
     protected fb: FormBuilder,
     protected accountService: AccountService,
     private localStorageService: LocalStorageService,
-    protected passwordService: PasswordService
+    protected passwordService: PasswordService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -136,8 +140,6 @@ export class SettingsComponent implements OnInit {
     console.log(usuarioExtra.fechaNacimiento);
 
     this.subscribeToSaveResponse(this.usuarioExtraService.update(usuarioExtra));
-
-    //reload
   }
 
   savePassword(): void {
@@ -173,7 +175,12 @@ export class SettingsComponent implements OnInit {
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IUsuarioExtra>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => (this.success = true),
+      () => (
+        (this.success = true),
+        this.router.navigate(['account/settings']).then(() => {
+          window.location.reload();
+        })
+      ),
       response => this.processError(response)
     );
   }
