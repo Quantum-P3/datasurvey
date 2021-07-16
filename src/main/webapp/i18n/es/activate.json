@@ -1,6 +1,6 @@
 {
   "activate": {
-    "title": "Activación",
+    "title": "Activación de Cuenta",
     "messages": {
       "success": "<strong>Su cuenta ha sido activada.</strong> Ya puede ",
       "error": "<strong>Su cuenta no pudo ser activada.</strong> Por favor, regístrese en DataSurvey."
