@@ -23,7 +23,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { Router } from '@angular/router';
 
-import { faShareAlt, faLock, faUnlock } from '@fortawesome/free-solid-svg-icons';
+import { faShareAlt, faLock, faUnlock, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 
 import * as $ from 'jquery';
 
@@ -36,6 +36,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   faShareAlt = faShareAlt;
   faLock = faLock;
   faUnlock = faUnlock;
+  faCalendarAlt = faCalendarAlt;
 
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;
@@ -312,5 +313,6 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     // Delete
     // Copy
     // Rename
+    // Share
   }
 }

@@ -84,16 +84,21 @@
       <br />
       <br />
       <br />
-      <span>{{ encuesta.fechaCreacion | formatMediumDatetime }}</span>
       <!-- <span>{{ encuesta.calificacion }}</span> -->
 
       <span *ngIf="encuesta.acceso == 'PUBLIC'" class="title"
         ><fa-icon class="entity-icon--access" [icon]="faUnlock"></fa-icon>&nbsp;&nbsp;{{ encuesta.nombre }}</span
       >
-      <span *ngIf="encuesta.acceso == 'PRIVATE'" class="title"
+      <span *ngIf="encuesta.acceso == 'PRIVATE'" class="title mt-2"
         ><fa-icon class="entity-icon--access" [icon]="faLock"></fa-icon>&nbsp;&nbsp;{{ encuesta.nombre }}</span
       >
-      <span class="subtitle">{{ encuesta.descripcion }}</span>
+      <span class="mt-2"
+        ><fa-icon class="entity-icon--access" [icon]="faCalendarAlt"></fa-icon>&nbsp;&nbsp;{{
+          encuesta.fechaCreacion | formatShortDatetime
+        }}</span
+      >
+      <span class="subtitle mt-2">{{ encuesta.descripcion }}</span>
+      <span class="tag mt-2">{{ encuesta.categoria?.nombre | lowercase }}</span>
 
       <!-- <p>
         <a [routerLink]="['/encuesta', encuesta.id, 'view']">{{ encuesta.id }}</a>
@@ -139,7 +144,7 @@
             <fa-icon icon="pencil-alt"></fa-icon>
             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
           </button>
-
+          
           <button type="submit" (click)="delete(encuesta)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
             <fa-icon icon="times"></fa-icon>
             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
@@ -148,8 +153,9 @@
       </div> -->
     </div>
   </div>
+</div>
 
-  <div class="table-responsive" id="entities" *ngIf="encuestas && encuestas.length > 0">
+<!-- <div class="table-responsive" id="entities" *ngIf="encuestas && encuestas.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
@@ -225,8 +231,7 @@
         </tr>
       </tbody>
     </table>
-  </div>
-</div>
+  </div> -->
 
 <!-- --------------------------------------------------------------------------------------------- -->
 

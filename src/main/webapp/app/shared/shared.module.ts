@@ -9,6 +9,7 @@ import { HasAnyAuthorityDirective } from './auth/has-any-authority.directive';
 import { DurationPipe } from './date/duration.pipe';
 import { FormatMediumDatetimePipe } from './date/format-medium-datetime.pipe';
 import { FormatMediumDatePipe } from './date/format-medium-date.pipe';
+import { FormatShortDatetimePipe } from './date/format-short-datetime.pipe';
 import { SortByDirective } from './sort/sort-by.directive';
 import { SortDirective } from './sort/sort.directive';
 import { ItemCountComponent } from './pagination/item-count.component';
@@ -25,6 +26,7 @@ import { FilterPipe } from './pipes/filter';
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
+    FormatShortDatetimePipe,
     SortByDirective,
     SortDirective,
     ItemCountComponent,
@@ -40,6 +42,7 @@ import { FilterPipe } from './pipes/filter';
     DurationPipe,
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
+    FormatShortDatetimePipe,
     SortByDirective,
     SortDirective,
     ItemCountComponent,
