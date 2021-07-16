@@ -82,11 +82,17 @@
       </div>
 
       <br />
+      <br />
+      <br />
       <span>{{ encuesta.fechaCreacion | formatMediumDatetime }}</span>
-      <span>{{ encuesta.calificacion }}</span>
-      <span>{{ encuesta.acceso }}</span>
+      <!-- <span>{{ encuesta.calificacion }}</span> -->
 
-      <span class="title">{{ encuesta.nombre }}</span>
+      <span *ngIf="encuesta.acceso == 'PUBLIC'" class="title"
+        ><fa-icon class="entity-icon--access" [icon]="faUnlock"></fa-icon>&nbsp;&nbsp;{{ encuesta.nombre }}</span
+      >
+      <span *ngIf="encuesta.acceso == 'PRIVATE'" class="title"
+        ><fa-icon class="entity-icon--access" [icon]="faLock"></fa-icon>&nbsp;&nbsp;{{ encuesta.nombre }}</span
+      >
       <span class="subtitle">{{ encuesta.descripcion }}</span>
 
       <!-- <p>

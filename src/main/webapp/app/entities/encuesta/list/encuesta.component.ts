@@ -23,7 +23,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { Router } from '@angular/router';
 
-import { faShareAlt } from '@fortawesome/free-solid-svg-icons';
+import { faShareAlt, faLock, faUnlock } from '@fortawesome/free-solid-svg-icons';
 
 import * as $ from 'jquery';
 
@@ -34,6 +34,8 @@ import * as $ from 'jquery';
 export class EncuestaComponent implements OnInit, AfterViewInit {
   // Icons
   faShareAlt = faShareAlt;
+  faLock = faLock;
+  faUnlock = faUnlock;
 
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;

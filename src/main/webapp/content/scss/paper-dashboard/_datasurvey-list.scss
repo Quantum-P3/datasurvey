@@ -40,6 +40,8 @@
     .title {
       color: rgba(0, 0, 0, 0.72);
       font-size: 0.9rem;
+      display: flex;
+      align-items: center;
     }
 
     .subtitle {
@@ -49,6 +51,7 @@
     .entity-header {
       display: flex;
       justify-content: space-between;
+      align-self: flex-start;
       position: relative;
       width: 100%;
     }
@@ -57,13 +60,18 @@
       border-radius: 50%;
       background-color: #f1f5f9;
       cursor: pointer;
-      width: 25px;
-      height: 25px;
       display: flex;
       justify-content: center;
       align-items: center;
       transition: background-color 0.2s ease-in-out;
+      width: 25px;
+      height: 25px;
       color: #313747;
+    }
+
+    .entity-icon--access {
+      font-size: 0.8rem;
+      color: rgb(154, 156, 158);
     }
 
     .entity-share:hover {
