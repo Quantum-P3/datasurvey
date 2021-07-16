@@ -10,11 +10,15 @@
 
           <div class="card-body p-4">
             <div class="text-center w-75 m-auto">
-              <h4 class="text-dark-50 text-center pb-0 fw-bold p-0 m-0" style="color: #727070; font-weight: 700; font-size: 1.3rem">
-                ACTIVACION DE CUENTA
+              <h4
+                class="text-dark-50 text-center pb-0 fw-bold p-0 m-0"
+                style="color: #727070; font-weight: 700; font-size: 1.3rem"
+                jhiTranslate="activate.title"
+              >
+                Activación de Cuenta
               </h4>
             </div>
-            <div>
+            <div *ngIf="success">
               <div class="alert alert-success text-center my-2">
                 <span jhiTranslate="activate.messages.success"><strong>Your user account has been activated.</strong></span>
                 <span jhiTranslate="global.messages.info.authenticated.link">sign in</span>
