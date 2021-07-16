@@ -173,6 +173,7 @@ public class AccountResource {
             // Pretend the request has been successful to prevent checking which emails really exist
             // but log that an invalid attempt has been made
             log.warn("Password reset requested for non existing mail");
+            throw new EmailNotExistException();
         }
     }
 
@@ -192,6 +193,8 @@ public class AccountResource {
 
         if (!user.isPresent()) {
             throw new AccountResourceException("No user was found for this reset key");
+        } else {
+            mailService.sendPasswordRestoredMail(user.get());
         }
     }
 
