@@ -305,26 +305,42 @@
       <div class="row mb-3 pb-3" style="border-bottom: 1px solid #e7ebf3">
         <div
           class="alert alert-danger"
-          *ngIf="errorPassword && !doNotMatch && !successPassword"
+          *ngIf="errorPassword && !doNotMatch && !successPassword && !samePassword"
           jhiTranslate="global.messages.info.authenticated.passwordForm"
           data-cy="loginError"
         ></div>
 
-        <div *ngIf="successPassword" class="alert alert-success alert-dismissible fade show" role="alert">
+        <div
+          *ngIf="successPassword && !errorPassword && !samePassword && !doNotMatch"
+          class="alert alert-success alert-dismissible fade show"
+          role="alert"
+        >
           Sus contraseña fue actualizada de manera exitosa
           <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>-->
         </div>
 
-        <div class="alert alert-danger" *ngIf="doNotMatch && !successPassword" jhiTranslate="global.messages.error.dontmatch">
+        <div
+          class="alert alert-danger"
+          *ngIf="doNotMatch && !successPassword && !errorPassword"
+          jhiTranslate="global.messages.error.dontmatch"
+        >
+          The password and its confirmation do not match!
+        </div>
+
+        <div
+          class="alert alert-danger"
+          *ngIf="samePassword && !successPassword && !errorPassword && !doNotMatch"
+          jhiTranslate="global.messages.error.samePassword"
+        >
           The password and its confirmation do not match!
         </div>
 
         <div class="form-group w-100">
           <label class="form-control-label" for="field_password">Contraseña actual</label>
           <input
-            type="password"
+            type="text"
             class="form-control"
             name="password"
             id="field_password"
@@ -371,7 +387,7 @@
         <div class="form-group w-100">
           <label class="form-control-label" for="field_passwordNew">Contraseña nueva</label>
           <input
-            type="password"
+            type="text"
             class="form-control"
             name="passwordNew"
             id="field_passwordNew"
@@ -418,7 +434,7 @@
         <div class="form-group w-100">
           <label class="form-control-label" for="field_passwordNewConfirm">Confirmar contraseña nueva</label>
           <input
-            type="password"
+            type="text"
             class="form-control"
             name="passwordNewConfirm"
             id="field_passwordNewConfirm"
@@ -477,7 +493,7 @@
           type="submit"
           id="save-entity"
           data-cy="entityCreateSaveButton"
-          [disabled]="isSaving"
+          [disabled]="passwordForm.invalid || isSaving"
           class="ds-btn ds-btn--primary"
         >
           <span jhiTranslate="entity.action.save">Save</span>
