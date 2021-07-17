@@ -26,6 +26,15 @@ export class CategoriaDeleteDialogComponent {
   }
 
   confirmDelete(categoria: ICategoria): void {
+    this.ensureNulaExists();
+    const categoriaNula = new Categoria(0, 'Otra', EstadoCategoria.ACTIVE);
+    this.getEncuestas(categoria);
+    if (this.encuestas) {
+      this.encuestas!.forEach(encuesta => {
+        encuesta.categoria = categoriaNula;
+        this.encuestaService.update(encuesta);
+      });
+    }
     categoria.estado = EstadoCategoria.INACTIVE;
     this.categoriaService.update(categoria).subscribe(() => {
       this.activeModal.close('deleted');
