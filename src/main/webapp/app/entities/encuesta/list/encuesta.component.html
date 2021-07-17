@@ -36,13 +36,50 @@
   </div>
 
   <!-- Lista de Encuestas del Usuario -->
-  <div class="ds-list" oncontextmenu="return false;">
+  <div class="ds-list" (contextmenu)="openContextMenu($event)">
+    <!-- Context Menu -->
+    <div class="ds-contextmenu ds-contextmenu--closed" id="contextmenu">
+      <ul id="ds-context-menu__list">
+        <div class="ds-contextmenu__divider ds-contextmenu__divider--separator-bottom" id="contextmenu-create--separator">
+          <li>
+            <button
+              *ngIf="!isAdmin() && isAuthenticated()"
+              type="button"
+              (click)="resetForm()"
+              data-toggle="modal"
+              data-target="#crearEncuesta"
+            >
+              <fa-icon class="contextmenu__icon" [icon]="faPlus"></fa-icon>Create
+            </button>
+          </li>
+        </div>
+        <div class="ds-contextmenu__divider ds-contextmenu__divider--separator-bottom" id="contextmenu-edit--separator">
+          <li class="d-justify justify-content-start">
+            <button type="button" id="contextmenu-edit"><fa-icon class="contextmenu__icon" [icon]="faEdit"></fa-icon>Edit</button>
+          </li>
+          <li>
+            <button type="button" id="contextmenu-duplicate"><fa-icon class="contextmenu__icon" [icon]="faCopy"></fa-icon>Duplicate</button>
+          </li>
+          <li>
+            <button type="button" id="contextmenu-rename"><fa-icon class="contextmenu__icon" [icon]="faFile"></fa-icon>Rename</button>
+          </li>
+          <li>
+            <button type="button" id="contextmenu-share"><fa-icon class="contextmenu__icon" [icon]="faShareAlt"></fa-icon>Share</button>
+          </li>
+        </div>
+        <div class="ds-contextmenu__divider" id="contextmenu-delete--separator">
+          <li>
+            <button type="button"><fa-icon class="contextmenu__icon" [icon]="faTrashAlt"></fa-icon>Delete</button>
+          </li>
+        </div>
+      </ul>
+    </div>
+
     <div
       class="ds-list--entity"
       *ngFor="let encuesta of encuestas; trackBy: trackId"
       (dblclick)="openSurvey($event)"
       (click)="selectSurvey($event)"
-      (contextmenu)="openContextMenu($event)"
       [attr.data-id]="encuesta.id"
     >
       <div class="entity-header">

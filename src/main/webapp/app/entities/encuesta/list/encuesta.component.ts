@@ -23,7 +23,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { Router } from '@angular/router';
 
-import { faShareAlt, faLock, faUnlock, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import { faShareAlt, faLock, faUnlock, faCalendarAlt, faEdit, faCopy, faFile, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import * as $ from 'jquery';
 
@@ -37,6 +37,11 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   faLock = faLock;
   faUnlock = faUnlock;
   faCalendarAlt = faCalendarAlt;
+  faEdit = faEdit;
+  faCopy = faCopy;
+  faFile = faFile;
+  faTrashAlt = faTrashAlt;
+  faPlus = faPlus;
 
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;
@@ -99,6 +104,9 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     document.body.addEventListener('click', e => {
+      document.getElementById('contextmenu')!.classList.add('ds-contextmenu--closed');
+      document.getElementById('contextmenu')!.classList.remove('ds-contextmenu--open');
+      document.getElementById('contextmenu')!.style.maxHeight = '0%';
       if (e.target) {
         if (!(e.target as HTMLElement).classList.contains('ds-list--entity')) {
           document.querySelectorAll('.ds-list--entity').forEach(e => {
@@ -304,15 +312,31 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     document.querySelectorAll('.ds-list--entity').forEach(e => {
       e.classList.remove('active');
     });
-    if (event.target.classList.contains('ds-list--entity')) {
-      event.target.classList.add('active');
-    }
 
-    // Open Context Menu
-    // Edit
-    // Delete
-    // Copy
-    // Rename
-    // Share
+    if (event.type === 'contextmenu') {
+      event.preventDefault();
+
+      document.getElementById('contextmenu-create--separator')!.style.display = 'block';
+      document.getElementById('contextmenu-edit--separator')!.style.display = 'block';
+      document.getElementById('contextmenu-delete--separator')!.style.display = 'block';
+      document.getElementById('contextmenu-edit')!.style.display = 'block';
+      document.getElementById('contextmenu-duplicate')!.style.display = 'block';
+      document.getElementById('contextmenu-rename')!.style.display = 'block';
+      document.getElementById('contextmenu-share')!.style.display = 'block';
+
+      if ((event.target as HTMLElement).classList.contains('ds-list')) {
+        document.getElementById('contextmenu-edit--separator')!.style.display = 'none';
+        document.getElementById('contextmenu-delete--separator')!.style.display = 'none';
+      } else if ((event.target as HTMLElement).classList.contains('ds-list--entity')) {
+        event.target.classList.add('active');
+        document.getElementById('contextmenu-create--separator')!.style.display = 'none';
+      }
+
+      document.getElementById('contextmenu')!.style.top = event.layerY + 'px';
+      document.getElementById('contextmenu')!.style.left = event.layerX + 'px';
+      document.getElementById('contextmenu')!.classList.remove('ds-contextmenu--closed');
+      document.getElementById('contextmenu')!.classList.add('ds-contextmenu--open');
+      document.getElementById('contextmenu')!.style.maxHeight = '100%';
+    }
   }
 }

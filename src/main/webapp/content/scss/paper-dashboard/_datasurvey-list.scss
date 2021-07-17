@@ -19,9 +19,9 @@
   width: 100%;
   user-select: none;
   box-sizing: border-box;
+  position: relative;
 
   .ds-list--entity {
-    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -31,7 +31,6 @@
     padding: 0.5rem;
     margin: 1rem;
     word-wrap: break-word;
-    position: relative;
 
     *:not(div) {
       pointer-events: none;
@@ -61,8 +60,8 @@
       display: flex;
       justify-content: space-between;
       align-self: flex-start;
-      position: relative;
       width: 100%;
+      pointer-events: none;
     }
 
     .entity-share {
