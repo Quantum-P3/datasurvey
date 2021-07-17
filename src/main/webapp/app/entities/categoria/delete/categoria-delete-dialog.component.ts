@@ -4,7 +4,7 @@ import { IEncuesta } from 'app/entities/encuesta/encuesta.model';
 import { EncuestaService } from 'app/entities/encuesta/service/encuesta.service';
 import { EstadoCategoria } from 'app/entities/enumerations/estado-categoria.model';
 
-import { ICategoria } from '../categoria.model';
+import { Categoria, ICategoria } from '../categoria.model';
 import { CategoriaService } from '../service/categoria.service';
 
 @Component({
@@ -31,6 +31,16 @@ export class CategoriaDeleteDialogComponent {
       this.activeModal.close('deleted');
     });
   }
+  ensureNulaExists(): void {
+    const categoriaNula = new Categoria(0, 'Otra', EstadoCategoria.ACTIVE);
+    const categoria = this.categoriaService.find(0);
+    if (categoria) {
+      this.categoriaService.update(categoriaNula);
+    } else {
+      this.categoriaService.create(categoriaNula);
+    }
+  }
+
   protected getEncuestas(categoria: ICategoria): void {
     this.encuestaService.query().subscribe(res => {
       this.encuestas = res.body ?? [];
