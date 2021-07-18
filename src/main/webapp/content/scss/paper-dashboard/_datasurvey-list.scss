@@ -24,7 +24,7 @@
   .ds-list--entity {
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: flex-start;
     border: 1px solid #dadce0;
     border-radius: $border-radius-small;
@@ -59,9 +59,12 @@
     .entity-header {
       display: flex;
       justify-content: space-between;
-      align-self: flex-start;
       width: 100%;
       pointer-events: none;
+    }
+
+    .entity-body--row {
+      margin: 0.4rem 0;
     }
 
     .entity-share {
@@ -77,13 +80,23 @@
       color: #313747;
     }
 
+    .entity-share:hover {
+      background-color: #e3e6e9;
+    }
+
     .entity-icon--access {
       font-size: 0.8rem;
       color: rgb(154, 156, 158);
     }
 
-    .entity-share:hover {
-      background-color: #e3e6e9;
+    .entity-icon--star {
+      color: #ffcc47;
+      margin-right: 0.2rem;
+    }
+
+    .entity-icon--star--off {
+      color: #d9dde0;
+      margin-right: 0.2rem;
     }
 
     .entity-state {
@@ -91,8 +104,16 @@
       width: 10px;
       height: 10px;
       position: absolute;
+      left: 0;
       opacity: 0;
       animation: scaleIn 4s infinite cubic-bezier(0.36, 0.11, 0.89, 0.32);
+    }
+
+    .entity-state--container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .entity-state--blue {

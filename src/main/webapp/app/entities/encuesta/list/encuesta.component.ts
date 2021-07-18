@@ -23,7 +23,18 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { Router } from '@angular/router';
 
-import { faShareAlt, faLock, faUnlock, faCalendarAlt, faEdit, faCopy, faFile, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import {
+  faShareAlt,
+  faLock,
+  faUnlock,
+  faCalendarAlt,
+  faEdit,
+  faCopy,
+  faFile,
+  faTrashAlt,
+  faPlus,
+  faStar,
+} from '@fortawesome/free-solid-svg-icons';
 
 import * as $ from 'jquery';
 
@@ -42,6 +53,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   faFile = faFile;
   faTrashAlt = faTrashAlt;
   faPlus = faPlus;
+  faStar = faStar;
 
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;
@@ -306,6 +318,14 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     if (event.target.classList.contains('ds-list--entity')) {
       event.target.classList.add('active');
     }
+  }
+
+  counter(i: number) {
+    return new Array(i);
+  }
+
+  testMe(something: any) {
+    return 5 - something;
   }
 
   openContextMenu(event: any): void {

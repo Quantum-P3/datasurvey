@@ -85,7 +85,7 @@
       [attr.data-id]="encuesta.id"
     >
       <div class="entity-header">
-        <div>
+        <div class="entity-state--container">
           <div
             class="entity-state"
             [ngClass]="
@@ -120,24 +120,35 @@
         </div>
       </div>
 
-      <br />
-      <br />
-      <br />
-      <!-- <span>{{ encuesta.calificacion }}</span> -->
-
-      <span *ngIf="encuesta.acceso == 'PUBLIC'" class="title"
-        ><fa-icon class="entity-icon--access" [icon]="faUnlock"></fa-icon>&nbsp;&nbsp;{{ encuesta.nombre }}</span
-      >
-      <span *ngIf="encuesta.acceso == 'PRIVATE'" class="title mt-2"
-        ><fa-icon class="entity-icon--access" [icon]="faLock"></fa-icon>&nbsp;&nbsp;{{ encuesta.nombre }}</span
-      >
-      <span class="mt-2"
-        ><fa-icon class="entity-icon--access" [icon]="faCalendarAlt"></fa-icon>&nbsp;&nbsp;{{
-          encuesta.fechaCreacion | formatShortDatetime
-        }}</span
-      >
-      <span class="subtitle mt-2">{{ encuesta.descripcion }}</span>
-      <span class="tag mt-2">{{ encuesta.categoria?.nombre | lowercase }}</span>
+      <div class="entity-body">
+        <div class="entity-body--row">
+          <span *ngIf="encuesta.acceso == 'PUBLIC'" class="title"
+            ><fa-icon class="entity-icon--access" [icon]="faUnlock"></fa-icon>&nbsp;&nbsp;{{ encuesta.nombre | titlecase }}</span
+          >
+        </div>
+        <div class="entity-body--row">
+          <span *ngIf="encuesta.acceso == 'PRIVATE'" class="title mt-2"
+            ><fa-icon class="entity-icon--access" [icon]="faLock"></fa-icon>&nbsp;&nbsp;{{ encuesta.nombre | titlecase }}</span
+          >
+        </div>
+        <div class="entity-body--row">
+          <span class="mt-2"
+            ><fa-icon class="entity-icon--access" [icon]="faCalendarAlt"></fa-icon>&nbsp;&nbsp;{{
+              encuesta.fechaCreacion | formatShortDatetime | titlecase
+            }}</span
+          >
+        </div>
+        <div class="entity-body--row">
+          <span class="subtitle mt-2">{{ encuesta.descripcion | titlecase }}</span>
+        </div>
+        <div class="entity-body--row">
+          <span class="tag mt-2">{{ encuesta.categoria?.nombre | lowercase }}</span>
+        </div>
+        <div class="entity-body--row">
+          <fa-icon *ngFor="let i of [].constructor(encuesta.calificacion)" class="entity-icon--star" [icon]="faStar"></fa-icon
+          ><fa-icon *ngFor="let i of [].constructor(5 - encuesta.calificacion!)" class="entity-icon--star--off" [icon]="faStar"></fa-icon>
+        </div>
+      </div>
 
       <!-- <p>
         <a [routerLink]="['/encuesta', encuesta.id, 'view']">{{ encuesta.id }}</a>
