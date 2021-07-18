@@ -50,8 +50,8 @@ export class SettingsComponent implements OnInit {
 
   //form de la contraseña
   passwordForm = this.fb.group({
-    password: [null, [Validators.required], Validators.minLength(8), Validators.maxLength(50)],
-    passwordNew: [null, [Validators.required], Validators.minLength(8), Validators.maxLength(50)],
+    password: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
+    passwordNew: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
     passwordNewConfirm: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
   });
 
@@ -121,7 +121,7 @@ export class SettingsComponent implements OnInit {
       }
     });
 
-    console.log(this.isGoogle);
+    //console.log(this.isGoogle);
 
     // this.activatedRoute.data.subscribe(({ usuarioExtra }) => {
 
@@ -230,8 +230,10 @@ export class SettingsComponent implements OnInit {
 
     // Update swiper
     this.profileIcon = usuarioExtra.iconoPerfil!;
+
+    console.log(this.profileIcon);
     this.profileIcons.forEach(icon => {
-      if (parseInt(icon.name.split('C')[1]) === this.profileIcon) {
+      if (icon.name.split('C')[1] === this.profileIcon) {
         icon.class = 'active';
       }
     });
@@ -282,7 +284,7 @@ export class SettingsComponent implements OnInit {
       event.target.classList.add('active');
       this.profileIcon = +event.target.getAttribute('id')! + 1;
 
-      console.log(this.profileIcon);
+      //console.log(this.profileIcon);
     }
   }
 }
