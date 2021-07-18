@@ -23,7 +23,7 @@
       "encuesta": "Encuesta",
       "plantilla": "Plantilla",
       "errors": {
-        "duplicateName": "Ya existe una categoría con ese nombre."
+        "duplicateName": "Ya existe una categoría con ese nombre"
       }
     }
   }
