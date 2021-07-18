@@ -9,10 +9,10 @@
         "notFound": "Ninguna Categoría encontrada"
       },
       "created": "Una nueva Categoría ha sido creada con el identificador {{ param }}",
-      "updated": "Una Categoría ha sido actualizado con el identificador {{ param }}",
+      "updated": "Los datos de la categoría {{ nombre }} han sido actualizados",
       "deleted": "Una Categoría ha sido eliminado con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Categoría {{ id }}?"
+        "question": "¿Seguro que quiere eliminar \"{{ nombre }}\"?"
       },
       "detail": {
         "title": "Categoría"
