@@ -7,7 +7,10 @@
       },
       "messages": {
         "info": "Introduzca la dirección de correo electrónico que utilizó para registrarse",
-        "success": "Revise su correo electrónico para obtener más información sobre cómo restablecer su contraseña."
+        "success": "Revise su correo electrónico para obtener más información sobre cómo restablecer su contraseña.",
+        "error": {
+          "emailnotexists": "<strong>¡El correo electrónico no se encuentra registrado en el sistema!</strong> Por favor, ingrese otro email."
+        }
       }
     },
     "finish": {
