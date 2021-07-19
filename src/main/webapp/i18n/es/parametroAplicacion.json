@@ -21,7 +21,8 @@
       "maxDiasEncuesta": "Max Dias Encuesta",
       "minDiasEncuesta": "Min Dias Encuesta",
       "maxCantidadPreguntas": "Max Cantidad Preguntas",
-      "minCantidadPreguntas": "Min Cantidad Preguntas"
+      "minCantidadPreguntas": "Min Cantidad Preguntas",
+      "datoInvalido": "Este dato no es válido"
     }
   }
 }
