@@ -1,8 +1,11 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { IEncuesta } from 'app/entities/encuesta/encuesta.model';
 import { EncuestaService } from 'app/entities/encuesta/service/encuesta.service';
 import { EstadoCategoria } from 'app/entities/enumerations/estado-categoria.model';
+import { Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
 import { Categoria, ICategoria } from '../categoria.model';
 import { CategoriaService } from '../service/categoria.service';
@@ -37,7 +40,7 @@ export class CategoriaDeleteDialogComponent {
       this.encuestas!.forEach(encuesta => {
         if (encuesta.categoria != null && encuesta.categoria!.id === categoria.id) {
           encuesta.categoria = categoriaNula;
-          this.encuestaService.update(encuesta);
+          this.subscribeToSaveResponse(this.encuestaService.update(encuesta));
         }
       });
       categoria.estado = EstadoCategoria.INACTIVE;
@@ -51,5 +54,24 @@ export class CategoriaDeleteDialogComponent {
     this.encuestaService.query().subscribe(res => {
       this.encuestas = res.body ?? [];
     });
+  }
+
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IEncuesta>>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
+  }
+
+  protected onSaveFinalize(): void {
+    // this.isSaving = false;
+  }
+
+  protected onSaveSuccess(): void {
+    // this.previousState();
+  }
+
+  protected onSaveError(): void {
+    // Api for inheritance.
   }
 }
