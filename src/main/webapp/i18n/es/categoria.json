@@ -8,11 +8,13 @@
         "createOrEditLabel": "Datos de categoría",
         "notFound": "Ninguna categoría encontrada"
       },
-      "created": "Una nueva categoría ha sido creada con el identificador {{ param }}",
-      "updated": "Los datos de la categoría {{ nombre }} han sido actualizados",
+      "created": "Su categoría fue creada de manera exitosa",
+      "updated": "Los datos de la categoría han sido guardados de manera exitosa",
       "deleted": "La categoría  {{ nombre }} ha sido deshabilitada",
       "delete": {
-        "question": "¿Seguro que quiere cambiar el estado de \"{{ nombre }}\"?"
+        "question": "¿Seguro que quiere cambiar el estado de \"{{ nombre }}\"?",
+        "success": "Su categoría ha sido modificada de manera exitosa ",
+        "error": "Ocurrió un error al cambiar el estado de su categoría, por favor intentar de nuevo"
       },
       "detail": {
         "title": "Categoría"
