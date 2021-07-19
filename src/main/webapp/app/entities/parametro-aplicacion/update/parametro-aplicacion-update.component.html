@@ -3,10 +3,10 @@
     <div class="col-lg-10 mr-lg-5">
       <div class="row">
         <div class="w-100">
-          <p class="ds-title">Parámetros de la aplicación</p>
+          <p class="ds-title">Configuración</p>
         </div>
         <div>
-          <p class="ds-subtitle">Información de los parámetros que se permiten para la creación de las encuestas dentro de DataSurvey.</p>
+          <p class="ds-subtitle">Configuración de parámetros de DataSurvey.</p>
         </div>
       </div>
     </div>
@@ -37,12 +37,10 @@
     <div class="col-lg-4 mr-lg-5">
       <div class="row">
         <div class="w-100">
-          <p class="ds-title">Días para Encuestas</p>
+          <p class="ds-title">Duración de una encuesta</p>
         </div>
         <div>
-          <p class="ds-subtitle">
-            Editar la cantidad mínima y máxima de los días que se permitirá para la creación de las encuestas dentro de DataSurvey.
-          </p>
+          <p class="ds-subtitle">Configurar la duración mínima y máxima para las encuestas publicadas</p>
         </div>
       </div>
     </div>
@@ -67,20 +65,29 @@
           >
             <small
               class="form-text text-danger"
-              *ngIf="editForm.get('minDiasEncuesta')?.errors?.required"
-              jhiTranslate="entity.validation.required"
+              *ngIf="
+                (editForm.get('minDiasEncuesta')?.errors?.pattern || editForm.get('minDiasEncuesta')?.errors?.required) &&
+                !editForm.get('minDiasEncuesta')?.errors?.max
+              "
+              jhiTranslate="dataSurveyApp.parametroAplicacion.datoInvalido"
             >
               This field is required.
             </small>
-            <small
+
+            <!--<small
               class="form-text text-danger"
-              [hidden]="!editForm.get('minDiasEncuesta')?.errors?.pattern"
-              jhiTranslate="entity.validation.integerNumber"
+              *ngIf="editForm.get('minDiasEncuesta')?.errors?.required "
+              jhiTranslate="dataSurveyApp.parametroAplicacion.vacio"
             >
-              This field should be a number.
+              This field is required.
+            </small>-->
+
+            <small class="form-text text-danger" *ngIf="editForm.get('minDiasEncuesta')?.errors?.min">
+              Este campo debe ser mayor o igual a 1
             </small>
-            <small class="form-text text-danger" [hidden]="!editForm.get('minDiasEncuesta')?.errors?.min">
-              Este campo no puede ser mayor que 1
+
+            <small class="form-text text-danger" *ngIf="editForm.get('minDiasEncuesta')?.errors?.max">
+              Este campo debe ser menor o igual a 14
             </small>
           </div>
         </div>
@@ -105,20 +112,29 @@
           >
             <small
               class="form-text text-danger"
-              *ngIf="editForm.get('maxDiasEncuesta')?.errors?.required"
-              jhiTranslate="entity.validation.required"
+              *ngIf="
+                (editForm.get('maxDiasEncuesta')?.errors?.pattern || editForm.get('maxDiasEncuesta')?.errors?.required) &&
+                !editForm.get('maxDiasEncuesta')?.errors?.max
+              "
+              jhiTranslate="dataSurveyApp.parametroAplicacion.datoInvalido"
             >
               This field is required.
             </small>
-            <small
+
+            <!--small
               class="form-text text-danger"
-              [hidden]="!editForm.get('maxDiasEncuesta')?.errors?.pattern"
-              jhiTranslate="entity.validation.integerNumber"
+              *ngIf="editForm.get('maxDiasEncuesta')?.errors?.required "
+              jhiTranslate="dataSurveyApp.parametroAplicacion.vacio"
             >
-              This field should be a number.
+              This field is required.
+            </small>-->
+
+            <small class="form-text text-danger" *ngIf="editForm.get('maxDiasEncuesta')?.errors?.min">
+              Este campo debe ser mayor o igual a 1
             </small>
-            <small class="form-text text-danger" [hidden]="!editForm.get('maxDiasEncuesta')?.errors?.min">
-              Este campo no puede ser mayor que 1
+
+            <small class="form-text text-danger" *ngIf="editForm.get('maxDiasEncuesta')?.errors?.max">
+              Este campo debe ser menor o igual a 14
             </small>
           </div>
         </div>
@@ -130,12 +146,10 @@
     <div class="col-lg-4 mr-lg-5">
       <div class="row">
         <div class="w-100">
-          <p class="ds-title">Preguntas para Encuestas</p>
+          <p class="ds-title">Cantidad de preguntas</p>
         </div>
         <div>
-          <p class="ds-subtitle">
-            Editar la cantidad mínima y máxima de las preguntas que se permitirán para la creación de las encuestas dentro de DataSurvey.
-          </p>
+          <p class="ds-subtitle">Configurar la cantidad mínima y máxima de preguntas por encuesta</p>
         </div>
       </div>
     </div>
@@ -160,20 +174,21 @@
           >
             <small
               class="form-text text-danger"
-              *ngIf="editForm.get('minCantidadPreguntas')?.errors?.required"
-              jhiTranslate="entity.validation.required"
+              *ngIf="
+                (editForm.get('minCantidadPreguntas')?.errors?.required || !editForm.get('minCantidadPreguntas')?.errors?.pattern) &&
+                !(editForm.get('minCantidadPreguntas')?.errors?.max || editForm.get('minCantidadPreguntas')?.errors?.min)
+              "
+              jhiTranslate="dataSurveyApp.parametroAplicacion.datoInvalido"
             >
               This field is required.
             </small>
-            <small
-              class="form-text text-danger"
-              [hidden]="!editForm.get('minCantidadPreguntas')?.errors?.pattern"
-              jhiTranslate="entity.validation.integerNumber"
-            >
-              This field should be a number.
+
+            <small class="form-text text-danger" *ngIf="editForm.get('minCantidadPreguntas')?.errors?.min">
+              Este campo debe ser mayor o igual a 1
             </small>
-            <small class="form-text text-danger" [hidden]="!editForm.get('minCantidadPreguntas')?.errors?.min">
-              Este campo no puede ser mayor que 1
+
+            <small class="form-text text-danger" *ngIf="editForm.get('minCantidadPreguntas')?.errors?.max">
+              Este campo debe ser menor o igual a 40
             </small>
           </div>
         </div>
@@ -196,20 +211,21 @@
           >
             <small
               class="form-text text-danger"
-              *ngIf="editForm.get('maxCantidadPreguntas')?.errors?.required"
-              jhiTranslate="entity.validation.required"
+              *ngIf="
+                (editForm.get('maxCantidadPreguntas')?.errors?.required || !editForm.get('maxCantidadPreguntas')?.errors?.pattern) &&
+                !(editForm.get('maxCantidadPreguntas')?.errors?.max || editForm.get('maxCantidadPreguntas')?.errors?.min)
+              "
+              jhiTranslate="dataSurveyApp.parametroAplicacion.datoInvalido"
             >
               This field is required.
             </small>
-            <small
-              class="form-text text-danger"
-              [hidden]="!editForm.get('maxCantidadPreguntas')?.errors?.pattern"
-              jhiTranslate="entity.validation.integerNumber"
-            >
-              This field should be a integer number.
+
+            <small class="form-text text-danger" *ngIf="editForm.get('maxCantidadPreguntas')?.errors?.min">
+              Este campo debe ser mayor o igual a 1
             </small>
-            <small class="form-text text-danger" [hidden]="!editForm.get('minCantidadPreguntas')?.errors?.min">
-              Este campo no puede ser mayor que 1
+
+            <small class="form-text text-danger" *ngIf="editForm.get('maxCantidadPreguntas')?.errors?.max">
+              Este campo debe ser menor o igual a 40
             </small>
           </div>
         </div>

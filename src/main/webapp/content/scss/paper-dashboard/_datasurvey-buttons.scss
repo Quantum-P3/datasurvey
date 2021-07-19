@@ -41,6 +41,15 @@
   }
 }
 
+.ds-btn--toggle {
+  background-color: #ffaa47;
+  color: #fff;
+
+  &:hover {
+    background-color: #e09935;
+  }
+}
+
 .ds-btn--secondary {
   background-color: transparent;
   color: #2962ff;
