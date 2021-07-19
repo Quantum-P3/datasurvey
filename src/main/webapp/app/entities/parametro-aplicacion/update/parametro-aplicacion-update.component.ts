@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 
@@ -24,16 +24,17 @@ export class ParametroAplicacionUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    maxDiasEncuesta: [null, [Validators.required, Validators.pattern(/^[0-9]\d*$/), Validators.min(1)]],
-    minDiasEncuesta: [null, [Validators.required, Validators.pattern(/^[0-9]\d*$/), Validators.min(1)]],
-    maxCantidadPreguntas: [null, [Validators.required, Validators.pattern(/^[0-9]\d*$/), Validators.min(1)]],
-    minCantidadPreguntas: [null, [Validators.required, Validators.pattern(/^[0-9]\d*$/), Validators.min(1)]],
+    maxDiasEncuesta: [null, [Validators.required, Validators.pattern(/^[0-9]\d*$/), Validators.min(1), Validators.max(14)]],
+    minDiasEncuesta: [null, [Validators.required, Validators.pattern(/^[0-9]\d*$/), Validators.min(1), Validators.max(14)]],
+    maxCantidadPreguntas: [null, [Validators.required, Validators.pattern(/^[0-9]\d*$/), Validators.min(1), Validators.max(40)]],
+    minCantidadPreguntas: [null, [Validators.required, Validators.pattern(/^[0-9]\d*$/), Validators.min(1), Validators.max(40)]],
   });
 
   constructor(
     protected parametroAplicacionService: ParametroAplicacionService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -89,9 +90,14 @@ export class ParametroAplicacionUpdateComponent implements OnInit {
   }
 
   protected onSaveSuccess(): void {
-    this.previousState();
+    (this.success = true), this.windowReload();
   }
 
+  windowReload() {
+    this.router.navigate(['parametro-aplicacion/1/edit']).then(() => {
+      window.location.reload();
+    });
+  }
   protected onSaveError(): void {
     // Api for inheritance.
   }
