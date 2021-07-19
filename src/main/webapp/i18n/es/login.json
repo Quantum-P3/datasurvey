@@ -9,7 +9,8 @@
     },
     "messages": {
       "error": {
-        "authentication": "Revise las credenciales e intente de nuevo "
+        "authentication": "Revise las credenciales e intente de nuevo ",
+        "isGoogle": "Al haber ingresado por medio de Google no cuenta con los permisos para modificar su contraseña"
       }
     },
     "password": {

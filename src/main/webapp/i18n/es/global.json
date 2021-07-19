@@ -65,7 +65,11 @@
         "authenticated": {
           "prefix": "Si desea ",
           "link": "iniciar sesión",
-          "suffix": ", puede intentar con las cuentas predeterminadas:<br/>- Administrador (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\")."
+          "suffix": ", puede intentar con las cuentas predeterminadas:<br/>- Administrador (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\").",
+          "updateForm": "Ocurrió un error al actualizar su información, favor revisar los campos e intentar de nuevo",
+          "passwordForm": "Ocurrió un error al actualizar su contraseña, favor revisar los campos e intentar de nuevo",
+
+          "botonInicio": "Iniciar Sesión"
         },
         "register": {
           "noaccount": "¿Aún no tienes una cuenta?",
@@ -73,7 +77,8 @@
         }
       },
       "error": {
-        "dontmatch": "¡La contraseña y la confirmación de contraseña no coinciden!"
+        "samePassword": "La contraseña actual y la nueva contraseña no pueden ser iguales",
+        "dontmatch": "La contraseña y la confirmación de contraseña no coinciden"
       },
       "validate": {
         "newpassword": {
@@ -107,7 +112,8 @@
     "ribbon": {
       "dev": "Development"
     },
-    "item-count": "Mostrando {{first}} - {{second}} de {{total}} elementos."
+    "item-count": "Mostrando {{first}} - {{second}} de {{total}} elementos.",
+    "registerLink": "Registrarse"
   },
   "entity": {
     "action": {

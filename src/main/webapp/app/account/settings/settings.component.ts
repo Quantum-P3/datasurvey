@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+import { Component, ContentChild, OnInit } from '@angular/core';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
-
 import * as dayjs from 'dayjs';
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
+import { DATE_FORMAT, DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/user.service';
 import { IPlantilla } from 'app/entities/plantilla/plantilla.model';
@@ -14,17 +13,30 @@ import { PlantillaService } from 'app/entities/plantilla/service/plantilla.servi
 import { IUsuarioExtra, UsuarioExtra } from 'app/entities/usuario-extra/usuario-extra.model';
 import { UsuarioExtraService } from 'app/entities/usuario-extra/service/usuario-extra.service';
 import { AccountService } from 'app/core/auth/account.service';
+import { LocalStorageService } from 'ngx-webstorage';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '../../config/error.constants';
+import { PasswordService } from '../password/password.service';
 
 @Component({
   selector: 'jhi-settings',
   templateUrl: './settings.component.html',
 })
 export class SettingsComponent implements OnInit {
+  currentUrl = this.router.url;
   isSaving = false;
-
+  success = false;
+  successPassword = false;
+  samePassword = false;
+  error = false;
+  errorPassword = false;
+  doNotMatch = false;
   usersSharedCollection: IUser[] = [];
   plantillasSharedCollection: IPlantilla[] = [];
+  showPassword = false;
 
+  isGoogle = this.localStorageService.retrieve('IsGoogle');
+
+  //Form info del usuario
   editForm = this.fb.group({
     email: [null, [Validators.required]],
     id: [],
@@ -36,10 +48,11 @@ export class SettingsComponent implements OnInit {
     plantillas: [],
   });
 
+  //form de la contraseña
   passwordForm = this.fb.group({
-    password: [null, [Validators.required]],
-    passwordNew: [null, [Validators.required]],
-    passwordNewConfirm: [null, [Validators.required]],
+    password: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
+    passwordNew: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
+    passwordNewConfirm: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
   });
 
   usuarioExtra: UsuarioExtra | null = null;
@@ -75,13 +88,18 @@ export class SettingsComponent implements OnInit {
     { name: 'C28' },
   ];
 
+  /*  @ContentChild(IonInput) input: IonInput;*/
+
   constructor(
     protected usuarioExtraService: UsuarioExtraService,
     protected userService: UserService,
     protected plantillaService: PlantillaService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected accountService: AccountService
+    protected accountService: AccountService,
+    private localStorageService: LocalStorageService,
+    protected passwordService: PasswordService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -103,6 +121,8 @@ export class SettingsComponent implements OnInit {
       }
     });
 
+    //console.log(this.isGoogle);
+
     // this.activatedRoute.data.subscribe(({ usuarioExtra }) => {
 
     // });
@@ -112,13 +132,37 @@ export class SettingsComponent implements OnInit {
     window.history.back();
   }
 
+  //Se manda la info a guardar
   save(): void {
     this.isSaving = true;
     const usuarioExtra = this.createFromForm();
-    if (usuarioExtra.id !== undefined) {
-      this.subscribeToSaveResponse(this.usuarioExtraService.update(usuarioExtra));
+
+    console.log(usuarioExtra.iconoPerfil);
+    console.log(usuarioExtra.fechaNacimiento);
+
+    this.subscribeToSaveResponse(this.usuarioExtraService.update(usuarioExtra));
+  }
+
+  savePassword(): void {
+    this.successPassword = false;
+    this.doNotMatch = false;
+    this.samePassword = false;
+    this.errorPassword = false;
+
+    const passwordNew = this.passwordForm.get(['passwordNew'])!.value;
+    const passwordOld = this.passwordForm.get(['password'])!.value;
+    if (passwordOld == passwordNew) {
+      this.samePassword = true;
     } else {
-      this.subscribeToSaveResponse(this.usuarioExtraService.create(usuarioExtra));
+      if (passwordNew !== this.passwordForm.get(['passwordNewConfirm'])!.value) {
+        (this.doNotMatch = true), (this.samePassword = false);
+      } else {
+        this.passwordService.save(passwordNew, passwordOld).subscribe(
+          () => (this.successPassword = true),
+
+          () => (this.errorPassword = true)
+        );
+      }
     }
   }
 
@@ -143,9 +187,20 @@ export class SettingsComponent implements OnInit {
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IUsuarioExtra>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => this.onSaveSuccess(),
-      () => this.onSaveError()
+      () => ((this.success = true), this.windowReload()),
+      response => this.processError(response)
     );
+  }
+  windowReload() {
+    this.router.navigate(['account/settings']).then(() => {
+      window.location.reload();
+    });
+  }
+
+  processError(response: HttpErrorResponse): void {
+    if (response.status === 400) {
+      this.error = true;
+    }
   }
 
   protected onSaveSuccess(): void {
@@ -160,22 +215,25 @@ export class SettingsComponent implements OnInit {
     this.isSaving = false;
   }
 
+  //Llena el formulario para que se vea en pantalla
   protected updateForm(usuarioExtra: IUsuarioExtra): void {
     this.editForm.patchValue({
       email: usuarioExtra.user?.login,
       id: usuarioExtra.id,
       nombre: usuarioExtra.nombre,
       iconoPerfil: usuarioExtra.iconoPerfil,
-      fechaNacimiento: usuarioExtra.fechaNacimiento ? usuarioExtra.fechaNacimiento.format(DATE_TIME_FORMAT) : null,
+      fechaNacimiento: usuarioExtra.fechaNacimiento ? usuarioExtra.fechaNacimiento.format(DATE_FORMAT) : null,
       estado: usuarioExtra.estado,
       user: usuarioExtra.user,
       plantillas: usuarioExtra.plantillas,
     });
 
     // Update swiper
-    this.profileIcon = parseInt(usuarioExtra.iconoPerfil!);
+    this.profileIcon = usuarioExtra.iconoPerfil!;
+
+    console.log(this.profileIcon);
     this.profileIcons.forEach(icon => {
-      if (parseInt(icon.name.split('C')[1]) === this.profileIcon) {
+      if (icon.name.split('C')[1] === this.profileIcon) {
         icon.class = 'active';
       }
     });
@@ -210,9 +268,9 @@ export class SettingsComponent implements OnInit {
       ...new UsuarioExtra(),
       id: this.editForm.get(['id'])!.value,
       nombre: this.editForm.get(['nombre'])!.value,
-      iconoPerfil: this.editForm.get(['iconoPerfil'])!.value,
+      iconoPerfil: this.profileIcon,
       fechaNacimiento: this.editForm.get(['fechaNacimiento'])!.value
-        ? dayjs(this.editForm.get(['fechaNacimiento'])!.value, DATE_TIME_FORMAT)
+        ? dayjs(this.editForm.get(['fechaNacimiento'])!.value, DATE_FORMAT)
         : undefined,
       estado: this.editForm.get(['estado'])!.value,
       user: this.editForm.get(['user'])!.value,
@@ -225,6 +283,8 @@ export class SettingsComponent implements OnInit {
       document.querySelectorAll('.active').forEach(e => e.classList.remove('active'));
       event.target.classList.add('active');
       this.profileIcon = +event.target.getAttribute('id')! + 1;
+
+      //console.log(this.profileIcon);
     }
   }
 }

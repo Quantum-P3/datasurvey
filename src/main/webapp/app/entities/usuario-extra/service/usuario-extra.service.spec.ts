@@ -28,7 +28,7 @@ describe('Service Tests', () => {
       elemDefault = {
         id: 0,
         nombre: 'AAAAAAA',
-        iconoPerfil: 'AAAAAAA',
+        iconoPerfil: 1,
         fechaNacimiento: currentDate,
         estado: EstadoUsuario.ACTIVE,
       };
