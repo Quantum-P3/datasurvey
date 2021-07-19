@@ -14,6 +14,7 @@ export class CategoriaComponent implements OnInit {
   categorias?: ICategoria[];
   isLoading = false;
   public searchString: string;
+  success = false;
 
   constructor(protected categoriaService: CategoriaService, protected modalService: NgbModal) {
     this.searchString = '';
@@ -48,6 +49,7 @@ export class CategoriaComponent implements OnInit {
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed.subscribe(reason => {
       if (reason === 'deleted') {
+        this.success = true;
         this.loadAll();
       }
     });

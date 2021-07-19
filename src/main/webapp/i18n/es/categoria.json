@@ -12,7 +12,9 @@
       "updated": "Los datos de la categoría {{ nombre }} han sido actualizados",
       "deleted": "La categoría  {{ nombre }} ha sido deshabilitada",
       "delete": {
-        "question": "¿Seguro que quiere cambiar el estado de \"{{ nombre }}\"?"
+        "question": "¿Seguro que quiere cambiar el estado de \"{{ nombre }}\"?",
+        "success": "Su categoría ha sido modificada de manera exitosa ",
+        "error": "Ocurrió un error al cambiar el estado de su categoría, por favor intentar de nuevo"
       },
       "detail": {
         "title": "Categoría"
