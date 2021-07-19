@@ -1,8 +1,11 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { IEncuesta } from 'app/entities/encuesta/encuesta.model';
 import { EncuestaService } from 'app/entities/encuesta/service/encuesta.service';
 import { EstadoCategoria } from 'app/entities/enumerations/estado-categoria.model';
+import { Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 
 import { Categoria, ICategoria } from '../categoria.model';
 import { CategoriaService } from '../service/categoria.service';
@@ -19,45 +22,55 @@ export class CategoriaDeleteDialogComponent {
     protected categoriaService: CategoriaService,
     protected activeModal: NgbActiveModal,
     protected encuestaService: EncuestaService
-  ) {}
+  ) {
+    this.getEncuestas();
+  }
 
   cancel(): void {
     this.activeModal.dismiss();
   }
 
   confirmDelete(categoria: ICategoria): void {
-    this.ensureNulaExists();
     const categoriaNula = new Categoria(0, 'Otra', EstadoCategoria.ACTIVE);
-    this.getEncuestas(categoria);
-    if (this.encuestas) {
+    this.getEncuestas();
+    if (categoria.estado == EstadoCategoria.INACTIVE) {
+      categoria.estado = EstadoCategoria.ACTIVE;
+    } else {
       this.encuestas!.forEach(encuesta => {
-        encuesta.categoria = categoriaNula;
-        this.encuestaService.update(encuesta);
+        if (encuesta.categoria != null && encuesta.categoria!.id === categoria.id) {
+          encuesta.categoria = categoriaNula;
+          this.subscribeToSaveResponse(this.encuestaService.update(encuesta));
+        }
       });
+      categoria.estado = EstadoCategoria.INACTIVE;
     }
-    categoria.estado = EstadoCategoria.INACTIVE;
     this.categoriaService.update(categoria).subscribe(() => {
       this.activeModal.close('deleted');
     });
   }
-  ensureNulaExists(): void {
-    const categoriaNula = new Categoria(0, 'Otra', EstadoCategoria.ACTIVE);
-    const categoria = this.categoriaService.find(0);
-    if (categoria) {
-      this.categoriaService.update(categoriaNula);
-    } else {
-      this.categoriaService.create(categoriaNula);
-    }
-  }
 
-  protected getEncuestas(categoria: ICategoria): void {
+  getEncuestas(): void {
     this.encuestaService.query().subscribe(res => {
       this.encuestas = res.body ?? [];
     });
-    if (this.encuestas) {
-      this.encuestasFiltradas = this.encuestas.filter(encuesta => {
-        encuesta.categoria!.id === categoria.id;
-      });
-    }
+  }
+
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IEncuesta>>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
+  }
+
+  protected onSaveFinalize(): void {
+    // this.isSaving = false;
+  }
+
+  protected onSaveSuccess(): void {
+    // this.previousState();
+  }
+
+  protected onSaveError(): void {
+    // Api for inheritance.
   }
 }
