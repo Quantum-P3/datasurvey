@@ -11,16 +11,23 @@ import { ParametroAplicacionService } from '../service/parametro-aplicacion.serv
 @Component({
   selector: 'jhi-parametro-aplicacion-update',
   templateUrl: './parametro-aplicacion-update.component.html',
+  styleUrls: ['./parametro-aplicacion-update.component.scss'],
 })
 export class ParametroAplicacionUpdateComponent implements OnInit {
   isSaving = false;
+  minDiasIncorrect = false;
+  minPreguntasIncorrect = false;
+  notNumbers = false;
+  notPositive = false;
+  error = false;
+  success = false;
 
   editForm = this.fb.group({
     id: [],
-    maxDiasEncuesta: [null, [Validators.required]],
-    minDiasEncuesta: [null, [Validators.required]],
-    maxCantidadPreguntas: [null, [Validators.required]],
-    minCantidadPreguntas: [null, [Validators.required]],
+    maxDiasEncuesta: [null, [Validators.required, Validators.pattern(/^[0-9]\d*$/), Validators.min(1)]],
+    minDiasEncuesta: [null, [Validators.required, Validators.pattern(/^[0-9]\d*$/), Validators.min(1)]],
+    maxCantidadPreguntas: [null, [Validators.required, Validators.pattern(/^[0-9]\d*$/), Validators.min(1)]],
+    minCantidadPreguntas: [null, [Validators.required, Validators.pattern(/^[0-9]\d*$/), Validators.min(1)]],
   });
 
   constructor(
@@ -40,12 +47,37 @@ export class ParametroAplicacionUpdateComponent implements OnInit {
   }
 
   save(): void {
-    this.isSaving = true;
-    const parametroAplicacion = this.createFromForm();
-    if (parametroAplicacion.id !== undefined) {
-      this.subscribeToSaveResponse(this.parametroAplicacionService.update(parametroAplicacion));
+    this.minDiasIncorrect = false;
+    this.minPreguntasIncorrect = false;
+    this.notNumbers = false;
+    this.notPositive = false;
+
+    const minCantDias = this.editForm.get(['minDiasEncuesta'])!.value;
+    const maxCantDias = this.editForm.get(['maxDiasEncuesta'])!.value;
+    const minCantPreguntas = this.editForm.get(['minCantidadPreguntas'])!.value;
+    const maxCantPreguntas = this.editForm.get(['maxCantidadPreguntas'])!.value;
+
+    if (minCantDias > maxCantDias) {
+      this.minDiasIncorrect = true;
+    } else if (minCantPreguntas > maxCantPreguntas) {
+      this.minPreguntasIncorrect = true;
+    } else if (
+      !Number.isInteger(minCantDias) ||
+      !Number.isInteger(maxCantDias) ||
+      !Number.isInteger(minCantPreguntas) ||
+      !Number.isInteger(maxCantPreguntas)
+    ) {
+      this.notNumbers = true;
+    } else if (minCantDias < 1 || maxCantDias < 1 || minCantPreguntas < 1 || maxCantPreguntas < 1) {
+      this.notPositive = true;
     } else {
-      this.subscribeToSaveResponse(this.parametroAplicacionService.create(parametroAplicacion));
+      this.isSaving = true;
+      const parametroAplicacion = this.createFromForm();
+      if (parametroAplicacion.id !== undefined) {
+        this.subscribeToSaveResponse(this.parametroAplicacionService.update(parametroAplicacion));
+      } else {
+        this.subscribeToSaveResponse(this.parametroAplicacionService.create(parametroAplicacion));
+      }
     }
   }
 
@@ -88,4 +120,6 @@ export class ParametroAplicacionUpdateComponent implements OnInit {
       minCantidadPreguntas: this.editForm.get(['minCantidadPreguntas'])!.value,
     };
   }
+
+  private validations() {}
 }

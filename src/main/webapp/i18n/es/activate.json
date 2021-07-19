@@ -1,9 +1,9 @@
 {
   "activate": {
-    "title": "Activación",
+    "title": "Registro Completado",
     "messages": {
-      "success": "<strong>Su cuenta ha sido activada.</strong> Por favor, ",
-      "error": "<strong>Su cuenta no pudo ser activada.</strong> Por favor, utilice el formulario de inscripción para registrarse."
+      "success": "¡Felicidades! Su confirmación de correo fue exitosa ",
+      "error": "Ocurrió un error al confirmar su correo, por favor intente de nuevo"
     }
   }
 }

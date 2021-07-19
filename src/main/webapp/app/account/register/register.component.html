@@ -1,4 +1,4 @@
-<div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5" style="height: 100vh; background-color: #f1f5f9">
+<div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5" style="/*height: 100vh;*/ height: 100%; background-color: #f1f5f9">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-xxl-4 col-lg-5">
@@ -8,12 +8,20 @@
           </div>
 
           <div class="card-body p-4">
-            <div class="text-center w-75 m-auto">
+            <div class="text-center w-75 m-auto" *ngIf="!success">
               <h4 class="text-dark-50 text-center pb-0 fw-bold p-0 m-0" style="color: #727070; font-weight: 700; font-size: 1.3rem">
                 REGISTRARSE
               </h4>
-              <p class="mb-4" style="color: rgba(146, 146, 146, 0.664)">Ingrese sus datos para registrarse.</p>
+              <p class="mb-4" style="color: rgba(146, 146, 146, 0.664)">Ingrese sus datos para registrarse</p>
             </div>
+
+            <div class="text-center w-75 m-auto" *ngIf="success">
+              <h4 class="text-dark-50 text-center pb-0 fw-bold p-0 m-0" style="color: #727070; font-weight: 700; font-size: 1.3rem">
+                ¡Gracias por registrarse en DataSurvey!
+              </h4>
+            </div>
+
+            <hr />
 
             <div class="alert alert-success" *ngIf="success" jhiTranslate="register.messages.success">
               <strong>Registration saved!</strong> Please check your email for confirmation.

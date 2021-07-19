@@ -4,15 +4,17 @@
       "home": {
         "title": "Categorías",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nueva Categoría",
-        "createOrEditLabel": "Datos de Categoría",
-        "notFound": "Ninguna Categoría encontrada"
+        "createLabel": "Crear nueva categoría",
+        "createOrEditLabel": "Datos de categoría",
+        "notFound": "Ninguna categoría encontrada"
       },
-      "created": "Una nueva Categoría ha sido creada con el identificador {{ param }}",
-      "updated": "Una Categoría ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Una Categoría ha sido eliminado con el identificador {{ param }}",
+      "created": "Su categoría fue creada de manera exitosa",
+      "updated": "Los datos de la categoría han sido guardados de manera exitosa",
+      "deleted": "La categoría  {{ nombre }} ha sido deshabilitada",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Categoría {{ id }}?"
+        "question": "¿Seguro que quiere cambiar el estado de \"{{ nombre }}\"?",
+        "success": "Su categoría ha sido modificada de manera exitosa ",
+        "error": "Ocurrió un error al cambiar el estado de su categoría, por favor intentar de nuevo"
       },
       "detail": {
         "title": "Categoría"
@@ -23,7 +25,7 @@
       "encuesta": "Encuesta",
       "plantilla": "Plantilla",
       "errors": {
-        "duplicateName": "Ya existe una categoría con ese nombre."
+        "duplicateName": "Ya existe una categoría con ese nombre"
       }
     }
   }

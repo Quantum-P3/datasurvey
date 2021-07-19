@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<!--<div class="row justify-content-center">
   <div class="col-8">
     <div *ngIf="parametroAplicacion">
       <h2 data-cy="parametroAplicacionDetailsHeading">
@@ -41,6 +41,83 @@
       <button type="button" [routerLink]="['/parametro-aplicacion', parametroAplicacion.id, 'edit']" class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
       </button>
+    </div>
+  </div>
+</div>-->
+<div class="row justify-content-center ds-form">
+  <div class="row w-75 mb-5" style="border-bottom: 1px solid #e7ebf3">
+    <div class="col-lg-10 mr-lg-5">
+      <div class="row">
+        <div class="w-100">
+          <p class="ds-title">Parámetros de la aplicación</p>
+        </div>
+        <div>
+          <p class="ds-subtitle">Informacion de los parametros que se permiten para la creacion de las encuestas dentro de DataSurvey.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row justify-content-center ds-form">
+  <jhi-alert-error></jhi-alert-error>
+  <jhi-alert></jhi-alert>
+  <div class="row w-75 pb-lg-5 pr-lg-5 mb-5" style="border-bottom: 1px solid #e7ebf3">
+    <div class="col-lg-4 mr-lg-5">
+      <div class="row">
+        <div class="w-100">
+          <p class="ds-title">Dias para encuestas</p>
+        </div>
+        <div>
+          <p class="ds-subtitle">
+            Cantidad mínima y máxima de los días que se permitirá para la creación de las encuestas dentro de DataSurvey.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="parametroAplicacion" class="ds-form col-lg ml-lg-5 mr-lg-5 pr-lg-5">
+      <div class="row mb-2">
+        <div class="form-group w-100">
+          <label class="form-control-label">Cantidad mínima</label>
+          <p class="form-control text-center">{{ parametroAplicacion.minDiasEncuesta }}</p>
+        </div>
+        <div class="form-group w-100">
+          <label class="form-control-label">Cantidad máxima</label>
+          <p class="form-control text-center">{{ parametroAplicacion.maxDiasEncuesta }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row justify-content-center ds-form">
+  <div class="row w-75 pb-lg-5 pr-lg-5 mb-5">
+    <div class="col-lg-4 mr-lg-5">
+      <div class="row">
+        <div class="w-100">
+          <p class="ds-title">Preguntas para encuestas</p>
+        </div>
+        <div>
+          <p class="ds-subtitle">
+            Cantidad mínima y máxima de las preguntas que se permitirá ingresar para la creación de las encuestas dentro de DataSurvey.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="parametroAplicacion" class="ds-form col-lg ml-lg-5 mr-lg-5 pr-lg-5">
+      <div class="row mb-2">
+        <div class="form-group w-100">
+          <label class="form-control-label">Cantidad mínima</label>
+          <p class="form-control text-center">{{ parametroAplicacion.minCantidadPreguntas }}</p>
+        </div>
+        <div class="form-group w-100">
+          <label class="form-control-label">Cantidad máxima</label>
+          <p class="form-control text-center">{{ parametroAplicacion.maxCantidadPreguntas }}</p>
+        </div>
+      </div>
+      <div class="row">
+        <button class="ds-btn ds-btn--primary" type="button" [routerLink]="['/parametro-aplicacion', parametroAplicacion.id, 'edit']">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>
