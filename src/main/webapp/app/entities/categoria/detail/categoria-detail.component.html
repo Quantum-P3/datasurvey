@@ -1,0 +1,36 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="categoria">
+      <h2 data-cy="categoriaDetailsHeading"><span jhiTranslate="dataSurveyApp.categoria.detail.title">Categoria</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ categoria.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.categoria.nombre">Nombre</span></dt>
+        <dd>
+          <span>{{ categoria.nombre }}</span>
+        </dd>
+        <dt><span jhiTranslate="dataSurveyApp.categoria.estado">Estado</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'dataSurveyApp.EstadoCategoria.' + categoria.estado }}">{{ categoria.estado }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-ds btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/categoria', categoria.id, 'edit']" class="btn btn-ds btn-ds-primary btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>
