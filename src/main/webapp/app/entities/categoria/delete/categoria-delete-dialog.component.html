@@ -14,17 +14,17 @@
       [translateValues]="{ nombre: categoria.nombre }"
       style="text-align: center"
     >
-      Are you sure you want to delete this category?
+      Are you sure you want to toggle this category's status?
     </p>
   </div>
 
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary ds-btn ds-btn-secondary" data-dismiss="modal" (click)="cancel()">
-      <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+      &nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
     </button>
 
     <button id="jhi-confirm-delete-categoria" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger ds-btn ds-btn-danger">
-      <fa-icon icon="times"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete">Delete</span>
+      <span jhiTranslate="entity.action.toggleStatus">Toggle Status</span>
     </button>
   </div>
 </form>
