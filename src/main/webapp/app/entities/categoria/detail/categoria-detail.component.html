@@ -25,11 +25,16 @@
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-ds btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        &nbsp;<span jhiTranslate="entity.action.back">Back</span>
       </button>
 
-      <button type="button" [routerLink]="['/categoria', categoria.id, 'edit']" class="btn btn-ds btn-ds-primary btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      <button
+        *ngIf="categoria.id != 0"
+        type="button"
+        [routerLink]="['/categoria', categoria.id, 'edit']"
+        class="btn btn-ds btn-ds-primary btn-primary"
+      >
+        &nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
       </button>
     </div>
   </div>

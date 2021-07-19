@@ -22,6 +22,7 @@ export class CategoriaUpdateComponent implements OnInit {
     estado: [null, [Validators.required]],
   });
   public duplicateName: boolean;
+  id: number | undefined;
 
   constructor(protected categoriaService: CategoriaService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {
     this.duplicateName = false;
@@ -88,6 +89,7 @@ export class CategoriaUpdateComponent implements OnInit {
   }
 
   protected updateForm(categoria: ICategoria): void {
+    this.id = categoria.id;
     this.editForm.patchValue({
       id: categoria.id,
       nombre: categoria.nombre,
