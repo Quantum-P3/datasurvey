@@ -168,7 +168,7 @@ public class AccountResource {
     public void requestPasswordReset(@RequestBody String mail) {
         Optional<User> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {
-            if (!user.get().getFirstName().equals("IsGoogle")) {
+            if (user.get().getFirstName() == null || (!user.get().getFirstName().equals("IsGoogle"))) {
                 mailService.sendPasswordResetMail(user.get());
             } else {
                 throw new UserIsGoogleException();
