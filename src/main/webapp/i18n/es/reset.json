@@ -6,10 +6,11 @@
         "button": "Restablecer la contraseña"
       },
       "messages": {
-        "info": "Introduzca la dirección de correo electrónico que utilizó para registrarse",
-        "success": "Revise su correo electrónico para obtener más información sobre cómo restablecer su contraseña.",
+        "info": "Introduzca su dirección de correo electrónico",
+        "success": "Revise su correo electrónico para restablecer su contraseña.",
         "error": {
-          "emailnotexists": "<strong>¡El correo electrónico no se encuentra registrado en el sistema!</strong> Por favor, ingrese otro email."
+          "emailnotexists": "<strong>No existe una cuenta creada con esa dirección de correo electrónico</strong>",
+          "userisgoogle": "<strong>No cuenta con el permiso de restablecer su contraseña al haber activado su cuenta por medio de Google</strong>"
         }
       }
     },
@@ -20,7 +21,7 @@
       },
       "messages": {
         "info": "Elija una contraseña nueva",
-        "success": "<strong>Su contraseña ha sido restablecida.</strong> Por favor, ",
+        "success": "<strong>Su contraseña ha sido restablecida.</strong>",
         "keymissing": "Falta la clave de reinicio.",
         "error": "Su contraseña no puede ser restablecida. Recuerde que una solicitud de reinicio de contraseña sólo es válida durante 24 horas."
       }

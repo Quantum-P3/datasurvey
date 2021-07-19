@@ -142,6 +142,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         password: this.user.id,
         langKey: this.translateService.currentLang,
         name: this.user.name,
+        firstName: 'IsGoogle',
         profileIcon: this.randomProfilePic(),
         isAdmin: 0,
         isGoogle: 1,
