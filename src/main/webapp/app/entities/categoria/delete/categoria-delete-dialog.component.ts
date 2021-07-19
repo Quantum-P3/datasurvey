@@ -34,7 +34,11 @@ export class CategoriaDeleteDialogComponent {
         this.encuestaService.update(encuesta);
       });
     }
-    categoria.estado = EstadoCategoria.INACTIVE;
+    if (categoria.estado == EstadoCategoria.INACTIVE) {
+      categoria.estado = EstadoCategoria.ACTIVE;
+    } else {
+      categoria.estado = EstadoCategoria.INACTIVE;
+    }
     this.categoriaService.update(categoria).subscribe(() => {
       this.activeModal.close('deleted');
     });

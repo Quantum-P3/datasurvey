@@ -42,7 +42,7 @@ export class CategoriaComponent implements OnInit {
     return item.id!;
   }
 
-  delete(categoria: ICategoria): void {
+  toggleStatus(categoria: ICategoria): void {
     const modalRef = this.modalService.open(CategoriaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.categoria = categoria;
     // unsubscribe not needed because closed completes on modal close
