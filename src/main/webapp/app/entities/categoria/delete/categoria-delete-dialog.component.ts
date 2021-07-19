@@ -19,7 +19,9 @@ export class CategoriaDeleteDialogComponent {
     protected categoriaService: CategoriaService,
     protected activeModal: NgbActiveModal,
     protected encuestaService: EncuestaService
-  ) {}
+  ) {
+    this.getEncuestas();
+  }
 
   cancel(): void {
     this.activeModal.dismiss();
