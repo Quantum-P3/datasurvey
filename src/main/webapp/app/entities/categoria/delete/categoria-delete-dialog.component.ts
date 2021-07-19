@@ -34,6 +34,13 @@ export class CategoriaDeleteDialogComponent {
     if (categoria.estado == EstadoCategoria.INACTIVE) {
       categoria.estado = EstadoCategoria.ACTIVE;
     } else {
+      this.encuestas!.forEach(encuesta => {
+        debugger;
+        if (encuesta.categoria != null && encuesta.categoria!.id === categoria.id) {
+          encuesta.categoria = categoriaNula;
+          this.encuestaService.update(encuesta);
+        }
+      });
       categoria.estado = EstadoCategoria.INACTIVE;
     }
     this.categoriaService.update(categoria).subscribe(() => {
@@ -45,10 +52,5 @@ export class CategoriaDeleteDialogComponent {
     this.encuestaService.query().subscribe(res => {
       this.encuestas = res.body ?? [];
     });
-    if (this.encuestas) {
-      this.encuestasFiltradas = this.encuestas.filter(encuesta => {
-        encuesta.categoria!.id === categoria.id;
-      });
-    }
   }
 }
