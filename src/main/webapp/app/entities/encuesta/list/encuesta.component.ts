@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -21,6 +21,20 @@ import { UsuarioExtraService } from 'app/entities/usuario-extra/service/usuario-
 import { EstadoEncuesta } from 'app/entities/enumerations/estado-encuesta.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
+import { Router } from '@angular/router';
+
+import {
+  faShareAlt,
+  faLock,
+  faUnlock,
+  faCalendarAlt,
+  faEdit,
+  faCopy,
+  faFile,
+  faTrashAlt,
+  faPlus,
+  faStar,
+} from '@fortawesome/free-solid-svg-icons';
 
 import * as $ from 'jquery';
 
@@ -28,7 +42,19 @@ import * as $ from 'jquery';
   selector: 'jhi-encuesta',
   templateUrl: './encuesta.component.html',
 })
-export class EncuestaComponent implements OnInit {
+export class EncuestaComponent implements OnInit, AfterViewInit {
+  // Icons
+  faShareAlt = faShareAlt;
+  faLock = faLock;
+  faUnlock = faUnlock;
+  faCalendarAlt = faCalendarAlt;
+  faEdit = faEdit;
+  faCopy = faCopy;
+  faFile = faFile;
+  faTrashAlt = faTrashAlt;
+  faPlus = faPlus;
+  faStar = faStar;
+
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;
 
@@ -65,7 +91,8 @@ export class EncuestaComponent implements OnInit {
     protected usuarioExtraService: UsuarioExtraService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected accountService: AccountService
+    protected accountService: AccountService,
+    protected router: Router
   ) {}
 
   resetForm(): void {
@@ -78,7 +105,8 @@ export class EncuestaComponent implements OnInit {
     this.encuestaService.query().subscribe(
       (res: HttpResponse<IEncuesta[]>) => {
         this.isLoading = false;
-        this.encuestas = res.body ?? [];
+        const tmpEncuestas = res.body ?? [];
+        this.encuestas = tmpEncuestas.filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id);
       },
       () => {
         this.isLoading = false;
@@ -87,12 +115,18 @@ export class EncuestaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadAll();
-
-    // Call upon selecting a survey to edit
-    // this.updateForm(encuesta);
-
-    this.loadRelationshipsOptions();
+    document.body.addEventListener('click', e => {
+      document.getElementById('contextmenu')!.classList.add('ds-contextmenu--closed');
+      document.getElementById('contextmenu')!.classList.remove('ds-contextmenu--open');
+      document.getElementById('contextmenu')!.style.maxHeight = '0%';
+      if (e.target) {
+        if (!(e.target as HTMLElement).classList.contains('ds-list--entity')) {
+          document.querySelectorAll('.ds-list--entity').forEach(e => {
+            e.classList.remove('active');
+          });
+        }
+      }
+    });
 
     // this.activatedRoute.data.subscribe(({ encuesta }) => {
     //   if (encuesta.id === undefined) {
@@ -112,6 +146,8 @@ export class EncuestaComponent implements OnInit {
       if (account !== null) {
         this.usuarioExtraService.find(account.id).subscribe(usuarioExtra => {
           this.usuarioExtra = usuarioExtra.body;
+          this.loadAll();
+          this.loadRelationshipsOptions();
           if (this.usuarioExtra !== null) {
             if (this.usuarioExtra.id === undefined) {
               const today = dayjs().startOf('day');
@@ -124,6 +160,8 @@ export class EncuestaComponent implements OnInit {
       }
     });
   }
+
+  ngAfterViewInit(): void {}
 
   trackId(index: number, item: IEncuesta): number {
     return item.id!;
@@ -258,5 +296,67 @@ export class EncuestaComponent implements OnInit {
       categoria: this.editForm.get(['categoria'])!.value,
       usuarioExtra: this.usuarioExtra,
     };
+  }
+
+  isAdmin(): boolean {
+    return this.accountService.hasAnyAuthority('ROLE_ADMIN');
+  }
+
+  isAuthenticated(): boolean {
+    return this.accountService.isAuthenticated();
+  }
+
+  openSurvey(event: any): void {
+    const surveyId = event.target.getAttribute('data-id');
+    this.router.navigate(['/encuesta', surveyId, 'edit']);
+  }
+
+  selectSurvey(event: any): void {
+    document.querySelectorAll('.ds-list--entity').forEach(e => {
+      e.classList.remove('active');
+    });
+    if (event.target.classList.contains('ds-list--entity')) {
+      event.target.classList.add('active');
+    }
+  }
+
+  counter(i: number) {
+    return new Array(i);
+  }
+
+  testMe(something: any) {
+    return 5 - something;
+  }
+
+  openContextMenu(event: any): void {
+    document.querySelectorAll('.ds-list--entity').forEach(e => {
+      e.classList.remove('active');
+    });
+
+    if (event.type === 'contextmenu') {
+      event.preventDefault();
+
+      document.getElementById('contextmenu-create--separator')!.style.display = 'block';
+      document.getElementById('contextmenu-edit--separator')!.style.display = 'block';
+      document.getElementById('contextmenu-delete--separator')!.style.display = 'block';
+      document.getElementById('contextmenu-edit')!.style.display = 'block';
+      document.getElementById('contextmenu-duplicate')!.style.display = 'block';
+      document.getElementById('contextmenu-rename')!.style.display = 'block';
+      document.getElementById('contextmenu-share')!.style.display = 'block';
+
+      if ((event.target as HTMLElement).classList.contains('ds-list')) {
+        document.getElementById('contextmenu-edit--separator')!.style.display = 'none';
+        document.getElementById('contextmenu-delete--separator')!.style.display = 'none';
+      } else if ((event.target as HTMLElement).classList.contains('ds-list--entity')) {
+        event.target.classList.add('active');
+        document.getElementById('contextmenu-create--separator')!.style.display = 'none';
+      }
+
+      document.getElementById('contextmenu')!.style.top = event.layerY + 'px';
+      document.getElementById('contextmenu')!.style.left = event.layerX + 'px';
+      document.getElementById('contextmenu')!.classList.remove('ds-contextmenu--closed');
+      document.getElementById('contextmenu')!.classList.add('ds-contextmenu--open');
+      document.getElementById('contextmenu')!.style.maxHeight = '100%';
+    }
   }
 }
