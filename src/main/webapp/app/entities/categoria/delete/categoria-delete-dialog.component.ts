@@ -33,7 +33,6 @@ export class CategoriaDeleteDialogComponent {
   confirmDelete(categoria: ICategoria): void {
     const categoriaNula = new Categoria(0, 'Otra', EstadoCategoria.ACTIVE);
     this.getEncuestas();
-    debugger;
     if (categoria.estado == EstadoCategoria.INACTIVE) {
       categoria.estado = EstadoCategoria.ACTIVE;
     } else {
