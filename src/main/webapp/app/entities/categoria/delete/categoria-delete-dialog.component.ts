@@ -35,7 +35,6 @@ export class CategoriaDeleteDialogComponent {
       categoria.estado = EstadoCategoria.ACTIVE;
     } else {
       this.encuestas!.forEach(encuesta => {
-        debugger;
         if (encuesta.categoria != null && encuesta.categoria!.id === categoria.id) {
           encuesta.categoria = categoriaNula;
           this.encuestaService.update(encuesta);
