@@ -6,6 +6,7 @@ import { IParametroAplicacion } from '../parametro-aplicacion.model';
 @Component({
   selector: 'jhi-parametro-aplicacion-detail',
   templateUrl: './parametro-aplicacion-detail.component.html',
+  styleUrls: ['./parametro-aplicacion-detail.component.scss'],
 })
 export class ParametroAplicacionDetailComponent implements OnInit {
   parametroAplicacion: IParametroAplicacion | null = null;

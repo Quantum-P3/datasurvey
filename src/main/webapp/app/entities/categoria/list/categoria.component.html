@@ -15,9 +15,15 @@
     </div>
   </h2>
 
-  <jhi-alert-error></jhi-alert-error>
+  <!--  <div class="alert alert-success" *ngIf="success" jhiTranslate="dataSurveyApp.categoria.delete.error">
 
-  <jhi-alert></jhi-alert>
+  </div>-->
+
+  <div>
+    <jhi-alert class="alert-success"></jhi-alert>
+  </div>
+
+  <div class="alert alert-success" *ngIf="success" jhiTranslate="dataSurveyApp.categoria.delete.success"></div>
 
   <div class="alert alert-warning" id="no-result" *ngIf="categorias?.length === 0">
     <span jhiTranslate="dataSurveyApp.categoria.home.notFound">No categorias found</span>
@@ -40,9 +46,9 @@
       </thead>
       <tbody>
         <tr *ngFor="let categoria of categorias | filter: 'nombre':searchString; trackBy: trackId" data-cy="entityTable">
-          <td>{{ categoria.nombre }}</td>
-          <td jhiTranslate="{{ 'dataSurveyApp.EstadoCategoria.' + categoria.estado }}">{{ categoria.estado }}</td>
-          <td class="text-right">
+          <td *ngIf="categoria.id != 0">{{ categoria.nombre }}</td>
+          <td *ngIf="categoria.id != 0" jhiTranslate="{{ 'dataSurveyApp.EstadoCategoria.' + categoria.estado }}">{{ categoria.estado }}</td>
+          <td *ngIf="categoria.id != 0" class="text-right">
             <div class="btn-group">
               <button
                 type="submit"
@@ -50,13 +56,11 @@
                 class="btn-sm ds-btn ds-btn--primary"
                 data-cy="entityEditButton"
               >
-                <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>
 
-              <button type="submit" (click)="delete(categoria)" class="btn-sm ds-btn ds-btn--danger" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              <button type="submit" (click)="toggleStatus(categoria)" class="btn-sm ds-btn ds-btn--toggle" data-cy="entityDeleteButton">
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.toggleStatus">Toggle Status</span>
               </button>
             </div>
           </td>

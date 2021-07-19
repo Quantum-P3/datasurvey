@@ -51,6 +51,9 @@ export class EncuestaUpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ encuesta }) => {
+      console.log(this.activatedRoute.data);
+      console.log(encuesta);
+
       if (encuesta.id === undefined) {
         const today = dayjs().startOf('day');
         encuesta.fechaCreacion = today;

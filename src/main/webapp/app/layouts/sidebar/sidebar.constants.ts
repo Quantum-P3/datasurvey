@@ -47,7 +47,7 @@ export const ADMIN_ROUTES: RouteInfo[] = [
     icontype: 'nc-icon nc-single-02',
   },
   {
-    path: '/parametro-aplicacion',
+    path: '/parametro-aplicacion/1/edit',
     title: 'Configuración',
     type: 'link',
     icontype: 'nc-icon nc-settings-gear-65',
