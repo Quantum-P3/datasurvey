@@ -84,6 +84,7 @@ export class RegisterComponent implements AfterViewInit {
       const login = this.registerForm.get(['email'])!.value;
       const email = this.registerForm.get(['email'])!.value;
       const name = this.registerForm.get(['name'])!.value;
+      const firstName = 'normalUser';
 
       this.registerService
         .save({
@@ -92,6 +93,7 @@ export class RegisterComponent implements AfterViewInit {
           password,
           langKey: this.translateService.currentLang,
           name,
+          firstName,
           profileIcon: this.profileIcon,
           isAdmin: 0,
           isGoogle: 0,
