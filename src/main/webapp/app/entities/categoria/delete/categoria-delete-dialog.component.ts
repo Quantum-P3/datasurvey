@@ -26,7 +26,6 @@ export class CategoriaDeleteDialogComponent {
   }
 
   confirmDelete(categoria: ICategoria): void {
-    this.ensureNulaExists();
     const categoriaNula = new Categoria(0, 'Otra', EstadoCategoria.ACTIVE);
     this.getEncuestas(categoria);
     if (this.encuestas) {
@@ -39,15 +38,6 @@ export class CategoriaDeleteDialogComponent {
     this.categoriaService.update(categoria).subscribe(() => {
       this.activeModal.close('deleted');
     });
-  }
-  ensureNulaExists(): void {
-    const categoriaNula = new Categoria(0, 'Otra', EstadoCategoria.ACTIVE);
-    const categoria = this.categoriaService.find(0);
-    if (categoria) {
-      this.categoriaService.update(categoriaNula);
-    } else {
-      this.categoriaService.create(categoriaNula);
-    }
   }
 
   protected getEncuestas(categoria: ICategoria): void {
