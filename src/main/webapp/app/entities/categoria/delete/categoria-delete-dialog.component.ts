@@ -29,13 +29,8 @@ export class CategoriaDeleteDialogComponent {
 
   confirmDelete(categoria: ICategoria): void {
     const categoriaNula = new Categoria(0, 'Otra', EstadoCategoria.ACTIVE);
-    this.getEncuestas(categoria);
-    if (this.encuestas) {
-      this.encuestas!.forEach(encuesta => {
-        encuesta.categoria = categoriaNula;
-        this.encuestaService.update(encuesta);
-      });
-    }
+    this.getEncuestas();
+    debugger;
     if (categoria.estado == EstadoCategoria.INACTIVE) {
       categoria.estado = EstadoCategoria.ACTIVE;
     } else {
@@ -46,7 +41,7 @@ export class CategoriaDeleteDialogComponent {
     });
   }
 
-  protected getEncuestas(categoria: ICategoria): void {
+  getEncuestas(): void {
     this.encuestaService.query().subscribe(res => {
       this.encuestas = res.body ?? [];
     });
