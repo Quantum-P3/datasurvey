@@ -66,6 +66,8 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   categoriasSharedCollection: ICategoria[] = [];
   usuarioExtrasSharedCollection: IUsuarioExtra[] = [];
 
+  public searchEncuesta: string;
+
   editForm = this.fb.group({
     id: [],
     nombre: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
@@ -93,7 +95,9 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     protected fb: FormBuilder,
     protected accountService: AccountService,
     protected router: Router
-  ) {}
+  ) {
+    this.searchEncuesta = '';
+  }
 
   resetForm(): void {
     this.editForm.reset();
@@ -115,6 +119,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.searchEncuesta = '';
     document.body.addEventListener('click', e => {
       document.getElementById('contextmenu')!.classList.add('ds-contextmenu--closed');
       document.getElementById('contextmenu')!.classList.remove('ds-contextmenu--open');
