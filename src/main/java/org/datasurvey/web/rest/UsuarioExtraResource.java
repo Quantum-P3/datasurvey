@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.datasurvey.domain.UsuarioExtra;
 import org.datasurvey.repository.UsuarioExtraRepository;
+import org.datasurvey.service.MailService;
 import org.datasurvey.service.UsuarioExtraQueryService;
 import org.datasurvey.service.UsuarioExtraService;
 import org.datasurvey.service.criteria.UsuarioExtraCriteria;
@@ -41,14 +42,18 @@ public class UsuarioExtraResource {
 
     private final UsuarioExtraQueryService usuarioExtraQueryService;
 
+    private final MailService mailService;
+
     public UsuarioExtraResource(
         UsuarioExtraService usuarioExtraService,
         UsuarioExtraRepository usuarioExtraRepository,
-        UsuarioExtraQueryService usuarioExtraQueryService
+        UsuarioExtraQueryService usuarioExtraQueryService,
+        MailService mailService
     ) {
         this.usuarioExtraService = usuarioExtraService;
         this.usuarioExtraRepository = usuarioExtraRepository;
         this.usuarioExtraQueryService = usuarioExtraQueryService;
+        this.mailService = mailService;
     }
 
     /**
@@ -99,6 +104,38 @@ public class UsuarioExtraResource {
         }
 
         UsuarioExtra result = usuarioExtraService.save(usuarioExtra);
+
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, usuarioExtra.getId().toString()))
+            .body(result);
+    }
+
+    @PutMapping("/usuario-extras-estado/{id}")
+    public ResponseEntity<UsuarioExtra> updateUsuarioExtraEstado(
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody UsuarioExtra usuarioExtra
+    ) throws URISyntaxException {
+        log.debug("REST request to update UsuarioExtra : {}, {}", id, usuarioExtra);
+        if (usuarioExtra.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, usuarioExtra.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!usuarioExtraRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        UsuarioExtra result = usuarioExtraService.save(usuarioExtra);
+
+        if (usuarioExtra.getEstado().name().equals("SUSPENDED")) {
+            mailService.sendSuspendedAccountMail(usuarioExtra); //se manda el correo de la suspecion
+        } else {
+            mailService.sendActivatedAccountMail(usuarioExtra); //se manda el correo de reactivacion
+        }
+
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, usuarioExtra.getId().toString()))
