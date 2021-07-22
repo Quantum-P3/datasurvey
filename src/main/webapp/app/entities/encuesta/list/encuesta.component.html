@@ -35,10 +35,41 @@
     <span jhiTranslate="dataSurveyApp.encuesta.home.notFound">No encuestas found</span>
   </div>
   <div class="table-responsive" id="entities" *ngIf="encuestas && encuestas.length > 0">
-    <form class="ds-form">
+    <form class="ds-form d-inline">
       <div class="input-group">
-        <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
-        <input type="text" name="searchEncuesta" placeholder="Buscar..." [(ngModel)]="searchEncuesta" />
+        <div class="col-3">
+          <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+          <input type="text" name="searchEncuesta" placeholder="Buscar por nombre..." [(ngModel)]="searchEncuesta" />
+        </div>
+        <div class="col-3">
+          <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+          <select name="accesoEncuestas" id="accesoEncuesta" [(ngModel)]="accesoEncuesta" style="width: 200px">
+            <option value="" selected="selected" disabled="disabled">Filtrar por acceso</option>
+            <option value="">Todos Accesos</option>
+            <option value="Public">Públicas</option>
+            <option value="Private">Privadas</option>
+          </select>
+        </div>
+        <div class="col-3">
+          <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+          <select name="estadoEncuesta" id="estadoEncuesta" [(ngModel)]="estadoEncuesta" style="width: 200px">
+            <option value="" selected="selected" disabled="disabled">Filtrar por estado</option>
+            <option value="">Todos Estados</option>
+            <option value="Draft">Borradores</option>
+            <option value="Active">Activadas</option>
+          </select>
+        </div>
+        <!--<div class="col-3">
+          <div class="input-group-addon "><i class="glyphicon glyphicon-search"></i></div>
+          <select id="categoriaEncuesta"  name="categoriaEncuesta" [(ngModel)]="categoriaEncuesta">
+            <option [ngValue]="null" selected>Filtre por categoría</option>
+            <option
+              *ngFor="let categoriaOption of categoriasSharedCollection; trackBy: trackCategoriaById"
+              [ngValue]="categoriaOption.nombre"    >
+              {{ categoriaOption.nombre }}
+            </option>
+          </select>
+        </div>-->
       </div>
     </form>
 
@@ -90,7 +121,10 @@
 
       <div
         class="ds-list--entity"
-        *ngFor="let encuesta of encuestas | filter: 'nombre':searchEncuesta; trackBy: trackId"
+        *ngFor="
+          let encuesta of encuestas | filter: 'nombre':searchEncuesta | filter: 'acceso':accesoEncuesta | filter: 'estado':estadoEncuesta;
+          trackBy: trackId
+        "
         (dblclick)="openSurvey($event)"
         (click)="selectSurvey($event)"
         [attr.data-id]="encuesta.id"
