@@ -66,6 +66,9 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   categoriasSharedCollection: ICategoria[] = [];
   usuarioExtrasSharedCollection: IUsuarioExtra[] = [];
 
+  selectedSurvey: number | null = null;
+  encuestaencontrada: IEncuesta | null = null;
+
   editForm = this.fb.group({
     id: [],
     nombre: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
@@ -176,6 +179,49 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
         this.loadAll();
       }
     });
+  }
+
+  deleteSurvey(): void {
+    if (this.selectedSurvey != null) {
+      this.getEncuesta(this.selectedSurvey)
+        .pipe(
+          finalize(() => {
+            const modalRef = this.modalService.open(EncuestaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+            modalRef.componentInstance.encuesta = this.encuestaencontrada;
+
+            modalRef.closed.subscribe(reason => {
+              if (reason === 'deleted') {
+                this.loadAll();
+              }
+            });
+          })
+        )
+        .subscribe(data => {
+          console.log(data);
+          this.encuestaencontrada = data;
+        });
+
+      /*const modalRef = this.modalService.open(EncuestaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+      modalRef.componentInstance.encuesta = this.getEncuesta(this.selectedSurvey)
+        .pipe(finalize(() =>
+          modalRef.closed.subscribe(reason => {
+            if (reason === 'deleted') {
+              this.loadAll();
+            }
+          })
+        ))
+        .subscribe(data=> {
+          console.log(data);
+          //this.encuestaencontrada = data;
+        });
+*/
+
+      // unsubscribe not needed because closed completes on modal close
+    }
+  }
+
+  getEncuesta(id: number) {
+    return this.encuestaService.findEncuesta(id);
   }
 
   previousState(): void {
@@ -350,6 +396,9 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       } else if ((event.target as HTMLElement).classList.contains('ds-list--entity')) {
         event.target.classList.add('active');
         document.getElementById('contextmenu-create--separator')!.style.display = 'none';
+
+        this.selectedSurvey = Number(event.target.dataset.id);
+        //this.selectedSurvey = event.target.dataset.encuesta;
       }
 
       document.getElementById('contextmenu')!.style.top = event.layerY + 'px';

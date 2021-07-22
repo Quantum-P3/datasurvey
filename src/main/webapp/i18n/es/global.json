@@ -136,7 +136,7 @@
       "value": "Valor"
     },
     "delete": {
-      "title": "Confirmar operación de borrado"
+      "title": "Confirmar de operación"
     },
     "validation": {
       "required": "Este campo es obligatorio.",

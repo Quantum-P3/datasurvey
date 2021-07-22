@@ -71,7 +71,9 @@
         </div>
         <div class="ds-contextmenu__divider" id="contextmenu-delete--separator">
           <li>
-            <button type="button"><fa-icon class="contextmenu__icon" [icon]="faTrashAlt"></fa-icon>Eliminar</button>
+            <button type="button" (click)="deleteSurvey()">
+              <fa-icon class="contextmenu__icon" [icon]="faTrashAlt"></fa-icon>Eliminar
+            </button>
           </li>
         </div>
       </ul>
@@ -82,6 +84,7 @@
       *ngFor="let encuesta of encuestas; trackBy: trackId"
       (dblclick)="openSurvey($event)"
       (click)="selectSurvey($event)"
+      [hidden]="encuesta.estado == 'DELETED'"
       [attr.data-id]="encuesta.id"
     >
       <div class="entity-header">
@@ -194,7 +197,7 @@
             <fa-icon icon="pencil-alt"></fa-icon>
             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
           </button>
-          
+
           <button type="submit" (click)="delete(encuesta)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
             <fa-icon icon="times"></fa-icon>
             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
