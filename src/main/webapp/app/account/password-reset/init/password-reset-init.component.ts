@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { PasswordResetInitService } from './password-reset-init.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { EMAIL_NOT_EXISTS_TYPE } from '../../../config/error.constants';
+import { EMAIL_NOT_EXISTS_TYPE, USER_IS_GOOGLE_TYPE } from '../../../config/error.constants';
 
 @Component({
   selector: 'jhi-password-reset-init',
@@ -13,6 +13,7 @@ export class PasswordResetInitComponent implements AfterViewInit {
   @ViewChild('email', { static: false })
   email?: ElementRef;
   errorEmailNotExists = false;
+  errorUserIsGoogle = false;
   error = false;
   success = false;
   resetRequestForm = this.fb.group({
@@ -29,6 +30,7 @@ export class PasswordResetInitComponent implements AfterViewInit {
 
   requestReset(): void {
     this.errorEmailNotExists = false;
+    this.errorUserIsGoogle = false;
     this.passwordResetInitService.save(this.resetRequestForm.get(['email'])!.value).subscribe(
       () => (this.success = true),
       response => this.processError(response)
@@ -42,6 +44,8 @@ export class PasswordResetInitComponent implements AfterViewInit {
   processError(response: HttpErrorResponse): void {
     if (response.status === 400 && response.error.type === EMAIL_NOT_EXISTS_TYPE) {
       this.errorEmailNotExists = true;
+    } else if (response.status === 400 && response.error.type === USER_IS_GOOGLE_TYPE) {
+      this.errorUserIsGoogle = true;
     } else {
       this.error = true;
     }
