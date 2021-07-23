@@ -13,6 +13,7 @@ public final class ErrorConstants {
     public static final URI EMAIL_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/email-already-used");
     public static final URI LOGIN_ALREADY_USED_TYPE = URI.create(PROBLEM_BASE_URL + "/login-already-used");
     public static final URI EMAIL_NOT_EXISTS_TYPE = URI.create(PROBLEM_BASE_URL + "/email-not-exists");
+    public static final URI USER_IS_GOOGLE_TYOE = URI.create(PROBLEM_BASE_URL + "/user-is-google");
 
     private ErrorConstants() {}
 }

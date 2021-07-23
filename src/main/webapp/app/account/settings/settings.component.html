@@ -175,7 +175,7 @@
           <p class="ds-title">Perfil</p>
         </div>
         <div>
-          <p class="ds-subtitle">Información general de su usuario, el correo electrónico es su identificador en DataSurvey.</p>
+          <p class="ds-subtitle">Información general de su usuario, el correo electrónico es su identificador en DataSurvey</p>
         </div>
       </div>
     </div>
@@ -246,7 +246,7 @@
       </div>
       <div class="row mb-4">
         <div class="form-group w-100">
-          <label for="iconoPerfil">Ícono de perfil</label>
+          <label>Ícono de perfil</label>
           <div class="d-flex">
             <jhi-swiper style="width: 22.5rem !important" [data]="profileIcons" (onSelectEvent)="selectIcon($event)"></jhi-swiper>
           </div>
@@ -284,7 +284,7 @@
         </div>
         <div>
           <p class="ds-subtitle">
-            Utilice una contraseña segura al realizar el cambio, este dato debe ser secreto ya que provee acceso a su cuenta.
+            Utilice una contraseña segura al realizar el cambio, este dato debe ser secreto ya que provee acceso a su cuenta
           </p>
         </div>
 
@@ -305,19 +305,35 @@
       <div class="row mb-3 pb-3" style="border-bottom: 1px solid #e7ebf3">
         <div
           class="alert alert-danger"
-          *ngIf="errorPassword && !doNotMatch && !successPassword"
+          *ngIf="errorPassword && !doNotMatch && !successPassword && !samePassword"
           jhiTranslate="global.messages.info.authenticated.passwordForm"
           data-cy="loginError"
         ></div>
 
-        <div *ngIf="successPassword" class="alert alert-success alert-dismissible fade show" role="alert">
+        <div
+          *ngIf="successPassword && !errorPassword && !samePassword && !doNotMatch"
+          class="alert alert-success alert-dismissible fade show"
+          role="alert"
+        >
           Sus contraseña fue actualizada de manera exitosa
           <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>-->
         </div>
 
-        <div class="alert alert-danger" *ngIf="doNotMatch && !successPassword" jhiTranslate="global.messages.error.dontmatch">
+        <div
+          class="alert alert-danger"
+          *ngIf="doNotMatch && !successPassword && !errorPassword"
+          jhiTranslate="global.messages.error.dontmatch"
+        >
+          The password and its confirmation do not match!
+        </div>
+
+        <div
+          class="alert alert-danger"
+          *ngIf="samePassword && !successPassword && !errorPassword && !doNotMatch"
+          jhiTranslate="global.messages.error.samePassword"
+        >
           The password and its confirmation do not match!
         </div>
 
@@ -477,7 +493,7 @@
           type="submit"
           id="save-entity"
           data-cy="entityCreateSaveButton"
-          [disabled]="isSaving"
+          [disabled]="passwordForm.invalid || isSaving"
           class="ds-btn ds-btn--primary"
         >
           <span jhiTranslate="entity.action.save">Save</span>

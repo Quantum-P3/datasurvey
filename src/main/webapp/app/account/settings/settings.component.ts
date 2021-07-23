@@ -26,6 +26,7 @@ export class SettingsComponent implements OnInit {
   isSaving = false;
   success = false;
   successPassword = false;
+  samePassword = false;
   error = false;
   errorPassword = false;
   doNotMatch = false;
@@ -49,8 +50,8 @@ export class SettingsComponent implements OnInit {
 
   //form de la contraseña
   passwordForm = this.fb.group({
-    password: [null, [Validators.required], Validators.minLength(8), Validators.maxLength(50)],
-    passwordNew: [null, [Validators.required], Validators.minLength(8), Validators.maxLength(50)],
+    password: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
+    passwordNew: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
     passwordNewConfirm: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
   });
 
@@ -120,7 +121,7 @@ export class SettingsComponent implements OnInit {
       }
     });
 
-    console.log(this.isGoogle);
+    //console.log(this.isGoogle);
 
     // this.activatedRoute.data.subscribe(({ usuarioExtra }) => {
 
@@ -143,14 +144,25 @@ export class SettingsComponent implements OnInit {
   }
 
   savePassword(): void {
+    this.successPassword = false;
+    this.doNotMatch = false;
+    this.samePassword = false;
+    this.errorPassword = false;
+
     const passwordNew = this.passwordForm.get(['passwordNew'])!.value;
-    if (passwordNew !== this.passwordForm.get(['passwordNewConfirm'])!.value) {
-      this.doNotMatch = true;
+    const passwordOld = this.passwordForm.get(['password'])!.value;
+    if (passwordOld == passwordNew) {
+      this.samePassword = true;
     } else {
-      this.passwordService.save(this.passwordForm.get(['passwordNew'])!.value, this.passwordForm.get(['password'])!.value).subscribe(
-        () => (this.successPassword = true),
-        () => (this.errorPassword = true)
-      );
+      if (passwordNew !== this.passwordForm.get(['passwordNewConfirm'])!.value) {
+        (this.doNotMatch = true), (this.samePassword = false);
+      } else {
+        this.passwordService.save(passwordNew, passwordOld).subscribe(
+          () => (this.successPassword = true),
+
+          () => (this.errorPassword = true)
+        );
+      }
     }
   }
 
@@ -175,15 +187,16 @@ export class SettingsComponent implements OnInit {
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IUsuarioExtra>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
-      () => (
-        (this.success = true),
-        this.router.navigate(['account/settings']).then(() => {
-          window.location.reload();
-        })
-      ),
+      () => ((this.success = true), this.windowReload()),
       response => this.processError(response)
     );
   }
+  windowReload() {
+    this.router.navigate(['account/settings']).then(() => {
+      window.location.reload();
+    });
+  }
+
   processError(response: HttpErrorResponse): void {
     if (response.status === 400) {
       this.error = true;
@@ -217,8 +230,10 @@ export class SettingsComponent implements OnInit {
 
     // Update swiper
     this.profileIcon = usuarioExtra.iconoPerfil!;
+
+    console.log(this.profileIcon);
     this.profileIcons.forEach(icon => {
-      if (parseInt(icon.name.split('C')[1]) === this.profileIcon) {
+      if (icon.name.split('C')[1] === this.profileIcon) {
         icon.class = 'active';
       }
     });
@@ -269,7 +284,7 @@ export class SettingsComponent implements OnInit {
       event.target.classList.add('active');
       this.profileIcon = +event.target.getAttribute('id')! + 1;
 
-      console.log(this.profileIcon);
+      //console.log(this.profileIcon);
     }
   }
 }

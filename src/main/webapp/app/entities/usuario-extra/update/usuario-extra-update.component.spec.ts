@@ -63,6 +63,7 @@ describe('Component Tests', () => {
           login: '',
           langKey: 'es',
           name: '',
+          firstName: 'userNormal',
           profileIcon: 1,
           isAdmin: 1,
           isGoogle: 0,

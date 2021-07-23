@@ -168,7 +168,11 @@ public class AccountResource {
     public void requestPasswordReset(@RequestBody String mail) {
         Optional<User> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {
-            mailService.sendPasswordResetMail(user.get());
+            if (user.get().getFirstName() == null || (!user.get().getFirstName().equals("IsGoogle"))) {
+                mailService.sendPasswordResetMail(user.get());
+            } else {
+                throw new UserIsGoogleException();
+            }
         } else {
             // Pretend the request has been successful to prevent checking which emails really exist
             // but log that an invalid attempt has been made
