@@ -135,6 +135,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   login(): void {
+    debugger;
+
     this.loginService
       .login({
         username: this.loginForm.get('username')!.value,
