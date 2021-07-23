@@ -14,7 +14,7 @@ const encuestaRoute: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
-    path: ':id/view',
+    path: ':id/preview',
     component: EncuestaDetailComponent,
     resolve: {
       encuesta: EncuestaRoutingResolveService,
@@ -30,7 +30,7 @@ const encuestaRoute: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
-    path: ':id/preview',
+    path: ':id/edit',
     component: EncuestaUpdateComponent,
     resolve: {
       encuesta: EncuestaRoutingResolveService,

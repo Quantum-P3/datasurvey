@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<!--<div class="row justify-content-center">
   <div class="col-8">
     <div *ngIf="encuesta">
       <h2 data-cy="encuestaDetailsHeading"><span jhiTranslate="dataSurveyApp.encuesta.detail.title">Encuesta</span></h2>
@@ -75,6 +75,77 @@
       <button type="button" [routerLink]="['/encuesta', encuesta.id, 'edit']" class="btn btn-primary">
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
       </button>
+    </div>
+  </div>
+</div>-->
+
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-8">
+      <div *ngIf="encuesta">
+        <h2 data-cy="encuestaDetailsHeading"><span jhiTranslate="dataSurveyApp.encuesta.detail.title">Encuesta</span></h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-around">
+    <div class="col-12">
+      <div *ngIf="encuesta">
+        <div class="row">
+          <div class="col-5">
+            <h2 class="text-center">{{ encuesta.nombre }}</h2>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-5">
+            <div class="alert alert-warning" id="no-result" *ngIf="ePreguntas?.length === 0">
+              <span>No se encontraron preguntas</span>
+            </div>
+
+            <div id="preguntas" *ngIf="ePreguntas && ePreguntas.length > 0">
+              <div>
+                <div *ngFor="let ePregunta of ePreguntas; let i = index; trackBy: trackId" [attr.data-index]="ePregunta.id">
+                  <span>{{ ePregunta.nombre }} | </span>
+                  <span>{{ ePregunta.tipo }} | </span>
+                  <span>{{ ePregunta.opcional }}</span>
+
+                  <ng-container *ngIf="ePregunta.tipo">
+                    <ng-container *ngFor="let ePreguntaOpcion of ePreguntasOpciones; let j = index; trackBy: trackId">
+                      <ng-container *ngIf="ePregunta.id == ePreguntaOpcion[j].epreguntaCerrada.id">
+                        <div *ngFor="let ePreguntaOpcion2 of ePreguntaOpcion; let k = index; trackBy: trackId">
+                          <input id="{{ ePregunta.id }}-{{ ePreguntaOpcion2.id }}" type="checkbox" />
+                          <label for="{{ ePregunta.id }}-{{ ePreguntaOpcion2.id }}">{{ ePreguntaOpcion2.nombre }}</label>
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                  <textarea *ngIf="!ePregunta.tipo" name="" id="" cols="30" rows="10"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <div *ngIf="encuesta">
+          <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaCreacion">Fecha Creacion</span></dt>
+          <dd>
+            <span>{{ encuesta.fechaCreacion | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaPublicacion">Fecha Publicacion</span></dt>
+          <dd>
+            <span>{{ encuesta.fechaPublicacion | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaFinalizar">Fecha Finalizar</span></dt>
+          <dd>
+            <span>{{ encuesta.fechaFinalizar | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaFinalizada">Fecha Finalizada</span></dt>
+          <dd>
+            <span>{{ encuesta.fechaFinalizada | formatMediumDatetime }}</span>
+          </dd>
+        </div>
+      </div>
     </div>
   </div>
 </div>

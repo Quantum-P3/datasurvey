@@ -63,7 +63,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   isLoading = false;
 
   isSaving = false;
-  selectedIdSurvey: number = 0;
+  selectedSurvey: number = 0;
 
   categoriasSharedCollection: ICategoria[] = [];
   usuarioExtrasSharedCollection: IUsuarioExtra[] = [];
@@ -323,7 +323,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   openPreview() {
-    const surveyId = this.selectedIdSurvey;
+    const surveyId = this.selectedSurvey;
     this.router.navigate(['/encuesta', surveyId, 'preview']);
   }
 
@@ -347,7 +347,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       document.getElementById('contextmenu-edit--separator')!.style.display = 'block';
       document.getElementById('contextmenu-delete--separator')!.style.display = 'block';
       document.getElementById('contextmenu-edit')!.style.display = 'block';
-      document.getElementById('contextmenu-duplicate')!.style.display = 'block';
+      document.getElementById('contextmenu-preview')!.style.display = 'block';
       document.getElementById('contextmenu-rename')!.style.display = 'block';
       document.getElementById('contextmenu-share')!.style.display = 'block';
 
@@ -357,7 +357,8 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       } else if ((event.target as HTMLElement).classList.contains('ds-list--entity')) {
         event.target.classList.add('active');
         document.getElementById('contextmenu-create--separator')!.style.display = 'none';
-        this.selectedIdSurvey = Number(event.target.dataset.id);
+
+        this.selectedSurvey = Number(event.target.dataset.id);
       }
 
       document.getElementById('contextmenu')!.style.top = event.layerY + 'px';
