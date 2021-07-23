@@ -1,3 +1,4 @@
+import { EPreguntaAbiertaService } from './../../e-pregunta-abierta/service/e-pregunta-abierta.service';
 import { EPreguntaCerradaOpcionService } from './../../e-pregunta-cerrada-opcion/service/e-pregunta-cerrada-opcion.service';
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
@@ -65,7 +66,8 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     protected fb: FormBuilder,
     protected modalService: NgbModal,
     protected ePreguntaCerradaService: EPreguntaCerradaService,
-    protected ePreguntaCerradaOpcionService: EPreguntaCerradaOpcionService
+    protected ePreguntaCerradaOpcionService: EPreguntaCerradaOpcionService,
+    protected ePreguntaAbiertaService: EPreguntaAbiertaService
   ) {}
 
   loadAll(): void {
@@ -156,7 +158,6 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     const id = event.target.dataset.id;
     if (event.target.dataset.type) {
       // Delete closed question
-      console.log('closed', id);
       const questionElement = (event.target as HTMLElement).parentElement?.parentElement;
       const optionIdsToDelete: number[] = [];
 
@@ -173,13 +174,16 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
       this.ePreguntaCerradaOpcionService.deleteMany(optionIdsToDelete).subscribe(e => {
         // Delete question
         this.ePreguntaCerradaService.delete(id).subscribe(e => {
-          console.log('DELETED QUESTION: ' + id);
+          console.log('DELETED CLOSED QUESTION: ' + id);
           this.loadAll();
         });
       });
     } else {
       // Delete open question
-      console.log('open', id);
+      this.ePreguntaAbiertaService.delete(id).subscribe(e => {
+        console.log('DELETED OPEN QUESTION: ' + id);
+        this.loadAll();
+      });
     }
   }
 
