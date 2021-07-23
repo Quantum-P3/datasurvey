@@ -2,6 +2,7 @@ package org.datasurvey.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -76,7 +77,7 @@ public class EPreguntaCerradaOpcionResource {
     /**
      * {@code PUT  /e-pregunta-cerrada-opcions/:id} : Updates an existing ePreguntaCerradaOpcion.
      *
-     * @param id the id of the ePreguntaCerradaOpcion to save.
+     * @param id                     the id of the ePreguntaCerradaOpcion to save.
      * @param ePreguntaCerradaOpcion the ePreguntaCerradaOpcion to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated ePreguntaCerradaOpcion,
      * or with status {@code 400 (Bad Request)} if the ePreguntaCerradaOpcion is not valid,
@@ -110,7 +111,7 @@ public class EPreguntaCerradaOpcionResource {
     /**
      * {@code PATCH  /e-pregunta-cerrada-opcions/:id} : Partial updates given fields of an existing ePreguntaCerradaOpcion, field will ignore if it is null
      *
-     * @param id the id of the ePreguntaCerradaOpcion to save.
+     * @param id                     the id of the ePreguntaCerradaOpcion to save.
      * @param ePreguntaCerradaOpcion the ePreguntaCerradaOpcion to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated ePreguntaCerradaOpcion,
      * or with status {@code 400 (Bad Request)} if the ePreguntaCerradaOpcion is not valid,
@@ -194,6 +195,18 @@ public class EPreguntaCerradaOpcionResource {
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
+    }
+
+    @PostMapping("/e-pregunta-cerrada-opcions/deleteMany")
+    public ResponseEntity<Void> deleteManyEPreguntaCerradaOpcion(@Valid @RequestBody int[] ids) {
+        for (int id : ids) {
+            ePreguntaCerradaOpcionService.delete((long) id);
+            System.out.println(id);
+        }
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, Arrays.toString(ids)))
             .build();
     }
 }

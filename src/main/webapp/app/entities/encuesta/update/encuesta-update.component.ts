@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { EPreguntaCerradaOpcionService } from './../../e-pregunta-cerrada-opcion/service/e-pregunta-cerrada-opcion.service';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -20,11 +21,15 @@ import { IEPreguntaCerrada } from 'app/entities/e-pregunta-cerrada/e-pregunta-ce
 import { EPreguntaCerradaService } from 'app/entities/e-pregunta-cerrada/service/e-pregunta-cerrada.service';
 import { EPreguntaCerradaDeleteDialogComponent } from 'app/entities/e-pregunta-cerrada/delete/e-pregunta-cerrada-delete-dialog.component';
 
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
 @Component({
   selector: 'jhi-encuesta-update',
   templateUrl: './encuesta-update.component.html',
 })
-export class EncuestaUpdateComponent implements OnInit {
+export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
+  faTimes = faTimes;
+
   isSaving = false;
 
   categoriasSharedCollection: ICategoria[] = [];
@@ -58,7 +63,9 @@ export class EncuestaUpdateComponent implements OnInit {
     protected usuarioExtraService: UsuarioExtraService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected ePreguntaCerradaService: EPreguntaCerradaService,
+    protected ePreguntaCerradaOpcionService: EPreguntaCerradaOpcionService
   ) {}
 
   loadAll(): void {
@@ -104,6 +111,10 @@ export class EncuestaUpdateComponent implements OnInit {
     });
   }
 
+  ngAfterViewChecked(): void {
+    this.initListeners();
+  }
+
   trackId(index: number, item: IEPreguntaCerrada): number {
     return item.id!;
   }
@@ -117,6 +128,59 @@ export class EncuestaUpdateComponent implements OnInit {
         this.loadAll();
       }
     });
+  }
+
+  initListeners(): void {
+    const checkboxes = document.getElementsByClassName('ds-survey--checkbox');
+    for (let i = 0; i < checkboxes.length; i++) {
+      checkboxes[i].addEventListener('click', e => {
+        console.log(e);
+        if ((e.target as HTMLInputElement).checked) {
+          (e.target as HTMLElement).offsetParent!.classList.add('ds-survey--closed-option--active');
+        } else {
+          (e.target as HTMLElement).offsetParent!.classList.remove('ds-survey--closed-option--active');
+        }
+      });
+    }
+  }
+
+  previousState(): void {
+    window.history.back();
+  }
+
+  publishSurvey(): void {}
+
+  finishSurvey(): void {}
+
+  deleteQuestion(event: any) {
+    const id = event.target.dataset.id;
+    if (event.target.dataset.type) {
+      // Delete closed question
+      console.log('closed', id);
+      const questionElement = (event.target as HTMLElement).parentElement?.parentElement;
+      const optionIdsToDelete: number[] = [];
+
+      // Get options IDs
+      questionElement?.childNodes.forEach((e, i) => {
+        if (e.nodeName !== 'DIV') return;
+        if (i === 0) return;
+        if ((e as HTMLElement).dataset.id === undefined) return;
+        let optionId = (e as HTMLElement).dataset.id;
+        optionIdsToDelete.push(+optionId!);
+      });
+
+      // Delete question options
+      this.ePreguntaCerradaOpcionService.deleteMany(optionIdsToDelete).subscribe(e => {
+        // Delete question
+        this.ePreguntaCerradaService.delete(id).subscribe(e => {
+          console.log('DELETED QUESTION: ' + id);
+          this.loadAll();
+        });
+      });
+    } else {
+      // Delete open question
+      console.log('open', id);
+    }
   }
 
   // previousState(): void {

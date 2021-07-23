@@ -49,6 +49,10 @@ export class EPreguntaCerradaOpcionService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  deleteMany(ids: number[]): Observable<EntityResponseType> {
+    return this.http.post<IEPreguntaCerradaOpcion>(`${this.resourceUrl}/deleteMany`, ids, { observe: 'response' });
+  }
+
   addEPreguntaCerradaOpcionToCollectionIfMissing(
     ePreguntaCerradaOpcionCollection: IEPreguntaCerradaOpcion[],
     ...ePreguntaCerradaOpcionsToCheck: (IEPreguntaCerradaOpcion | null | undefined)[]

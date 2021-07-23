@@ -68,6 +68,15 @@
     background-color: #f7f9ff;
     color: #d33232;
   }
+
+  &--full {
+    background-color: #e73636;
+    color: #fff;
+
+    &:hover {
+      background-color: #d33232;
+    }
+  }
 }
 
 .ds-btn--google {
