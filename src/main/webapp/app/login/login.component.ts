@@ -81,7 +81,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   authenticacionGoogle(): void {
-    this.loginService.login({ username: this.user.email, password: this.user.id, rememberMe: true }).subscribe(
+    this.loginService.login({ username: this.user.email, password: this.user.id, rememberMe: false }).subscribe(
       () => {
         this.authenticationError = false;
         if (!this.router.getCurrentNavigation()) {
