@@ -64,9 +64,8 @@
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
               </button>
               &nbsp;&nbsp;
-              <button type="submit" (click)="delete(usuarioExtra)" class="ds-btn ds-btn--danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete"></span>
+              <button type="submit" (click)="delete(usuarioExtra)" class="btn-sm ds-btn ds-btn--toggle" data-cy="entityDeleteButton">
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.toggleStatus"></span>
               </button>
             </div>
           </td>

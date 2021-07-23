@@ -11,7 +11,7 @@
       "error": {
         "authentication": "Revise las credenciales e intente de nuevo ",
         "isGoogle": "Al haber ingresado por medio de Google no cuenta con los permisos para modificar su contraseña",
-        "userSuspended": "No cuenta con los permisos para iniciar sesión, su cuenta se encuentra suspendida"
+        "userSuspended": "No cuenta con los permisos para iniciar sesión. Su cuenta se encuentra suspendida"
       }
     },
     "password": {

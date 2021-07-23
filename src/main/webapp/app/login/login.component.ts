@@ -11,6 +11,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE, USER_IS_SUSPENDED } from '../config/error.constants';
 import { LocalStorageService } from 'ngx-webstorage';
+import { UsuarioExtra } from '../entities/usuario-extra/usuario-extra.model';
+import { Account } from '../core/auth/account.model';
 
 @Component({
   selector: 'jhi-login',
@@ -88,7 +90,14 @@ export class LoginComponent implements OnInit, AfterViewInit {
           this.router.navigate(['']);
         }
       },
-      () => this.activateGoogle()
+      response => {
+        debugger;
+        if (response.status == 401 && response.error.detail == 'Bad credentials') {
+          this.activateGoogle();
+        } else {
+          this.processError(response);
+        }
+      }
     );
   }
 
@@ -97,11 +106,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   processError(response: HttpErrorResponse): void {
+    debugger;
     if (response.status === 400 && response.error.type === LOGIN_ALREADY_USED_TYPE) {
       this.errorUserExists = true;
     } else if (response.status === 400 && response.error.type === EMAIL_ALREADY_USED_TYPE) {
       this.errorEmailExists = true;
-    } else if (response.status === 401 && response.error.type === USER_IS_SUSPENDED) {
+    } else if (response.status === 401) {
       this.userSuspended = true;
     } else {
       this.error = true;
@@ -136,7 +146,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   login(): void {
     debugger;
-
     this.loginService
       .login({
         username: this.loginForm.get('username')!.value,
@@ -144,14 +153,24 @@ export class LoginComponent implements OnInit, AfterViewInit {
         rememberMe: this.loginForm.get('rememberMe')!.value,
       })
       .subscribe(
-        () => {
+        value => {
+          debugger;
+          console.log(value);
+
+          /*if (value?.activated == false){
+              this.userSuspended = true;
+
+              console.log(value.activated)
+            }else {*/
           this.authenticationError = false;
           if (!this.router.getCurrentNavigation()) {
             // There were no routing during login (eg from navigationToStoredUrl)
             this.router.navigate(['']);
           }
+          // }
         },
-        () => (this.authenticationError = true)
+
+        response => this.processError(response)
       );
   }
 }
