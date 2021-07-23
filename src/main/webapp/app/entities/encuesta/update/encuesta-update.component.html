@@ -39,6 +39,7 @@
           <div class="ds-survey--titulo">
             <span class="ds-survey--titulo--name">{{ i + 1 }}. {{ ePregunta.nombre }}</span>
             <fa-icon
+              *ngIf="encuesta!.estado === 'DRAFT'"
               class="ds-survey--titulo--icon"
               [icon]="faTimes"
               (click)="deleteQuestion($event)"
