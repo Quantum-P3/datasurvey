@@ -66,6 +66,13 @@
                 >
                   <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcion2.id }}" type="checkbox" disabled /> -->
                   <label for="{{ ePregunta.id }}-{{ ePreguntaOpcion2.id }}">{{ ePreguntaOpcion2.nombre }}</label>
+                  <fa-icon
+                    *ngIf="encuesta!.estado === 'DRAFT'"
+                    class="ds-survey--titulo--icon ds-survey--titulo--icon--small"
+                    [icon]="faTimes"
+                    (click)="deleteOption($event)"
+                    [attr.data-optionid]="ePreguntaOpcion2.id"
+                  ></fa-icon>
                 </div>
               </ng-container>
             </ng-container>

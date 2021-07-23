@@ -214,6 +214,15 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  deleteOption(event: any): void {
+    const id = event.target.dataset.optionid;
+    this.ePreguntaCerradaOpcionService.delete(id).subscribe(e => {
+      this.ePreguntas = [];
+      this.ePreguntasOpciones = [];
+      this.loadAll();
+    });
+  }
+
   save(): void {
     this.isSaving = true;
     const ePreguntaCerradaOpcion = this.createFromForm();
