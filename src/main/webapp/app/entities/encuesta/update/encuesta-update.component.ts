@@ -1,3 +1,5 @@
+import { EPreguntaCerrada } from './../../e-pregunta-cerrada/e-pregunta-cerrada.model';
+import { EPreguntaCerradaOpcion, IEPreguntaCerradaOpcion } from './../../e-pregunta-cerrada-opcion/e-pregunta-cerrada-opcion.model';
 import { EPreguntaAbiertaService } from './../../e-pregunta-abierta/service/e-pregunta-abierta.service';
 import { EPreguntaCerradaOpcionService } from './../../e-pregunta-cerrada-opcion/service/e-pregunta-cerrada-opcion.service';
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
@@ -22,7 +24,7 @@ import { IEPreguntaCerrada } from 'app/entities/e-pregunta-cerrada/e-pregunta-ce
 import { EPreguntaCerradaService } from 'app/entities/e-pregunta-cerrada/service/e-pregunta-cerrada.service';
 import { EPreguntaCerradaDeleteDialogComponent } from 'app/entities/e-pregunta-cerrada/delete/e-pregunta-cerrada-delete-dialog.component';
 
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'jhi-encuesta-update',
@@ -30,26 +32,35 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 })
 export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   faTimes = faTimes;
+  faPlus = faPlus;
 
   isSaving = false;
 
   categoriasSharedCollection: ICategoria[] = [];
   usuarioExtrasSharedCollection: IUsuarioExtra[] = [];
 
+  // editForm = this.fb.group({
+  //   id: [],
+  //   nombre: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
+  //   descripcion: [],
+  //   fechaCreacion: [null, [Validators.required]],
+  //   fechaPublicacion: [],
+  //   fechaFinalizar: [],
+  //   fechaFinalizada: [],
+  //   calificacion: [null, [Validators.required]],
+  //   acceso: [null, [Validators.required]],
+  //   contrasenna: [],
+  //   estado: [null, [Validators.required]],
+  //   categoria: [],
+  //   usuarioExtra: [],
+  // });
+
   editForm = this.fb.group({
     id: [],
-    nombre: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
-    descripcion: [],
-    fechaCreacion: [null, [Validators.required]],
-    fechaPublicacion: [],
-    fechaFinalizar: [],
-    fechaFinalizada: [],
-    calificacion: [null, [Validators.required]],
-    acceso: [null, [Validators.required]],
-    contrasenna: [],
-    estado: [null, [Validators.required]],
-    categoria: [],
-    usuarioExtra: [],
+    nombre: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(500)]],
+    // orden: [null, [Validators.required]],
+    // cantidad: [null, [Validators.required]],
+    // ePreguntaCerrada: [],
   });
 
   ePreguntas?: any[];
@@ -57,6 +68,9 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   encuesta: Encuesta | null = null;
 
   isLoading = false;
+
+  createAnother: Boolean = false;
+  selectedQuestionToCreateOption: IEPreguntaCerrada | null = null;
 
   constructor(
     protected encuestaService: EncuestaService,
@@ -154,6 +168,19 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
 
   finishSurvey(): void {}
 
+  addOption(event: any): void {}
+
+  resetForm(event: any): void {
+    this.editForm.reset();
+    if (event !== null) {
+      const id = event.target.dataset.id;
+      this.ePreguntaCerradaService.find(id).subscribe(e => {
+        this.selectedQuestionToCreateOption = e.body;
+        console.log(this.selectedQuestionToCreateOption);
+      });
+    }
+  }
+
   deleteQuestion(event: any) {
     const id = event.target.dataset.id;
     if (event.target.dataset.type) {
@@ -185,6 +212,65 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
         this.loadAll();
       });
     }
+  }
+
+  save(): void {
+    this.isSaving = true;
+    const ePreguntaCerradaOpcion = this.createFromForm();
+    if (ePreguntaCerradaOpcion.id !== undefined) {
+      this.subscribeToSaveResponse(this.ePreguntaCerradaOpcionService.update(ePreguntaCerradaOpcion));
+    } else {
+      this.subscribeToSaveResponse(
+        this.ePreguntaCerradaOpcionService.create(ePreguntaCerradaOpcion, this.selectedQuestionToCreateOption?.id!)
+      );
+    }
+  }
+
+  trackEPreguntaCerradaById(index: number, item: IEPreguntaCerrada): number {
+    return item.id!;
+  }
+
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IEPreguntaCerradaOpcion>>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
+  }
+
+  protected onSaveSuccess(): void {
+    // this.previousState();
+    this.resetForm(null);
+    this.ePreguntas = [];
+    this.ePreguntasOpciones = [];
+    this.loadAll();
+    if (!this.createAnother) {
+      $('#cancelBtn').click();
+    }
+  }
+
+  protected onSaveError(): void {
+    // Api for inheritance.
+  }
+
+  protected onSaveFinalize(): void {
+    this.isSaving = false;
+  }
+
+  protected createFromForm(): IEPreguntaCerradaOpcion {
+    console.log(this.selectedQuestionToCreateOption);
+
+    return {
+      // ...new EPreguntaCerradaOpcion(),
+      id: undefined,
+      nombre: this.editForm.get(['nombre'])!.value,
+      orden: 10,
+      cantidad: 0,
+      ePreguntaCerrada: this.selectedQuestionToCreateOption,
+    };
+  }
+
+  createAnotherChange(event: any) {
+    this.createAnother = event.target.checked;
   }
 
   // previousState(): void {

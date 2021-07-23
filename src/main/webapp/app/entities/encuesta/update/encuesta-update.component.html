@@ -47,21 +47,45 @@
               [attr.data-type]="ePregunta.tipo"
             ></fa-icon>
           </div>
+          <div>
+            <span *ngIf="ePregunta.tipo === 'SINGLE'" class="ds-subtitle"
+              >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.SINGLE' | translate | lowercase }}</span
+            >
+            <span *ngIf="ePregunta.tipo === 'MULTIPLE'" class="ds-subtitle"
+              >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.MULTIPLE' | translate | lowercase }}</span
+            >
+            <span *ngIf="!ePregunta.tipo" class="ds-subtitle">Pregunta de respuesta abierta</span>
+          </div>
           <ng-container *ngIf="ePregunta.tipo">
             <ng-container *ngFor="let ePreguntaOpcion of ePreguntasOpciones; let j = index; trackBy: trackId">
               <ng-container *ngIf="ePregunta.id == ePreguntaOpcion[j].epreguntaCerrada.id">
                 <div
-                  class="ds-survey--option ds-survey--closed-option"
+                  class="ds-survey--option ds-survey--option--base ds-survey--closed-option"
                   *ngFor="let ePreguntaOpcion2 of ePreguntaOpcion; let k = index; trackBy: trackId"
                   [attr.data-id]="ePreguntaOpcion2.id"
                 >
-                  <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcion2.id }}" type="checkbox" disabled />
+                  <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcion2.id }}" type="checkbox" disabled /> -->
                   <label for="{{ ePregunta.id }}-{{ ePreguntaOpcion2.id }}">{{ ePreguntaOpcion2.nombre }}</label>
                 </div>
               </ng-container>
             </ng-container>
+            <div
+              class="ds-survey--option ds-survey--option--add ds-survey--closed-option"
+              (click)="resetForm($event)"
+              data-toggle="modal"
+              data-target="#crearOpcion"
+              [attr.data-id]="ePregunta.id"
+            >
+              <fa-icon
+                class="ds-survey--add-option--icon"
+                [icon]="faPlus"
+                [attr.data-id]="ePregunta.id"
+                [attr.data-type]="ePregunta.tipo"
+              ></fa-icon>
+              <span class="ds-survey--add-option">Añadir pregunta</span>
+            </div>
           </ng-container>
-          <div class="ds-survey--option ds-survey--open-option" *ngIf="!ePregunta.tipo">
+          <div class="ds-survey--option ds-survey--option--base ds-survey--open-option" *ngIf="!ePregunta.tipo">
             <textarea name="" id="" cols="30" rows="10" disabled></textarea>
           </div>
         </div>
@@ -129,6 +153,73 @@
     </table> -->
   </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade ds-modal" id="crearOpcion" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <form autocomplete="off" class="ds-form" name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+        <div class="modal-header">
+          <h1 class="modal-title" id="exampleModalLongTitle">Crear Opción</h1>
+        </div>
+        <div class="modal-body">
+          <!-- Survey Closed Question Create Option Modal -->
+          <div>
+            <jhi-alert-error></jhi-alert-error>
+
+            <div class="form-group">
+              <label class="form-control-label" jhiTranslate="dataSurveyApp.ePreguntaCerradaOpcion.nombre" for="field_nombre">Nombre</label>
+              <input type="text" class="form-control" name="nombre" id="field_nombre" data-cy="nombre" formControlName="nombre" />
+              <div *ngIf="editForm.get('nombre')!.invalid && (editForm.get('nombre')!.dirty || editForm.get('nombre')!.touched)">
+                <small
+                  class="form-text text-danger"
+                  *ngIf="editForm.get('nombre')?.errors?.required"
+                  jhiTranslate="entity.validation.required"
+                >
+                  This field is required.
+                </small>
+                <small
+                  class="form-text text-danger"
+                  *ngIf="editForm.get('nombre')?.errors?.minlength"
+                  jhiTranslate="entity.validation.minlength"
+                  [translateValues]="{ min: 1 }"
+                >
+                  This field is required to be at least 1 characters.
+                </small>
+                <small
+                  class="form-text text-danger"
+                  *ngIf="editForm.get('nombre')?.errors?.maxlength"
+                  jhiTranslate="entity.validation.maxlength"
+                  [translateValues]="{ max: 500 }"
+                >
+                  This field cannot be longer than 500 characters.
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input id="createAnother" type="checkbox" (change)="createAnotherChange($event)" />
+          <label for="createAnother">Crear otra</label>
+          <button id="cancelBtn" type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal">
+            <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+          </button>
+          <button
+            type="submit"
+            id="save-entity"
+            data-cy="entityCreateSaveButton"
+            class="ds-btn ds-btn--primary"
+            [disabled]="editForm.invalid || isSaving"
+          >
+            <span jhiTranslate="entity.action.create">Create</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ------------------------------------------------------------------------------------------------- -->
 
 <!-- <div class="row justify-content-center">
   <div class="col-8">

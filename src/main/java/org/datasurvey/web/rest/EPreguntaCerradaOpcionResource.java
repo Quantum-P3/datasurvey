@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import org.datasurvey.domain.EPreguntaCerrada;
 import org.datasurvey.domain.EPreguntaCerradaOpcion;
 import org.datasurvey.repository.EPreguntaCerradaOpcionRepository;
 import org.datasurvey.service.EPreguntaCerradaOpcionQueryService;
@@ -59,10 +60,15 @@ public class EPreguntaCerradaOpcionResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new ePreguntaCerradaOpcion, or with status {@code 400 (Bad Request)} if the ePreguntaCerradaOpcion has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/e-pregunta-cerrada-opcions")
+    @PostMapping("/e-pregunta-cerrada-opcions/{id}")
     public ResponseEntity<EPreguntaCerradaOpcion> createEPreguntaCerradaOpcion(
-        @Valid @RequestBody EPreguntaCerradaOpcion ePreguntaCerradaOpcion
+        @Valid @RequestBody EPreguntaCerradaOpcion ePreguntaCerradaOpcion,
+        @PathVariable(value = "id", required = false) final Long id
     ) throws URISyntaxException {
+        EPreguntaCerrada ePreguntaCerrada = new EPreguntaCerrada();
+        ePreguntaCerrada.setId(id);
+        ePreguntaCerradaOpcion.setEPreguntaCerrada(ePreguntaCerrada);
+
         log.debug("REST request to save EPreguntaCerradaOpcion : {}", ePreguntaCerradaOpcion);
         if (ePreguntaCerradaOpcion.getId() != null) {
             throw new BadRequestAlertException("A new ePreguntaCerradaOpcion cannot already have an ID", ENTITY_NAME, "idexists");
@@ -202,7 +208,6 @@ public class EPreguntaCerradaOpcionResource {
     public ResponseEntity<Void> deleteManyEPreguntaCerradaOpcion(@Valid @RequestBody int[] ids) {
         for (int id : ids) {
             ePreguntaCerradaOpcionService.delete((long) id);
-            System.out.println(id);
         }
         return ResponseEntity
             .noContent()

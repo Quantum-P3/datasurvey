@@ -16,8 +16,8 @@ export class EPreguntaCerradaOpcionService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(ePreguntaCerradaOpcion: IEPreguntaCerradaOpcion): Observable<EntityResponseType> {
-    return this.http.post<IEPreguntaCerradaOpcion>(this.resourceUrl, ePreguntaCerradaOpcion, { observe: 'response' });
+  create(ePreguntaCerradaOpcion: IEPreguntaCerradaOpcion, preguntaId?: number): Observable<EntityResponseType> {
+    return this.http.post<IEPreguntaCerradaOpcion>(`${this.resourceUrl}/${preguntaId}`, ePreguntaCerradaOpcion, { observe: 'response' });
   }
 
   update(ePreguntaCerradaOpcion: IEPreguntaCerradaOpcion): Observable<EntityResponseType> {

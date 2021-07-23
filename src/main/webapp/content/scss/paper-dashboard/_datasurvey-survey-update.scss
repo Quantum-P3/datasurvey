@@ -4,8 +4,10 @@
   &--titulo {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     &--name {
+      color: #1f3779;
     }
 
     &--icon {
@@ -20,7 +22,7 @@
       padding: 0.8rem;
       width: 25px;
       height: 25px;
-      color: #313747;
+      color: #1f3779;
       pointer-events: visible !important;
       transition: all 0.1s ease-in-out;
 
@@ -58,16 +60,38 @@
   }
 
   &--option {
+    display: flex;
+    align-items: center;
     margin: 0.5rem 0;
     border-radius: 5px;
     font-weight: 500;
     letter-spacing: 0.025rem;
     color: #787878;
-    border: 1px solid #e6e6e6;
     background-color: transparent;
     position: relative;
     top: 0;
     transition: all 0.1s ease-in-out;
+
+    &--base {
+      border: 1px solid #e6e6e6;
+    }
+
+    &--add {
+      border: 2px dashed #9c9c9c;
+      transition: all 0.1s ease-in-out;
+
+      &:hover {
+        border: 2px dashed #727272;
+      }
+
+      &:hover .ds-survey--add-option {
+        color: #727272;
+      }
+
+      &:hover .ds-survey--add-option--icon {
+        color: #727272;
+      }
+    }
   }
 
   &--closed-option {
@@ -76,7 +100,7 @@
     align-items: center;
     font-size: 0.9rem;
     color: #15131d;
-    padding: 1rem 3rem;
+    padding: 1rem 3rem 1rem 0.5rem;
     transition: all 0.1s ease-in-out;
     cursor: pointer;
     position: relative;
@@ -84,6 +108,7 @@
     label {
       width: 100%;
       margin: 0 1rem;
+      color: #1f3779;
     }
   }
 
@@ -102,6 +127,33 @@
       color: #787878;
       border: none;
       resize: none;
+
+      &:disabled {
+        background-color: transparent;
+      }
+    }
+  }
+
+  &--add-option {
+    width: 100%;
+    color: #919191;
+    transition: all 0.1s ease-in-out;
+    pointer-events: none;
+
+    &--icon {
+      margin: 0 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 25px;
+      height: 25px;
+      color: #919191;
+      pointer-events: visible !important;
+      transition: all 0.1s ease-in-out;
+
+      * {
+        pointer-events: none;
+      }
     }
   }
 }
