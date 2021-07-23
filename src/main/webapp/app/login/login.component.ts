@@ -9,7 +9,7 @@ import { GoogleLoginProvider } from 'angularx-social-login';
 import { RegisterService } from '../account/register/register.service';
 import { TranslateService } from '@ngx-translate/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '../config/error.constants';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE, USER_IS_SUSPENDED } from '../config/error.constants';
 import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
@@ -25,6 +25,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
   error = false;
   errorEmailExists = false;
   errorUserExists = false;
+  userSuspended = false;
+  imprimir = false;
 
   loginForm = this.fb.group({
     username: [null, [Validators.required, Validators.email, Validators.maxLength(254)]],
@@ -48,18 +50,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    //Servicio para verificar si el usuario se encuentra loggeado
-    /*this.authService.authState.subscribe(user => {
-      this.user = user;
-      this.loggedIn = user != null;
-
-     /!* console.log('correo: ' + user.email);
-      console.log('correo: ' + user.name);
-      console.log('ID: ' + this.user.id);*!/
-
-      this.authenticacionGoogle();
-    });
-*/
     // if already authenticated then navigate to home page
     this.accountService.identity().subscribe(() => {
       if (this.accountService.isAuthenticated()) {
@@ -99,20 +89,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
         }
       },
       () => this.activateGoogle()
-      /*this.registerService
-          .save({
-            login: this.user.email,
-            email: this.user.email,
-            password: this.user.id,
-            langKey: this.translateService.currentLang,
-            name: this.user.name,
-            profileIcon: this.randomProfilePic(),
-            isAdmin: 0,
-          })
-          .subscribe(
-            () => (this.success = true),
-            response => this.processError(response)
-          ) */ //console.log("Usuario no existe")
     );
   }
 
@@ -125,6 +101,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
       this.errorUserExists = true;
     } else if (response.status === 400 && response.error.type === EMAIL_ALREADY_USED_TYPE) {
       this.errorEmailExists = true;
+    } else if (response.status === 401 && response.error.type === USER_IS_SUSPENDED) {
+      this.userSuspended = true;
     } else {
       this.error = true;
     }

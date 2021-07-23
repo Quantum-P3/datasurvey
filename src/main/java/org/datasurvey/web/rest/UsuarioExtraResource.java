@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import org.datasurvey.domain.UsuarioExtra;
 import org.datasurvey.repository.UsuarioExtraRepository;
 import org.datasurvey.service.MailService;
+import org.datasurvey.service.UserService;
 import org.datasurvey.service.UsuarioExtraQueryService;
 import org.datasurvey.service.UsuarioExtraService;
 import org.datasurvey.service.criteria.UsuarioExtraCriteria;
@@ -44,16 +45,20 @@ public class UsuarioExtraResource {
 
     private final MailService mailService;
 
+    private final UserService userService;
+
     public UsuarioExtraResource(
         UsuarioExtraService usuarioExtraService,
         UsuarioExtraRepository usuarioExtraRepository,
         UsuarioExtraQueryService usuarioExtraQueryService,
-        MailService mailService
+        MailService mailService,
+        UserService userService
     ) {
         this.usuarioExtraService = usuarioExtraService;
         this.usuarioExtraRepository = usuarioExtraRepository;
         this.usuarioExtraQueryService = usuarioExtraQueryService;
         this.mailService = mailService;
+        this.userService = userService;
     }
 
     /**
@@ -131,8 +136,10 @@ public class UsuarioExtraResource {
         UsuarioExtra result = usuarioExtraService.save(usuarioExtra);
 
         if (usuarioExtra.getEstado().name().equals("SUSPENDED")) {
+            this.userService.modifyStatus(usuarioExtra.getUser().getLogin(), false);
             mailService.sendSuspendedAccountMail(usuarioExtra); //se manda el correo de la suspecion
         } else {
+            this.userService.modifyStatus(usuarioExtra.getUser().getLogin(), true);
             mailService.sendActivatedAccountMail(usuarioExtra); //se manda el correo de reactivacion
         }
 

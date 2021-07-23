@@ -76,6 +76,19 @@ public class UserService {
             );
     }
 
+    public Optional<User> modifyStatus(String login, Boolean estado) {
+        return userRepository
+            .findOneByLogin(login)
+            .map(
+                user -> {
+                    // activate given user for the registration key.
+                    user.setActivated(estado);
+                    log.debug("Activated user: {}", user);
+                    return user;
+                }
+            );
+    }
+
     public Optional<User> completePasswordReset(String newPassword, String key) {
         log.debug("Reset user password for reset key {}", key);
         return userRepository
