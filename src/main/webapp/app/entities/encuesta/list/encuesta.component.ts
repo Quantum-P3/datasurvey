@@ -34,6 +34,7 @@ import {
   faTrashAlt,
   faPlus,
   faStar,
+  faPollH,
 } from '@fortawesome/free-solid-svg-icons';
 
 import * as $ from 'jquery';
@@ -54,7 +55,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   faTrashAlt = faTrashAlt;
   faPlus = faPlus;
   faStar = faStar;
-
+  faPollH = faPollH;
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;
 
@@ -62,6 +63,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   isLoading = false;
 
   isSaving = false;
+  selectedIdSurvey: number = 0;
 
   categoriasSharedCollection: ICategoria[] = [];
   usuarioExtrasSharedCollection: IUsuarioExtra[] = [];
@@ -320,6 +322,11 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     }
   }
 
+  openPreview() {
+    const surveyId = this.selectedIdSurvey;
+    this.router.navigate(['/encuesta', surveyId, 'preview']);
+  }
+
   counter(i: number) {
     return new Array(i);
   }
@@ -350,6 +357,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       } else if ((event.target as HTMLElement).classList.contains('ds-list--entity')) {
         event.target.classList.add('active');
         document.getElementById('contextmenu-create--separator')!.style.display = 'none';
+        this.selectedIdSurvey = Number(event.target.dataset.id);
       }
 
       document.getElementById('contextmenu')!.style.top = event.layerY + 'px';

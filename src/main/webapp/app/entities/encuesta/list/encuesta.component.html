@@ -58,7 +58,9 @@
             <button type="button" id="contextmenu-edit"><fa-icon class="contextmenu__icon" [icon]="faEdit"></fa-icon>Editar</button>
           </li>
           <li>
-            <button type="button" id="contextmenu-duplicate"><fa-icon class="contextmenu__icon" [icon]="faCopy"></fa-icon>Duplicar</button>
+            <button type="button" (click)="openPreview()" id="contextmenu-preview">
+              <fa-icon class="contextmenu__icon" [icon]="faPollH"></fa-icon>Vista Previa
+            </button>
           </li>
           <li>
             <button type="button" id="contextmenu-rename">
@@ -194,7 +196,7 @@
             <fa-icon icon="pencil-alt"></fa-icon>
             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
           </button>
-          
+
           <button type="submit" (click)="delete(encuesta)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
             <fa-icon icon="times"></fa-icon>
             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
