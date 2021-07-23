@@ -19,6 +19,35 @@
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="usuarioExtras && usuarioExtras.length > 0">
+    <form class="ds-form d-inline">
+      <div class="input-group">
+        <div class="col-3">
+          <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+          <input type="text" name="searchNombreUsuario" placeholder="Buscar por nombre..." [(ngModel)]="searchNombreUsuario" />
+        </div>
+        <div class="col-3">
+          <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+          <select name="searchEstadoUsuario" id="searchEstadoUsuario" [(ngModel)]="searchEstadoUsuario" style="width: 200px">
+            <option value="" selected="selected" disabled="disabled">Filtrar por estado</option>
+            <option value="">Todos Estados</option>
+            <option value="Active">Activadas</option>
+            <option value="Suspended">Bloqueados</option>
+          </select>
+        </div>
+        <!--<div class="col-3">
+          <div class="input-group-addon "><i class="glyphicon glyphicon-search"></i></div>
+          <select id="categoriaEncuesta"  name="categoriaEncuesta" [(ngModel)]="categoriaEncuesta">
+            <option [ngValue]="null" selected>Filtre por categoría</option>
+            <option
+              *ngFor="let categoriaOption of categoriasSharedCollection; trackBy: trackCategoriaById"
+              [ngValue]="categoriaOption.nombre"    >
+              {{ categoriaOption.nombre }}
+            </option>
+          </select>
+        </div>-->
+      </div>
+    </form>
+
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
@@ -32,7 +61,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let usuarioExtra of usuarioExtras; trackBy: trackId" data-cy="entityTable">
+        <tr
+          *ngFor="
+            let usuarioExtra of usuarioExtras | filter: 'nombre':searchNombreUsuario | filter: 'estado':searchEstadoUsuario;
+            trackBy: trackId
+          "
+          data-cy="entityTable"
+        >
           <td *ngIf="usuarioExtra.user">
             <ul class="listRoles">
               <li *ngFor="let userRole of usuarioExtra.user.authorities">
