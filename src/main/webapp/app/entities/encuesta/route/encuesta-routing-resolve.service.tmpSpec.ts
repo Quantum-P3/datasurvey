@@ -34,7 +34,7 @@ describe('Service Tests', () => {
     describe('resolve', () => {
       it('should return IEncuesta returned by find', () => {
         // GIVEN
-        service.find = jest.fn(id => of(new HttpResponse({ body: { id } })));
+        // service.find = jest.fn(id => of(new HttpResponse({ body: { id } })));
         mockActivatedRouteSnapshot.params = { id: 123 };
 
         // WHEN
