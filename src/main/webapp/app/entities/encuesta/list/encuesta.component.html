@@ -78,7 +78,7 @@
     </div>
 
     <div
-      class="ds-list--entity card-encuesta lift"
+      class="ds-list--entity"
       *ngFor="let encuesta of encuestas; trackBy: trackId"
       (dblclick)="openSurvey($event)"
       (click)="selectSurvey($event)"
@@ -194,7 +194,7 @@
             <fa-icon icon="pencil-alt"></fa-icon>
             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
           </button>
-
+          
           <button type="submit" (click)="delete(encuesta)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
             <fa-icon icon="times"></fa-icon>
             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
