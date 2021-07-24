@@ -6,10 +6,17 @@ import { EncuestaUpdateComponent } from './update/encuesta-update.component';
 import { EncuestaDeleteDialogComponent } from './delete/encuesta-delete-dialog.component';
 import { EncuestaRoutingModule } from './route/encuesta-routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { EncuestaPublishDialogComponent } from './encuesta-publish-dialog/encuesta-publish-dialog.component';
 
 @NgModule({
   imports: [SharedModule, EncuestaRoutingModule, FontAwesomeModule],
-  declarations: [EncuestaComponent, EncuestaDetailComponent, EncuestaUpdateComponent, EncuestaDeleteDialogComponent],
+  declarations: [
+    EncuestaComponent,
+    EncuestaDetailComponent,
+    EncuestaUpdateComponent,
+    EncuestaDeleteDialogComponent,
+    EncuestaPublishDialogComponent,
+  ],
   entryComponents: [EncuestaDeleteDialogComponent],
 })
 export class EncuestaModule {}
