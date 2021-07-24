@@ -58,22 +58,24 @@
           </div>
           <ng-container *ngIf="ePregunta.tipo">
             <ng-container *ngFor="let ePreguntaOpcion of ePreguntasOpciones; let j = index; trackBy: trackId">
-              <ng-container *ngIf="ePregunta.id == ePreguntaOpcion[j].epreguntaCerrada.id">
-                <div
-                  class="ds-survey--option ds-survey--option--base ds-survey--closed-option"
-                  *ngFor="let ePreguntaOpcion2 of ePreguntaOpcion; let k = index; trackBy: trackId"
-                  [attr.data-id]="ePreguntaOpcion2.id"
-                >
-                  <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcion2.id }}" type="checkbox" disabled /> -->
-                  <label for="{{ ePregunta.id }}-{{ ePreguntaOpcion2.id }}">{{ ePreguntaOpcion2.nombre }}</label>
-                  <fa-icon
-                    *ngIf="encuesta!.estado === 'DRAFT'"
-                    class="ds-survey--titulo--icon ds-survey--titulo--icon--small"
-                    [icon]="faTimes"
-                    (click)="deleteOption($event)"
-                    [attr.data-optionid]="ePreguntaOpcion2.id"
-                  ></fa-icon>
-                </div>
+              <ng-container *ngIf="ePreguntaOpcion[j] !== undefined">
+                <ng-container *ngIf="ePregunta.id == ePreguntaOpcion[j].epreguntaCerrada.id">
+                  <div
+                    class="ds-survey--option ds-survey--option--base ds-survey--closed-option"
+                    *ngFor="let ePreguntaOpcion2 of ePreguntaOpcion; let k = index; trackBy: trackId"
+                    [attr.data-id]="ePreguntaOpcion2.id"
+                  >
+                    <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcion2.id }}" type="checkbox" disabled /> -->
+                    <label for="{{ ePregunta.id }}-{{ ePreguntaOpcion2.id }}">{{ ePreguntaOpcion2.nombre }}</label>
+                    <fa-icon
+                      *ngIf="encuesta!.estado === 'DRAFT'"
+                      class="ds-survey--titulo--icon ds-survey--titulo--icon--small"
+                      [icon]="faTimes"
+                      (click)="deleteOption($event)"
+                      [attr.data-optionid]="ePreguntaOpcion2.id"
+                    ></fa-icon>
+                  </div>
+                </ng-container>
               </ng-container>
             </ng-container>
             <div
