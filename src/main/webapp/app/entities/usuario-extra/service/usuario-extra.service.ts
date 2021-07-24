@@ -18,6 +18,7 @@ export type EntityArrayUserPublicResponseType = HttpResponse<IUser[]>;
 @Injectable({ providedIn: 'root' })
 export class UsuarioExtraService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/usuario-extras');
+  protected resourceUrlEstado = this.applicationConfigService.getEndpointFor('api/usuario-extras-estado');
   protected resourceUrlPublicUser = this.applicationConfigService.getEndpointFor('api');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
@@ -33,6 +34,13 @@ export class UsuarioExtraService {
     const copy = this.convertDateFromClient(usuarioExtra);
     return this.http
       .put<IUsuarioExtra>(`${this.resourceUrl}/${getUsuarioExtraIdentifier(usuarioExtra) as number}`, copy, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  updateEstado(usuarioExtra: IUsuarioExtra): Observable<EntityResponseType> {
+    const copy = this.convertDateFromClient(usuarioExtra);
+    return this.http
+      .put<IUsuarioExtra>(`${this.resourceUrlEstado}/${getUsuarioExtraIdentifier(usuarioExtra) as number}`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
