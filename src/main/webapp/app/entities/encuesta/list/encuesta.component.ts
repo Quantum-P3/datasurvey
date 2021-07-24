@@ -106,7 +106,11 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       (res: HttpResponse<IEncuesta[]>) => {
         this.isLoading = false;
         const tmpEncuestas = res.body ?? [];
-        this.encuestas = tmpEncuestas.filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id);
+        if (this.isAdmin()) {
+          this.encuestas = tmpEncuestas;
+        } else {
+          this.encuestas = tmpEncuestas.filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id);
+        }
       },
       () => {
         this.isLoading = false;
