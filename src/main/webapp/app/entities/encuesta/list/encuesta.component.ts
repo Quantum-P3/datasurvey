@@ -61,6 +61,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   successPublished = false;
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;
+  estadoDeleted = EstadoEncuesta.DELETED;
 
   encuestas?: IEncuesta[];
   isLoading = false;
@@ -111,7 +112,13 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       (res: HttpResponse<IEncuesta[]>) => {
         this.isLoading = false;
         const tmpEncuestas = res.body ?? [];
-        this.encuestas = tmpEncuestas.filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id);
+        if (this.isAdmin()) {
+          this.encuestas = tmpEncuestas;
+        } else {
+          this.encuestas = tmpEncuestas
+            .filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id)
+            .filter(e => e.estado !== EstadoEncuesta.DELETED);
+        }
       },
       () => {
         this.isLoading = false;
@@ -168,7 +175,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {}
 
-  trackId(index: number, item: IEncuesta): number {
+  trackId(_index: number, item: IEncuesta): number {
     return item.id!;
   }
 
@@ -198,11 +205,11 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     }
   }
 
-  trackCategoriaById(index: number, item: ICategoria): number {
+  trackCategoriaById(_index: number, item: ICategoria): number {
     return item.id!;
   }
 
-  trackUsuarioExtraById(index: number, item: IUsuarioExtra): number {
+  trackUsuarioExtraById(_index: number, item: IUsuarioExtra): number {
     return item.id!;
   }
 
