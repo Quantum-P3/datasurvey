@@ -80,7 +80,7 @@
   </form>
 
   <!-- Lista de Encuestas del Usuario -->
-  <div class="ds-list" (contextmenu)="openContextMenu($event)" *ngIf="!isAdmin()">
+  <div class="ds-list" (contextmenu)="openContextMenu($event)">
     <!-- Context Menu -->
     <div class="ds-contextmenu ds-contextmenu--closed" id="contextmenu">
       <ul id="ds-context-menu__list">
@@ -97,6 +97,22 @@
             </button>
           </li>
         </div>
+        <div class="ds-contextmenu__divider ds-contextmenu__divider--separator-bottom" id="contextmenu-edit--separator">
+          <li class="d-justify justify-content-start">
+            <button type="button" id="contextmenu-edit"><fa-icon class="contextmenu__icon" [icon]="faEdit"></fa-icon>Editar</button>
+          </li>
+          <li>
+            <button type="button" id="contextmenu-duplicate"><fa-icon class="contextmenu__icon" [icon]="faCopy"></fa-icon>Duplicar</button>
+          </li>
+          <li>
+            <button type="button" id="contextmenu-rename">
+              <fa-icon class="contextmenu__icon" [icon]="faFile"></fa-icon>Cambiar nombre
+            </button>
+          </li>
+          <li>
+            <button type="button" id="contextmenu-share"><fa-icon class="contextmenu__icon" [icon]="faShareAlt"></fa-icon>Compartir</button>
+          </li>
+        </div>
         <div class="ds-contextmenu__divider" id="contextmenu-delete--separator">
           <li>
             <button type="button"><fa-icon class="contextmenu__icon" [icon]="faTrashAlt"></fa-icon>Eliminar</button>
@@ -104,146 +120,83 @@
         </div>
       </ul>
     </div>
-
-    <!-- Lista de Encuestas del Usuario -->
-    <div class="ds-list" (contextmenu)="openContextMenu($event)">
-      <!-- Context Menu -->
-      <div class="ds-contextmenu ds-contextmenu--closed" id="contextmenu">
-        <ul id="ds-context-menu__list">
-          <div class="ds-contextmenu__divider ds-contextmenu__divider--separator-bottom" id="contextmenu-create--separator">
-            <li>
-              <button
-                *ngIf="!isAdmin() && isAuthenticated()"
-                type="button"
-                (click)="resetForm()"
-                data-toggle="modal"
-                data-target="#crearEncuesta"
-              >
-                <fa-icon class="contextmenu__icon" [icon]="faPlus"></fa-icon>Crear
-              </button>
-            </li>
-          </div>
-          <div class="ds-contextmenu__divider ds-contextmenu__divider--separator-bottom" id="contextmenu-edit--separator">
-            <li class="d-justify justify-content-start">
-              <button type="button" id="contextmenu-edit"><fa-icon class="contextmenu__icon" [icon]="faEdit"></fa-icon>Editar</button>
-            </li>
-            <li>
-              <button type="button" id="contextmenu-duplicate">
-                <fa-icon class="contextmenu__icon" [icon]="faCopy"></fa-icon>Duplicar
-              </button>
-            </li>
-            <li>
-              <button type="button" id="contextmenu-rename">
-                <fa-icon class="contextmenu__icon" [icon]="faFile"></fa-icon>Cambiar nombre
-              </button>
-            </li>
-            <li>
-              <button type="button" id="contextmenu-share">
-                <fa-icon class="contextmenu__icon" [icon]="faShareAlt"></fa-icon>Compartir
-              </button>
-            </li>
-          </div>
-          <div class="ds-contextmenu__divider" id="contextmenu-delete--separator">
-            <li>
-              <button type="button"><fa-icon class="contextmenu__icon" [icon]="faTrashAlt"></fa-icon>Eliminar</button>
-            </li>
-          </div>
-        </ul>
+    <div
+      class="ds-list--entity"
+      *ngFor="
+        let encuesta of encuestas | filter: 'nombre':searchString | filter: 'acceso':accesoEncuesta | filter: 'estado':estadoEncuesta;
+        trackBy: trackId
+      "
+      (dblclick)="openSurvey($event)"
+      (click)="selectSurvey($event)"
+      [attr.data-id]="encuesta.id"
+    >
+      <div class="entity-header">
+        <div class="entity-state--container">
+          <div
+            class="entity-state"
+            [ngClass]="
+              encuesta.estado == 'DRAFT' ? 'entity-state--blue' : encuesta.estado == 'ACTIVE' ? 'entity-state--green' : 'entity-state--red'
+            "
+            style="animation-delay: 0s"
+          ></div>
+          <div
+            class="entity-state"
+            [ngClass]="
+              encuesta.estado == 'DRAFT' ? 'entity-state--blue' : encuesta.estado == 'ACTIVE' ? 'entity-state--green' : 'entity-state--red'
+            "
+            style="animation-delay: 1s"
+          ></div>
+          <div
+            class="entity-state entity-state--blue"
+            [ngClass]="
+              encuesta.estado == 'DRAFT' ? 'entity-state--blue' : encuesta.estado == 'ACTIVE' ? 'entity-state--green' : 'entity-state--red'
+            "
+            style="animation-delay: 2s"
+          ></div>
+          <div
+            class="entity-state entity-state--blue"
+            [ngClass]="
+              encuesta.estado == 'DRAFT' ? 'entity-state--blue' : encuesta.estado == 'ACTIVE' ? 'entity-state--green' : 'entity-state--red'
+            "
+            style="animation-delay: 3s"
+          ></div>
+        </div>
+        <div class="entity-share">
+          <span><fa-icon [icon]="faShareAlt"></fa-icon></span>
+        </div>
       </div>
 
-      <div
-        class="ds-list--entity"
-        *ngFor="
-          let encuesta of encuestas | filter: 'nombre':searchString | filter: 'acceso':accesoEncuesta | filter: 'estado':estadoEncuesta;
-          trackBy: trackId
-        "
-        (dblclick)="openSurvey($event)"
-        (click)="selectSurvey($event)"
-        [attr.data-id]="encuesta.id"
-      >
-        <div class="entity-header">
-          <div class="entity-state--container">
-            <div
-              class="entity-state"
-              [ngClass]="
-                encuesta.estado == 'DRAFT'
-                  ? 'entity-state--blue'
-                  : encuesta.estado == 'ACTIVE'
-                  ? 'entity-state--green'
-                  : 'entity-state--red'
-              "
-              style="animation-delay: 0s"
-            ></div>
-            <div
-              class="entity-state"
-              [ngClass]="
-                encuesta.estado == 'DRAFT'
-                  ? 'entity-state--blue'
-                  : encuesta.estado == 'ACTIVE'
-                  ? 'entity-state--green'
-                  : 'entity-state--red'
-              "
-              style="animation-delay: 1s"
-            ></div>
-            <div
-              class="entity-state entity-state--blue"
-              [ngClass]="
-                encuesta.estado == 'DRAFT'
-                  ? 'entity-state--blue'
-                  : encuesta.estado == 'ACTIVE'
-                  ? 'entity-state--green'
-                  : 'entity-state--red'
-              "
-              style="animation-delay: 2s"
-            ></div>
-            <div
-              class="entity-state entity-state--blue"
-              [ngClass]="
-                encuesta.estado == 'DRAFT'
-                  ? 'entity-state--blue'
-                  : encuesta.estado == 'ACTIVE'
-                  ? 'entity-state--green'
-                  : 'entity-state--red'
-              "
-              style="animation-delay: 3s"
-            ></div>
-          </div>
-          <div class="entity-share">
-            <span><fa-icon [icon]="faShareAlt"></fa-icon></span>
-          </div>
+      <div class="entity-body">
+        <div class="entity-body--row">
+          <span *ngIf="encuesta.acceso == 'PUBLIC'" class="title"
+            ><fa-icon class="entity-icon--access" [icon]="faUnlock"></fa-icon>&nbsp;&nbsp;{{ encuesta.nombre | titlecase }}</span
+          >
         </div>
-
-        <div class="entity-body">
-          <div class="entity-body--row">
-            <span *ngIf="encuesta.acceso == 'PUBLIC'" class="title"
-              ><fa-icon class="entity-icon--access" [icon]="faUnlock"></fa-icon>&nbsp;&nbsp;{{ encuesta.nombre | titlecase }}</span
-            >
-          </div>
-          <div class="entity-body--row">
-            <span *ngIf="encuesta.acceso == 'PRIVATE'" class="title mt-2"
-              ><fa-icon class="entity-icon--access" [icon]="faLock"></fa-icon>&nbsp;&nbsp;{{ encuesta.nombre | titlecase }}</span
-            >
-          </div>
-          <div class="entity-body--row">
-            <span class="mt-2"
-              ><fa-icon class="entity-icon--access" [icon]="faCalendarAlt"></fa-icon>&nbsp;&nbsp;{{
-                encuesta.fechaCreacion | formatShortDatetime | titlecase
-              }}</span
-            >
-          </div>
-          <div class="entity-body--row">
-            <span class="subtitle mt-2">{{ encuesta.descripcion | titlecase }}</span>
-          </div>
-          <div class="entity-body--row">
-            <span class="tag mt-2">{{ encuesta.categoria?.nombre | lowercase }}</span>
-          </div>
-          <div class="entity-body--row">
-            <fa-icon *ngFor="let i of [].constructor(encuesta.calificacion)" class="entity-icon--star" [icon]="faStar"></fa-icon
-            ><fa-icon *ngFor="let i of [].constructor(5 - encuesta.calificacion!)" class="entity-icon--star--off" [icon]="faStar"></fa-icon>
-          </div>
+        <div class="entity-body--row">
+          <span *ngIf="encuesta.acceso == 'PRIVATE'" class="title mt-2"
+            ><fa-icon class="entity-icon--access" [icon]="faLock"></fa-icon>&nbsp;&nbsp;{{ encuesta.nombre | titlecase }}</span
+          >
         </div>
+        <div class="entity-body--row">
+          <span class="mt-2"
+            ><fa-icon class="entity-icon--access" [icon]="faCalendarAlt"></fa-icon>&nbsp;&nbsp;{{
+              encuesta.fechaCreacion | formatShortDatetime | titlecase
+            }}</span
+          >
+        </div>
+        <div class="entity-body--row">
+          <span class="subtitle mt-2">{{ encuesta.descripcion | titlecase }}</span>
+        </div>
+        <div class="entity-body--row">
+          <span class="tag mt-2">{{ encuesta.categoria?.nombre | lowercase }}</span>
+        </div>
+        <div class="entity-body--row">
+          <fa-icon *ngFor="let i of [].constructor(encuesta.calificacion)" class="entity-icon--star" [icon]="faStar"></fa-icon
+          ><fa-icon *ngFor="let i of [].constructor(5 - encuesta.calificacion!)" class="entity-icon--star--off" [icon]="faStar"></fa-icon>
+        </div>
+      </div>
 
-        <!-- <p>
+      <!-- <p>
           <a [routerLink]="['/encuesta', encuesta.id, 'view']">{{ encuesta.id }}</a>
         </p>
         <p>{{ encuesta.nombre }}</p>
@@ -321,14 +274,13 @@
             <fa-icon icon="pencil-alt"></fa-icon>
             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
           </button>
-          
+
           <button type="submit" (click)="delete(encuesta)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
             <fa-icon icon="times"></fa-icon>
             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
           </button>
         </div>
       </div> -->
-      </div>
     </div>
   </div>
 

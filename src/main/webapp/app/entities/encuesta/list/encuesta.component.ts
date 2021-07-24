@@ -62,7 +62,6 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;
   estadoDeleted = EstadoEncuesta.DELETED;
-  public searchString: string;
 
   encuestas?: IEncuesta[];
   isLoading = false;
@@ -72,7 +71,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   categoriasSharedCollection: ICategoria[] = [];
   usuarioExtrasSharedCollection: IUsuarioExtra[] = [];
 
-  public searchEncuesta: string;
+  public searchString: string;
   public accesoEncuesta: string;
   //public categoriaEncuesta: string;
   public estadoEncuesta: string;
