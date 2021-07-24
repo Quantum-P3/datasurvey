@@ -82,7 +82,7 @@ export class UsuarioExtraUpdateComponent {
       const login = this.registerForm.get(['email'])!.value;
       const email = this.registerForm.get(['email'])!.value;
       const name = this.registerForm.get(['name'])!.value;
-
+      const firstName = 'userNormal';
       this.registerService
         .save({
           login,
@@ -90,6 +90,7 @@ export class UsuarioExtraUpdateComponent {
           password,
           langKey: this.translateService.currentLang,
           name,
+          firstName,
           profileIcon: this.profileIcon,
           isAdmin: 1,
           isGoogle: 0,
