@@ -209,36 +209,20 @@
   <table class="table table-striped" aria-describedby="page-heading">
     <thead>
       <tr>
-        <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
         <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.nombre">Nombre</span></th>
-        <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.descripcion">Descripcion</span></th>
         <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.fechaCreacion">Fecha Creacion</span></th>
-        <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.fechaPublicacion">Fecha Publicacion</span></th>
-        <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.fechaFinalizar">Fecha Finalizar</span></th>
-        <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.fechaFinalizada">Fecha Finalizada</span></th>
-        <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.calificacion">Calificacion</span></th>
         <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.acceso">Acceso</span></th>
-        <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.contrasenna">Contrasenna</span></th>
         <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.estado">Estado</span></th>
         <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.categoria">Categoria</span></th>
-        <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.usuarioExtra">Usuario Extra</span></th>
+        <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.usuarioExtra">Correo Usuario</span></th>
         <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let encuesta of encuestas; trackBy: trackId" data-cy="entityTable">
-        <td>
-          <a [routerLink]="['/encuesta', encuesta.id, 'view']">{{ encuesta.id }}</a>
-        </td>
         <td>{{ encuesta.nombre }}</td>
-        <td>{{ encuesta.descripcion }}</td>
         <td>{{ encuesta.fechaCreacion | formatMediumDatetime }}</td>
-        <td>{{ encuesta.fechaPublicacion | formatMediumDatetime }}</td>
-        <td>{{ encuesta.fechaFinalizar | formatMediumDatetime }}</td>
-        <td>{{ encuesta.fechaFinalizada | formatMediumDatetime }}</td>
-        <td>{{ encuesta.calificacion }}</td>
         <td jhiTranslate="{{ 'dataSurveyApp.AccesoEncuesta.' + encuesta.acceso }}">{{ encuesta.acceso }}</td>
-        <td>{{ encuesta.contrasenna }}</td>
         <td jhiTranslate="{{ 'dataSurveyApp.EstadoEncuesta.' + encuesta.estado }}">{{ encuesta.estado }}</td>
         <td>
           <div *ngIf="encuesta.categoria">
@@ -247,7 +231,9 @@
         </td>
         <td>
           <div *ngIf="encuesta.usuarioExtra">
-            <a [routerLink]="['/usuario-extra', encuesta.usuarioExtra?.id, 'view']">{{ encuesta.usuarioExtra?.id }}</a>
+            <a [routerLink]="['/usuario-extra', encuesta.usuarioExtra?.nombre, 'view']">
+              {{ encuesta.usuarioExtra?.nombre }}
+            </a>
           </div>
         </td>
         <td class="text-right">
@@ -255,7 +241,7 @@
             <button
               type="submit"
               [routerLink]="['/encuesta', encuesta.id, 'view']"
-              class="btn btn-info btn-sm"
+              class="ds-btn btn-info btn-sm"
               data-cy="entityDetailsButton"
             >
               <fa-icon icon="eye"></fa-icon>
@@ -265,14 +251,14 @@
             <button
               type="submit"
               [routerLink]="['/encuesta', encuesta.id, 'edit']"
-              class="btn btn-primary btn-sm"
+              class="ds-btn ds-btn--primary btn-sm"
               data-cy="entityEditButton"
             >
               <fa-icon icon="pencil-alt"></fa-icon>
               <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
             </button>
 
-            <button type="submit" (click)="delete(encuesta)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+            <button type="submit" (click)="delete(encuesta)" class="ds-btn ds-btn--danger btn-sm" data-cy="entityDeleteButton">
               <fa-icon icon="times"></fa-icon>
               <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
             </button>
