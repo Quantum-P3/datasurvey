@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { EstadoEncuesta } from 'app/entities/enumerations/estado-encuesta.model';
 
 import { IEncuesta } from '../encuesta.model';
 import { EncuestaService } from '../service/encuesta.service';
@@ -16,8 +17,9 @@ export class EncuestaDeleteDialogComponent {
     this.activeModal.dismiss();
   }
 
-  confirmDelete(id: number): void {
-    this.encuestaService.delete(id).subscribe(() => {
+  confirmDelete(encuesta: IEncuesta): void {
+    encuesta.estado = EstadoEncuesta.DELETED;
+    this.encuestaService.update(encuesta).subscribe(() => {
       this.activeModal.close('deleted');
     });
   }

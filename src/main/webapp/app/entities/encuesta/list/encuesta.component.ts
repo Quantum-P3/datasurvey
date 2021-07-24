@@ -34,9 +34,11 @@ import {
   faTrashAlt,
   faPlus,
   faStar,
+  faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 
 import * as $ from 'jquery';
+import { EncuestaPublishDialogComponent } from '../encuesta-publish-dialog/encuesta-publish-dialog.component';
 
 @Component({
   selector: 'jhi-encuesta',
@@ -54,13 +56,17 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   faTrashAlt = faTrashAlt;
   faPlus = faPlus;
   faStar = faStar;
-
+  faUpload = faUpload;
+  isPublished = false;
+  successPublished = false;
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;
+  estadoDeleted = EstadoEncuesta.DELETED;
+  public searchString: string;
 
   encuestas?: IEncuesta[];
   isLoading = false;
-
+  selectedSurvey?: IEncuesta | null = null;
   isSaving = false;
 
   categoriasSharedCollection: ICategoria[] = [];
@@ -88,6 +94,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   });
 
   createAnother: Boolean = false;
+  selectedSurveyId: Number = 0;
 
   constructor(
     protected encuestaService: EncuestaService,
@@ -99,9 +106,8 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     protected accountService: AccountService,
     protected router: Router
   ) {
-    this.searchEncuesta = '';
+    this.searchString = '';
     this.accesoEncuesta = '';
-    //this.categoriaEncuesta = '';
     this.estadoEncuesta = '';
   }
 
@@ -116,7 +122,13 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       (res: HttpResponse<IEncuesta[]>) => {
         this.isLoading = false;
         const tmpEncuestas = res.body ?? [];
-        this.encuestas = tmpEncuestas.filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id);
+        if (this.isAdmin()) {
+          this.encuestas = tmpEncuestas;
+        } else {
+          this.encuestas = tmpEncuestas
+            .filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id)
+            .filter(e => e.estado !== EstadoEncuesta.DELETED);
+        }
       },
       () => {
         this.isLoading = false;
@@ -125,7 +137,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.searchEncuesta = '';
+    this.searchString = '';
     this.accesoEncuesta = '';
     //this.categoriaEncuesta = '';
     this.estadoEncuesta = '';
@@ -178,7 +190,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {}
 
-  trackId(index: number, item: IEncuesta): number {
+  trackId(_index: number, item: IEncuesta): number {
     return item.id!;
   }
 
@@ -208,11 +220,11 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     }
   }
 
-  trackCategoriaById(index: number, item: ICategoria): number {
+  trackCategoriaById(_index: number, item: ICategoria): number {
     return item.id!;
   }
 
-  trackUsuarioExtraById(index: number, item: IUsuarioExtra): number {
+  trackUsuarioExtraById(_index: number, item: IUsuarioExtra): number {
     return item.id!;
   }
 
@@ -343,7 +355,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     return 5 - something;
   }
 
-  openContextMenu(event: any): void {
+  async openContextMenu(event: any): Promise<void> {
     document.querySelectorAll('.ds-list--entity').forEach(e => {
       e.classList.remove('active');
     });
@@ -351,12 +363,25 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     if (event.type === 'contextmenu') {
       event.preventDefault();
 
+      debugger;
+
+      this.selectedSurveyId = event.target.dataset.id;
+      console.log(this.selectedSurveyId);
+
+      debugger;
+      let res = await this.encuestaService.find(this.selectedSurveyId).toPromise();
+      this.selectedSurvey = res.body;
+      this.isPublished = this.selectedSurvey!.estado === 'DRAFT'; // QUE SE LE MUESTRE CUANDO ESTE EN DRAFT
+
       document.getElementById('contextmenu-create--separator')!.style.display = 'block';
       document.getElementById('contextmenu-edit--separator')!.style.display = 'block';
       document.getElementById('contextmenu-delete--separator')!.style.display = 'block';
       document.getElementById('contextmenu-edit')!.style.display = 'block';
       document.getElementById('contextmenu-duplicate')!.style.display = 'block';
-      document.getElementById('contextmenu-rename')!.style.display = 'block';
+
+      if (this.isPublished) {
+        document.getElementById('contextmenu-publish')!.style.display = 'block'; //cambiar
+      }
       document.getElementById('contextmenu-share')!.style.display = 'block';
 
       if ((event.target as HTMLElement).classList.contains('ds-list')) {
@@ -373,5 +398,19 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       document.getElementById('contextmenu')!.classList.add('ds-contextmenu--open');
       document.getElementById('contextmenu')!.style.maxHeight = '100%';
     }
+  }
+
+  publish() {
+    debugger;
+
+    const modalRef = this.modalService.open(EncuestaPublishDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.encuesta = this.selectedSurvey;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'published') {
+        this.successPublished = true;
+        this.loadAll();
+      }
+    });
   }
 }

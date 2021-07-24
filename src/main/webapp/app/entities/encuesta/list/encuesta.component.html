@@ -29,38 +29,43 @@
 
   <jhi-alert-error></jhi-alert-error>
 
-  <jhi-alert></jhi-alert>
+  <div *ngIf="successPublished" class="alert alert-success alert-dismissible fade show" role="alert">
+    Su encuesta fue publicada exitosamente
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
 
   <div class="alert alert-warning" id="no-result" *ngIf="encuestas?.length === 0">
-    <span jhiTranslate="dataSurveyApp.encuesta.home.notFound">No encuestas found</span>
+    <span jhiTranslate="dataSurveyApp.encuesta.home.notFound">No surveys found</span>
   </div>
-  <div class="table-responsive" id="entities" *ngIf="encuestas && encuestas.length > 0">
-    <form class="ds-form d-inline">
-      <div class="input-group">
-        <div class="col-3">
-          <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
-          <input type="text" name="searchEncuesta" placeholder="Buscar por nombre..." [(ngModel)]="searchEncuesta" />
-        </div>
-        <div class="col-3">
-          <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
-          <select name="accesoEncuestas" id="accesoEncuesta" [(ngModel)]="accesoEncuesta" style="width: 200px">
-            <option value="" selected="selected" disabled="disabled">Filtrar por acceso</option>
-            <option value="">Todos Accesos</option>
-            <option value="Public">Públicas</option>
-            <option value="Private">Privadas</option>
-          </select>
-        </div>
-        <div class="col-3">
-          <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
-          <select name="estadoEncuesta" id="estadoEncuesta" [(ngModel)]="estadoEncuesta" style="width: 200px">
-            <option value="" selected="selected" disabled="disabled">Filtrar por estado</option>
-            <option value="">Todos Estados</option>
-            <option value="Draft">Borradores</option>
-            <option value="Active">Activadas</option>
-            <option value="Finished">Finalizadas</option>
-          </select>
-        </div>
-        <!--<div class="col-3">
+
+  <form class="ds-form">
+    <div class="input-group">
+      <div class="col-3">
+        <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+        <input type="text" name="searchString" placeholder="Buscar por nombre..." [(ngModel)]="searchString" />
+      </div>
+      <div class="col-3">
+        <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+        <select name="accesoEncuestas" id="accesoEncuesta" [(ngModel)]="accesoEncuesta" style="width: 200px">
+          <option value="" selected="selected" disabled="disabled">Filtrar por acceso</option>
+          <option value="">Todos Accesos</option>
+          <option value="Public">Públicas</option>
+          <option value="Private">Privadas</option>
+        </select>
+      </div>
+      <div class="col-3">
+        <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+        <select name="estadoEncuesta" id="estadoEncuesta" [(ngModel)]="estadoEncuesta" style="width: 200px">
+          <option value="" selected="selected" disabled="disabled">Filtrar por estado</option>
+          <option value="">Todos Estados</option>
+          <option value="Draft">Borradores</option>
+          <option value="Active">Activadas</option>
+          <option value="Finished">Finalizadas</option>
+        </select>
+      </div>
+      <!--<div class="col-3">
           <div class="input-group-addon "><i class="glyphicon glyphicon-search"></i></div>
           <select id="categoriaEncuesta"  name="categoriaEncuesta" [(ngModel)]="categoriaEncuesta">
             <option [ngValue]="null" selected>Filtre por categoría</option>
@@ -71,8 +76,34 @@
             </option>
           </select>
         </div>-->
-      </div>
-    </form>
+    </div>
+  </form>
+
+  <!-- Lista de Encuestas del Usuario -->
+  <div class="ds-list" (contextmenu)="openContextMenu($event)" *ngIf="!isAdmin()">
+    <!-- Context Menu -->
+    <div class="ds-contextmenu ds-contextmenu--closed" id="contextmenu">
+      <ul id="ds-context-menu__list">
+        <div class="ds-contextmenu__divider ds-contextmenu__divider--separator-bottom" id="contextmenu-create--separator">
+          <li>
+            <button
+              *ngIf="!isAdmin() && isAuthenticated()"
+              type="button"
+              (click)="resetForm()"
+              data-toggle="modal"
+              data-target="#crearEncuesta"
+            >
+              <fa-icon class="contextmenu__icon" [icon]="faPlus"></fa-icon>Crear
+            </button>
+          </li>
+        </div>
+        <div class="ds-contextmenu__divider" id="contextmenu-delete--separator">
+          <li>
+            <button type="button"><fa-icon class="contextmenu__icon" [icon]="faTrashAlt"></fa-icon>Eliminar</button>
+          </li>
+        </div>
+      </ul>
+    </div>
 
     <!-- Lista de Encuestas del Usuario -->
     <div class="ds-list" (contextmenu)="openContextMenu($event)">
@@ -123,7 +154,7 @@
       <div
         class="ds-list--entity"
         *ngFor="
-          let encuesta of encuestas | filter: 'nombre':searchEncuesta | filter: 'acceso':accesoEncuesta | filter: 'estado':estadoEncuesta;
+          let encuesta of encuestas | filter: 'nombre':searchString | filter: 'acceso':accesoEncuesta | filter: 'estado':estadoEncuesta;
           trackBy: trackId
         "
         (dblclick)="openSurvey($event)"
@@ -262,46 +293,69 @@
               <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
             </button>
           </div>
-        </div> -->
+        </div>
+      </div>
+      <div>
+        <div *ngIf="encuesta.usuarioExtra">
+          <a [routerLink]="['/usuario-extra', encuesta.usuarioExtra?.id, 'view']">{{ encuesta.usuarioExtra?.id }}</a>
+        </div>
+      </div>
+      <div class="text-right">
+        <div class="btn-group">
+          <button
+            type="submit"
+            [routerLink]="['/encuesta', encuesta.id, 'view']"
+            class="btn btn-info btn-sm"
+            data-cy="entityDetailsButton"
+          >
+            <fa-icon icon="eye"></fa-icon>
+            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+          </button>
+
+          <button
+            type="submit"
+            [routerLink]="['/encuesta', encuesta.id, 'edit']"
+            class="btn btn-primary btn-sm"
+            data-cy="entityEditButton"
+          >
+            <fa-icon icon="pencil-alt"></fa-icon>
+            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+          </button>
+          
+          <button type="submit" (click)="delete(encuesta)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+            <fa-icon icon="times"></fa-icon>
+            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+          </button>
+        </div>
+      </div> -->
       </div>
     </div>
   </div>
-</div>
 
-<!-- <div class="table-responsive" id="entities" *ngIf="encuestas && encuestas.length > 0">
+  <div class="table-responsive" id="entities" *ngIf="isAdmin() && encuestas && encuestas.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.nombre">Nombre</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.descripcion">Descripcion</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.fechaCreacion">Fecha Creacion</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.fechaPublicacion">Fecha Publicacion</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.fechaFinalizar">Fecha Finalizar</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.fechaFinalizada">Fecha Finalizada</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.calificacion">Calificacion</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.acceso">Acceso</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.contrasenna">Contrasenna</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.estado">Estado</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.categoria">Categoria</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.usuarioExtra">Usuario Extra</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.usuarioExtra">Correo Usuario</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let encuesta of encuestas; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/encuesta', encuesta.id, 'view']">{{ encuesta.id }}</a>
-          </td>
+        <tr
+          *ngFor="
+            let encuesta of encuestas | filter: 'nombre':searchString | filter: 'acceso':accesoEncuesta | filter: 'estado':estadoEncuesta;
+            trackBy: trackId
+          "
+          data-cy="entityTable"
+        >
           <td>{{ encuesta.nombre }}</td>
-          <td>{{ encuesta.descripcion }}</td>
           <td>{{ encuesta.fechaCreacion | formatMediumDatetime }}</td>
-          <td>{{ encuesta.fechaPublicacion | formatMediumDatetime }}</td>
-          <td>{{ encuesta.fechaFinalizar | formatMediumDatetime }}</td>
-          <td>{{ encuesta.fechaFinalizada | formatMediumDatetime }}</td>
-          <td>{{ encuesta.calificacion }}</td>
           <td jhiTranslate="{{ 'dataSurveyApp.AccesoEncuesta.' + encuesta.acceso }}">{{ encuesta.acceso }}</td>
-          <td>{{ encuesta.contrasenna }}</td>
           <td jhiTranslate="{{ 'dataSurveyApp.EstadoEncuesta.' + encuesta.estado }}">{{ encuesta.estado }}</td>
           <td>
             <div *ngIf="encuesta.categoria">
@@ -310,7 +364,9 @@
           </td>
           <td>
             <div *ngIf="encuesta.usuarioExtra">
-              <a [routerLink]="['/usuario-extra', encuesta.usuarioExtra?.id, 'view']">{{ encuesta.usuarioExtra?.id }}</a>
+              <a [routerLink]="['/usuario-extra', encuesta.usuarioExtra?.nombre, 'view']">
+                {{ encuesta.usuarioExtra?.nombre }}
+              </a>
             </div>
           </td>
           <td class="text-right">
@@ -318,7 +374,7 @@
               <button
                 type="submit"
                 [routerLink]="['/encuesta', encuesta.id, 'view']"
-                class="btn btn-info btn-sm"
+                class="ds-btn btn-info btn-sm"
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
@@ -328,14 +384,14 @@
               <button
                 type="submit"
                 [routerLink]="['/encuesta', encuesta.id, 'edit']"
-                class="btn btn-primary btn-sm"
+                class="ds-btn ds-btn--primary btn-sm"
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>
 
-              <button type="submit" (click)="delete(encuesta)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              <button type="submit" (click)="delete(encuesta)" class="ds-btn ds-btn--danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>
@@ -344,141 +400,141 @@
         </tr>
       </tbody>
     </table>
-  </div> -->
+  </div>
 
-<!-- --------------------------------------------------------------------------------------------- -->
+  <!-- --------------------------------------------------------------------------------------------- -->
 
-<!-- Modal -->
-<div
-  class="modal fade ds-modal"
-  id="crearEncuesta"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="exampleModalCenterTitle"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <form autocomplete="off" class="ds-form" name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-        <div class="modal-header">
-          <h1 class="modal-title" id="exampleModalLongTitle">Crear Encuesta</h1>
-        </div>
-        <div class="modal-body">
-          <!-- Survey Registration Modal -->
-          <div>
-            <jhi-alert-error></jhi-alert-error>
+  <!-- Modal -->
+  <div
+    class="modal fade ds-modal"
+    id="crearEncuesta"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <form autocomplete="off" class="ds-form" name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+          <div class="modal-header">
+            <h1 class="modal-title" id="exampleModalLongTitle">Crear Encuesta</h1>
+          </div>
+          <div class="modal-body">
+            <!-- Survey Registration Modal -->
+            <div>
+              <jhi-alert-error></jhi-alert-error>
 
-            <div class="form-group">
-              <label class="form-control-label" jhiTranslate="dataSurveyApp.encuesta.nombre" for="field_nombre">Nombre</label>
-              <input type="text" class="form-control" name="nombre" id="field_nombre" data-cy="nombre" formControlName="nombre" />
-              <div *ngIf="editForm.get('nombre')!.invalid && (editForm.get('nombre')!.dirty || editForm.get('nombre')!.touched)">
-                <small
-                  class="form-text text-danger"
-                  *ngIf="editForm.get('nombre')?.errors?.required"
-                  jhiTranslate="entity.validation.required"
-                >
-                  This field is required.
-                </small>
-                <small
-                  class="form-text text-danger"
-                  *ngIf="editForm.get('nombre')?.errors?.minlength"
-                  jhiTranslate="entity.validation.minlength"
-                  [translateValues]="{ min: 1 }"
-                >
-                  This field is required to be at least 1 characters.
-                </small>
-                <small
-                  class="form-text text-danger"
-                  *ngIf="editForm.get('nombre')?.errors?.maxlength"
-                  jhiTranslate="entity.validation.maxlength"
-                  [translateValues]="{ max: 50 }"
-                >
-                  This field cannot be longer than 50 characters.
-                </small>
+              <div class="form-group">
+                <label class="form-control-label" jhiTranslate="dataSurveyApp.encuesta.nombre" for="field_nombre">Nombre</label>
+                <input type="text" class="form-control" name="nombre" id="field_nombre" data-cy="nombre" formControlName="nombre" />
+                <div *ngIf="editForm.get('nombre')!.invalid && (editForm.get('nombre')!.dirty || editForm.get('nombre')!.touched)">
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="editForm.get('nombre')?.errors?.required"
+                    jhiTranslate="entity.validation.required"
+                  >
+                    This field is required.
+                  </small>
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="editForm.get('nombre')?.errors?.minlength"
+                    jhiTranslate="entity.validation.minlength"
+                    [translateValues]="{ min: 1 }"
+                  >
+                    This field is required to be at least 1 characters.
+                  </small>
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="editForm.get('nombre')?.errors?.maxlength"
+                    jhiTranslate="entity.validation.maxlength"
+                    [translateValues]="{ max: 50 }"
+                  >
+                    This field cannot be longer than 50 characters.
+                  </small>
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label class="form-control-label" jhiTranslate="dataSurveyApp.encuesta.descripcion" for="field_descripcion"
-                >Descripcion</label
-              >
-              <input
-                type="text"
-                class="form-control"
-                name="descripcion"
-                id="field_descripcion"
-                data-cy="descripcion"
-                formControlName="descripcion"
-              />
-            </div>
-
-            <div class="form-group">
-              <label class="form-control-label" jhiTranslate="dataSurveyApp.encuesta.acceso" for="field_acceso">Acceso</label>
-              <select class="form-control" name="acceso" formControlName="acceso" id="field_acceso" data-cy="acceso">
-                <option [ngValue]="null">{{ 'dataSurveyApp.AccesoEncuesta.null' | translate }}</option>
-                <option value="PUBLIC">{{ 'dataSurveyApp.AccesoEncuesta.PUBLIC' | translate }}</option>
-                <option value="PRIVATE">{{ 'dataSurveyApp.AccesoEncuesta.PRIVATE' | translate }}</option>
-              </select>
-              <div *ngIf="editForm.get('acceso')!.invalid && (editForm.get('acceso')!.dirty || editForm.get('acceso')!.touched)">
-                <small
-                  class="form-text text-danger"
-                  *ngIf="editForm.get('acceso')?.errors?.required"
-                  jhiTranslate="entity.validation.required"
+              <div class="form-group">
+                <label class="form-control-label" jhiTranslate="dataSurveyApp.encuesta.descripcion" for="field_descripcion"
+                  >Descripcion</label
                 >
-                  This field is required.
-                </small>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="descripcion"
+                  id="field_descripcion"
+                  data-cy="descripcion"
+                  formControlName="descripcion"
+                />
               </div>
-            </div>
 
-            <div class="form-group">
-              <label class="form-control-label" jhiTranslate="dataSurveyApp.encuesta.categoria" for="field_categoria">Categoría</label>
-              <select class="form-control" id="field_categoria" data-cy="categoria" name="categoria" formControlName="categoria">
-                <option [ngValue]="null" selected></option>
-                <option
-                  [ngValue]="
-                    categoriaOption.id === editForm.get('categoria')!.value?.id ? editForm.get('categoria')!.value : categoriaOption
-                  "
-                  *ngFor="let categoriaOption of categoriasSharedCollection; trackBy: trackCategoriaById"
-                >
-                  {{ categoriaOption.nombre }}
-                </option>
-              </select>
-              <div *ngIf="editForm.get('categoria')!.invalid && (editForm.get('categoria')!.dirty || editForm.get('categoria')!.touched)">
-                <small
-                  class="form-text text-danger"
-                  *ngIf="editForm.get('categoria')?.errors?.required"
-                  jhiTranslate="entity.validation.required"
-                >
-                  This field is required.
-                </small>
+              <div class="form-group">
+                <label class="form-control-label" jhiTranslate="dataSurveyApp.encuesta.acceso" for="field_acceso">Acceso</label>
+                <select class="form-control" name="acceso" formControlName="acceso" id="field_acceso" data-cy="acceso">
+                  <option [ngValue]="null">{{ 'dataSurveyApp.AccesoEncuesta.null' | translate }}</option>
+                  <option value="PUBLIC">{{ 'dataSurveyApp.AccesoEncuesta.PUBLIC' | translate }}</option>
+                  <option value="PRIVATE">{{ 'dataSurveyApp.AccesoEncuesta.PRIVATE' | translate }}</option>
+                </select>
+                <div *ngIf="editForm.get('acceso')!.invalid && (editForm.get('acceso')!.dirty || editForm.get('acceso')!.touched)">
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="editForm.get('acceso')?.errors?.required"
+                    jhiTranslate="entity.validation.required"
+                  >
+                    This field is required.
+                  </small>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-control-label" jhiTranslate="dataSurveyApp.encuesta.categoria" for="field_categoria">Categoría</label>
+                <select class="form-control" id="field_categoria" data-cy="categoria" name="categoria" formControlName="categoria">
+                  <option [ngValue]="null" selected></option>
+                  <option
+                    [ngValue]="
+                      categoriaOption.id === editForm.get('categoria')!.value?.id ? editForm.get('categoria')!.value : categoriaOption
+                    "
+                    *ngFor="let categoriaOption of categoriasSharedCollection; trackBy: trackCategoriaById"
+                  >
+                    {{ categoriaOption.nombre }}
+                  </option>
+                </select>
+                <div *ngIf="editForm.get('categoria')!.invalid && (editForm.get('categoria')!.dirty || editForm.get('categoria')!.touched)">
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="editForm.get('categoria')?.errors?.required"
+                    jhiTranslate="entity.validation.required"
+                  >
+                    This field is required.
+                  </small>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <input id="createAnother" type="checkbox" (change)="createAnotherChange($event)" />
-          <label for="createAnother">Crear otra</label>
-          <button id="cancelBtn" type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal">
-            <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-          </button>
-          <button
-            type="submit"
-            id="save-entity"
-            data-cy="entityCreateSaveButton"
-            class="ds-btn ds-btn--primary"
-            [disabled]="editForm.invalid || isSaving"
-          >
-            <span jhiTranslate="entity.action.create">Create</span>
-          </button>
-        </div>
-      </form>
+          <div class="modal-footer">
+            <input id="createAnother" type="checkbox" (change)="createAnotherChange($event)" />
+            <label for="createAnother">Crear otra</label>
+            <button id="cancelBtn" type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal">
+              <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+            </button>
+            <button
+              type="submit"
+              id="save-entity"
+              data-cy="entityCreateSaveButton"
+              class="ds-btn ds-btn--primary"
+              [disabled]="editForm.invalid || isSaving"
+            >
+              <span jhiTranslate="entity.action.create">Create</span>
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- ------------------------------------------------------------------------------------------------- -->
+  <!-- ------------------------------------------------------------------------------------------------- -->
 
-<!-- <div class="row justify-content-center">
+  <!-- <div ngIf class="row justify-content-center">
   <div class="col-8">
     <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
       <h2 id="jhi-encuesta-heading" data-cy="EncuestaCreateUpdateHeading" jhiTranslate="dataSurveyApp.encuesta.home.createOrEditLabel">
@@ -740,3 +796,4 @@
     </form>
   </div>
 </div> -->
+</div>
