@@ -62,6 +62,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;
   estadoDeleted = EstadoEncuesta.DELETED;
+  public searchString: string;
 
   encuestas?: IEncuesta[];
   isLoading = false;
@@ -99,7 +100,9 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     protected fb: FormBuilder,
     protected accountService: AccountService,
     protected router: Router
-  ) {}
+  ) {
+    this.searchString = '';
+  }
 
   resetForm(): void {
     this.editForm.reset();

@@ -40,6 +40,13 @@
     <span jhiTranslate="dataSurveyApp.encuesta.home.notFound">No surveys found</span>
   </div>
 
+  <form class="ds-form">
+    <div class="input-group">
+      <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+      <input type="text" name="searchString" placeholder="Buscar..." [(ngModel)]="searchString" />
+    </div>
+  </form>
+
   <!-- Lista de Encuestas del Usuario -->
   <div class="ds-list" (contextmenu)="openContextMenu($event)" *ngIf="!isAdmin()">
     <!-- Context Menu -->
@@ -93,7 +100,7 @@
 
     <div
       class="ds-list--entity"
-      *ngFor="let encuesta of encuestas; trackBy: trackId"
+      *ngFor="let encuesta of encuestas! | filter: 'nombre':searchString; trackBy: trackId"
       (dblclick)="openSurvey($event)"
       (click)="selectSurvey($event)"
       [attr.data-id]="encuesta.id"
@@ -233,7 +240,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let encuesta of encuestas; trackBy: trackId" data-cy="entityTable">
+      <tr *ngFor="let encuesta of encuestas | filter: 'nombre':searchString; trackBy: trackId" data-cy="entityTable">
         <td>{{ encuesta.nombre }}</td>
         <td>{{ encuesta.fechaCreacion | formatMediumDatetime }}</td>
         <td jhiTranslate="{{ 'dataSurveyApp.AccesoEncuesta.' + encuesta.acceso }}">{{ encuesta.acceso }}</td>
