@@ -6,12 +6,15 @@
           ><img src="http://datasurvey.org/content/img_datasurvey/datasurvey-logo-text-black.svg" width="300" alt=""
         /></a>
 
-        <div class="col-4" [hidden]="!notAccount">
-          <a href="login">
+        <div class="col-6">
+          <a href="#">
+            <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Encuestas</button>
+          </a>
+          <a href="login" [hidden]="!notAccount">
             <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Iniciar Sesión</button>
           </a>
 
-          <a href="account/register">
+          <a href="account/register" [hidden]="!notAccount">
             <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Registrarse</button>
           </a>
         </div>
@@ -31,6 +34,13 @@
                 <h5 class="page-header-ui-text">
                   Somos su mejor aliado para la recolección de información, a través de nuestra plataforma.
                 </h5>
+                <div class="row">
+                  <div class="col">
+                    <a routerLink="/login">
+                      <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Comenzar</button>
+                    </a>
+                  </div>
+                </div>
               </div>
               <!--<div class="row">
                 <div class="col">
@@ -57,17 +67,17 @@
       <div class="container px-5">
         <div class="row gx-5 text-center">
           <div class="col-lg-4 mb-5 mb-lg-0">
-            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4"><i data-feather="droplet"></i></div>
+            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4"><i class="fa fa-droplet"></i></div>
             <h2>El Mejor diseño</h2>
             <p class="mb-0">Tenemos el mejor diseño para que pueda disfrutar visualmente de la plataforma.</p>
           </div>
           <div class="col-lg-4 mb-5 mb-lg-0">
-            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4"><i data-feather="code"></i></div>
+            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4"><i class="fa fa-code"></i></div>
             <h2>Fácil uso</h2>
             <p class="mb-0">Contamos con una plataforma muy sencilla de usar.</p>
           </div>
           <div class="col-lg-4">
-            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4"><i data-feather="truck"></i></div>
+            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4"><i class="fa fa-truck"></i></div>
             <h2>Diverso contenido</h2>
             <p class="mb-0">Podrá encontrar y crear encuestas de diferentes categorías.</p>
           </div>
@@ -83,19 +93,8 @@
     <div class="bg-light py-10 container-encuestas">
       <div class="container px-0">
         <h1 class="text-center mb-4">Encuestas</h1>
-        <form class="ds-form d-inline">
-          <div class="input-group">
-            <div class="col-3">
-              <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
-              <input type="text" name="searchEncuesta" placeholder="Buscar por nombre..." [(ngModel)]="searchEncuestaPublica" />
-            </div>
-          </div>
-        </form>
         <div class="row gx-5" *ngIf="encuestas && encuestas.length > 0">
-          <div
-            class="col-xl-4 col-lg-4 col-md-6 mb-5"
-            *ngFor="let encuesta of encuestas | filter: 'nombre':searchEncuestaPublica; trackBy: trackId"
-          >
+          <div class="col-xl-4 col-lg-4 col-md-6 mb-5" *ngFor="let encuesta of encuestasMostradas; trackBy: trackId">
             <div class="card lift h-100" (dblclick)="openSurvey($event)" (click)="selectSurvey($event)" [attr.data-id]="encuesta.id">
               <div class="card-body p-3">
                 <div class="card-title mb-0">{{ encuesta.nombre }}</div>
@@ -137,10 +136,17 @@
               </div>
             </div>
           </div>
+          <div class="row">
+            <div class="col">
+              <a routerLink="#">
+                <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Ver todas las encuestas</button>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="container mt-4">
+    <div class="container my-5">
       <div class="text-center mb-4">
         <h1>Preguntas frecuentes</h1>
       </div>

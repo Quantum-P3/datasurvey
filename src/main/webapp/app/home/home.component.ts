@@ -32,6 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   usuarioExtra: UsuarioExtra | null = null;
   encuestas?: IEncuesta[];
+  encuestasMostradas: IEncuesta[] = new Array(3);
   isLoading = false;
 
   faStar = faStar;
@@ -94,6 +95,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         const tmpEncuestas = res.body ?? [];
         this.encuestas = tmpEncuestas.filter(e => e.estado === 'ACTIVE' && e.acceso === 'PUBLIC');
+        this.encuestasMostradas = this.encuestas.reverse().slice(0, 3);
       },
       () => {
         this.isLoading = false;
