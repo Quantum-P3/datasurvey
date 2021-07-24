@@ -1,78 +1,272 @@
 <div class="row">
-  <div class="col-md-3">
-    <span class="hipster img-fluid rounded"></span>
-  </div>
+  <div class="col">
+    <div class="container-fluid navbar navbar-marketing navbar-expand-lg bg-white navbar-light">
+      <div class="container px-5 py-4">
+        <a class="text-dark" href="index.html"
+          ><img src="http://datasurvey.org/content/img_datasurvey/datasurvey-logo-text-black.svg" width="300" alt=""
+        /></a>
 
-  <div class="col-md-9">
-    <h1 class="display-4"><span jhiTranslate="home.title">Welcome, Java Hipster!</span> (Data Survey)</h1>
+        <div class="col-6" style="text-align: end">
+          <a href="#">
+            <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Encuestas</button>
+          </a>
+          <a href="login" [hidden]="!notAccount">
+            <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Iniciar Sesión</button>
+          </a>
 
-    <p class="lead" jhiTranslate="home.subtitle">This is your homepage</p>
-
-    <div [ngSwitch]="account !== null">
-      <div class="alert alert-success" *ngSwitchCase="true">
-        <span id="home-logged-message" *ngIf="account" jhiTranslate="home.logged.message" [translateValues]="{ username: account.login }"
-          >You are logged in as user "{{ account.login }}".</span
-        >
-      </div>
-
-      <div class="alert alert-warning" *ngSwitchCase="false">
-        <span jhiTranslate="global.messages.info.authenticated.prefix">If you want to </span>
-        <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">sign in</a
-        ><span jhiTranslate="global.messages.info.authenticated.suffix"
-          >, you can try the default accounts:<br />- Administrator (login="admin" and password="admin") <br />- User (login="user" and
-          password="user").</span
-        >
-      </div>
-
-      <div class="alert alert-warning" *ngSwitchCase="false">
-        <span jhiTranslate="global.messages.info.register.noaccount">You don't have an account yet?</span>&nbsp;
-        <a class="alert-link" routerLink="account/register" jhiTranslate="global.messages.info.register.link">Register a new account</a>
+          <a href="account/register" [hidden]="!notAccount">
+            <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Registrarse</button>
+          </a>
+        </div>
       </div>
     </div>
+    <!-- Page Header-->
+    <div
+      class="page-header-ui page-header-ui-dark bg-img-cover overlay overlay-40"
+      style="background-image: url('../../content/img_datasurvey/banner2.png')"
+    >
+      <div class="page-header-ui-content py-5 position-relative">
+        <div class="container px-5">
+          <div class="row gx-5 justify-content-center">
+            <div class="col-xl-8 col-lg-10 text-center">
+              <div data-aos="fade-up">
+                <h1 class="page-header-ui-title">¡Le damos la bienvenida a DataSurvey!</h1>
+                <h5 class="page-header-ui-text">
+                  Somos su mejor aliado para la recolección de información, a través de nuestra plataforma.
+                </h5>
+                <div class="row" [hidden]="!notAccount">
+                  <div class="col">
+                    <a routerLink="/login">
+                      <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Comenzar</button>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <!--<div class="row">
+                <div class="col">
+                  <a routerLink="/login">
+                    <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Iniciar Sesión</button>
+                  </a>
+                  <a routerLink="/account/register">
+                    <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Registrarse</button>
+                  </a>
+                </div>
+              </div>-->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="svg-border-rounded text-white">
+        <!-- Rounded SVG Border-->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor">
+          <path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0"></path>
+        </svg>
+      </div>
+    </div>
+    <div class="bg-white py-10" id="get-started">
+      <div class="container px-5">
+        <div class="row gx-5 text-center">
+          <div class="col-lg-4 mb-5 mb-lg-0">
+            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4"><i class="fa fa-droplet"></i></div>
+            <h2>El Mejor diseño</h2>
+            <p class="mb-0">Tenemos el mejor diseño para que pueda disfrutar visualmente de la plataforma.</p>
+          </div>
+          <div class="col-lg-4 mb-5 mb-lg-0">
+            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4"><i class="fa fa-code"></i></div>
+            <h2>Fácil uso</h2>
+            <p class="mb-0">Contamos con una plataforma muy sencilla de usar.</p>
+          </div>
+          <div class="col-lg-4">
+            <div class="icon-stack icon-stack-xl bg-gradient-primary-to-secondary text-white mb-4"><i class="fa fa-truck"></i></div>
+            <h2>Diverso contenido</h2>
+            <p class="mb-0">Podrá encontrar y crear encuestas de diferentes categorías.</p>
+          </div>
+        </div>
+      </div>
+      <div class="svg-border-rounded text-light">
+        <!-- Rounded SVG Border-->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144.54 17.34" preserveAspectRatio="none" fill="currentColor">
+          <path d="M144.54,17.34H0V0H144.54ZM0,0S32.36,17.34,72.27,17.34,144.54,0,144.54,0"></path>
+        </svg>
+      </div>
+    </div>
+    <div class="bg-light py-10 container-encuestas">
+      <div class="container px-0">
+        <h1 class="text-center mb-4">Encuestas</h1>
+        <div class="row gx-5" *ngIf="encuestas && encuestas.length > 0">
+          <div class="col-xl-4 col-lg-4 col-md-6 mb-5" *ngFor="let encuesta of encuestasMostradas; trackBy: trackId">
+            <div
+              class="card-encuesta lift h-100"
+              (dblclick)="openSurvey($event)"
+              (click)="selectSurvey($event)"
+              [attr.data-id]="encuesta.id"
+            >
+              <div class="card-body p-3">
+                <div class="card-title mb-0">{{ encuesta.nombre }}</div>
+                <div class="entity-body--row m-2">
+                  <span class="tag mt-2">{{ encuesta.categoria?.nombre | lowercase }}</span>
+                </div>
+                <div class="entity-body--row m-2">
+                  <span class="subtitle mt-2">{{ encuesta.descripcion | titlecase }}</span>
+                </div>
+                <div class="text-xs text-gray-500">
+                  <div class="entity-body">
+                    <div class="entity-body--row m-2">
+                      <span class="mt-2"
+                        >Fecha Publicada&nbsp;&nbsp;<fa-icon class="entity-icon--access" [icon]="faCalendarAlt"></fa-icon>&nbsp;&nbsp;{{
+                          encuesta.fechaPublicacion | formatShortDatetime | titlecase
+                        }}</span
+                      >
+                    </div>
+                    <div class="entity-body--row m-2">
+                      <span class="mt-2"
+                        >Fecha de Finalización &nbsp;&nbsp;<fa-icon class="entity-icon--access" [icon]="faCalendarAlt"></fa-icon
+                        >&nbsp;&nbsp;{{ encuesta.fechaFinalizar | formatShortDatetime | titlecase }}</span
+                      >
+                    </div>
+                    <div class="entity-body--row m-2">
+                      <p>Calificacion</p>
+                      <fa-icon *ngFor="let i of [].constructor(encuesta.calificacion)" class="entity-icon--star" [icon]="faStar"></fa-icon>
+                      <fa-icon
+                        *ngFor="let i of [].constructor(5 - encuesta.calificacion!)"
+                        class="entity-icon--star--off"
+                        [icon]="faStar"
+                      ></fa-icon>
+                    </div>
+                    <div class="entity-body--row m-2">
+                      <button class="ds-btn btn-card"><fa-icon [icon]="faPollH"></fa-icon>&nbsp;&nbsp;Completar encuesta</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <a routerLink="#">
+                <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Ver todas las encuestas</button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container my-5">
+      <div class="text-center mb-4">
+        <h1>Preguntas frecuentes</h1>
+      </div>
 
-    <p jhiTranslate="home.question">If you have any question on JHipster:</p>
+      <!--Accordion wrapper-->
+      <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+        <!-- Accordion card -->
+        <div class="card accordion-item">
+          <!-- Card header -->
+          <div class="card-header" role="tab" id="headingOne1">
+            <a
+              data-toggle="collapse"
+              data-parent="#accordionEx"
+              href="#collapseOne1"
+              aria-expanded="true"
+              aria-controls="collapseOne1"
+              class="accordion-header"
+            >
+              <h2 class="mb-0">
+                <button
+                  class="accordion-button py-4 collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseOne1"
+                  aria-expanded="true"
+                  aria-controls="collapseOne"
+                >
+                  ¿Qué métodos de pago estás disponibles en DataSurvey?
+                </button>
+              </h2>
+            </a>
+          </div>
 
-    <ul>
-      <li>
-        <a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.homepage"
-          >JHipster homepage</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://stackoverflow.com/tags/jhipster/info"
-          target="_blank"
-          rel="noopener noreferrer"
-          jhiTranslate="home.link.stackoverflow"
-          >JHipster on Stack Overflow</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/jhipster/generator-jhipster/issues?state=open"
-          target="_blank"
-          rel="noopener noreferrer"
-          jhiTranslate="home.link.bugtracker"
-          >JHipster bug tracker</a
-        >
-      </li>
-      <li>
-        <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.chat"
-          >JHipster public chat room</a
-        >
-      </li>
-      <li>
-        <a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.follow"
-          >follow @jhipster on Twitter</a
-        >
-      </li>
-    </ul>
+          <!-- Card body -->
+          <div id="collapseOne1" class="collapse show" role="tabpanel" aria-labelledby="headingOne1" data-parent="#accordionEx">
+            <div class="card-body">DataSurvey utiliza PayPal como método de pago para la compra de plantillas.</div>
+          </div>
+        </div>
+        <!-- Accordion card -->
 
-    <p>
-      <span jhiTranslate="home.like">If you like JHipster, don't forget to give us a star on</span>
-      <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.github"
-        >GitHub</a
-      >!
-    </p>
+        <!-- Accordion card -->
+        <div class="card accordion-item">
+          <!-- Card header -->
+          <div class="card-header" role="tab" id="headingTwo2">
+            <a
+              data-toggle="collapse"
+              data-parent="#accordionEx"
+              href="#collapseTwo2"
+              aria-expanded="true"
+              aria-controls="collapseTwo2"
+              class="accordion-header"
+            >
+              <h2 class="mb-0">
+                <button
+                  class="accordion-button py-4 collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseTwo2"
+                  aria-expanded="true"
+                  aria-controls="collapseTwo"
+                >
+                  ¿Debo iniciar sesión o registrarme para poder completar encuestas?
+                </button>
+              </h2>
+            </a>
+          </div>
+
+          <!-- Card body -->
+          <div id="collapseTwo2" class="collapse" role="tabpanel" aria-labelledby="headingTwo2" data-parent="#accordionEx">
+            <div class="card-body">
+              Uno de los objetivos de DataSurvey es que se puedan compartir las encuestas con todos los usuarios, sin necesidad de tener una
+              cuenta en la plataforma.
+            </div>
+          </div>
+        </div>
+        <!-- Accordion card -->
+
+        <!-- Accordion card -->
+        <div class="card">
+          <!-- Card header -->
+          <!-- Card header -->
+          <div class="card-header" role="tab" id="headingThree3">
+            <a
+              data-toggle="collapse"
+              data-parent="#accordionEx"
+              href="#collapseThree3"
+              aria-expanded="true"
+              aria-controls="collapseThree3"
+              class="accordion-header"
+            >
+              <h2 class="mb-0">
+                <button
+                  class="accordion-button py-4 collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseThree3"
+                  aria-expanded="true"
+                  aria-controls="collapseThree"
+                >
+                  ¿Cómo comparto una encuesta?
+                </button>
+              </h2>
+            </a>
+          </div>
+          <!-- Card body -->
+          <div id="collapseThree3" class="collapse" role="tabpanel" aria-labelledby="headingThree3" data-parent="#accordionEx">
+            <div class="card-body">
+              La plataforma tiene dos tipos de encuestas: públicas y privadas. Las públicas pueden ser compartidas con todo tipo de usuario,
+              sin ninguna excepción, mientras que las encuestas privadas, necesitan de una clave para poder ser completadas.
+            </div>
+          </div>
+        </div>
+        <!-- Accordion card -->
+      </div>
+      <!-- Accordion wrapper -->
+    </div>
   </div>
 </div>

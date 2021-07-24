@@ -1,0 +1,57 @@
+.app-loading .container {
+  margin: auto auto;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.app-loading .tittle {
+  margin-bottom: 40px;
+  color: #44b9ff;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+.app-loading .square-container {
+  list-style-type: none;
+  display: flex;
+  position: relative;
+}
+.app-loading .square {
+  margin: 4px;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  animation: rotating 2s ease infinite;
+}
+.app-loading .square1 {
+  background: #192e4d;
+  animation-delay: 0.2s;
+}
+.app-loading .square2 {
+  background: #018adf;
+  animation-delay: 0.4s;
+}
+.app-loading .square3 {
+  background: #20a9fe;
+  animation-delay: 0.6s;
+}
+.app-loading .square4 {
+  background: #00e0ac;
+  animation-delay: 0.8s;
+}
+.app-loading .square5 {
+  background: #70ffde;
+  animation-delay: 1s;
+}
+@keyframes rotating {
+  0% {
+    transform: rotate(0) scale(1);
+  }
+  50% {
+    transform: rotate(90deg) scale(0.6);
+  }
+  100% {
+    transform: rotate(90deg) scale(1);
+  }
+}
