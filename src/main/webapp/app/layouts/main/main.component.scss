@@ -2,3 +2,8 @@
 .off-canvas-sidebar:after {
   background: #0f172a;
 }
+
+.main-panel {
+  height: 100vh !important;
+  overflow-y: auto;
+}

@@ -1,0 +1,70 @@
+.ds-contextmenu {
+  position: absolute;
+  background-color: #fff;
+  border-radius: 3px;
+  z-index: 100;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  max-height: 0%;
+  overflow: hidden;
+
+  /* Set our transitions up. */
+  -webkit-transition: max-height 0.8s;
+  -moz-transition: max-height 0.8s;
+  transition: max-height 0.8s;
+
+  ul {
+    padding: 0;
+    margin: 0;
+
+    li {
+      list-style: none;
+      padding: 0.2rem 0;
+      text-align: left;
+      width: 100%;
+
+      button {
+        border: none;
+        outline: 0;
+        background-color: transparent;
+        width: 100%;
+        text-align: left;
+        padding: 0.4rem 8rem 0.4rem 3rem;
+        color: #313747;
+        position: relative;
+
+        &:hover {
+          background-color: #eeeeee;
+        }
+
+        .contextmenu__icon {
+          font-size: 1rem;
+          color: #808080;
+          margin-right: 1rem;
+          position: absolute;
+          left: 0.8rem;
+          bottom: 0.25rem;
+        }
+      }
+    }
+  }
+
+  .ds-contextmenu__divider {
+    padding: 0.25rem 0;
+  }
+
+  .ds-contextmenu__divider--separator-top {
+    border-bottom: 1px solid #dadce0;
+  }
+
+  .ds-contextmenu__divider--separator-bottom {
+    border-bottom: 1px solid #dadce0;
+  }
+
+  &--open {
+    display: block;
+  }
+
+  &--closed {
+    display: none;
+  }
+}
