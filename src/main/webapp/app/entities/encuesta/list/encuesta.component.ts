@@ -110,7 +110,9 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
         if (this.isAdmin()) {
           this.encuestas = tmpEncuestas;
         } else {
-          this.encuestas = tmpEncuestas.filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id);
+          this.encuestas = tmpEncuestas
+            .filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id)
+            .filter(e => e.estado !== EstadoEncuesta.DELETED);
         }
       },
       () => {
