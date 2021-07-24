@@ -17,7 +17,7 @@ import { UsuarioExtraService } from 'app/entities/usuario-extra/service/usuario-
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 
-import { faShareAlt, faWindowMaximize, faPollH, faCalendarAlt, faAngleDown, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faPollH, faCalendarAlt, faStar } from '@fortawesome/free-solid-svg-icons';
 
 import * as $ from 'jquery';
 
@@ -36,10 +36,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   faStar = faStar;
   faCalendarAlt = faCalendarAlt;
-  faWindowMaximize = faWindowMaximize;
   faPollH = faPollH;
 
   notAccount: boolean = true;
+
+  public searchEncuestaPublica: string;
 
   constructor(
     protected encuestaService: EncuestaService,
@@ -50,9 +51,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     protected fb: FormBuilder,
     protected accountService: AccountService,
     protected router: Router
-  ) {}
+  ) {
+    this.searchEncuestaPublica = '';
+  }
 
   ngOnInit(): void {
+    this.searchEncuestaPublica = '';
     this.accountService
       .getAuthenticationState()
       .pipe(takeUntil(this.destroy$))
