@@ -57,6 +57,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
 
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;
+  estadoDeleted = EstadoEncuesta.DELETED;
 
   encuestas?: IEncuesta[];
   isLoading = false;

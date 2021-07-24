@@ -36,7 +36,7 @@
   </div>
 
   <!-- Lista de Encuestas del Usuario -->
-  <div class="ds-list" (contextmenu)="openContextMenu($event)" *ngIf="!isAdmin">
+  <div class="ds-list" (contextmenu)="openContextMenu($event)" *ngIf="!isAdmin()">
     <!-- Context Menu -->
     <div class="ds-contextmenu ds-contextmenu--closed" id="contextmenu">
       <ul id="ds-context-menu__list">
@@ -84,7 +84,7 @@
       (click)="selectSurvey($event)"
       [attr.data-id]="encuesta.id"
     >
-      <div class="entity-header">
+      <div *ngIf="encuesta.estado != estadoDeleted" class="entity-header">
         <div class="entity-state--container">
           <div
             class="entity-state"
@@ -120,7 +120,7 @@
         </div>
       </div>
 
-      <div class="entity-body">
+      <div *ngIf="encuesta.estado != estadoDeleted" class="entity-body">
         <div class="entity-body--row">
           <span *ngIf="encuesta.acceso == 'PUBLIC'" class="title"
             ><fa-icon class="entity-icon--access" [icon]="faUnlock"></fa-icon>&nbsp;&nbsp;{{ encuesta.nombre | titlecase }}</span
@@ -205,7 +205,7 @@
   </div>
 </div>
 
-<div class="table-responsive" id="entities" *ngIf="isAdmin && encuestas && encuestas.length > 0">
+<div class="table-responsive" id="entities" *ngIf="isAdmin() && encuestas && encuestas.length > 0">
   <table class="table table-striped" aria-describedby="page-heading">
     <thead>
       <tr>
