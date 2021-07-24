@@ -58,21 +58,20 @@
           </div>
           <ng-container *ngIf="ePregunta.tipo">
             <ng-container *ngFor="let ePreguntaOpcion of ePreguntasOpciones; let j = index; trackBy: trackId">
-              <ng-container *ngIf="ePreguntaOpcion[j] !== undefined">
-                <ng-container *ngIf="ePregunta.id == ePreguntaOpcion[j].epreguntaCerrada.id">
+              <ng-container *ngFor="let ePreguntaOpcionFinal of ePreguntaOpcion">
+                <ng-container *ngIf="ePregunta.id === ePreguntaOpcionFinal.epreguntaCerrada.id">
                   <div
-                    class="ds-survey--option ds-survey--option--base ds-survey--closed-option"
-                    *ngFor="let ePreguntaOpcion2 of ePreguntaOpcion; let k = index; trackBy: trackId"
-                    [attr.data-id]="ePreguntaOpcion2.id"
+                    class="ds-survey--option ds-survey--option--base ds-survey--closed-option can-delete"
+                    [attr.data-id]="ePreguntaOpcionFinal.id"
                   >
-                    <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcion2.id }}" type="checkbox" disabled /> -->
-                    <label for="{{ ePregunta.id }}-{{ ePreguntaOpcion2.id }}">{{ ePreguntaOpcion2.nombre }}</label>
+                    <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}" type="checkbox" disabled />
+                    <label for="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
                     <fa-icon
                       *ngIf="encuesta!.estado === 'DRAFT'"
                       class="ds-survey--titulo--icon ds-survey--titulo--icon--small"
                       [icon]="faTimes"
                       (click)="deleteOption($event)"
-                      [attr.data-optionid]="ePreguntaOpcion2.id"
+                      [attr.data-optionid]="ePreguntaOpcionFinal.id"
                     ></fa-icon>
                   </div>
                 </ng-container>

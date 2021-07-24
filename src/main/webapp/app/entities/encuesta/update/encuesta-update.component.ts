@@ -150,7 +150,6 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     const checkboxes = document.getElementsByClassName('ds-survey--checkbox');
     for (let i = 0; i < checkboxes.length; i++) {
       checkboxes[i].addEventListener('click', e => {
-        console.log(e);
         if ((e.target as HTMLInputElement).checked) {
           (e.target as HTMLElement).offsetParent!.classList.add('ds-survey--closed-option--active');
         } else {
@@ -176,7 +175,6 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
       const id = event.target.dataset.id;
       this.ePreguntaCerradaService.find(id).subscribe(e => {
         this.selectedQuestionToCreateOption = e.body;
-        console.log(this.selectedQuestionToCreateOption);
       });
     }
   }
@@ -193,22 +191,27 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
         if (e.nodeName !== 'DIV') return;
         if (i === 0) return;
         if ((e as HTMLElement).dataset.id === undefined) return;
+        if (!(e as HTMLElement).classList.contains('can-delete')) return;
         let optionId = (e as HTMLElement).dataset.id;
         optionIdsToDelete.push(+optionId!);
       });
 
-      // Delete question options
-      this.ePreguntaCerradaOpcionService.deleteMany(optionIdsToDelete).subscribe(e => {
-        // Delete question
+      if (optionIdsToDelete.length === 0) {
         this.ePreguntaCerradaService.delete(id).subscribe(e => {
-          console.log('DELETED CLOSED QUESTION: ' + id);
           this.loadAll();
         });
-      });
+      } else {
+        // Delete question options
+        this.ePreguntaCerradaOpcionService.deleteMany(optionIdsToDelete).subscribe(e => {
+          // Delete question
+          this.ePreguntaCerradaService.delete(id).subscribe(e => {
+            this.loadAll();
+          });
+        });
+      }
     } else {
       // Delete open question
       this.ePreguntaAbiertaService.delete(id).subscribe(e => {
-        console.log('DELETED OPEN QUESTION: ' + id);
         this.loadAll();
       });
     }
@@ -266,8 +269,6 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   }
 
   protected createFromForm(): IEPreguntaCerradaOpcion {
-    console.log(this.selectedQuestionToCreateOption);
-
     return {
       // ...new EPreguntaCerradaOpcion(),
       id: undefined,
