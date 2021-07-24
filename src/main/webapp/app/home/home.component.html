@@ -6,7 +6,7 @@
           ><img src="http://datasurvey.org/content/img_datasurvey/datasurvey-logo-text-black.svg" width="300" alt=""
         /></a>
 
-        <div class="col-6">
+        <div class="col-6" style="text-align: end">
           <a href="#">
             <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Encuestas</button>
           </a>
@@ -34,7 +34,7 @@
                 <h5 class="page-header-ui-text">
                   Somos su mejor aliado para la recolección de información, a través de nuestra plataforma.
                 </h5>
-                <div class="row">
+                <div class="row" [hidden]="!notAccount">
                   <div class="col">
                     <a routerLink="/login">
                       <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Comenzar</button>
@@ -95,7 +95,12 @@
         <h1 class="text-center mb-4">Encuestas</h1>
         <div class="row gx-5" *ngIf="encuestas && encuestas.length > 0">
           <div class="col-xl-4 col-lg-4 col-md-6 mb-5" *ngFor="let encuesta of encuestasMostradas; trackBy: trackId">
-            <div class="card lift h-100" (dblclick)="openSurvey($event)" (click)="selectSurvey($event)" [attr.data-id]="encuesta.id">
+            <div
+              class="card-encuesta lift h-100"
+              (dblclick)="openSurvey($event)"
+              (click)="selectSurvey($event)"
+              [attr.data-id]="encuesta.id"
+            >
               <div class="card-body p-3">
                 <div class="card-title mb-0">{{ encuesta.nombre }}</div>
                 <div class="entity-body--row m-2">
