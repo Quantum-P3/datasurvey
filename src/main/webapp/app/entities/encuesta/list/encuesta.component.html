@@ -29,7 +29,12 @@
 
   <jhi-alert-error></jhi-alert-error>
 
-  <jhi-alert></jhi-alert>
+  <div *ngIf="successPublished" class="alert alert-success alert-dismissible fade show" role="alert">
+    Su encuesta fue publicada exitosamente
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
 
   <div class="alert alert-warning" id="no-result" *ngIf="encuestas?.length === 0">
     <span jhiTranslate="dataSurveyApp.encuesta.home.notFound">No surveys found</span>
@@ -61,8 +66,17 @@
             <button type="button" id="contextmenu-duplicate"><fa-icon class="contextmenu__icon" [icon]="faCopy"></fa-icon>Duplicar</button>
           </li>
           <li>
-            <button type="button" id="contextmenu-rename">
-              <fa-icon class="contextmenu__icon" [icon]="faFile"></fa-icon>Cambiar nombre
+            <button
+              type="button"
+              id="contextmenu-publish"
+              type="button"
+              (click)="publish()"
+              data-toggle="modal"
+              data-target="#publicarEncuesta"
+              *ngIf="isPublished"
+            >
+              <!--Agarrar  el id de la encuesta -->
+              <fa-icon class="contextmenu__icon" [icon]="faUpload"></fa-icon>Publicar
             </button>
           </li>
           <li>
