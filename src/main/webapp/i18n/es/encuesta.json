@@ -4,15 +4,15 @@
       "home": {
         "title": "Encuestas",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Encuesta",
-        "createOrEditLabel": "Crear o editar Encuesta",
-        "notFound": "Ningún Encuestas encontrado"
+        "createLabel": "Crear nueva encuesta",
+        "createOrEditLabel": "Crear o editar encuesta",
+        "notFound": "Ninguna encuesta fue encontrada"
       },
-      "created": "Un nuevo Encuesta ha sido creado con el identificador {{ param }}",
-      "updated": "Un Encuesta ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Encuesta ha sido eliminado con el identificador {{ param }}",
+      "created": "Una nueva encuesta ha sido creada con el identificador {{ param }}",
+      "updated": "Una encuesta ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Una encuesta ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Encuesta {{ id }}?"
+        "question": "¿Seguro que quiere eliminar la encuesta {{ id }}?"
       },
       "detail": {
         "title": "Encuesta"
@@ -32,7 +32,7 @@
       "ePreguntaAbierta": "E Pregunta Abierta",
       "ePreguntaCerrada": "E Pregunta Cerrada",
       "categoria": "Categoría",
-      "usuarioExtra": "Usuario Extra"
+      "usuarioExtra": "Correo Usuario"
     }
   }
 }

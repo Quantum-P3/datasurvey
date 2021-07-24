@@ -5,6 +5,7 @@ import java.util.Locale;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import org.datasurvey.domain.User;
+import org.datasurvey.domain.UsuarioExtra;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -114,5 +115,17 @@ public class MailService {
     public void sendPasswordRestoredMail(User user) {
         log.debug("Sending password restored email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordRestoredEmail", "email.restored.title");
+    }
+
+    @Async
+    public void sendSuspendedAccountMail(UsuarioExtra user) {
+        log.debug("Sending suspended account mail to '{}'", user.getUser().getEmail());
+        sendEmailFromTemplate(user.getUser(), "mail/suspendedAccountEmail", "email.suspended.title");
+    }
+
+    @Async
+    public void sendActivatedAccountMail(UsuarioExtra user) {
+        log.debug("Sending reactivated  account mail to '{}'", user.getUser().getEmail());
+        sendEmailFromTemplate(user.getUser(), "mail/reactivatedAccountEmail", "email.reactivation.title");
     }
 }
