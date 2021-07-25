@@ -102,7 +102,7 @@
   font-weight: normal;
 }
 
-.app-loading .lds-pacman {
+/*.app-loading .lds-pacman {
   position: relative;
   margin: auto;
   width: 200px !important;
@@ -149,4 +149,4 @@
 .app-loading .lds-pacman > div:nth-child(1) div:nth-child(3) {
   -webkit-animation-delay: 0s;
   animation-delay: 0s;
-}
+}*/
