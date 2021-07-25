@@ -149,7 +149,8 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
               this.isLoading = false;
               const tmpEncuestas = res.body ?? [];
               if (this.isAdmin()) {
-                this.encuestas = tmpEncuestas;
+                this.encuestas = tmpEncuestas.filter(e => e.estado !== EstadoEncuesta.DELETED);
+
                 this.encuestas.forEach(e => {
                   e.usuarioExtra = this.usuarioExtrasSharedCollection?.find(pU => pU.id == e.usuarioExtra?.id);
                 });

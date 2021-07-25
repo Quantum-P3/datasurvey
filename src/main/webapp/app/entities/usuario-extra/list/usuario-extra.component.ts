@@ -17,6 +17,7 @@ export class UsuarioExtraComponent implements OnInit {
   usuarioExtras?: IUsuarioExtra[];
   publicUsers?: IUser[];
   isLoading = false;
+  successChange = false;
   public searchNombreUsuario: string;
   public searchEstadoUsuario: string;
 
@@ -80,6 +81,7 @@ export class UsuarioExtraComponent implements OnInit {
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed.subscribe(reason => {
       if (reason === 'deleted') {
+        this.successChange = true;
         this.loadAll();
       }
     });
