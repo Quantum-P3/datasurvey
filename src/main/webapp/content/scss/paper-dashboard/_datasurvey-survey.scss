@@ -1,0 +1,77 @@
+.preview-survey {
+  /* --------------------------------------- */
+  /* ----- Radio Button */
+  /* --------------------------------------- */
+  /* --------------------------------------- */
+  /* ----- Checkbox */
+  /* --------------------------------------- */
+}
+.preview-survey h2 {
+  font-size: 16px;
+  color: #001f3f;
+  margin-bottom: 20px;
+  margin-left: 20px;
+}
+.preview-survey > div {
+  padding: 20px 0;
+  border-bottom: 1px solid #ccc;
+}
+.preview-survey .radio label,
+.preview-survey .checkbox label {
+  display: inline-block;
+  cursor: pointer;
+  color: #00b88d;
+  position: relative;
+  padding: 5px 15px 5px 51px;
+  font-size: 1em;
+  border-radius: 5px;
+  -webkit-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.preview-survey .radio label:hover,
+.preview-survey .checkbox label:hover {
+  background: rgba(0, 184, 141, 0.1);
+}
+.preview-survey .radio label:before,
+.preview-survey .checkbox label:before {
+  content: '';
+  display: inline-block;
+  width: 17px;
+  height: 17px;
+  position: absolute;
+  left: 15px;
+  border-radius: 50%;
+  background: none;
+  border: 3px solid #00b88d;
+}
+.preview-survey input[type='radio'] {
+  display: none;
+}
+.preview-survey input[type='radio']:checked + label:before {
+  display: none;
+}
+.preview-survey input[type='radio']:checked + label {
+  padding: 5px 15px;
+  background: #00b88d;
+  border-radius: 2px;
+  color: #fff;
+}
+.preview-survey .checkbox label:before {
+  border-radius: 3px;
+}
+.preview-survey .checkbox input[type='checkbox'] {
+  display: none;
+}
+.preview-survey .checkbox input[type='checkbox']:checked + label:before {
+  display: none;
+}
+.preview-survey .checkbox input[type='checkbox']:checked + label {
+  background: #00b88d;
+  color: #fff;
+  padding: 5px 15px;
+}
+
+.preview-survey .ds-survey--open-option textarea {
+  border: 3px solid #00b88d;
+}

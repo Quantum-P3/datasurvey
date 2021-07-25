@@ -70,7 +70,6 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   isLoading = false;
   selectedSurvey?: IEncuesta | null = null;
   isSaving = false;
-  selectedSurvey: number = 0;
 
   categoriasSharedCollection: ICategoria[] = [];
   usuarioExtrasSharedCollection: IUsuarioExtra[] = [];
@@ -438,7 +437,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   openPreview() {
-    const surveyId = this.selectedSurvey;
+    const surveyId = this.selectedIdSurvey;
     this.router.navigate(['/encuesta', surveyId, 'preview']);
   }
 
@@ -479,8 +478,6 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       } else if ((event.target as HTMLElement).classList.contains('ds-list--entity')) {
         event.target.classList.add('active');
         document.getElementById('contextmenu-create--separator')!.style.display = 'none';
-
-        this.selectedSurvey = Number(event.target.dataset.id);
 
         this.selectedIdSurvey = Number(event.target.dataset.id);
         //this.selectedSurvey = event.target.dataset.encuesta;
