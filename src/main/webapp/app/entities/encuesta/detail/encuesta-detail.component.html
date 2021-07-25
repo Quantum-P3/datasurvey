@@ -141,7 +141,7 @@
                       class="ds-survey--option ds-survey--option--base ds-survey--closed-option can-delete checkbox"
                       [attr.data-id]="ePreguntaOpcionFinal.id"
                     >
-                      <div *ngIf="ePregunta.tipo === 'SINGLE'">
+                      <div class="radio" *ngIf="ePregunta.tipo === 'SINGLE'">
                         <input
                           type="radio"
                           style="border-radius: 3px"
@@ -151,7 +151,7 @@
                         <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
                         <label for="{{ 'radio' + ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
                       </div>
-                      <div *ngIf="ePregunta.tipo === 'MULTIPLE'">
+                      <div class="checkbox" *ngIf="ePregunta.tipo === 'MULTIPLE'">
                         <input type="checkbox" style="border-radius: 3px" id="{{ 'checkbox' + ePreguntaOpcionFinal.id }}" />
                         <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
                         <label for="{{ 'checkbox' + ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
