@@ -27,7 +27,7 @@
     </div>
   </h2>
 
-  <jhi-alert-error></jhi-alert-error>
+  <!-- <jhi-alert-error></jhi-alert-error> -->
 
   <div *ngIf="successPublished" class="alert alert-success alert-dismissible fade show" role="alert">
     Su encuesta fue publicada exitosamente
@@ -42,11 +42,11 @@
 
   <form class="ds-form">
     <div class="input-group">
-      <div class="col-3">
+      <div class="ds-filter">
         <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
         <input type="text" name="searchString" placeholder="Buscar por nombre..." [(ngModel)]="searchString" />
       </div>
-      <div class="col-3">
+      <div class="ds-filter">
         <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
         <select name="accesoEncuestas" id="accesoEncuesta" [(ngModel)]="accesoEncuesta" style="width: 200px">
           <option value="" selected="selected" disabled="disabled">Filtrar por acceso</option>
@@ -55,7 +55,7 @@
           <option value="Private">Privadas</option>
         </select>
       </div>
-      <div class="col-3">
+      <div class="ds-filter">
         <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
         <select name="estadoEncuesta" id="estadoEncuesta" [(ngModel)]="estadoEncuesta" style="width: 200px">
           <option value="" selected="selected" disabled="disabled">Filtrar por estado</option>
@@ -132,7 +132,7 @@
       </ul>
     </div>
     <div
-      class="ds-list--entity card-encuesta lift"
+      class="ds-list--entity"
       *ngFor="
         let encuesta of encuestas! | filter: 'nombre':searchString | filter: 'acceso':accesoEncuesta | filter: 'estado':estadoEncuesta;
         trackBy: trackId
