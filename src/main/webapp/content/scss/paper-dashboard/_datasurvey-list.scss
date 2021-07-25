@@ -32,7 +32,7 @@
     margin: 1rem;
     word-wrap: break-word;
 
-    *:not(div) {
+    * {
       pointer-events: none;
     }
 
@@ -78,6 +78,7 @@
       width: 25px;
       height: 25px;
       color: #313747;
+      pointer-events: visible !important;
     }
 
     .entity-share:hover {

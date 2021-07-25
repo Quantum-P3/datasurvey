@@ -2,11 +2,13 @@ package org.datasurvey.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import org.datasurvey.domain.EPreguntaCerrada;
 import org.datasurvey.domain.EPreguntaCerradaOpcion;
 import org.datasurvey.repository.EPreguntaCerradaOpcionRepository;
 import org.datasurvey.service.EPreguntaCerradaOpcionQueryService;
@@ -58,10 +60,15 @@ public class EPreguntaCerradaOpcionResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new ePreguntaCerradaOpcion, or with status {@code 400 (Bad Request)} if the ePreguntaCerradaOpcion has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/e-pregunta-cerrada-opcions")
+    @PostMapping("/e-pregunta-cerrada-opcions/{id}")
     public ResponseEntity<EPreguntaCerradaOpcion> createEPreguntaCerradaOpcion(
-        @Valid @RequestBody EPreguntaCerradaOpcion ePreguntaCerradaOpcion
+        @Valid @RequestBody EPreguntaCerradaOpcion ePreguntaCerradaOpcion,
+        @PathVariable(value = "id", required = false) final Long id
     ) throws URISyntaxException {
+        EPreguntaCerrada ePreguntaCerrada = new EPreguntaCerrada();
+        ePreguntaCerrada.setId(id);
+        ePreguntaCerradaOpcion.setEPreguntaCerrada(ePreguntaCerrada);
+
         log.debug("REST request to save EPreguntaCerradaOpcion : {}", ePreguntaCerradaOpcion);
         if (ePreguntaCerradaOpcion.getId() != null) {
             throw new BadRequestAlertException("A new ePreguntaCerradaOpcion cannot already have an ID", ENTITY_NAME, "idexists");
@@ -76,7 +83,7 @@ public class EPreguntaCerradaOpcionResource {
     /**
      * {@code PUT  /e-pregunta-cerrada-opcions/:id} : Updates an existing ePreguntaCerradaOpcion.
      *
-     * @param id the id of the ePreguntaCerradaOpcion to save.
+     * @param id                     the id of the ePreguntaCerradaOpcion to save.
      * @param ePreguntaCerradaOpcion the ePreguntaCerradaOpcion to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated ePreguntaCerradaOpcion,
      * or with status {@code 400 (Bad Request)} if the ePreguntaCerradaOpcion is not valid,
@@ -110,7 +117,7 @@ public class EPreguntaCerradaOpcionResource {
     /**
      * {@code PATCH  /e-pregunta-cerrada-opcions/:id} : Partial updates given fields of an existing ePreguntaCerradaOpcion, field will ignore if it is null
      *
-     * @param id the id of the ePreguntaCerradaOpcion to save.
+     * @param id                     the id of the ePreguntaCerradaOpcion to save.
      * @param ePreguntaCerradaOpcion the ePreguntaCerradaOpcion to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated ePreguntaCerradaOpcion,
      * or with status {@code 400 (Bad Request)} if the ePreguntaCerradaOpcion is not valid,
@@ -194,6 +201,17 @@ public class EPreguntaCerradaOpcionResource {
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
+    }
+
+    @PostMapping("/e-pregunta-cerrada-opcions/deleteMany")
+    public ResponseEntity<Void> deleteManyEPreguntaCerradaOpcion(@Valid @RequestBody int[] ids) {
+        for (int id : ids) {
+            ePreguntaCerradaOpcionService.delete((long) id);
+        }
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, Arrays.toString(ids)))
             .build();
     }
 }
