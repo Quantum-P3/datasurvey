@@ -45,6 +45,27 @@ export class EncuestaService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  findQuestions(id: number): Observable<EntityResponseType> {
+    return this.http
+      .get<any>(`${this.resourceUrl}/preguntas/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  findQuestionsOptions(id: number): Observable<EntityResponseType> {
+    return this.http
+      .get<any>(`${this.resourceUrl}/preguntas-opciones/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  findEncuesta(id: number): Observable<IEncuesta> {
+    return this.http.get<IEncuesta>(`${this.resourceUrl}/${id}`);
+  }
+
+  deleteEncuesta(encuesta: IEncuesta): Observable<EntityResponseType> {
+    //const copy = this.convertDateFromClient(encuesta);
+    return this.http.put<IEncuesta>(`${this.resourceUrl}/${getEncuestaIdentifier(encuesta) as number}`, encuesta, { observe: 'response' });
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http

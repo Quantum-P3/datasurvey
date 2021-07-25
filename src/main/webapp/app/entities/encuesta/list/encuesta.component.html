@@ -40,6 +40,45 @@
     <span jhiTranslate="dataSurveyApp.encuesta.home.notFound">No surveys found</span>
   </div>
 
+  <form class="ds-form">
+    <div class="input-group">
+      <div class="col-3">
+        <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+        <input type="text" name="searchString" placeholder="Buscar por nombre..." [(ngModel)]="searchString" />
+      </div>
+      <div class="col-3">
+        <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+        <select name="accesoEncuestas" id="accesoEncuesta" [(ngModel)]="accesoEncuesta" style="width: 200px">
+          <option value="" selected="selected" disabled="disabled">Filtrar por acceso</option>
+          <option value="">Todos Accesos</option>
+          <option value="Public">Públicas</option>
+          <option value="Private">Privadas</option>
+        </select>
+      </div>
+      <div class="col-3">
+        <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+        <select name="estadoEncuesta" id="estadoEncuesta" [(ngModel)]="estadoEncuesta" style="width: 200px">
+          <option value="" selected="selected" disabled="disabled">Filtrar por estado</option>
+          <option value="">Todos Estados</option>
+          <option value="Draft">Borradores</option>
+          <option value="Active">Activadas</option>
+          <option value="Finished">Finalizadas</option>
+        </select>
+      </div>
+      <!--<div class="col-3">
+          <div class="input-group-addon "><i class="glyphicon glyphicon-search"></i></div>
+          <select id="categoriaEncuesta"  name="categoriaEncuesta" [(ngModel)]="categoriaEncuesta">
+            <option [ngValue]="null" selected>Filtre por categoría</option>
+            <option
+              *ngFor="let categoriaOption of categoriasSharedCollection; trackBy: trackCategoriaById"
+              [ngValue]="categoriaOption.nombre"    >
+              {{ categoriaOption.nombre }}
+            </option>
+          </select>
+        </div>-->
+    </div>
+  </form>
+
   <!-- Lista de Encuestas del Usuario -->
   <div class="ds-list" (contextmenu)="openContextMenu($event)" *ngIf="!isAdmin()">
     <!-- Context Menu -->
@@ -85,17 +124,22 @@
         </div>
         <div class="ds-contextmenu__divider" id="contextmenu-delete--separator">
           <li>
-            <button type="button"><fa-icon class="contextmenu__icon" [icon]="faTrashAlt"></fa-icon>Eliminar</button>
+            <button type="button" (click)="deleteSurvey()">
+              <fa-icon class="contextmenu__icon" [icon]="faTrashAlt"></fa-icon>Eliminar
+            </button>
           </li>
         </div>
       </ul>
     </div>
-
     <div
-      class="ds-list--entity"
-      *ngFor="let encuesta of encuestas; trackBy: trackId"
+      class="ds-list--entity card-encuesta lift"
+      *ngFor="
+        let encuesta of encuestas! | filter: 'nombre':searchString | filter: 'acceso':accesoEncuesta | filter: 'estado':estadoEncuesta;
+        trackBy: trackId
+      "
       (dblclick)="openSurvey($event)"
       (click)="selectSurvey($event)"
+      [hidden]="encuesta.estado == 'DELETED'"
       [attr.data-id]="encuesta.id"
     >
       <div class="entity-header">
@@ -165,21 +209,55 @@
       </div>
 
       <!-- <p>
-        <a [routerLink]="['/encuesta', encuesta.id, 'view']">{{ encuesta.id }}</a>
-      </p>
-      <p>{{ encuesta.nombre }}</p>
-      <p>{{ encuesta.descripcion }}</p>
-      <p>{{ encuesta.fechaCreacion | formatMediumDatetime }}</p>
-      <p>{{ encuesta.fechaPublicacion | formatMediumDatetime }}</p>
-      <p>{{ encuesta.fechaFinalizar | formatMediumDatetime }}</p>
-      <p>{{ encuesta.fechaFinalizada | formatMediumDatetime }}</p>
-      <p>{{ encuesta.calificacion }}</p>
-      <p jhiTranslate="{{ 'dataSurveyApp.AccesoEncuesta.' + encuesta.acceso }}">{{ encuesta.acceso }}</p>
-      <p>{{ encuesta.contrasenna }}</p>
-      <p jhiTranslate="{{ 'dataSurveyApp.EstadoEncuesta.' + encuesta.estado }}">{{ encuesta.estado }}</p>
-      <div>
-        <div *ngIf="encuesta.categoria">
-          <a [routerLink]="['/categoria', encuesta.categoria?.id, 'view']">{{ encuesta.categoria?.nombre }}</a>
+          <a [routerLink]="['/encuesta', encuesta.id, 'view']">{{ encuesta.id }}</a>
+        </p>
+        <p>{{ encuesta.nombre }}</p>
+        <p>{{ encuesta.descripcion }}</p>
+        <p>{{ encuesta.fechaCreacion | formatMediumDatetime }}</p>
+        <p>{{ encuesta.fechaPublicacion | formatMediumDatetime }}</p>
+        <p>{{ encuesta.fechaFinalizar | formatMediumDatetime }}</p>
+        <p>{{ encuesta.fechaFinalizada | formatMediumDatetime }}</p>
+        <p>{{ encuesta.calificacion }}</p>
+        <p jhiTranslate="{{ 'dataSurveyApp.AccesoEncuesta.' + encuesta.acceso }}">{{ encuesta.acceso }}</p>
+        <p>{{ encuesta.contrasenna }}</p>
+        <p jhiTranslate="{{ 'dataSurveyApp.EstadoEncuesta.' + encuesta.estado }}">{{ encuesta.estado }}</p>
+        <div>
+          <div *ngIf="encuesta.categoria">
+            <a [routerLink]="['/categoria', encuesta.categoria?.id, 'view']">{{ encuesta.categoria?.nombre }}</a>
+          </div>
+        </div>
+        <div>
+          <div *ngIf="encuesta.usuarioExtra">
+            <a [routerLink]="['/usuario-extra', encuesta.usuarioExtra?.id, 'view']">{{ encuesta.usuarioExtra?.id }}</a>
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="btn-group">
+            <button
+              type="submit"
+              [routerLink]="['/encuesta', encuesta.id, 'view']"
+              class="btn btn-info btn-sm"
+              data-cy="entityDetailsButton"
+            >
+              <fa-icon icon="eye"></fa-icon>
+              <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+            </button>
+
+            <button
+              type="submit"
+              [routerLink]="['/encuesta', encuesta.id, 'edit']"
+              class="btn btn-primary btn-sm"
+              data-cy="entityEditButton"
+            >
+              <fa-icon icon="pencil-alt"></fa-icon>
+              <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+
+            <button type="submit" (click)="delete(encuesta)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              <fa-icon icon="times"></fa-icon>
+              <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+            </button>
+          </div>
         </div>
       </div>
       <div>
@@ -218,7 +296,6 @@
     </div>
   </div>
 </div>
-
 <div class="table-responsive" id="entities" *ngIf="isAdmin() && encuestas && encuestas.length > 0">
   <table class="table table-striped" aria-describedby="page-heading">
     <thead>
@@ -233,9 +310,15 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let encuesta of encuestas; trackBy: trackId" data-cy="entityTable">
+      <tr
+        *ngFor="
+          let encuesta of encuestas | filter: 'nombre':searchString | filter: 'acceso':accesoEncuesta | filter: 'estado':estadoEncuesta;
+          trackBy: trackId
+        "
+        data-cy="entityTable"
+      >
         <td>{{ encuesta.nombre }}</td>
-        <td>{{ encuesta.fechaCreacion | formatMediumDatetime }}</td>
+        <td>{{ encuesta.fechaCreacion | formatShortDatetime | titlecase }}</td>
         <td jhiTranslate="{{ 'dataSurveyApp.AccesoEncuesta.' + encuesta.acceso }}">{{ encuesta.acceso }}</td>
         <td jhiTranslate="{{ 'dataSurveyApp.EstadoEncuesta.' + encuesta.estado }}">{{ encuesta.estado }}</td>
         <td>
@@ -245,9 +328,7 @@
         </td>
         <td>
           <div *ngIf="encuesta.usuarioExtra">
-            <a [routerLink]="['/usuario-extra', encuesta.usuarioExtra?.nombre, 'view']">
-              {{ encuesta.usuarioExtra?.nombre }}
-            </a>
+            {{ encuesta.usuarioExtra?.user?.login }}
           </div>
         </td>
         <td class="text-right">

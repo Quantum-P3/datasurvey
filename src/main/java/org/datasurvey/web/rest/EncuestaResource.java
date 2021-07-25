@@ -2,14 +2,21 @@ package org.datasurvey.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import org.datasurvey.domain.EPreguntaAbierta;
+import org.datasurvey.domain.EPreguntaCerrada;
+import org.datasurvey.domain.EPreguntaCerradaOpcion;
 import org.datasurvey.domain.Encuesta;
 import org.datasurvey.domain.enumeration.AccesoEncuesta;
 import org.datasurvey.repository.EncuestaRepository;
+import org.datasurvey.service.*;
 import org.datasurvey.service.EncuestaQueryService;
 import org.datasurvey.service.EncuestaService;
 import org.datasurvey.service.MailService;
@@ -45,16 +52,28 @@ public class EncuestaResource {
 
     private final MailService mailService;
 
+    private final EPreguntaCerradaService ePreguntaCerradaService;
+
+    private final EPreguntaAbiertaService ePreguntaAbiertaService;
+
+    private final EPreguntaCerradaOpcionService ePreguntaCerradaOpcionService;
+
     public EncuestaResource(
         EncuestaService encuestaService,
         EncuestaRepository encuestaRepository,
         EncuestaQueryService encuestaQueryService,
-        MailService mailService
+        MailService mailService,
+        EPreguntaCerradaService ePreguntaCerradaService,
+        EPreguntaAbiertaService ePreguntaAbiertaService,
+        EPreguntaCerradaOpcionService ePreguntaCerradaOpcionService
     ) {
         this.encuestaService = encuestaService;
         this.encuestaRepository = encuestaRepository;
         this.encuestaQueryService = encuestaQueryService;
         this.mailService = mailService;
+        this.ePreguntaCerradaService = ePreguntaCerradaService;
+        this.ePreguntaAbiertaService = ePreguntaAbiertaService;
+        this.ePreguntaCerradaOpcionService = ePreguntaCerradaOpcionService;
     }
 
     /**
@@ -80,7 +99,7 @@ public class EncuestaResource {
     /**
      * {@code PUT  /encuestas/:id} : Updates an existing encuesta.
      *
-     * @param id the id of the encuesta to save.
+     * @param id       the id of the encuesta to save.
      * @param encuesta the encuesta to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated encuesta,
      * or with status {@code 400 (Bad Request)} if the encuesta is not valid,
@@ -120,7 +139,7 @@ public class EncuestaResource {
     /**
      * {@code PATCH  /encuestas/:id} : Partial updates given fields of an existing encuesta, field will ignore if it is null
      *
-     * @param id the id of the encuesta to save.
+     * @param id       the id of the encuesta to save.
      * @param encuesta the encuesta to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated encuesta,
      * or with status {@code 400 (Bad Request)} if the encuesta is not valid,
@@ -164,6 +183,55 @@ public class EncuestaResource {
         log.debug("REST request to get Encuestas by criteria: {}", criteria);
         List<Encuesta> entityList = encuestaQueryService.findByCriteria(criteria);
         return ResponseEntity.ok().body(entityList);
+    }
+
+    @GetMapping("/encuestas/preguntas/{id}")
+    public ResponseEntity<List<Object>> getPreguntasByIdEncuesta(@PathVariable Long id) {
+        List<EPreguntaCerrada> preguntasCerradas = ePreguntaCerradaService.findAll();
+        List<EPreguntaAbierta> preguntasAbiertas = ePreguntaAbiertaService.findAll();
+        List<Object> preguntas = Stream.concat(preguntasCerradas.stream(), preguntasAbiertas.stream()).collect(Collectors.toList());
+        List<Object> preguntasFiltered = new ArrayList<>();
+
+        for (Object obj : preguntas) {
+            if (obj.getClass() == EPreguntaCerrada.class) {
+                if (((EPreguntaCerrada) obj).getEncuesta() != null) {
+                    if (((EPreguntaCerrada) obj).getEncuesta().getId().equals(id)) {
+                        preguntasFiltered.add(obj);
+                    }
+                }
+            } else if (obj.getClass() == EPreguntaAbierta.class) {
+                if (((EPreguntaAbierta) obj).getEncuesta() != null) {
+                    if (((EPreguntaAbierta) obj).getEncuesta().getId().equals(id)) {
+                        preguntasFiltered.add(obj);
+                    }
+                }
+            }
+        }
+        return ResponseEntity.ok().body(preguntasFiltered);
+    }
+
+    @GetMapping("/encuestas/preguntas-opciones/{id}")
+    public ResponseEntity<List<List<EPreguntaCerradaOpcion>>> getPreguntaCerradaOpcionByIdEncuesta(@PathVariable Long id) {
+        List<List<EPreguntaCerradaOpcion>> res = new ArrayList<>();
+        List<EPreguntaCerrada> preguntasCerradas = ePreguntaCerradaService.findAll();
+        List<EPreguntaCerrada> preguntasCerradasFiltered = preguntasCerradas
+            .stream()
+            .filter(p -> Objects.nonNull(p.getEncuesta()))
+            .filter(p -> p.getEncuesta().getId().equals(id))
+            .collect(Collectors.toList());
+        List<EPreguntaCerradaOpcion> opciones = ePreguntaCerradaOpcionService.findAll();
+
+        for (EPreguntaCerrada ePreguntaCerrada : preguntasCerradasFiltered) {
+            long preguntaCerradaId = ePreguntaCerrada.getId();
+            List<EPreguntaCerradaOpcion> opcionesFiltered = opciones
+                .stream()
+                .filter(o -> Objects.nonNull(o.getEPreguntaCerrada()))
+                .filter(o -> o.getEPreguntaCerrada().getId().equals(preguntaCerradaId))
+                .collect(Collectors.toList());
+            res.add(opcionesFiltered);
+        }
+
+        return ResponseEntity.ok().body(res);
     }
 
     /**

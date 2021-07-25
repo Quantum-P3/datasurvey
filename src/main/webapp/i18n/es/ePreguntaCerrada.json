@@ -23,7 +23,8 @@
       "opcional": "Opcional",
       "orden": "Orden",
       "ePreguntaCerradaOpcion": "E Pregunta Cerrada Opcion",
-      "encuesta": "Encuesta"
+      "encuesta": "Encuesta",
+      "tiporespuesta": "Tipo de respuesta"
     }
   }
 }
