@@ -62,7 +62,6 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;
   estadoDeleted = EstadoEncuesta.DELETED;
-  public searchString: string;
 
   encuestas?: IEncuesta[];
   isLoading = false;
@@ -74,6 +73,11 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
 
   selectedSurvey: number | null = null;
   encuestaencontrada: IEncuesta | null = null;
+
+  public searchString: string;
+  public accesoEncuesta: string;
+  //public categoriaEncuesta: string;
+  public estadoEncuesta: string;
 
   editForm = this.fb.group({
     id: [],
@@ -105,6 +109,8 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     protected router: Router
   ) {
     this.searchString = '';
+    this.accesoEncuesta = '';
+    this.estadoEncuesta = '';
   }
 
   resetForm(): void {
@@ -133,6 +139,11 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.searchString = '';
+    this.accesoEncuesta = '';
+    //this.categoriaEncuesta = '';
+    this.estadoEncuesta = '';
+
     document.body.addEventListener('click', e => {
       document.getElementById('contextmenu')!.classList.add('ds-contextmenu--closed');
       document.getElementById('contextmenu')!.classList.remove('ds-contextmenu--open');
