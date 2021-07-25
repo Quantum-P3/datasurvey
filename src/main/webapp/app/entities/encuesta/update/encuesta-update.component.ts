@@ -1,3 +1,4 @@
+import { IEPreguntaAbierta } from './../../e-pregunta-abierta/e-pregunta-abierta.model';
 import { EPreguntaCerrada } from './../../e-pregunta-cerrada/e-pregunta-cerrada.model';
 import { EPreguntaCerradaOpcion, IEPreguntaCerradaOpcion } from './../../e-pregunta-cerrada-opcion/e-pregunta-cerrada-opcion.model';
 import { EPreguntaAbiertaService } from './../../e-pregunta-abierta/service/e-pregunta-abierta.service';
@@ -70,6 +71,9 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   editFormQuestion = this.fb.group({
     id: [],
     nombre: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(500)]],
+    tipo: [PreguntaCerradaTipo.SINGLE],
+    opcional: [false],
+    tipopregunta: ['CLOSED'],
   });
 
   ePreguntas?: any[];
@@ -309,13 +313,24 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     console.log(surveyId);
   }
 
-  protected createFromFormQuestion(): IEPreguntaCerrada {
+  protected createFromFormClosedQuestion(): IEPreguntaCerrada {
     return {
       // ...new EPreguntaCerrada(),
       id: undefined,
       nombre: this.editFormQuestion.get(['nombre'])!.value,
-      tipo: PreguntaCerradaTipo.SINGLE,
-      opcional: false,
+      tipo: this.editFormQuestion.get(['tipo'])!.value,
+      opcional: this.editFormQuestion.get(['opcional'])!.value,
+      orden: 10,
+      encuesta: this.encuesta,
+    };
+  }
+
+  protected createFromFormOpenQuestion(): IEPreguntaAbierta {
+    return {
+      // ...new EPreguntaAbierta(),
+      id: undefined,
+      nombre: this.editFormQuestion.get(['nombre'])!.value,
+      opcional: this.editFormQuestion.get(['opcional'])!.value,
       orden: 10,
       encuesta: this.encuesta,
     };
@@ -327,15 +342,33 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
 
   saveQuestion(): void {
     this.isSavingQuestion = true;
-    const ePreguntaCerrada = this.createFromFormQuestion();
-    if (ePreguntaCerrada.id !== undefined) {
-      this.subscribeToSaveResponseQuestion(this.ePreguntaCerradaService.update(ePreguntaCerrada));
-    } else {
-      this.subscribeToSaveResponseQuestion(this.ePreguntaCerradaService.create(ePreguntaCerrada));
+    const tipoPregunta = this.editFormQuestion.get(['tipopregunta'])!.value;
+
+    if (tipoPregunta === 'CLOSED') {
+      const ePreguntaCerrada = this.createFromFormClosedQuestion();
+      if (ePreguntaCerrada.id !== undefined) {
+        this.subscribeToSaveResponseQuestionClosed(this.ePreguntaCerradaService.update(ePreguntaCerrada));
+      } else {
+        this.subscribeToSaveResponseQuestionClosed(this.ePreguntaCerradaService.create(ePreguntaCerrada));
+      }
+    } else if (tipoPregunta === 'OPEN') {
+      const ePreguntaAbierta = this.createFromFormOpenQuestion();
+      if (ePreguntaAbierta.id !== undefined) {
+        this.subscribeToSaveResponseQuestionOpen(this.ePreguntaAbiertaService.update(ePreguntaAbierta));
+      } else {
+        this.subscribeToSaveResponseQuestionOpen(this.ePreguntaAbiertaService.create(ePreguntaAbierta));
+      }
     }
   }
 
-  protected subscribeToSaveResponseQuestion(result: Observable<HttpResponse<IEPreguntaCerrada>>): void {
+  protected subscribeToSaveResponseQuestionClosed(result: Observable<HttpResponse<IEPreguntaCerrada>>): void {
+    result.pipe(finalize(() => this.onSaveFinalizeQuestion())).subscribe(
+      () => this.onSaveSuccessQuestion(),
+      () => this.onSaveErrorQuestion()
+    );
+  }
+
+  protected subscribeToSaveResponseQuestionOpen(result: Observable<HttpResponse<IEPreguntaAbierta>>): void {
     result.pipe(finalize(() => this.onSaveFinalizeQuestion())).subscribe(
       () => this.onSaveSuccessQuestion(),
       () => this.onSaveErrorQuestion()
@@ -343,7 +376,8 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   }
 
   protected onSaveSuccessQuestion(): void {
-    this.editFormQuestion.reset();
+    this.editFormQuestion.reset({ tipo: PreguntaCerradaTipo.SINGLE, tipopregunta: 'CLOSED', opcional: false });
+    this.editForm.reset();
     this.ePreguntas = [];
     this.ePreguntasOpciones = [];
     this.loadAll();
