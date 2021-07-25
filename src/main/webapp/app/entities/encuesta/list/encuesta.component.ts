@@ -450,6 +450,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       });
 
       if ((event.target as HTMLElement).classList.contains('ds-list')) {
+        document;
         document.getElementById('contextmenu-create--separator')!.style.display = 'block';
         document.getElementById('contextmenu-edit--separator')!.style.display = 'none';
         document.getElementById('contextmenu-delete--separator')!.style.display = 'none';

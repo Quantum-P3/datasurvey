@@ -21,7 +21,6 @@ export class EncuestaPublishDialogComponent implements OnInit {
   }
 
   confirmPublish(encuesta: IEncuesta): void {
-    debugger;
     if (encuesta.estado === 'DRAFT') {
       encuesta.estado = EstadoEncuesta.ACTIVE;
     }
@@ -36,7 +35,6 @@ export class EncuestaPublishDialogComponent implements OnInit {
   }
 
   generatePassword(): string {
-    debugger;
     const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
     let password = '';

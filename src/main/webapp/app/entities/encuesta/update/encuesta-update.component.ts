@@ -25,10 +25,13 @@ import { IEPreguntaCerrada } from 'app/entities/e-pregunta-cerrada/e-pregunta-ce
 import { EPreguntaCerradaService } from 'app/entities/e-pregunta-cerrada/service/e-pregunta-cerrada.service';
 import { EPreguntaCerradaDeleteDialogComponent } from 'app/entities/e-pregunta-cerrada/delete/e-pregunta-cerrada-delete-dialog.component';
 
-import { faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faPlus, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { PreguntaCerradaTipo } from 'app/entities/enumerations/pregunta-cerrada-tipo.model';
 import { EncuestaDeleteQuestionDialogComponent } from '../encuesta-delete-question-dialog/encuesta-delete-question-dialog.component';
 import { EncuestaDeleteOptionDialogComponent } from '../encuesta-delete-option-dialog/encuesta-delete-option-dialog.component';
+
+import { ParametroAplicacionService } from './../../parametro-aplicacion/service/parametro-aplicacion.service';
+import { IParametroAplicacion } from './../../parametro-aplicacion/parametro-aplicacion.model';
 
 @Component({
   selector: 'jhi-encuesta-update',
@@ -37,6 +40,7 @@ import { EncuestaDeleteOptionDialogComponent } from '../encuesta-delete-option-d
 export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   faTimes = faTimes;
   faPlus = faPlus;
+  faQuestion = faQuestion;
 
   isSaving = false;
   isSavingQuestion = false;
@@ -79,6 +83,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   ePreguntas?: any[];
   ePreguntasOpciones?: any[];
   encuesta: Encuesta | null = null;
+  parametrosAplicacion?: IParametroAplicacion | null = null;
 
   isLoading = false;
 
@@ -95,7 +100,8 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     protected modalService: NgbModal,
     protected ePreguntaCerradaService: EPreguntaCerradaService,
     protected ePreguntaCerradaOpcionService: EPreguntaCerradaOpcionService,
-    protected ePreguntaAbiertaService: EPreguntaAbiertaService
+    protected ePreguntaAbiertaService: EPreguntaAbiertaService,
+    protected parametroAplicacionService: ParametroAplicacionService
   ) {}
 
   loadAll(): void {
@@ -123,6 +129,12 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     );
   }
 
+  async loadAplicationParameters(): Promise<void> {
+    const params = await this.parametroAplicacionService.find(1).toPromise();
+    this.parametrosAplicacion = params.body;
+    console.log(this.parametrosAplicacion);
+  }
+
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ encuesta }) => {
       if (encuesta.id === undefined) {
@@ -134,6 +146,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
       } else {
         this.encuesta = encuesta;
         this.loadAll();
+        this.loadAplicationParameters();
       }
 
       // this.updateForm(encuesta);
