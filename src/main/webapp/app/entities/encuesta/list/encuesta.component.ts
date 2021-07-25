@@ -265,7 +265,6 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
           })
         )
         .subscribe(data => {
-          console.log(data);
           this.encuestaencontrada = data;
         });
 
@@ -449,13 +448,8 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
 
     if (event.type === 'contextmenu') {
       event.preventDefault();
-
-      debugger;
-
       this.selectedSurveyId = event.target.dataset.id;
-      console.log(this.selectedSurveyId);
 
-      debugger;
       let res = await this.encuestaService.find(this.selectedSurveyId).toPromise();
       this.selectedSurvey = res.body;
       this.isPublished = this.selectedSurvey!.estado === 'DRAFT'; // QUE SE LE MUESTRE CUANDO ESTE EN DRAFT
@@ -490,9 +484,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     }
   }
 
-  publish() {
-    debugger;
-
+  publish(): void {
     const modalRef = this.modalService.open(EncuestaPublishDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.encuesta = this.selectedSurvey;
     // unsubscribe not needed because closed completes on modal close
