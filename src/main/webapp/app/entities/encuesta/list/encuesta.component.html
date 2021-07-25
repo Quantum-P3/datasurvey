@@ -286,7 +286,7 @@
             <fa-icon icon="pencil-alt"></fa-icon>
             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
           </button>
-          
+
           <button type="submit" (click)="delete(encuesta)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
             <fa-icon icon="times"></fa-icon>
             <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
@@ -318,7 +318,7 @@
         data-cy="entityTable"
       >
         <td>{{ encuesta.nombre }}</td>
-        <td>{{ encuesta.fechaCreacion | formatMediumDatetime }}</td>
+        <td>{{ encuesta.fechaCreacion | formatShortDatetime | titlecase }}</td>
         <td jhiTranslate="{{ 'dataSurveyApp.AccesoEncuesta.' + encuesta.acceso }}">{{ encuesta.acceso }}</td>
         <td jhiTranslate="{{ 'dataSurveyApp.EstadoEncuesta.' + encuesta.estado }}">{{ encuesta.estado }}</td>
         <td>
@@ -328,9 +328,7 @@
         </td>
         <td>
           <div *ngIf="encuesta.usuarioExtra">
-            <a [routerLink]="['/usuario-extra', encuesta.usuarioExtra?.nombre, 'view']">
-              {{ encuesta.usuarioExtra?.nombre }}
-            </a>
+            {{ encuesta.usuarioExtra?.user?.login }}
           </div>
         </td>
         <td class="text-right">
