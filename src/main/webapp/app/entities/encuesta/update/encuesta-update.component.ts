@@ -1,4 +1,3 @@
-import { EncuestaDeleteQuestionDialogComponent } from './../encuesta-delete-dialog/encuesta-delete-question-dialog.component';
 import { EPreguntaCerrada } from './../../e-pregunta-cerrada/e-pregunta-cerrada.model';
 import { EPreguntaCerradaOpcion, IEPreguntaCerradaOpcion } from './../../e-pregunta-cerrada-opcion/e-pregunta-cerrada-opcion.model';
 import { EPreguntaAbiertaService } from './../../e-pregunta-abierta/service/e-pregunta-abierta.service';
@@ -27,6 +26,9 @@ import { EPreguntaCerradaDeleteDialogComponent } from 'app/entities/e-pregunta-c
 
 import { faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { PreguntaCerradaTipo } from 'app/entities/enumerations/pregunta-cerrada-tipo.model';
+import { EncuestaDeleteQuestionDialogComponent } from '../encuesta-delete-question-dialog/encuesta-delete-question-dialog.component';
+import { EncuestaDeleteOptionDialogComponent } from '../encuesta-delete-option-dialog/encuesta-delete-option-dialog.component';
+
 @Component({
   selector: 'jhi-encuesta-update',
   templateUrl: './encuesta-update.component.html',
@@ -232,11 +234,16 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   }
 
   deleteOption(event: any): void {
-    const id = event.target.dataset.optionid;
-    this.ePreguntaCerradaOpcionService.delete(id).subscribe(e => {
-      this.ePreguntas = [];
-      this.ePreguntasOpciones = [];
-      this.loadAll();
+    const modalRef = this.modalService.open(EncuestaDeleteOptionDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'confirm') {
+        const id = event.target.dataset.optionid;
+        this.ePreguntaCerradaOpcionService.delete(id).subscribe(e => {
+          this.ePreguntas = [];
+          this.ePreguntasOpciones = [];
+          this.loadAll();
+        });
+      }
     });
   }
 
