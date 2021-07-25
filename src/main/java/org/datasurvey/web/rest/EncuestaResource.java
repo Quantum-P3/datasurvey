@@ -125,6 +125,31 @@ public class EncuestaResource {
 
         Encuesta result = encuestaService.save(encuesta);
 
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, encuesta.getId().toString()))
+            .body(result);
+    }
+
+    @PutMapping("/encuestas/publish/{id}")
+    public ResponseEntity<Encuesta> publishEncuesta(
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody Encuesta encuesta
+    ) throws URISyntaxException {
+        log.debug("REST request to update Encuesta : {}, {}", id, encuesta);
+        if (encuesta.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, encuesta.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!encuestaRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Encuesta result = encuestaService.save(encuesta);
+
         if (result.getAcceso().equals(AccesoEncuesta.PRIVATE)) {
             mailService.sendPublishedPrivateMail(result.getUsuarioExtra(), result.getContrasenna());
         } else {

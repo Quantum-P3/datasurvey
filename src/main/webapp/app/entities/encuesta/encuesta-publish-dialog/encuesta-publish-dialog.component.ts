@@ -30,7 +30,7 @@ export class EncuestaPublishDialogComponent implements OnInit {
       encuesta.contrasenna = this.generatePassword();
     }
 
-    this.encuestaService.update(encuesta).subscribe(() => {
+    this.encuestaService.publishEncuesta(encuesta).subscribe(() => {
       this.activeModal.close('published');
     });
   }
