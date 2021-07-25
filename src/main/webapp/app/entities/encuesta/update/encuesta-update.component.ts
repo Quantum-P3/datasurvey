@@ -408,13 +408,13 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   //   }
   // }
 
-  // trackCategoriaById(index: number, item: ICategoria): number {
-  //   return item.id!;
-  // }
+  trackCategoriaById(index: number, item: ICategoria): number {
+    return item.id!;
+  }
 
-  // trackUsuarioExtraById(index: number, item: IUsuarioExtra): number {
-  //   return item.id!;
-  // }
+  trackUsuarioExtraById(index: number, item: IUsuarioExtra): number {
+    return item.id!;
+  }
 
   // protected subscribeToSaveResponse(result: Observable<HttpResponse<IEncuesta>>): void {
   //   result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
