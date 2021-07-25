@@ -394,12 +394,16 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneWithAuthoritiesByLogin(login);
+        //cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
     }
 
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
         //findOneWithAuthoritiesByLogin
+        //cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
+
+        //return user;
     }
 
     /**

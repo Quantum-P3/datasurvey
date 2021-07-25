@@ -24,13 +24,13 @@ public class CacheConfiguration {
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
-        JHipsterProperties.Cache.Ehcache ehcache = jHipsterProperties.getCache().getEhcache();
+        //JHipsterProperties.Cache.Ehcache ehcache = jHipsterProperties.getCache().getEhcache();
 
         jcacheConfiguration =
             Eh107Configuration.fromEhcacheCacheConfiguration(
                 CacheConfigurationBuilder
-                    .newCacheConfigurationBuilder(Object.class, Object.class, ResourcePoolsBuilder.heap(ehcache.getMaxEntries()))
-                    .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(ehcache.getTimeToLiveSeconds())))
+                    .newCacheConfigurationBuilder(Object.class, Object.class, ResourcePoolsBuilder.heap(100L))
+                    .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(1)))
                     .build()
             );
     }
@@ -82,6 +82,7 @@ public class CacheConfiguration {
 
     private void createCache(javax.cache.CacheManager cm, String cacheName) {
         javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
+
         if (cache != null) {
             cache.clear();
         } else {

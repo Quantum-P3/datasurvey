@@ -74,13 +74,18 @@
               <p class="mb-4" style="color: rgba(146, 146, 146, 0.664)">Ingrese su correo electrónico y contraseña</p>
             </div>
 
-            <div class="alert alert-danger" *ngIf="error" jhiTranslate="login.messages.error.authentication" data-cy="loginError">
+            <div
+              class="alert alert-danger"
+              *ngIf="error && !userSuspended"
+              jhiTranslate="login.messages.error.authentication"
+              data-cy="loginError"
+            >
               <strong>Failed to sign in!</strong> Please check your credentials and try again.
             </div>
 
             <div
               class="alert alert-danger"
-              *ngIf="userSuspended"
+              *ngIf="userSuspended && !error"
               jhiTranslate="login.messages.error.userSuspended"
               data-cy="loginError"
             ></div>
