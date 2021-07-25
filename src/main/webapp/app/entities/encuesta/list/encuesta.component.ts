@@ -22,6 +22,7 @@ import { EstadoEncuesta } from 'app/entities/enumerations/estado-encuesta.model'
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { Router } from '@angular/router';
+import { EncuestaPublishDialogComponent } from '../encuesta-publish-dialog/encuesta-publish-dialog.component';
 
 import {
   faShareAlt,
@@ -38,7 +39,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import * as $ from 'jquery';
-import { EncuestaPublishDialogComponent } from '../encuesta-publish-dialog/encuesta-publish-dialog.component';
 
 @Component({
   selector: 'jhi-encuesta',
@@ -71,7 +71,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   categoriasSharedCollection: ICategoria[] = [];
   usuarioExtrasSharedCollection: IUsuarioExtra[] = [];
 
-  selectedSurvey: number | null = null;
+  selectedIdSurvey: number | null = null;
   encuestaencontrada: IEncuesta | null = null;
 
   public searchString: string;
@@ -208,8 +208,8 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   deleteSurvey(): void {
-    if (this.selectedSurvey != null) {
-      this.getEncuesta(this.selectedSurvey)
+    if (this.selectedIdSurvey != null) {
+      this.getEncuesta(this.selectedIdSurvey)
         .pipe(
           finalize(() => {
             const modalRef = this.modalService.open(EncuestaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
@@ -436,7 +436,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
         event.target.classList.add('active');
         document.getElementById('contextmenu-create--separator')!.style.display = 'none';
 
-        this.selectedSurvey = Number(event.target.dataset.id);
+        this.selectedIdSurvey = Number(event.target.dataset.id);
         //this.selectedSurvey = event.target.dataset.encuesta;
       }
 

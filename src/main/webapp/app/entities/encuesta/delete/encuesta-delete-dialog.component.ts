@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { EstadoEncuesta } from 'app/entities/enumerations/estado-encuesta.model';
-
 import { IEncuesta } from '../encuesta.model';
 import { EncuestaService } from '../service/encuesta.service';
 import { EstadoEncuesta } from 'app/entities/enumerations/estado-encuesta.model';
