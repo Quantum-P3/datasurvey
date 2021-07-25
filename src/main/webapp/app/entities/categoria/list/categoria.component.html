@@ -19,11 +19,16 @@
 
   </div>-->
 
-  <div>
-    <jhi-alert class="alert-success"></jhi-alert>
+  <div
+    *ngIf="success"
+    class="alert alert-success alert-dismissible fade show"
+    role="alert"
+    jhiTranslate="dataSurveyApp.categoria.delete.success"
+  >
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
-
-  <div class="alert alert-success" *ngIf="success" jhiTranslate="dataSurveyApp.categoria.delete.success"></div>
 
   <div class="alert alert-warning" id="no-result" *ngIf="categorias?.length === 0">
     <span jhiTranslate="dataSurveyApp.categoria.home.notFound">No categorias found</span>
