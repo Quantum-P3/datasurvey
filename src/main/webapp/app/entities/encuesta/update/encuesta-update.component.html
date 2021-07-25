@@ -47,7 +47,7 @@
         <p class="ds-title text-center">Encuesta finalizada</p>
         <p class="ds-subtitle">No puede modificar la encuesta debido a que esta ya ha concluido.</p>
       </ng-container>
-      <ng-container *ngIf="ePreguntas && ePreguntas.length === 0">
+      <ng-container *ngIf="encuesta!.estado === 'DRAFT' && ePreguntas && ePreguntas.length === 0">
         <p class="ds-title text-center">Encuesta vacía</p>
         <p class="ds-subtitle">Inicie creando preguntas y opciones para su encuesta.</p>
       </ng-container>
