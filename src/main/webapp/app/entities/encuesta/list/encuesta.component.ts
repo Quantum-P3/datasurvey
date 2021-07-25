@@ -22,6 +22,7 @@ import { EstadoEncuesta } from 'app/entities/enumerations/estado-encuesta.model'
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { Router } from '@angular/router';
+import { EncuestaPublishDialogComponent } from '../encuesta-publish-dialog/encuesta-publish-dialog.component';
 import { IUser } from '../../user/user.model';
 
 import {
@@ -39,7 +40,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import * as $ from 'jquery';
-import { EncuestaPublishDialogComponent } from '../encuesta-publish-dialog/encuesta-publish-dialog.component';
 
 @Component({
   selector: 'jhi-encuesta',
@@ -72,6 +72,9 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   categoriasSharedCollection: ICategoria[] = [];
   usuarioExtrasSharedCollection: IUsuarioExtra[] = [];
   userSharedCollection: IUser[] = [];
+
+  selectedIdSurvey: number | null = null;
+  encuestaencontrada: IEncuesta | null = null;
 
   public searchString: string;
   public accesoEncuesta: string;
@@ -244,6 +247,49 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
         this.loadAll();
       }
     });
+  }
+
+  deleteSurvey(): void {
+    if (this.selectedIdSurvey != null) {
+      this.getEncuesta(this.selectedIdSurvey)
+        .pipe(
+          finalize(() => {
+            const modalRef = this.modalService.open(EncuestaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+            modalRef.componentInstance.encuesta = this.encuestaencontrada;
+
+            modalRef.closed.subscribe(reason => {
+              if (reason === 'deleted') {
+                this.loadAll();
+              }
+            });
+          })
+        )
+        .subscribe(data => {
+          console.log(data);
+          this.encuestaencontrada = data;
+        });
+
+      /*const modalRef = this.modalService.open(EncuestaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+      modalRef.componentInstance.encuesta = this.getEncuesta(this.selectedSurvey)
+        .pipe(finalize(() =>
+          modalRef.closed.subscribe(reason => {
+            if (reason === 'deleted') {
+              this.loadAll();
+            }
+          })
+        ))
+        .subscribe(data=> {
+          console.log(data);
+          //this.encuestaencontrada = data;
+        });
+*/
+
+      // unsubscribe not needed because closed completes on modal close
+    }
+  }
+
+  getEncuesta(id: number) {
+    return this.encuestaService.findEncuesta(id);
   }
 
   previousState(): void {
@@ -431,6 +477,9 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       } else if ((event.target as HTMLElement).classList.contains('ds-list--entity')) {
         event.target.classList.add('active');
         document.getElementById('contextmenu-create--separator')!.style.display = 'none';
+
+        this.selectedIdSurvey = Number(event.target.dataset.id);
+        //this.selectedSurvey = event.target.dataset.encuesta;
       }
 
       document.getElementById('contextmenu')!.style.top = event.layerY + 'px';

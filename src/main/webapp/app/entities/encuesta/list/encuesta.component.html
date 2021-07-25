@@ -124,7 +124,9 @@
         </div>
         <div class="ds-contextmenu__divider" id="contextmenu-delete--separator">
           <li>
-            <button type="button"><fa-icon class="contextmenu__icon" [icon]="faTrashAlt"></fa-icon>Eliminar</button>
+            <button type="button" (click)="deleteSurvey()">
+              <fa-icon class="contextmenu__icon" [icon]="faTrashAlt"></fa-icon>Eliminar
+            </button>
           </li>
         </div>
       </ul>
