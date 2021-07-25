@@ -12,7 +12,8 @@
       "updated": "Una encuesta ha sido actualizado con el identificador {{ param }}",
       "deleted": "Una encuesta ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar la encuesta {{ id }}?"
+        "question": "¿Seguro que quiere eliminar la encuesta {{ id }}?",
+        "deletequestion": "¿Seguro que quiere eliminar esta pregunta?"
       },
       "detail": {
         "title": "Encuesta"

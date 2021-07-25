@@ -1,3 +1,4 @@
+import { EncuestaDeleteQuestionDialogComponent } from './../encuesta-delete-dialog/encuesta-delete-question-dialog.component';
 import { EPreguntaCerrada } from './../../e-pregunta-cerrada/e-pregunta-cerrada.model';
 import { EPreguntaCerradaOpcion, IEPreguntaCerradaOpcion } from './../../e-pregunta-cerrada-opcion/e-pregunta-cerrada-opcion.model';
 import { EPreguntaAbiertaService } from './../../e-pregunta-abierta/service/e-pregunta-abierta.service';
@@ -26,7 +27,6 @@ import { EPreguntaCerradaDeleteDialogComponent } from 'app/entities/e-pregunta-c
 
 import { faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { PreguntaCerradaTipo } from 'app/entities/enumerations/pregunta-cerrada-tipo.model';
-
 @Component({
   selector: 'jhi-encuesta-update',
   templateUrl: './encuesta-update.component.html',
@@ -99,6 +99,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
       (res: any) => {
         this.isLoading = false;
         this.ePreguntas = res.body ?? [];
+        console.log(this.ePreguntas);
       },
       () => {
         this.isLoading = false;
@@ -188,41 +189,46 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   }
 
   deleteQuestion(event: any) {
-    const id = event.target.dataset.id;
-    if (event.target.dataset.type) {
-      // Delete closed question
-      const questionElement = (event.target as HTMLElement).parentElement?.parentElement;
-      const optionIdsToDelete: number[] = [];
+    const modalRef = this.modalService.open(EncuestaDeleteQuestionDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'confirm') {
+        const id = event.target.dataset.id;
+        if (event.target.dataset.type) {
+          // Delete closed question
+          const questionElement = (event.target as HTMLElement).parentElement?.parentElement;
+          const optionIdsToDelete: number[] = [];
 
-      // Get options IDs
-      questionElement?.childNodes.forEach((e, i) => {
-        if (e.nodeName !== 'DIV') return;
-        if (i === 0) return;
-        if ((e as HTMLElement).dataset.id === undefined) return;
-        if (!(e as HTMLElement).classList.contains('can-delete')) return;
-        let optionId = (e as HTMLElement).dataset.id;
-        optionIdsToDelete.push(+optionId!);
-      });
+          // Get options IDs
+          questionElement?.childNodes.forEach((e, i) => {
+            if (e.nodeName !== 'DIV') return;
+            if (i === 0) return;
+            if ((e as HTMLElement).dataset.id === undefined) return;
+            if (!(e as HTMLElement).classList.contains('can-delete')) return;
+            let optionId = (e as HTMLElement).dataset.id;
+            optionIdsToDelete.push(+optionId!);
+          });
 
-      if (optionIdsToDelete.length === 0) {
-        this.ePreguntaCerradaService.delete(id).subscribe(e => {
-          this.loadAll();
-        });
-      } else {
-        // Delete question options
-        this.ePreguntaCerradaOpcionService.deleteMany(optionIdsToDelete).subscribe(e => {
-          // Delete question
-          this.ePreguntaCerradaService.delete(id).subscribe(e => {
+          if (optionIdsToDelete.length === 0) {
+            this.ePreguntaCerradaService.delete(id).subscribe(e => {
+              this.loadAll();
+            });
+          } else {
+            // Delete question options
+            this.ePreguntaCerradaOpcionService.deleteMany(optionIdsToDelete).subscribe(e => {
+              // Delete question
+              this.ePreguntaCerradaService.delete(id).subscribe(e => {
+                this.loadAll();
+              });
+            });
+          }
+        } else {
+          // Delete open question
+          this.ePreguntaAbiertaService.delete(id).subscribe(e => {
             this.loadAll();
           });
-        });
+        }
       }
-    } else {
-      // Delete open question
-      this.ePreguntaAbiertaService.delete(id).subscribe(e => {
-        this.loadAll();
-      });
-    }
+    });
   }
 
   deleteOption(event: any): void {

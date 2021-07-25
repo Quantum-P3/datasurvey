@@ -7,6 +7,7 @@ import { EncuestaDeleteDialogComponent } from './delete/encuesta-delete-dialog.c
 import { EncuestaRoutingModule } from './route/encuesta-routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EncuestaPublishDialogComponent } from './encuesta-publish-dialog/encuesta-publish-dialog.component';
+import { EncuestaDeleteQuestionDialogComponent } from './encuesta-delete-dialog/encuesta-delete-question-dialog.component';
 
 @NgModule({
   imports: [SharedModule, EncuestaRoutingModule, FontAwesomeModule],
@@ -16,6 +17,7 @@ import { EncuestaPublishDialogComponent } from './encuesta-publish-dialog/encues
     EncuestaUpdateComponent,
     EncuestaDeleteDialogComponent,
     EncuestaPublishDialogComponent,
+    EncuestaDeleteQuestionDialogComponent,
   ],
   entryComponents: [EncuestaDeleteDialogComponent],
 })
