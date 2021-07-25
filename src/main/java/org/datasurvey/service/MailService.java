@@ -30,6 +30,8 @@ public class MailService {
 
     private static final String USER = "user";
 
+    private static final String CONTRASENNA = "contrasenna";
+
     private static final String BASE_URL = "baseUrl";
 
     private final JHipsterProperties jHipsterProperties;
@@ -94,6 +96,22 @@ public class MailService {
     }
 
     @Async
+    public void sendEmailFromTemplateEncuesta(User user, String templateName, String titleKey, String contrasenna) {
+        if (user.getEmail() == null) {
+            log.debug("Email doesn't exist for user '{}'", user.getLogin());
+            return;
+        }
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(CONTRASENNA, contrasenna);
+        context.setVariable(USER, user);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        String content = templateEngine.process(templateName, context);
+        String subject = messageSource.getMessage(titleKey, null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    @Async
     public void sendActivationEmail(User user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
@@ -127,5 +145,17 @@ public class MailService {
     public void sendActivatedAccountMail(UsuarioExtra user) {
         log.debug("Sending reactivated  account mail to '{}'", user.getUser().getEmail());
         sendEmailFromTemplate(user.getUser(), "mail/reactivatedAccountEmail", "email.reactivation.title");
+    }
+
+    @Async
+    public void sendPublishedPrivateMail(UsuarioExtra user, String contrasenna) {
+        log.debug("Sending reactivated  account mail to '{}'", user.getUser().getEmail());
+        sendEmailFromTemplateEncuesta(user.getUser(), "mail/encuestaPrivadaEmail", "email.private.title", contrasenna);
+    }
+
+    @Async
+    public void sendPublishedPublicMail(UsuarioExtra user) {
+        log.debug("Sending reactivated  account mail to '{}'", user.getUser().getEmail());
+        sendEmailFromTemplate(user.getUser(), "mail/encuestaPublicaEmail", "email.public.title");
     }
 }

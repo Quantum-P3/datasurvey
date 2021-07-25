@@ -72,6 +72,7 @@ export class AccountService {
         shareReplay()
       );
     }
+
     return this.accountCache$;
   }
 

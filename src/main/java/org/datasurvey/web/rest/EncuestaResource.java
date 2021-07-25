@@ -14,8 +14,12 @@ import org.datasurvey.domain.EPreguntaAbierta;
 import org.datasurvey.domain.EPreguntaCerrada;
 import org.datasurvey.domain.EPreguntaCerradaOpcion;
 import org.datasurvey.domain.Encuesta;
+import org.datasurvey.domain.enumeration.AccesoEncuesta;
 import org.datasurvey.repository.EncuestaRepository;
 import org.datasurvey.service.*;
+import org.datasurvey.service.EncuestaQueryService;
+import org.datasurvey.service.EncuestaService;
+import org.datasurvey.service.MailService;
 import org.datasurvey.service.criteria.EncuestaCriteria;
 import org.datasurvey.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
@@ -46,6 +50,8 @@ public class EncuestaResource {
 
     private final EncuestaQueryService encuestaQueryService;
 
+    private final MailService mailService;
+
     private final EPreguntaCerradaService ePreguntaCerradaService;
 
     private final EPreguntaAbiertaService ePreguntaAbiertaService;
@@ -56,6 +62,7 @@ public class EncuestaResource {
         EncuestaService encuestaService,
         EncuestaRepository encuestaRepository,
         EncuestaQueryService encuestaQueryService,
+        MailService mailService,
         EPreguntaCerradaService ePreguntaCerradaService,
         EPreguntaAbiertaService ePreguntaAbiertaService,
         EPreguntaCerradaOpcionService ePreguntaCerradaOpcionService
@@ -63,6 +70,7 @@ public class EncuestaResource {
         this.encuestaService = encuestaService;
         this.encuestaRepository = encuestaRepository;
         this.encuestaQueryService = encuestaQueryService;
+        this.mailService = mailService;
         this.ePreguntaCerradaService = ePreguntaCerradaService;
         this.ePreguntaAbiertaService = ePreguntaAbiertaService;
         this.ePreguntaCerradaOpcionService = ePreguntaCerradaOpcionService;
@@ -116,6 +124,12 @@ public class EncuestaResource {
         }
 
         Encuesta result = encuestaService.save(encuesta);
+
+        if (result.getAcceso().equals(AccesoEncuesta.PRIVATE)) {
+            mailService.sendPublishedPrivateMail(result.getUsuarioExtra(), result.getContrasenna());
+        } else {
+            mailService.sendPublishedPublicMail(result.getUsuarioExtra());
+        }
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, encuesta.getId().toString()))

@@ -81,6 +81,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   authenticacionGoogle(): void {
+    this.error = false;
+    this.userSuspended = false;
+
     this.loginService.login({ username: this.user.email, password: this.user.id, rememberMe: false }).subscribe(
       () => {
         this.authenticationError = false;
@@ -123,6 +126,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   activateGoogle(): void {
+    this.error = false;
+    this.userSuspended = false;
+
     this.registerService
       .save({
         login: this.user.email,
@@ -145,6 +151,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   login(): void {
+    this.error = false;
+    this.userSuspended = false;
     debugger;
     this.loginService
       .login({
@@ -169,8 +177,14 @@ export class LoginComponent implements OnInit, AfterViewInit {
           }
           // }
         },
-
-        response => this.processError(response)
+        response => {
+          debugger;
+          if (response.status == 401 && response.error.detail == 'Bad credentials') {
+            this.error = true;
+          } else {
+            this.processError(response);
+          }
+        }
       );
   }
 }

@@ -31,6 +31,13 @@
     padding: 0.5rem;
     margin: 1rem;
     word-wrap: break-word;
+    transition: all 0.1s ease-in-out;
+
+    &:hover {
+      // top: -3px;
+      // box-shadow: rgba(80, 80, 80, 0.15) 0px 5px 15px;
+      background-color: #f5f9fd;
+    }
 
     * {
       pointer-events: none;

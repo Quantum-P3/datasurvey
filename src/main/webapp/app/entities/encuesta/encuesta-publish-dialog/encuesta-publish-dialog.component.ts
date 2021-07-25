@@ -3,6 +3,8 @@ import { IEncuesta } from '../encuesta.model';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { EncuestaService } from '../service/encuesta.service';
 import { EstadoEncuesta } from '../../enumerations/estado-encuesta.model';
+import { AccesoEncuesta } from '../../enumerations/acceso-encuesta.model';
+import { passwordResetFinishRoute } from '../../../account/password-reset/finish/password-reset-finish.route';
 
 @Component({
   selector: 'jhi-encuesta-publish-dialog',
@@ -24,9 +26,24 @@ export class EncuestaPublishDialogComponent implements OnInit {
       encuesta.estado = EstadoEncuesta.ACTIVE;
     }
 
+    if (encuesta.acceso === AccesoEncuesta.PRIVATE) {
+      encuesta.contrasenna = this.generatePassword();
+    }
+
     this.encuestaService.update(encuesta).subscribe(() => {
       this.activeModal.close('published');
     });
+  }
+
+  generatePassword(): string {
+    debugger;
+    const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+    let password = '';
+    for (let i = 0; i < 5; i++) {
+      password += alpha.charAt(Math.floor(Math.random() * alpha.length));
+    }
+    return password;
   }
 
   ngOnInit(): void {}

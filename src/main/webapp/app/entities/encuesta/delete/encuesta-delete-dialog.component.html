@@ -1,8 +1,8 @@
-<form *ngIf="encuesta" name="deleteForm" (ngSubmit)="confirmDelete(encuesta)">
+<form class="ds-form" *ngIf="encuesta" name="deleteForm" (ngSubmit)="confirmDelete(encuesta!)">
   <div class="modal-header">
-    <h4 class="modal-title" data-cy="encuestaDeleteDialogHeading" jhiTranslate="entity.delete.title">Confirm delete operation</h4>
+    <!-- <h2 class="ds-title" data-cy="encuestaDeleteDialogHeading" jhiTranslate="entity.delete.title">Confirm delete operation</h2>
 
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>-->
   </div>
 
   <div class="modal-body">
@@ -14,11 +14,11 @@
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
-      <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    <button type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
     </button>
 
-    <button id="jhi-confirm-delete-encuesta" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger">
+    <button id="jhi-confirm-delete-encuesta" data-cy="entityConfirmDeleteButton" type="submit" class="ds-btn ds-btn--danger">
       <fa-icon icon="times"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete">Delete</span>
     </button>
   </div>
