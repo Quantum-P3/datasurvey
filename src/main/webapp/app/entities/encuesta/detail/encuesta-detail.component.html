@@ -138,7 +138,7 @@
                 <ng-container *ngFor="let ePreguntaOpcionFinal of ePreguntaOpcion">
                   <ng-container *ngIf="ePregunta.id === ePreguntaOpcionFinal.epreguntaCerrada.id">
                     <div
-                      class="ds-survey--option ds-survey--option--base ds-survey--closed-option can-delete checkbox"
+                      class="ds-survey--option ds-survey--option--base ds-survey--closed-option can-delete"
                       [attr.data-id]="ePreguntaOpcionFinal.id"
                     >
                       <div class="radio" *ngIf="ePregunta.tipo === 'SINGLE'">
