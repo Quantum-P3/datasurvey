@@ -1,0 +1,164 @@
+.ds-survey {
+  display: flex;
+
+  &--titulo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &--name {
+      color: #1f3779;
+    }
+
+    &--icon {
+      border-radius: 50%;
+      background-color: #f1f5f9;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.2s ease-in-out;
+      font-size: 1rem;
+      padding: 0.8rem;
+      width: 25px;
+      height: 25px;
+      color: #1f3779;
+      pointer-events: visible !important;
+      transition: all 0.1s ease-in-out;
+
+      * {
+        pointer-events: none;
+      }
+
+      &:hover {
+        background-color: #e73636;
+        color: #fff;
+      }
+
+      &--small {
+        font-size: 0.8rem;
+        padding: 0.3rem;
+      }
+    }
+  }
+
+  &--all-question-wrapper {
+    display: flex;
+    flex-direction: column;
+    border: 2px dashed #f1f1f1;
+    border-radius: $border-radius-x-large;
+    padding: 2rem 5rem;
+    margin: 0 auto;
+  }
+
+  &--question-wrapper {
+    margin: 0 auto;
+  }
+
+  &--question {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2rem;
+    color: #15131d;
+    padding: 2rem;
+    border-bottom: 1px solid #e9e9e9;
+  }
+
+  &--option {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0;
+    border-radius: 5px;
+    font-weight: 500;
+    letter-spacing: 0.025rem;
+    color: #787878;
+    background-color: transparent;
+    position: relative;
+    top: 0;
+    transition: all 0.1s ease-in-out;
+
+    &--base {
+      border: 1px solid #e6e6e6;
+    }
+
+    &--add {
+      border: 2px dashed #9c9c9c;
+      transition: all 0.1s ease-in-out;
+
+      &:hover {
+        border: 2px dashed #727272;
+      }
+
+      &:hover .ds-survey--add-option {
+        color: #727272;
+      }
+
+      &:hover .ds-survey--add-option--icon {
+        color: #727272;
+      }
+    }
+  }
+
+  &--closed-option {
+    display: flex;
+    width: 25rem;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #15131d;
+    padding: 1rem;
+    transition: all 0.1s ease-in-out;
+    cursor: pointer;
+    position: relative;
+
+    label {
+      width: 100%;
+      margin: 0;
+      color: #1f3779;
+    }
+  }
+
+  &--open-option {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #15131d;
+    transition: all 0.1s ease-in-out;
+    position: relative;
+
+    & textarea {
+      width: 25rem;
+      height: 20rem;
+      padding: 1rem 3rem;
+      color: #787878;
+      border: none;
+      resize: none;
+
+      &:disabled {
+        background-color: transparent;
+      }
+    }
+  }
+
+  &--add-option {
+    width: 100%;
+    color: #919191;
+    transition: all 0.1s ease-in-out;
+    pointer-events: none;
+
+    &--icon {
+      margin: 0 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 25px;
+      height: 25px;
+      color: #919191;
+      pointer-events: visible !important;
+      transition: all 0.1s ease-in-out;
+
+      * {
+        pointer-events: none;
+      }
+    }
+  }
+}
