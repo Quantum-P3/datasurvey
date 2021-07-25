@@ -25,10 +25,12 @@ import { IEPreguntaCerrada } from 'app/entities/e-pregunta-cerrada/e-pregunta-ce
 import { EPreguntaCerradaService } from 'app/entities/e-pregunta-cerrada/service/e-pregunta-cerrada.service';
 import { EPreguntaCerradaDeleteDialogComponent } from 'app/entities/e-pregunta-cerrada/delete/e-pregunta-cerrada-delete-dialog.component';
 
-import { faTimes, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faPlus, faPollH } from '@fortawesome/free-solid-svg-icons';
 import { PreguntaCerradaTipo } from 'app/entities/enumerations/pregunta-cerrada-tipo.model';
 import { EncuestaDeleteQuestionDialogComponent } from '../encuesta-delete-question-dialog/encuesta-delete-question-dialog.component';
 import { EncuestaDeleteOptionDialogComponent } from '../encuesta-delete-option-dialog/encuesta-delete-option-dialog.component';
+
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'jhi-encuesta-update',
@@ -37,6 +39,7 @@ import { EncuestaDeleteOptionDialogComponent } from '../encuesta-delete-option-d
 export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   faTimes = faTimes;
   faPlus = faPlus;
+  faPollH = faPollH;
 
   isSaving = false;
   isSavingQuestion = false;
@@ -95,7 +98,8 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     protected modalService: NgbModal,
     protected ePreguntaCerradaService: EPreguntaCerradaService,
     protected ePreguntaCerradaOpcionService: EPreguntaCerradaOpcionService,
-    protected ePreguntaAbiertaService: EPreguntaAbiertaService
+    protected ePreguntaAbiertaService: EPreguntaAbiertaService,
+    protected router: Router
   ) {}
 
   loadAll(): void {
@@ -183,6 +187,11 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   finishSurvey(): void {}
 
   addOption(event: any): void {}
+
+  openPreview() {
+    const surveyId = this.encuesta?.id;
+    this.router.navigate(['/encuesta', surveyId, 'preview']);
+  }
 
   resetForm(event: any): void {
     this.editForm.reset();

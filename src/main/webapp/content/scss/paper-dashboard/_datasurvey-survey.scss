@@ -75,3 +75,41 @@
 .preview-survey .ds-survey--open-option textarea {
   border: 3px solid #00b88d;
 }
+
+.preview-survey .entity-icon--star {
+  color: #ffcc47;
+  margin-right: 0.2rem;
+}
+
+.preview-survey dt {
+  margin-bottom: 10px;
+}
+
+.preview-survey dd {
+  margin-left: 40px;
+}
+
+.ds-survey--all-question-wrapper,
+.info-encuesta {
+  @media screen and (max-width: 991px) {
+    padding: 2rem 0rem;
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+  }
+}
+
+.ds-survey--option {
+  @media screen and (max-width: 991px) {
+    width: 21rem !important;
+  }
+  @media screen and (max-width: 500px) {
+    width: 12rem !important;
+  }
+}
+
+.preview-survey {
+  @media screen and (max-width: 991px) {
+    flex-direction: column-reverse;
+  }
+}

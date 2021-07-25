@@ -5,11 +5,12 @@
 
     <div class="d-flex justify-content-end">
       <button type="button" class="ds-btn ds-btn--secondary" (click)="previousState()">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.back">Back</span>
       </button>
       <button type="button" class="ds-btn ds-btn--secondary" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>&nbsp;&nbsp;<span>Refrescar preguntas</span>
       </button>
+
       <button
         type="button"
         class="ds-btn ds-btn--secondary"
@@ -19,6 +20,9 @@
         data-target="#crearPregunta"
       >
         <fa-icon icon="sync" [icon]="faPlus"></fa-icon>&nbsp;&nbsp;<span>Crear pregunta</span>
+      </button>
+      <button type="button" class="ds-btn ds-btn--success" (click)="openPreview()" [disabled]="isLoading">
+        <fa-icon [icon]="faPollH"></fa-icon>&nbsp;&nbsp;<span>Ver vista previa</span>
       </button>
       <ng-container *ngIf="encuesta!.estado === 'DRAFT'">
         <button type="button" class="ds-btn ds-btn--primary" (click)="publishSurvey()">Publicar encuesta</button>
@@ -79,7 +83,8 @@
                     [attr.data-id]="ePreguntaOpcionFinal.id"
                   >
                     <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
-                    <label for="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
+                    <!-- <label for="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label> -->
+                    <label>{{ ePreguntaOpcionFinal.nombre }}</label>
                     <fa-icon
                       *ngIf="encuesta!.estado === 'DRAFT'"
                       class="ds-survey--titulo--icon ds-survey--titulo--icon--small"
@@ -134,7 +139,7 @@
           <td>{{ ePreguntaCerrada.nombre }}</td>
           <td *ngIf="ePreguntaCerrada.tipo != undefined" jhiTranslate="{{ 'dataSurveyApp.PreguntaCerradaTipo.' + ePreguntaCerrada.tipo }}">{{ ePreguntaCerrada.tipo }}</td>
           <td *ngIf="ePreguntaCerrada.tipo == undefined"></td>
-          
+
           <td>{{ ePreguntaCerrada.opcional }}</td>
           <td>{{ ePreguntaCerrada.orden }}</td>
           <td>
@@ -264,7 +269,7 @@
         [formGroup]="editFormQuestion"
       >
         <div class="modal-header">
-          <h1 class="modal-title" id="exampleModalLongTitle">Crear Pregunta</h1>
+          <h1 class="modal-title" id="exampleModalLongTitle2">Crear Pregunta</h1>
         </div>
         <div class="modal-body">
           <!-- Survey Create Question Modal -->
@@ -273,7 +278,7 @@
 
             <div class="form-group">
               <label class="form-control-label" for="field_nombre">Pregunta</label>
-              <input type="text" class="form-control" name="nombre" id="field_nombre" data-cy="nombre" formControlName="nombre" />
+              <input type="text" class="form-control" name="nombre" id="field_nombre2" data-cy="nombre" formControlName="nombre" />
               <div
                 *ngIf="
                   editFormQuestion.get('nombre')!.invalid &&
@@ -309,7 +314,7 @@
             <!-- Custom Form Group (Closed & Open Question Validation) -->
             <div class="form-group">
               <label class="form-control-label" for="field_tipo">Tipo de pregunta</label>
-              <select class="form-control" name="tipopregunta" formControlName="tipopregunta" id="field_tipo" data-cy="tipopregunta">
+              <select class="form-control" name="tipopregunta" formControlName="tipopregunta" id="field_tipo2" data-cy="tipopregunta">
                 <option selected value="CLOSED">Opción multiple</option>
                 <option value="OPEN">Respuesta abierta</option>
               </select>

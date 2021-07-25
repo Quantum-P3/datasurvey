@@ -79,7 +79,7 @@
   </div>
 </div>-->
 
-<div class="container-fluid">
+<div class="container-fluid" *ngIf="encuesta">
   <div>
     <h2 id="page-heading" data-cy="EPreguntaCerradaHeading">
       <p class="ds-title">Vista previa de {{ encuesta!.nombre }}</p>
@@ -141,14 +141,21 @@
                       class="ds-survey--option ds-survey--option--base ds-survey--closed-option can-delete checkbox"
                       [attr.data-id]="ePreguntaOpcionFinal.id"
                     >
-                      <input
-                        type="checkbox"
-                        style="border-radius: 3px"
-                        id="{{ 'checkbox' + ePreguntaOpcionFinal.id }}"
-                        disabled="disabled"
-                      />
-                      <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
-                      <label for="{{ 'checkbox' + ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
+                      <div *ngIf="ePregunta.tipo === 'SINGLE'">
+                        <input
+                          type="radio"
+                          style="border-radius: 3px"
+                          name="{{ 'radio' + ePregunta.id }}"
+                          id="{{ 'radio' + ePreguntaOpcionFinal.id }}"
+                        />
+                        <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
+                        <label for="{{ 'radio' + ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
+                      </div>
+                      <div *ngIf="ePregunta.tipo === 'MULTIPLE'">
+                        <input type="checkbox" style="border-radius: 3px" id="{{ 'checkbox' + ePreguntaOpcionFinal.id }}" />
+                        <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
+                        <label for="{{ 'checkbox' + ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
+                      </div>
                     </div>
                   </ng-container>
                 </ng-container>
@@ -160,10 +167,77 @@
           </div>
         </div>
       </div>
-      <div class="col-3">
-        <p style="font-size: 1.2em" class="ds-survey--titulo--name">Cantidad de preguntas: {{ ePreguntas?.length }}</p>
+      <div class="col-3 info-encuesta">
+        <p style="font-size: 1.2em" class="ds-survey--titulo--name py-3">Cantidad de preguntas: {{ ePreguntas?.length }}</p>
+        <!--<div>
+            <p style="font-size: 1.2em" class="ds-survey--titulo--name">Colaboradores</p>
+          </div>-->
+        <dl>
+          <dt><span jhiTranslate="dataSurveyApp.encuesta.acceso">Acceso</span></dt>
+          <dd>
+            -
+            <span jhiTranslate="{{ 'dataSurveyApp.AccesoEncuesta.' + encuesta.acceso }}"> {{ encuesta.acceso }}</span>
+          </dd>
+        </dl>
+        <dl *ngIf="encuesta.acceso === 'PRIVATE'">
+          <dt><span jhiTranslate="dataSurveyApp.encuesta.contrasenna">Contrasenna</span></dt>
+          <dd>
+            <span>- {{ encuesta.contrasenna }}</span>
+          </dd>
+        </dl>
+        <dl>
+          <dt><span jhiTranslate="dataSurveyApp.encuesta.estado">Estado</span></dt>
+          <dd>
+            - <span jhiTranslate="{{ 'dataSurveyApp.EstadoEncuesta.' + encuesta.estado }}">{{ encuesta.estado }}</span>
+          </dd>
+        </dl>
+        <dl *ngIf="encuesta.categoria">
+          <dt><span jhiTranslate="dataSurveyApp.encuesta.categoria">Categoria</span></dt>
+          <dd>
+            <a>- {{ encuesta.categoria?.nombre }}</a>
+          </dd>
+        </dl>
+        <dl *ngIf="encuesta.acceso === 'PRIVATE'">
+          <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaPublicacion">Fecha Publicacion</span></dt>
+          <dd>
+            <span
+              >-
+              {{
+                encuesta.fechaPublicacion === undefined ? 'Sin publicar' : (encuesta.fechaFinalizada | formatShortDatetime | lowercase)
+              }}</span
+            >
+          </dd>
+        </dl>
+        <dl>
+          <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaFinalizar">Fecha Finalizar</span></dt>
+          <dd>
+            <span>
+              -
+              {{
+                encuesta.fechaFinalizar === undefined
+                  ? 'Sin fecha de finalización'
+                  : (encuesta.fechaFinalizada | formatShortDatetime | lowercase)
+              }}</span
+            >
+          </dd>
+        </dl>
+        <dl>
+          <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaFinalizada">Fecha Finalizada</span></dt>
+          <dd>
+            <span>
+              -
+              {{
+                encuesta.fechaFinalizada === undefined ? 'Sin finalizar' : (encuesta.fechaFinalizada | formatShortDatetime | lowercase)
+              }}</span
+            >
+          </dd>
+        </dl>
         <div>
-          <p style="font-size: 1.2em" class="ds-survey--titulo--name">Colaboradores</p>
+          <dt><span jhiTranslate="dataSurveyApp.encuesta.calificacion">Calificacion</span></dt>
+          <dd>
+            <fa-icon *ngFor="let i of [].constructor(encuesta.calificacion)" class="entity-icon--star" [icon]="faStar"></fa-icon
+            ><fa-icon *ngFor="let i of [].constructor(5 - encuesta.calificacion!)" class="entity-icon--star--off" [icon]="faStar"></fa-icon>
+          </dd>
         </div>
       </div>
     </div>
