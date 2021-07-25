@@ -33,85 +33,99 @@
 
   <!-- <jhi-alert></jhi-alert> -->
 
-  <div class="alert alert-warning" id="no-result" *ngIf="ePreguntas?.length === 0">
+  <!-- <div class="alert alert-warning" id="no-result" *ngIf="ePreguntas?.length === 0">
     <span>No se encontraron preguntas</span>
-  </div>
-
-  <div class="ds-survey" id="entities" *ngIf="ePreguntas && ePreguntas.length > 0">
+  </div> -->
+  <!-- *ngIf="ePreguntas && ePreguntas.length > 0" -->
+  <div class="ds-survey" id="entities">
     <div class="ds-survey--all-question-wrapper">
-      <div class="ds-survey--question-wrapper" *ngFor="let ePregunta of ePreguntas; let i = index; trackBy: trackId">
-        <div
-          [attr.data-index]="ePregunta.id"
-          [attr.data-tipo]="ePregunta.tipo"
-          [attr.data-opcional]="ePregunta.opcional"
-          class="ds-survey--question"
-        >
-          <div class="ds-survey--titulo">
-            <span class="ds-survey--titulo--name">{{ i + 1 }}. {{ ePregunta.nombre }}</span>
-            <fa-icon
-              *ngIf="encuesta!.estado === 'DRAFT'"
-              class="ds-survey--titulo--icon"
-              [icon]="faTimes"
-              (click)="deleteQuestion($event)"
-              [attr.data-id]="ePregunta.id"
-              [attr.data-type]="ePregunta.tipo"
-            ></fa-icon>
-          </div>
-          <div>
-            <span *ngIf="ePregunta.tipo === 'SINGLE'" class="ds-subtitle"
-              >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.SINGLE' | translate | lowercase }}
-              {{ ePregunta.opcional ? '(opcional)' : '' }}</span
-            >
-            <span *ngIf="ePregunta.tipo === 'MULTIPLE'" class="ds-subtitle"
-              >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.MULTIPLE' | translate | lowercase }}
-              {{ ePregunta.opcional ? '(opcional)' : '' }}</span
-            >
-            <span *ngIf="!ePregunta.tipo" class="ds-subtitle"
-              >Pregunta de respuesta abierta {{ ePregunta.opcional ? '(opcional)' : '' }}</span
-            >
-          </div>
-          <ng-container *ngIf="ePregunta.tipo">
-            <ng-container *ngFor="let ePreguntaOpcion of ePreguntasOpciones; let j = index; trackBy: trackId">
-              <ng-container *ngFor="let ePreguntaOpcionFinal of ePreguntaOpcion">
-                <ng-container *ngIf="ePregunta.id === ePreguntaOpcionFinal.epreguntaCerrada.id">
-                  <div
-                    class="ds-survey--option ds-survey--option--base ds-survey--closed-option can-delete"
-                    [attr.data-id]="ePreguntaOpcionFinal.id"
-                  >
-                    <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
-                    <label for="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
-                    <fa-icon
-                      *ngIf="encuesta!.estado === 'DRAFT'"
-                      class="ds-survey--titulo--icon ds-survey--titulo--icon--small"
-                      [icon]="faTimes"
-                      (click)="deleteOption($event)"
-                      [attr.data-optionid]="ePreguntaOpcionFinal.id"
-                    ></fa-icon>
-                  </div>
-                </ng-container>
-              </ng-container>
-            </ng-container>
-            <div
-              class="ds-survey--option ds-survey--option--add ds-survey--closed-option"
-              (click)="resetForm($event)"
-              data-toggle="modal"
-              data-target="#crearOpcion"
-              [attr.data-id]="ePregunta.id"
-            >
+      <ng-container *ngIf="encuesta!.estado === 'ACTIVE'">
+        <p class="ds-title text-center">Encuesta en progreso</p>
+        <p class="ds-subtitle">No puede modificar la encuesta debido a que esta ya está en progreso.</p>
+      </ng-container>
+      <ng-container *ngIf="encuesta!.estado === 'FINISHED'">
+        <p class="ds-title text-center">Encuesta finalizada</p>
+        <p class="ds-subtitle">No puede modificar la encuesta debido a que esta ya ha concluido.</p>
+      </ng-container>
+      <ng-container *ngIf="ePreguntas && ePreguntas.length === 0">
+        <p class="ds-title text-center">Encuesta vacía</p>
+        <p class="ds-subtitle">Inicie creando preguntas y opciones para su encuesta.</p>
+      </ng-container>
+      <ng-container *ngIf="encuesta!.estado === 'DRAFT'">
+        <div class="ds-survey--question-wrapper" *ngFor="let ePregunta of ePreguntas; let i = index; trackBy: trackId">
+          <div
+            [attr.data-index]="ePregunta.id"
+            [attr.data-tipo]="ePregunta.tipo"
+            [attr.data-opcional]="ePregunta.opcional"
+            class="ds-survey--question"
+          >
+            <div class="ds-survey--titulo">
+              <span class="ds-survey--titulo--name">{{ i + 1 }}. {{ ePregunta.nombre }}</span>
               <fa-icon
-                class="ds-survey--add-option--icon"
-                [icon]="faPlus"
+                *ngIf="encuesta!.estado === 'DRAFT'"
+                class="ds-survey--titulo--icon"
+                [icon]="faTimes"
+                (click)="deleteQuestion($event)"
                 [attr.data-id]="ePregunta.id"
                 [attr.data-type]="ePregunta.tipo"
               ></fa-icon>
-              <span class="ds-survey--add-option">Añadir opción</span>
             </div>
-          </ng-container>
-          <div class="ds-survey--option ds-survey--option--base ds-survey--open-option" *ngIf="!ePregunta.tipo">
-            <textarea name="" id="" cols="30" rows="10" disabled></textarea>
+            <div>
+              <span *ngIf="ePregunta.tipo === 'SINGLE'" class="ds-subtitle"
+                >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.SINGLE' | translate | lowercase }}
+                {{ ePregunta.opcional ? '(opcional)' : '' }}</span
+              >
+              <span *ngIf="ePregunta.tipo === 'MULTIPLE'" class="ds-subtitle"
+                >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.MULTIPLE' | translate | lowercase }}
+                {{ ePregunta.opcional ? '(opcional)' : '' }}</span
+              >
+              <span *ngIf="!ePregunta.tipo" class="ds-subtitle"
+                >Pregunta de respuesta abierta {{ ePregunta.opcional ? '(opcional)' : '' }}</span
+              >
+            </div>
+            <ng-container *ngIf="ePregunta.tipo">
+              <ng-container *ngFor="let ePreguntaOpcion of ePreguntasOpciones; let j = index; trackBy: trackId">
+                <ng-container *ngFor="let ePreguntaOpcionFinal of ePreguntaOpcion">
+                  <ng-container *ngIf="ePregunta.id === ePreguntaOpcionFinal.epreguntaCerrada.id">
+                    <div
+                      class="ds-survey--option ds-survey--option--base ds-survey--closed-option can-delete"
+                      [attr.data-id]="ePreguntaOpcionFinal.id"
+                    >
+                      <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
+                      <label for="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
+                      <fa-icon
+                        *ngIf="encuesta!.estado === 'DRAFT'"
+                        class="ds-survey--titulo--icon ds-survey--titulo--icon--small"
+                        [icon]="faTimes"
+                        (click)="deleteOption($event)"
+                        [attr.data-optionid]="ePreguntaOpcionFinal.id"
+                      ></fa-icon>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+              <div
+                class="ds-survey--option ds-survey--option--add ds-survey--closed-option"
+                (click)="resetForm($event)"
+                data-toggle="modal"
+                data-target="#crearOpcion"
+                [attr.data-id]="ePregunta.id"
+              >
+                <fa-icon
+                  class="ds-survey--add-option--icon"
+                  [icon]="faPlus"
+                  [attr.data-id]="ePregunta.id"
+                  [attr.data-type]="ePregunta.tipo"
+                ></fa-icon>
+                <span class="ds-survey--add-option">Añadir opción</span>
+              </div>
+            </ng-container>
+            <div class="ds-survey--option ds-survey--option--base ds-survey--open-option" *ngIf="!ePregunta.tipo">
+              <textarea name="" id="" cols="30" rows="10" disabled></textarea>
+            </div>
           </div>
         </div>
-      </div>
+      </ng-container>
     </div>
 
     <!-- <table class="table table-striped" aria-describedby="page-heading">
