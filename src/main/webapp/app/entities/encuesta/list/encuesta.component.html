@@ -97,11 +97,13 @@
         </div>
         <div class="ds-contextmenu__divider ds-contextmenu__divider--separator-bottom" id="contextmenu-edit--separator">
           <li class="d-justify justify-content-start">
-            <button type="button" id="contextmenu-edit"><fa-icon class="contextmenu__icon" [icon]="faEdit"></fa-icon>Editar</button>
+            <button type="button" (click)="openSurvey(null)" id="contextmenu-edit">
+              <fa-icon class="contextmenu__icon" [icon]="faEdit"></fa-icon>Editar
+            </button>
           </li>
           <li>
             <button type="button" (click)="openPreview()" id="contextmenu-preview">
-              <fa-icon class="contextmenu__icon" [icon]="faPollH"></fa-icon>Ver Vista Previa
+              <fa-icon class="contextmenu__icon" [icon]="faPollH"></fa-icon>Ver vista previa
             </button>
           </li>
           <li>
