@@ -84,6 +84,10 @@ export class EncuestaService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  deletedNotification(email: string): Observable<HttpResponse<{}>> {
+    return this.http.delete(`${this.resourceUrl}/${email}`, { observe: 'response' });
+  }
+
   addEncuestaToCollectionIfMissing(encuestaCollection: IEncuesta[], ...encuestasToCheck: (IEncuesta | null | undefined)[]): IEncuesta[] {
     const encuestas: IEncuesta[] = encuestasToCheck.filter(isPresent);
     if (encuestas.length > 0) {

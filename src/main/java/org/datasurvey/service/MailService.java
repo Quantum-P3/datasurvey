@@ -158,4 +158,9 @@ public class MailService {
         log.debug("Sending reactivated  account mail to '{}'", user.getUser().getEmail());
         sendEmailFromTemplate(user.getUser(), "mail/encuestaPublicaEmail", "email.public.title");
     }
+
+    public void sendEncuestaDeleted(UsuarioExtra user) {
+        log.debug("Sending encuesta deletion notification mail to '{}'", user.getUser().getEmail());
+        sendEmailFromTemplate(user.getUser(), "mail/encuestaDeletedEmail", "email.encuestaDeleted.title");
+    }
 }
