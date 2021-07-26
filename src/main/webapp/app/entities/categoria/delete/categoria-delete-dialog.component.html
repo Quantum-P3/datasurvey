@@ -2,24 +2,25 @@
   <div class="modal-header"></div>
 
   <div class="modal-body">
-    <jhi-alert-error></jhi-alert-error>
-
+    <!-- <jhi-alert-error></jhi-alert-error> -->
+    <p class="ds-title--small">Cambiar estado</p>
     <p
+      class="ds-subtitle"
       id="jhi-delete-categoria-heading"
       jhiTranslate="dataSurveyApp.categoria.delete.question"
       [translateValues]="{ nombre: categoria.nombre }"
-      style="text-align: center"
     >
       Are you sure you want to toggle this category's status?
     </p>
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary ds-btn ds-btn-secondary" data-dismiss="modal" (click)="cancel()">
-      &nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    <button type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
     </button>
 
-    <button id="jhi-confirm-delete-categoria" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger ds-btn ds-btn-danger">
+    <button id="jhi-confirm-delete-categoria" data-cy="entityConfirmDeleteButton" type="submit" class="ds-btn ds-btn--danger">
+      <fa-icon [icon]="faExchangeAlt"></fa-icon>
       <span jhiTranslate="entity.action.toggleStatus">Toggle Status</span>
     </button>
   </div>

@@ -8,12 +8,16 @@ import { UsuarioExtraDeleteDialogComponent } from '../delete/usuario-extra-delet
 import { IUser } from '../../user/user.model';
 import { finalize } from 'rxjs/operators';
 
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
+
 @Component({
   selector: 'jhi-usuario-extra',
   templateUrl: './usuario-extra.component.html',
   styleUrls: ['./usuario-extra.component.scss'],
 })
 export class UsuarioExtraComponent implements OnInit {
+  faExchangeAlt = faExchangeAlt;
+
   usuarioExtras?: IUsuarioExtra[];
   publicUsers?: IUser[];
   isLoading = false;

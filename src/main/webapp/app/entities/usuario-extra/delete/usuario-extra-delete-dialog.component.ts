@@ -5,10 +5,14 @@ import { IUsuarioExtra } from '../usuario-extra.model';
 import { UsuarioExtraService } from '../service/usuario-extra.service';
 import { EstadoUsuario } from '../../enumerations/estado-usuario.model';
 
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
+
 @Component({
   templateUrl: './usuario-extra-delete-dialog.component.html',
 })
 export class UsuarioExtraDeleteDialogComponent {
+  faExchangeAlt = faExchangeAlt;
+
   usuarioExtra?: IUsuarioExtra;
 
   constructor(protected usuarioExtraService: UsuarioExtraService, protected activeModal: NgbActiveModal) {}
