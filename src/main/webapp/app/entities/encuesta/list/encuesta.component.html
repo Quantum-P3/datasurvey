@@ -96,25 +96,19 @@
           </li>
         </div>
         <div class="ds-contextmenu__divider ds-contextmenu__divider--separator-bottom" id="contextmenu-edit--separator">
-          <li class="d-justify justify-content-start">
-            <button type="button" (click)="openSurvey(null)" id="contextmenu-edit">
-              <fa-icon class="contextmenu__icon" [icon]="faEdit"></fa-icon>Editar
-            </button>
+          <li class="d-justify justify-content-start" id="contextmenu-edit">
+            <button type="button" (click)="openSurvey(null)"><fa-icon class="contextmenu__icon" [icon]="faEdit"></fa-icon>Editar</button>
           </li>
-          <li>
-            <button type="button" (click)="openPreview()" id="contextmenu-preview">
+          <li id="contextmenu-preview">
+            <button type="button" (click)="openPreview()">
               <fa-icon class="contextmenu__icon" [icon]="faPollH"></fa-icon>Ver vista previa
             </button>
           </li>
-          <li>
-            <button
-              type="button"
-              id="contextmenu-publish"
-              type="button"
-              (click)="publish()"
-              data-toggle="modal"
-              data-target="#publicarEncuesta"
-            >
+          <li id="contextmenu-duplicate">
+            <button type="button" (click)="duplicateSurvey()"><fa-icon class="contextmenu__icon" [icon]="faCopy"></fa-icon>Duplicar</button>
+          </li>
+          <li id="contextmenu-publish">
+            <button type="button" (click)="publish()" data-toggle="modal" data-target="#publicarEncuesta">
               <!--Agarrar  el id de la encuesta -->
               <fa-icon class="contextmenu__icon" [icon]="faUpload"></fa-icon>Publicar
             </button>

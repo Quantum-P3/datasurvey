@@ -253,8 +253,8 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   deleteSurvey(): void {
-    if (this.idEncuesta != null) {
-      this.getEncuesta(this.idEncuesta)
+    if (this.selectedSurveyId != null) {
+      this.getEncuesta(this.selectedSurveyId)
         .pipe(
           finalize(() => {
             const modalRef = this.modalService.open(EncuestaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
@@ -475,8 +475,10 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
 
         if (!this.isPublished) {
           document.getElementById('contextmenu-publish')!.style.display = 'block';
+          document.getElementById('contextmenu-duplicate')!.style.display = 'block';
         } else {
           document.getElementById('contextmenu-publish')!.style.display = 'none';
+          document.getElementById('contextmenu-duplicate')!.style.display = 'none';
         }
         // document.getElementById('contextmenu-share')!.style.display = 'block';
         document.getElementById('contextmenu-create--separator')!.style.display = 'none';
@@ -500,5 +502,9 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
         this.loadAll();
       }
     });
+  }
+
+  duplicateSurvey(): void {
+    console.log(this.selectedSurveyId);
   }
 }
