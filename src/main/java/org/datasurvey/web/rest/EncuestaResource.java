@@ -2,6 +2,7 @@ package org.datasurvey.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -305,5 +306,72 @@ public class EncuestaResource {
         log.debug("REST request to notify {} of deleted Encuesta", encuesta.getUsuarioExtra().getUser().getEmail());
         mailService.sendEncuestaDeleted(encuesta.getUsuarioExtra());
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/encuestas/duplicate/{id}")
+    public ResponseEntity<Encuesta> getAllEncuestas(@PathVariable Long id) {
+        Optional<Encuesta> encuesta = encuestaService.findOne(id);
+        Encuesta newEncuesta = new Encuesta();
+
+        if (encuesta.isPresent()) {
+            // Encuesta
+            newEncuesta.setNombre(encuesta.get().getNombre());
+            newEncuesta.setDescripcion(encuesta.get().getDescripcion());
+            newEncuesta.setFechaCreacion(ZonedDateTime.now());
+            newEncuesta.setCalificacion(5d);
+            newEncuesta.setAcceso(encuesta.get().getAcceso());
+            newEncuesta.setEstado(encuesta.get().getEstado());
+            newEncuesta.setCategoria(encuesta.get().getCategoria());
+            newEncuesta.setUsuarioExtra(encuesta.get().getUsuarioExtra());
+
+            Encuesta encuestaCreated = encuestaService.save(newEncuesta);
+
+            // Preguntas cerradas
+            List<EPreguntaCerrada> preguntasCerradas = ePreguntaCerradaService.findAll();
+            for (EPreguntaCerrada ePreguntaCerrada : preguntasCerradas) {
+                if (ePreguntaCerrada.getEncuesta().getId().equals(id)) {
+                    EPreguntaCerrada newEPreguntaCerrada = new EPreguntaCerrada();
+                    newEPreguntaCerrada.setNombre(ePreguntaCerrada.getNombre());
+                    newEPreguntaCerrada.setTipo(ePreguntaCerrada.getTipo());
+                    newEPreguntaCerrada.setOpcional(ePreguntaCerrada.getOpcional());
+                    newEPreguntaCerrada.setOrden(ePreguntaCerrada.getOrden());
+                    newEPreguntaCerrada.setEncuesta(encuestaCreated);
+
+                    ePreguntaCerradaService.save(newEPreguntaCerrada);
+
+                    // Opciones de preguntas cerradas
+                    List<EPreguntaCerradaOpcion> opciones = ePreguntaCerradaOpcionService.findAll();
+                    for (EPreguntaCerradaOpcion ePreguntaCerradaOpcion : opciones) {
+                        if (ePreguntaCerradaOpcion.getEPreguntaCerrada().getId().equals(ePreguntaCerrada.getId())) {
+                            EPreguntaCerradaOpcion newEPreguntaCerradaOpcion = new EPreguntaCerradaOpcion();
+                            newEPreguntaCerradaOpcion.setNombre(ePreguntaCerradaOpcion.getNombre());
+                            newEPreguntaCerradaOpcion.setOrden(ePreguntaCerradaOpcion.getOrden());
+                            newEPreguntaCerradaOpcion.setCantidad(0);
+                            newEPreguntaCerradaOpcion.setEPreguntaCerrada(newEPreguntaCerrada);
+
+                            ePreguntaCerradaOpcionService.save(newEPreguntaCerradaOpcion);
+                        }
+                    }
+                }
+            }
+
+            // Preguntas abiertas
+            List<EPreguntaAbierta> preguntasAbiertas = ePreguntaAbiertaService.findAll();
+            for (EPreguntaAbierta ePreguntaAbierta : preguntasAbiertas) {
+                if (ePreguntaAbierta.getEncuesta().getId().equals(id)) {
+                    EPreguntaAbierta newEPreguntaAbierta = new EPreguntaAbierta();
+                    newEPreguntaAbierta.setNombre(ePreguntaAbierta.getNombre());
+                    newEPreguntaAbierta.setOpcional(ePreguntaAbierta.getOpcional());
+                    newEPreguntaAbierta.setOrden(ePreguntaAbierta.getOrden());
+                    newEPreguntaAbierta.setEncuesta(encuestaCreated);
+
+                    ePreguntaAbiertaService.save(newEPreguntaAbierta);
+                }
+            }
+
+            return ResponseEntity.ok().body(encuestaCreated);
+        }
+
+        return ResponseEntity.ok().body(null);
     }
 }

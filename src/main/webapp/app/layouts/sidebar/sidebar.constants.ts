@@ -16,12 +16,12 @@ export interface ChildrenItems {
 }
 
 export const ADMIN_ROUTES: RouteInfo[] = [
-  {
-    path: '/dashboard',
-    title: 'Dashboard',
-    type: 'link',
-    icontype: 'nc-icon nc-chart-bar-32',
-  },
+  // {
+  //   path: '/dashboard',
+  //   title: 'Dashboard',
+  //   type: 'link',
+  //   icontype: 'nc-icon nc-chart-bar-32',
+  // },
   {
     path: '/encuesta',
     title: 'Encuestas',

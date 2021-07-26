@@ -504,7 +504,8 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     });
   }
 
-  duplicateSurvey(): void {
-    console.log(this.selectedSurveyId);
+  async duplicateSurvey(): Promise<void> {
+    const res = await this.encuestaService.duplicate(this.selectedSurveyId!).toPromise();
+    this.loadAll();
   }
 }
