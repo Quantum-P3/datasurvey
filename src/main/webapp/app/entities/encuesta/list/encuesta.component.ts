@@ -457,8 +457,9 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       document.querySelectorAll('.ds-list--entity').forEach(e => {
         e.classList.remove('active');
       });
+      this.selectedSurveyId = Number(event.target.dataset.id);
 
-      let res = await this.encuestaService.find(event.target.id).toPromise();
+      let res = await this.encuestaService.find(this.selectedSurveyId).toPromise();
       this.selectedSurvey = res.body;
       this.isPublished = this.selectedSurvey!.estado === 'DRAFT'; // QUE SE LE MUESTRE CUANDO ESTE EN DRAFT
       // }
@@ -474,7 +475,6 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       //document.getElementById('contextmenu-share')!.style.display = 'block';
 
       if ((event.target as HTMLElement).classList.contains('ds-list')) {
-        document;
         document.getElementById('contextmenu-create--separator')!.style.display = 'block';
         document.getElementById('contextmenu-edit--separator')!.style.display = 'none';
         document.getElementById('contextmenu-delete--separator')!.style.display = 'none';
