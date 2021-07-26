@@ -25,7 +25,7 @@ import { IEPreguntaCerrada } from 'app/entities/e-pregunta-cerrada/e-pregunta-ce
 import { EPreguntaCerradaService } from 'app/entities/e-pregunta-cerrada/service/e-pregunta-cerrada.service';
 import { EPreguntaCerradaDeleteDialogComponent } from 'app/entities/e-pregunta-cerrada/delete/e-pregunta-cerrada-delete-dialog.component';
 
-import { faTimes, faPlus, faQuestion, faPollH } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faPlus, faQuestion, faPollH, faEye } from '@fortawesome/free-solid-svg-icons';
 import { PreguntaCerradaTipo } from 'app/entities/enumerations/pregunta-cerrada-tipo.model';
 import { EncuestaDeleteQuestionDialogComponent } from '../encuesta-delete-question-dialog/encuesta-delete-question-dialog.component';
 import { EncuestaDeleteOptionDialogComponent } from '../encuesta-delete-option-dialog/encuesta-delete-option-dialog.component';
@@ -43,6 +43,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   faPlus = faPlus;
   faPollH = faPollH;
   faQuestion = faQuestion;
+  faEye = faEye;
 
   isSaving = false;
   isSavingQuestion = false;
