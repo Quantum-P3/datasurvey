@@ -1,19 +1,19 @@
 <form *ngIf="encuesta" name="deleteForm" (ngSubmit)="confirmPublish(encuesta!)">
   <div class="modal-header">
     <!-- <h4 class="modal-title" data-cy="encuestaDeleteDialogHeading" jhiTranslate="entity.publish.title">Confirm delete operation</h4>-->
-    <div class="alert alert-danger" *ngIf="fechaFinalizarInvalid" data-cy="fechaError">
-      Debe ingresar un rango de fechas mayor al indicado
-    </div>
-
-    <div class="alert alert-danger" *ngIf="fechaFinalizarInvalidMax" data-cy="fechaError">
-      Su rango de fechas debe ser menor al indicado
-    </div>
   </div>
 
   <div class="modal-body">
-    <jhi-alert-error></jhi-alert-error>
+    <div class="alert alert-danger" *ngIf="fechaFinalizarInvalid && !fechaFinalizarInvalidMax" data-cy="fechaError">
+      Debe ingresar un rango de fechas mayor al indicado
+    </div>
 
-    <p id="jhi-delete-encuesta-heading">Elija la fecha de finalización de su encencuesta</p>
+    <div class="alert alert-danger" *ngIf="fechaFinalizarInvalidMax && !fechaFinalizarInvalid" data-cy="fechaError">
+      Debe ingresar un rango de fechas menor al indicado
+    </div>
+
+    <p id="jhi-delete-encuesta-heading">Elija la fecha de finalización de su encuesta</p>
+    <hr />
     <!--<input type="date" onchange="fechaFinalizacionIsInvalid()" />-->
     <div class="d-flex" [formGroup]="fechaForm">
       <input

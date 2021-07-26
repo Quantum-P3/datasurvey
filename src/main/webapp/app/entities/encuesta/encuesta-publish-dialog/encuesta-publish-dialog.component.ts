@@ -11,6 +11,7 @@ import { ParametroAplicacionService } from 'app/entities/parametro-aplicacion/se
 import { HttpResponse } from '@angular/common/http';
 import { DATE_FORMAT, DATE_TIME_FORMAT } from '../../../config/input.constants';
 import * as dayjs from 'dayjs';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-encuesta-publish-dialog',
@@ -42,11 +43,6 @@ export class EncuestaPublishDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAll();
-
-    this.parametroAplicacions?.forEach(datos => {
-      this.datoMin = datos.minDiasEncuesta;
-      this.datoMax = datos.maxDiasEncuesta;
-    });
   }
 
   cancel(): void {
@@ -54,10 +50,18 @@ export class EncuestaPublishDialogComponent implements OnInit {
   }
 
   confirmPublish(encuesta: IEncuesta): void {
+    this.fechaFinalizarInvalid = false;
+    this.fechaFinalizarInvalidMax = false;
+
     const now = dayjs();
     debugger;
 
-    //this.loadAll()
+    /*this.loadAll()
+
+    this.parametroAplicacions?.forEach(datos => {
+      this.datoMin = datos.minDiasEncuesta;
+      this.datoMax = datos.maxDiasEncuesta;
+    });*/
 
     encuesta.fechaFinalizar = dayjs(this.fechaForm.get(['fechaFinalizacion'])!.value);
     encuesta.fechaPublicacion = dayjs(now, DATE_TIME_FORMAT);
@@ -80,15 +84,27 @@ export class EncuestaPublishDialogComponent implements OnInit {
   loadAll(): void {
     this.isLoading = true;
 
-    this.parametroAplicacionService.query().subscribe(
-      (res: HttpResponse<IParametroAplicacion[]>) => {
-        this.isLoading = false;
-        this.parametroAplicacions = res.body ?? [];
-      },
-      () => {
-        this.isLoading = false;
-      }
-    );
+    debugger;
+    this.parametroAplicacionService
+      .query()
+      .pipe(finalize(() => this.onLoadFinalize()))
+      .subscribe(
+        (res: HttpResponse<IParametroAplicacion[]>) => {
+          this.isLoading = false;
+          this.parametroAplicacions = res.body ?? [];
+        },
+        () => {
+          this.isLoading = false;
+        }
+      );
+  }
+
+  onLoadFinalize() {
+    this.parametroAplicacions?.forEach(datos => {
+      this.datoMin = datos.minDiasEncuesta;
+      this.datoMax = datos.maxDiasEncuesta;
+    });
+    this.isLoading = false;
   }
 
   fechaFinalizacionIsInvalid(fechaFinalizar: dayjs.Dayjs, fechaPublicacion: dayjs.Dayjs): boolean {
@@ -97,10 +113,10 @@ export class EncuestaPublishDialogComponent implements OnInit {
 
     numberDays = fechaFinalizar?.diff(fechaPublicacion, 'days');
 
-    if (numberDays < this.datoMin!) {
+    if (numberDays <= this.datoMin!) {
       this.fechaFinalizarInvalid = true;
       return false;
-    } else if (numberDays > this.datoMax!) {
+    } else if (numberDays >= this.datoMax!) {
       this.fechaFinalizarInvalidMax = true;
       return false;
     } else {
