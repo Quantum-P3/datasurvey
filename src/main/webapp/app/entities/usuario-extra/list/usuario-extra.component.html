@@ -47,6 +47,7 @@
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.iconoPerfil">Icono</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.nombre">Nombre Usuario</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.correo">Correo electrónico</span></th>
+          <th scope="col"><span>Fecha de nacimiento</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.estado">Estado</span></th>
           <!--<th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.plantilla">Plantilla</span></th>-->
           <th scope="col"></th>
@@ -72,6 +73,8 @@
           </td>
           <td>{{ usuarioExtra.nombre }}</td>
           <td *ngIf="usuarioExtra.user">{{ usuarioExtra.user.email }}</td>
+          <td *ngIf="usuarioExtra.fechaNacimiento == null">No establecida</td>
+          <td *ngIf="usuarioExtra.fechaNacimiento != null">{{ usuarioExtra.fechaNacimiento | formatMediumDate }}</td>
           <td jhiTranslate="{{ 'dataSurveyApp.EstadoUsuario.' + usuarioExtra.estado }}">{{ usuarioExtra.estado }}</td>
           <!--<td>
             <span *ngFor="let plantilla of usuarioExtra.plantillas; let last = last">
