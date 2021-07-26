@@ -5,6 +5,10 @@ import { EncuestaService } from '../service/encuesta.service';
 import { EstadoEncuesta } from '../../enumerations/estado-encuesta.model';
 import { AccesoEncuesta } from '../../enumerations/acceso-encuesta.model';
 import { passwordResetFinishRoute } from '../../../account/password-reset/finish/password-reset-finish.route';
+import { FormBuilder, Validators } from '@angular/forms';
+import { IParametroAplicacion } from 'app/entities/parametro-aplicacion/parametro-aplicacion.model';
+import { ParametroAplicacionService } from 'app/entities/parametro-aplicacion/service/parametro-aplicacion.service';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'jhi-encuesta-publish-dialog',
@@ -13,10 +17,22 @@ import { passwordResetFinishRoute } from '../../../account/password-reset/finish
 })
 export class EncuestaPublishDialogComponent implements OnInit {
   encuesta?: IEncuesta;
-  fechaFinalizar?: Date;
+  fechaFinalizacion?: Date;
   fechaFinalizarInvalid?: boolean;
+  isLoading?: boolean;
+  parametroAplicacions?: IParametroAplicacion[];
+  isMin = false;
+  isMax = false;
+  fechaForm = this.fb.group({
+    fechaFinalizacion: [null, [Validators.required]],
+  });
 
-  constructor(protected encuestaService: EncuestaService, protected activeModal: NgbActiveModal) {}
+  constructor(
+    protected parametroAplicacionService: ParametroAplicacionService,
+    protected encuestaService: EncuestaService,
+    protected fb: FormBuilder,
+    protected activeModal: NgbActiveModal
+  ) {}
 
   cancel(): void {
     this.activeModal.dismiss();
@@ -37,10 +53,24 @@ export class EncuestaPublishDialogComponent implements OnInit {
     });
   }
 
-  fechaFinalizarIsInvalid(): void {
+  loadAll(): void {
+    this.isLoading = true;
+    this.parametroAplicacionService.query().subscribe(
+      (res: HttpResponse<IParametroAplicacion[]>) => {
+        this.isLoading = false;
+        this.parametroAplicacions = res.body ?? [];
+      },
+      () => {
+        this.isLoading = false;
+      }
+    );
+  }
+
+  fechaFinalizacionIsInvalid(): void {
     const now = new Date();
+    const timeDiff = now.valueOf() - this.fechaFinalizacion!.valueOf();
     debugger;
-    this.fechaFinalizarInvalid = now < this.fechaFinalizar!;
+    this.fechaFinalizarInvalid = now < this.fechaFinalizacion!;
   }
 
   generatePassword(): string {
@@ -55,7 +85,9 @@ export class EncuestaPublishDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fechaFinalizar = new Date();
+    this.loadAll();
+    this.fechaFinalizacion = new Date();
     this.fechaFinalizarInvalid = false;
+    this.fechaFinalizacionIsInvalid();
   }
 }
