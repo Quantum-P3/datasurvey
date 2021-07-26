@@ -61,6 +61,13 @@ export class EncuestaService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  publishEncuesta(encuesta: IEncuesta): Observable<EntityResponseType> {
+    //const copy = this.convertDateFromClient(encuesta);
+    return this.http.put<IEncuesta>(`${this.resourceUrl}/publish/${getEncuestaIdentifier(encuesta) as number}`, encuesta, {
+      observe: 'response',
+    });
+  }
+
   deleteEncuesta(encuesta: IEncuesta): Observable<EntityResponseType> {
     //const copy = this.convertDateFromClient(encuesta);
     return this.http.put<IEncuesta>(`${this.resourceUrl}/${getEncuestaIdentifier(encuesta) as number}`, encuesta, { observe: 'response' });
@@ -75,6 +82,10 @@ export class EncuestaService {
 
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  deletedNotification(email: string): Observable<HttpResponse<{}>> {
+    return this.http.delete(`${this.resourceUrl}/${email}`, { observe: 'response' });
   }
 
   addEncuestaToCollectionIfMissing(encuestaCollection: IEncuesta[], ...encuestasToCheck: (IEncuesta | null | undefined)[]): IEncuesta[] {

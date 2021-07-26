@@ -19,3 +19,22 @@
 p {
   margin: 0 !important;
 }
+
+.ds-info--icon {
+  border-radius: 50%;
+  background-color: #f1f5f9;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  width: 20px;
+  height: 20px;
+  font-size: 0.7rem;
+  color: #313747;
+  pointer-events: visible !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: #e3e6e9;
+  }
+}

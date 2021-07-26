@@ -59,7 +59,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   faPlus = faPlus;
   faStar = faStar;
   faUpload = faUpload;
-  isPublished = false;
+  isPublished: Boolean = false;
   successPublished = false;
   faPollH = faPollH;
   account: Account | null = null;
@@ -75,7 +75,6 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   usuarioExtrasSharedCollection: IUsuarioExtra[] = [];
   userSharedCollection: IUser[] = [];
 
-  selectedIdSurvey: number | null = null;
   encuestaencontrada: IEncuesta | null = null;
 
   public searchString: string;
@@ -100,7 +99,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   });
 
   createAnother: Boolean = false;
-  selectedSurveyId: Number = 0;
+  selectedSurveyId: number | null = null;
 
   constructor(
     protected encuestaService: EncuestaService,
@@ -126,7 +125,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
 
     this.usuarioExtraService
       .retrieveAllPublicUsers()
-      .pipe(finalize(() => this.loadUserExtras()))
+      .pipe(finalize(() => this.loadPublicUser()))
       .subscribe(res => {
         this.userSharedCollection = res;
       });
@@ -253,8 +252,8 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   deleteSurvey(): void {
-    if (this.selectedIdSurvey != null) {
-      this.getEncuesta(this.selectedIdSurvey)
+    if (this.selectedSurveyId != null) {
+      this.getEncuesta(this.selectedSurveyId)
         .pipe(
           finalize(() => {
             const modalRef = this.modalService.open(EncuestaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
@@ -450,13 +449,12 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   async openContextMenu(event: any): Promise<void> {
-    document.querySelectorAll('.ds-list--entity').forEach(e => {
-      e.classList.remove('active');
-    });
-
     if (event.type === 'contextmenu') {
       event.preventDefault();
-      this.selectedSurveyId = event.target.dataset.id;
+      if (event.target === null) return;
+      document.querySelectorAll('.ds-list--entity').forEach(e => {
+        e.classList.remove('active');
+      });
 
       let res = await this.encuestaService.find(this.selectedSurveyId).toPromise();
       this.selectedSurvey = res.body;
@@ -473,14 +471,31 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       document.getElementById('contextmenu-share')!.style.display = 'block';
 
       if ((event.target as HTMLElement).classList.contains('ds-list')) {
+        document;
+        document.getElementById('contextmenu-create--separator')!.style.display = 'block';
         document.getElementById('contextmenu-edit--separator')!.style.display = 'none';
         document.getElementById('contextmenu-delete--separator')!.style.display = 'none';
       } else if ((event.target as HTMLElement).classList.contains('ds-list--entity')) {
+        this.selectedSurveyId = Number(event.target.dataset.id);
         event.target.classList.add('active');
-        document.getElementById('contextmenu-create--separator')!.style.display = 'none';
 
-        this.selectedIdSurvey = Number(event.target.dataset.id);
-        //this.selectedSurvey = event.target.dataset.encuesta;
+        let res = await this.encuestaService.find(this.selectedSurveyId).toPromise();
+        this.selectedSurvey = res.body;
+        this.isPublished = this.selectedSurvey!.estado === 'ACTIVE' || this.selectedSurvey!.estado === 'FINISHED'; // QUE SE LE MUESTRE CUANDO ESTE EN DRAFT
+
+        document.getElementById('contextmenu-create--separator')!.style.display = 'none';
+        document.getElementById('contextmenu-edit--separator')!.style.display = 'block';
+        document.getElementById('contextmenu-delete--separator')!.style.display = 'block';
+        document.getElementById('contextmenu-edit')!.style.display = 'block';
+        document.getElementById('contextmenu-duplicate')!.style.display = 'block';
+
+        if (!this.isPublished) {
+          document.getElementById('contextmenu-publish')!.style.display = 'block';
+        } else {
+          document.getElementById('contextmenu-publish')!.style.display = 'none';
+        }
+        // document.getElementById('contextmenu-share')!.style.display = 'block';
+        document.getElementById('contextmenu-create--separator')!.style.display = 'none';
       }
 
       document.getElementById('contextmenu')!.style.top = event.layerY + 'px';

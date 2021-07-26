@@ -21,7 +21,6 @@ export class EncuestaPublishDialogComponent implements OnInit {
   }
 
   confirmPublish(encuesta: IEncuesta): void {
-    debugger;
     if (encuesta.estado === 'DRAFT') {
       encuesta.estado = EstadoEncuesta.ACTIVE;
     }
@@ -30,13 +29,12 @@ export class EncuestaPublishDialogComponent implements OnInit {
       encuesta.contrasenna = this.generatePassword();
     }
 
-    this.encuestaService.update(encuesta).subscribe(() => {
+    this.encuestaService.publishEncuesta(encuesta).subscribe(() => {
       this.activeModal.close('published');
     });
   }
 
   generatePassword(): string {
-    debugger;
     const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
     let password = '';

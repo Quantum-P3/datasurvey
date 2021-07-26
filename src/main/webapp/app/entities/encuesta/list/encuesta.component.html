@@ -85,14 +85,8 @@
     <div class="ds-contextmenu ds-contextmenu--closed" id="contextmenu">
       <ul id="ds-context-menu__list">
         <div class="ds-contextmenu__divider ds-contextmenu__divider--separator-bottom" id="contextmenu-create--separator">
-          <li>
-            <button
-              *ngIf="!isAdmin() && isAuthenticated()"
-              type="button"
-              (click)="resetForm()"
-              data-toggle="modal"
-              data-target="#crearEncuesta"
-            >
+          <li *ngIf="!isAdmin() && isAuthenticated()">
+            <button type="button" (click)="resetForm()" data-toggle="modal" data-target="#crearEncuesta">
               <fa-icon class="contextmenu__icon" [icon]="faPlus"></fa-icon>Crear
             </button>
           </li>
@@ -114,15 +108,14 @@
               (click)="publish()"
               data-toggle="modal"
               data-target="#publicarEncuesta"
-              *ngIf="isPublished"
             >
               <!--Agarrar  el id de la encuesta -->
               <fa-icon class="contextmenu__icon" [icon]="faUpload"></fa-icon>Publicar
             </button>
           </li>
-          <li>
+          <!-- <li>
             <button type="button" id="contextmenu-share"><fa-icon class="contextmenu__icon" [icon]="faShareAlt"></fa-icon>Compartir</button>
-          </li>
+          </li> -->
         </div>
         <div class="ds-contextmenu__divider" id="contextmenu-delete--separator">
           <li>
@@ -303,7 +296,7 @@
     <thead>
       <tr>
         <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.nombre">Nombre</span></th>
-        <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.fechaCreacion">Fecha Creacion</span></th>
+        <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.fechaCreacion">Fecha Creación</span></th>
         <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.acceso">Acceso</span></th>
         <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.estado">Estado</span></th>
         <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.categoria">Categoria</span></th>
