@@ -10,10 +10,13 @@ import { finalize, map } from 'rxjs/operators';
 import { Categoria, ICategoria } from '../categoria.model';
 import { CategoriaService } from '../service/categoria.service';
 
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 @Component({
   templateUrl: './categoria-delete-dialog.component.html',
 })
 export class CategoriaDeleteDialogComponent {
+  faExchangeAlt = faExchangeAlt;
+
   categoria?: ICategoria;
   encuestas?: IEncuesta[];
   encuestasFiltradas?: IEncuesta[];

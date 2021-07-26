@@ -46,10 +46,10 @@
           type="button"
           id="cancel-save"
           data-cy="entityCreateCancelButton"
-          class="btn btn-secondary ds-btn ds-btn-secondary"
+          class="ds-btn ds-btn--secondary"
           (click)="previousState()"
         >
-          &nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
 
         <button
@@ -58,7 +58,7 @@
           id="save-entity"
           data-cy="entityCreateSaveButton"
           [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary ds-btn ds-btn-primary"
+          class="ds-btn ds-btn--primary"
         >
           &nbsp;<span jhiTranslate="entity.action.save">Save</span>
         </button>

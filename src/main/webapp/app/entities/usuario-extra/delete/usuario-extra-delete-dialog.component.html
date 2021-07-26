@@ -1,20 +1,22 @@
-<form *ngIf="usuarioExtra" name="deleteForm" (ngSubmit)="confirmDelete(usuarioExtra)">
+<form class="ds-form" *ngIf="usuarioExtra" name="deleteForm" (ngSubmit)="confirmDelete(usuarioExtra)">
   <div class="modal-header">
     <!--<h4 class="modal-title" data-cy="usuarioExtraDeleteDialogHeading" jhiTranslate="entity.delete.status">Confirm delete operation</h4>-->
   </div>
 
   <div class="modal-body">
-    <jhi-alert-error></jhi-alert-error>
-
-    <p id="jhi-delete-usuarioExtra-heading" jhiTranslate="dataSurveyApp.usuarioExtra.delete.question"></p>
+    <p class="ds-title--small">Cambiar estado</p>
+    <p class="ds-subtitle" id="jhi-delete-usuarioExtra-heading" jhiTranslate="dataSurveyApp.usuarioExtra.delete.question">
+      Are you sure you want to toggle this user's status?
+    </p>
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
-      <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    <button type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
     </button>
 
-    <button id="jhi-confirm-delete-usuarioExtra" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-warning">
+    <button id="jhi-confirm-delete-usuarioExtra" data-cy="entityConfirmDeleteButton" type="submit" class="ds-btn ds-btn--danger">
+      <fa-icon [icon]="faExchangeAlt"></fa-icon>
       <span jhiTranslate="entity.action.toggleStatus">Cambiar estado</span>
     </button>
   </div>

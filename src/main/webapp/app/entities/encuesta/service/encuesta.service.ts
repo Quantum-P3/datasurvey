@@ -45,6 +45,10 @@ export class EncuestaService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  findEncuesta(id: number): Observable<IEncuesta> {
+    return this.http.get<IEncuesta>(`${this.resourceUrl}/${id}`);
+  }
+
   findQuestions(id: number): Observable<EntityResponseType> {
     return this.http
       .get<any>(`${this.resourceUrl}/preguntas/${id}`, { observe: 'response' })
@@ -57,8 +61,11 @@ export class EncuestaService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
-  findEncuesta(id: number): Observable<IEncuesta> {
-    return this.http.get<IEncuesta>(`${this.resourceUrl}/${id}`);
+  publishEncuesta(encuesta: IEncuesta): Observable<EntityResponseType> {
+    //const copy = this.convertDateFromClient(encuesta);
+    return this.http.put<IEncuesta>(`${this.resourceUrl}/publish/${getEncuestaIdentifier(encuesta) as number}`, encuesta, {
+      observe: 'response',
+    });
   }
 
   deleteEncuesta(encuesta: IEncuesta): Observable<EntityResponseType> {
@@ -75,6 +82,10 @@ export class EncuestaService {
 
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  deletedNotification(encuesta: IEncuesta): Observable<HttpResponse<{}>> {
+    return this.http.delete(`${this.resourceUrl}/notify/${encuesta.id}`, { observe: 'response' });
   }
 
   addEncuestaToCollectionIfMissing(encuestaCollection: IEncuesta[], ...encuestasToCheck: (IEncuesta | null | undefined)[]): IEncuesta[] {

@@ -24,11 +24,11 @@
   </div>
   <form class="ds-form d-inline">
     <div class="input-group">
-      <div class="col-3">
+      <div class="ds-filter">
         <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
         <input type="text" name="searchNombreUsuario" placeholder="Buscar por nombre..." [(ngModel)]="searchNombreUsuario" />
       </div>
-      <div class="col-3">
+      <div class="ds-filter">
         <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
         <select name="searchEstadoUsuario" id="searchEstadoUsuario" [(ngModel)]="searchEstadoUsuario" style="width: 200px">
           <option value="" selected="selected" disabled="disabled">Filtrar por estado</option>
@@ -82,7 +82,7 @@
               >{{ last ? '' : ', ' }}
             </span>
           </td>-->
-          <td class="text-center">
+          <td class="text-right">
             <div class="btn-group">
               <button
                 type="submit"
@@ -90,12 +90,12 @@
                 class="ds-btn ds-btn--primary btn-sm"
                 data-cy="entityDetailsButton"
               >
-                <fa-icon icon="eye"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
               </button>
-              &nbsp;&nbsp;
-              <button type="submit" (click)="delete(usuarioExtra)" class="btn-sm ds-btn ds-btn--toggle" data-cy="entityDeleteButton">
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.toggleStatus"></span>
+
+              <button type="submit" (click)="delete(usuarioExtra)" class="ds-btn ds-btn--danger" data-cy="entityDeleteButton">
+                <fa-icon [icon]="faExchangeAlt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.toggleStatus">Toggle Status</span>
               </button>
             </div>
           </td>

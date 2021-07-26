@@ -8,7 +8,7 @@
     <!-- Use the latest (edge) version of IE rendering engine -->
     <meta name="x-apple-disable-message-reformatting" />
     <!-- Disable auto-scale in iOS 10 Mail entirely -->
-    <title th:text="#{email.suspended.title}">JHipster activation</title>
+    <title th:text="#{email.encuestaDeleted.title}">Encuesta Eliminada</title>
     <link rel="icon" th:href="@{|${baseUrl}/favicon.ico|}" />
     <link href="https://fonts.googleapis.com/css?family=NotoSansSP:300,400,700" rel="stylesheet" />
     <link rel="manifest" href="manifest.webapp" />
@@ -244,7 +244,7 @@
               <img
                 src="https://res.cloudinary.com/marielascloud/image/upload/v1626333882/email_v7pjtv.png"
                 alt=""
-                style="width: 250px; max-width: 600px; height: auto; margin: auto; display: block"
+                style="width: 300px; max-width: 600px; height: auto; margin: auto; display: block"
               />
             </td>
           </tr>
@@ -255,17 +255,8 @@
                 <tr>
                   <td>
                     <div class="text" style="padding: 0 2.5em; text-align: center">
-                      <h2 th:text="#{email.suspended.greeting(${user.login})}">¡Hola!</h2>
-                      <h3 th:text="#{email.suspended.text1}">
-                        Your JHipster account has been created, please click on the URL below to activate it:
-                      </h3>
-                    </div>
-                    <div class="text" style="padding: 1em 2.5em; text-align: center">
-                      <p>
-                        <span th:text="#{email.suspended.text2}">Regards, </span>
-                        <br />
-                        <em th:text="#{email.signature}">JHipster.</em>
-                      </p>
+                      <h2 th:text="#{email.encuestaDeleted.greeting(${user.login})}">¡Encuesta eliminada!</h2>
+                      <h3 th:text="#{email.encuestaDeleted.text1}">¡Su encuesta ha sido eliminada exitosamente!</h3>
                     </div>
                   </td>
                 </tr>
@@ -285,7 +276,7 @@
                       <tr>
                         <td style="text-align: left; padding-right: 10px">
                           <h3 class="heading">Acerca de</h3>
-                          <p>DataSurvey es su compañero más cercano para poder recolectar información valiosa para usted</p>
+                          <p>DataSurvey es su compañero más cercano para poder recolectar información valiosa para usted.</p>
                         </td>
                       </tr>
                     </table>

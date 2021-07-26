@@ -54,7 +54,6 @@ export class EncuestaPublishDialogComponent implements OnInit {
     this.fechaFinalizarInvalidMax = false;
 
     const now = dayjs();
-    debugger;
 
     /*this.loadAll()
 
@@ -84,7 +83,6 @@ export class EncuestaPublishDialogComponent implements OnInit {
   loadAll(): void {
     this.isLoading = true;
 
-    debugger;
     this.parametroAplicacionService
       .query()
       .pipe(finalize(() => this.onLoadFinalize()))
@@ -125,7 +123,6 @@ export class EncuestaPublishDialogComponent implements OnInit {
   }
 
   generatePassword(): string {
-    debugger;
     const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
     let password = '';
