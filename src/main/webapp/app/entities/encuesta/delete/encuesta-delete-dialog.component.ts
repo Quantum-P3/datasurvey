@@ -16,9 +16,9 @@ export class EncuestaDeleteDialogComponent {
     this.activeModal.dismiss();
   }
 
-  confirmDelete(encuest: IEncuesta): void {
-    encuest.estado = EstadoEncuesta.DELETED;
-    this.encuestaService.deleteEncuesta(encuest).subscribe(() => {
+  confirmDelete(encuesta: IEncuesta): void {
+    encuesta.estado = EstadoEncuesta.DELETED;
+    this.encuestaService.deleteEncuesta(encuesta).subscribe(() => {
       this.activeModal.close('deleted');
     });
   }

@@ -61,6 +61,13 @@ export class EncuestaService {
     return this.http.get<IEncuesta>(`${this.resourceUrl}/${id}`);
   }
 
+  publishEncuesta(encuesta: IEncuesta): Observable<EntityResponseType> {
+    //const copy = this.convertDateFromClient(encuesta);
+    return this.http.put<IEncuesta>(`${this.resourceUrl}/publish/${getEncuestaIdentifier(encuesta) as number}`, encuesta, {
+      observe: 'response',
+    });
+  }
+
   deleteEncuesta(encuesta: IEncuesta): Observable<EntityResponseType> {
     //const copy = this.convertDateFromClient(encuesta);
     return this.http.put<IEncuesta>(`${this.resourceUrl}/${getEncuestaIdentifier(encuesta) as number}`, encuesta, { observe: 'response' });
