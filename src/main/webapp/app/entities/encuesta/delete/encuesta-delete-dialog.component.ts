@@ -23,9 +23,6 @@ export class EncuestaDeleteDialogComponent {
     this.encuestaService.deleteEncuesta(encuesta).subscribe(() => {
       this.activeModal.close('deleted');
     });
-    if (encuesta.usuarioExtra != undefined) {
-      const userEmail = encuesta.usuarioExtra!.user!.login;
-      this.encuestaService.deletedNotification(userEmail!);
-    }
+    this.encuestaService.deletedNotification(encuesta);
   }
 }
