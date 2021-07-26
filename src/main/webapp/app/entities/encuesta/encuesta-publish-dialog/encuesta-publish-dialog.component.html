@@ -1,13 +1,46 @@
 <form *ngIf="encuesta" name="deleteForm" (ngSubmit)="confirmPublish(encuesta!)">
   <div class="modal-header">
     <!-- <h4 class="modal-title" data-cy="encuestaDeleteDialogHeading" jhiTranslate="entity.publish.title">Confirm delete operation</h4>-->
+    <div class="alert alert-danger" *ngIf="fechaFinalizarInvalid" data-cy="fechaError">
+      Debe ingresar un rango de fechas mayor al indicado
+    </div>
+
+    <div class="alert alert-danger" *ngIf="fechaFinalizarInvalidMax" data-cy="fechaError">
+      Su rango de fechas debe ser menor al indicado
+    </div>
   </div>
 
   <div class="modal-body">
     <jhi-alert-error></jhi-alert-error>
 
     <p id="jhi-delete-encuesta-heading">Elija la fecha de finalización de su encencuesta</p>
-    <input type="date" onchange="fechaFinalizacionIsInvalid()" />
+    <!--<input type="date" onchange="fechaFinalizacionIsInvalid()" />-->
+    <div class="d-flex" [formGroup]="fechaForm">
+      <input
+        id="field_fechaFinalizacion"
+        data-cy="fechaFinalizacion"
+        type="date"
+        class="form-control"
+        name="fechaFinalizacion"
+        formControlName="fechaFinalizacion"
+        placeholder="YYYY-MM-DD HH:mm"
+      />
+    </div>
+
+    <div
+      *ngIf="
+        fechaForm.get('fechaFinalizacion')!.invalid &&
+        (fechaForm.get('fechaFinalizacion')!.dirty || fechaForm.get('fechaFinalizacion')!.touched)
+      "
+    >
+      <small
+        class="form-text text-danger"
+        *ngIf="fechaForm.get('fechaFinalizacion')?.errors?.required"
+        jhiTranslate="entity.validation.required"
+      >
+        This field is required.
+      </small>
+    </div>
   </div>
 
   <div class="modal-footer">
@@ -16,7 +49,7 @@
     </button>
 
     <button
-      disabled="fechaFinalizarInvalid"
+      [disabled]="fechaForm.invalid"
       id="jhi-confirm-delete-encuesta"
       data-cy="entityConfirmDeleteButton"
       type="submit"

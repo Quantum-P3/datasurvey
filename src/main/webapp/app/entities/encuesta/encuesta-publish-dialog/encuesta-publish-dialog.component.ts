@@ -9,6 +9,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { IParametroAplicacion } from 'app/entities/parametro-aplicacion/parametro-aplicacion.model';
 import { ParametroAplicacionService } from 'app/entities/parametro-aplicacion/service/parametro-aplicacion.service';
 import { HttpResponse } from '@angular/common/http';
+import { DATE_FORMAT, DATE_TIME_FORMAT } from '../../../config/input.constants';
+import * as dayjs from 'dayjs';
 
 @Component({
   selector: 'jhi-encuesta-publish-dialog',
@@ -17,12 +19,16 @@ import { HttpResponse } from '@angular/common/http';
 })
 export class EncuestaPublishDialogComponent implements OnInit {
   encuesta?: IEncuesta;
-  fechaFinalizacion?: Date;
-  fechaFinalizarInvalid?: boolean;
+  //fechaFinalizacion?: Date;
+  fechaFinalizarInvalid?: boolean = false;
+  fechaFinalizarInvalidMax?: boolean = false;
   isLoading?: boolean;
   parametroAplicacions?: IParametroAplicacion[];
   isMin = false;
   isMax = false;
+  datoMin?: number;
+  datoMax?: number;
+  now = new Date();
   fechaForm = this.fb.group({
     fechaFinalizacion: [null, [Validators.required]],
   });
@@ -34,27 +40,46 @@ export class EncuestaPublishDialogComponent implements OnInit {
     protected activeModal: NgbActiveModal
   ) {}
 
+  ngOnInit(): void {
+    this.loadAll();
+
+    this.parametroAplicacions?.forEach(datos => {
+      this.datoMin = datos.minDiasEncuesta;
+      this.datoMax = datos.maxDiasEncuesta;
+    });
+  }
+
   cancel(): void {
     this.activeModal.dismiss();
   }
 
   confirmPublish(encuesta: IEncuesta): void {
+    const now = dayjs();
     debugger;
-    if (encuesta.estado === 'DRAFT') {
-      encuesta.estado = EstadoEncuesta.ACTIVE;
-    }
 
-    if (encuesta.acceso === AccesoEncuesta.PRIVATE) {
-      encuesta.contrasenna = this.generatePassword();
-    }
+    //this.loadAll()
 
-    this.encuestaService.update(encuesta).subscribe(() => {
-      this.activeModal.close('published');
-    });
+    encuesta.fechaFinalizar = dayjs(this.fechaForm.get(['fechaFinalizacion'])!.value);
+    encuesta.fechaPublicacion = dayjs(now, DATE_TIME_FORMAT);
+
+    if (this.fechaFinalizacionIsInvalid(encuesta.fechaFinalizar, encuesta.fechaPublicacion)) {
+      if (encuesta.estado === 'DRAFT') {
+        encuesta.estado = EstadoEncuesta.ACTIVE;
+      }
+
+      if (encuesta.acceso === AccesoEncuesta.PRIVATE) {
+        encuesta.contrasenna = this.generatePassword();
+      }
+
+      this.encuestaService.update(encuesta).subscribe(() => {
+        this.activeModal.close('published');
+      });
+    }
   }
 
   loadAll(): void {
     this.isLoading = true;
+
     this.parametroAplicacionService.query().subscribe(
       (res: HttpResponse<IParametroAplicacion[]>) => {
         this.isLoading = false;
@@ -66,11 +91,21 @@ export class EncuestaPublishDialogComponent implements OnInit {
     );
   }
 
-  fechaFinalizacionIsInvalid(): void {
-    const now = new Date();
-    const timeDiff = now.valueOf() - this.fechaFinalizacion!.valueOf();
+  fechaFinalizacionIsInvalid(fechaFinalizar: dayjs.Dayjs, fechaPublicacion: dayjs.Dayjs): boolean {
+    let numberDays: number;
     debugger;
-    this.fechaFinalizarInvalid = now < this.fechaFinalizacion!;
+
+    numberDays = fechaFinalizar?.diff(fechaPublicacion, 'days');
+
+    if (numberDays < this.datoMin!) {
+      this.fechaFinalizarInvalid = true;
+      return false;
+    } else if (numberDays > this.datoMax!) {
+      this.fechaFinalizarInvalidMax = true;
+      return false;
+    } else {
+      return true;
+    }
   }
 
   generatePassword(): string {
@@ -82,12 +117,5 @@ export class EncuestaPublishDialogComponent implements OnInit {
       password += alpha.charAt(Math.floor(Math.random() * alpha.length));
     }
     return password;
-  }
-
-  ngOnInit(): void {
-    this.loadAll();
-    this.fechaFinalizacion = new Date();
-    this.fechaFinalizarInvalid = false;
-    this.fechaFinalizacionIsInvalid();
   }
 }
