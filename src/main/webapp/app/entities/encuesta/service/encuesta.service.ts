@@ -45,7 +45,7 @@ export class EncuestaService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
-  findEncuesta(id: number): Observable<IEncuesta> {
+  findEncuesta(id: Number): Observable<IEncuesta> {
     return this.http.get<IEncuesta>(`${this.resourceUrl}/${id}`);
   }
 

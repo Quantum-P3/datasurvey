@@ -65,11 +65,9 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;
   estadoDeleted = EstadoEncuesta.DELETED;
-
   encuestas?: IEncuesta[];
   isLoading = false;
   selectedSurvey?: IEncuesta | null = null;
-  idEncuesta: number | null = null;
   isSaving = false;
 
   categoriasSharedCollection: ICategoria[] = [];
@@ -82,6 +80,9 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   public accesoEncuesta: string;
   //public categoriaEncuesta: string;
   public estadoEncuesta: string;
+
+  createAnother: Boolean = false;
+  selectedSurveyId: Number | null = null;
 
   editForm = this.fb.group({
     id: [],
@@ -98,9 +99,6 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     categoria: [null, [Validators.required]],
     // usuarioExtra: [],
   });
-
-  createAnother: Boolean = false;
-  selectedSurveyId: Number | null = null;
 
   constructor(
     protected encuestaService: EncuestaService,
@@ -124,12 +122,16 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   loadAll(): void {
     this.isLoading = true;
 
-    this.usuarioExtraService
-      .retrieveAllPublicUsers()
-      .pipe(finalize(() => this.loadPublicUser()))
-      .subscribe(res => {
-        this.userSharedCollection = res;
-      });
+    if (this.isAdmin()) {
+      this.usuarioExtraService
+        .retrieveAllPublicUsers()
+        .pipe(finalize(() => this.loadPublicUser()))
+        .subscribe(res => {
+          this.userSharedCollection = res;
+        });
+    } else {
+      this.loadEncuestas();
+    }
   }
 
   loadPublicUser(): void {
@@ -144,30 +146,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   loadUserExtras() {
     this.usuarioExtraService
       .query()
-      .pipe(
-        finalize(() =>
-          this.encuestaService.query().subscribe(
-            (res: HttpResponse<IEncuesta[]>) => {
-              this.isLoading = false;
-              const tmpEncuestas = res.body ?? [];
-              if (this.isAdmin()) {
-                this.encuestas = tmpEncuestas.filter(e => e.estado !== EstadoEncuesta.DELETED);
-
-                this.encuestas.forEach(e => {
-                  e.usuarioExtra = this.usuarioExtrasSharedCollection?.find(pU => pU.id == e.usuarioExtra?.id);
-                });
-              } else {
-                this.encuestas = tmpEncuestas
-                  .filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id)
-                  .filter(e => e.estado !== EstadoEncuesta.DELETED);
-              }
-            },
-            () => {
-              this.isLoading = false;
-            }
-          )
-        )
-      )
+      .pipe(finalize(() => this.loadEncuestas()))
       .subscribe(
         (res: HttpResponse<IUsuarioExtra[]>) => {
           this.isLoading = false;
@@ -180,6 +159,29 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
           this.isLoading = false;
         }
       );
+  }
+
+  loadEncuestas() {
+    this.encuestaService.query().subscribe(
+      (res: HttpResponse<IEncuesta[]>) => {
+        this.isLoading = false;
+        const tmpEncuestas = res.body ?? [];
+        if (this.isAdmin()) {
+          this.encuestas = tmpEncuestas.filter(e => e.estado !== EstadoEncuesta.DELETED);
+
+          this.encuestas.forEach(e => {
+            e.usuarioExtra = this.usuarioExtrasSharedCollection?.find(pU => pU.id == e.usuarioExtra?.id);
+          });
+        } else {
+          this.encuestas = tmpEncuestas
+            .filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id)
+            .filter(e => e.estado !== EstadoEncuesta.DELETED);
+        }
+      },
+      () => {
+        this.isLoading = false;
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -253,8 +255,8 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   deleteSurvey(): void {
-    if (this.idEncuesta != null) {
-      this.getEncuesta(this.idEncuesta)
+    if (this.selectedSurveyId != null) {
+      this.getEncuesta(this.selectedSurveyId)
         .pipe(
           finalize(() => {
             const modalRef = this.modalService.open(EncuestaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
@@ -290,7 +292,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getEncuesta(id: number) {
+  getEncuesta(id: Number) {
     return this.encuestaService.findEncuesta(id);
   }
 
@@ -428,7 +430,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   selectSurvey(event: any): void {
-    this.idEncuesta = event.target.getAttribute('data-id');
+    this.selectedSurveyId = event.target.getAttribute('data-id');
     document.querySelectorAll('.ds-list--entity').forEach(e => {
       e.classList.remove('active');
     });
@@ -438,7 +440,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   openPreview() {
-    const surveyId = this.idEncuesta;
+    const surveyId = this.selectedSurveyId;
     this.router.navigate(['/encuesta', surveyId, 'preview']);
   }
 
@@ -480,7 +482,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
         document.getElementById('contextmenu-delete--separator')!.style.display = 'none';
       } else if ((event.target as HTMLElement).classList.contains('ds-list--entity')) {
         this.selectedSurveyId = Number(event.target.dataset.id);
-        this.idEncuesta = Number(event.target.dataset.id);
+
         event.target.classList.add('active');
 
         let res = await this.encuestaService.find(this.selectedSurveyId).toPromise();
