@@ -69,6 +69,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   encuestas?: IEncuesta[];
   isLoading = false;
   selectedSurvey?: IEncuesta | null = null;
+  idEncuesta: number | null = null;
   isSaving = false;
 
   categoriasSharedCollection: ICategoria[] = [];
@@ -99,7 +100,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   });
 
   createAnother: Boolean = false;
-  selectedSurveyId: number | null = null;
+  selectedSurveyId: Number | null = null;
 
   constructor(
     protected encuestaService: EncuestaService,
@@ -252,8 +253,8 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   deleteSurvey(): void {
-    if (this.selectedSurveyId != null) {
-      this.getEncuesta(this.selectedSurveyId)
+    if (this.idEncuesta != null) {
+      this.getEncuesta(this.idEncuesta)
         .pipe(
           finalize(() => {
             const modalRef = this.modalService.open(EncuestaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
@@ -427,6 +428,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   selectSurvey(event: any): void {
+    this.idEncuesta = event.target.getAttribute('data-id');
     document.querySelectorAll('.ds-list--entity').forEach(e => {
       e.classList.remove('active');
     });
@@ -436,7 +438,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   openPreview() {
-    const surveyId = this.selectedIdSurvey;
+    const surveyId = this.idEncuesta;
     this.router.navigate(['/encuesta', surveyId, 'preview']);
   }
 
@@ -456,9 +458,10 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
         e.classList.remove('active');
       });
 
-      let res = await this.encuestaService.find(this.selectedSurveyId).toPromise();
+      let res = await this.encuestaService.find(event.target.id).toPromise();
       this.selectedSurvey = res.body;
       this.isPublished = this.selectedSurvey!.estado === 'DRAFT'; // QUE SE LE MUESTRE CUANDO ESTE EN DRAFT
+      // }
 
       document.getElementById('contextmenu-create--separator')!.style.display = 'block';
       document.getElementById('contextmenu-edit--separator')!.style.display = 'block';
@@ -468,7 +471,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
         document.getElementById('contextmenu-publish')!.style.display = 'block'; //cambiar
       }
       document.getElementById('contextmenu-preview')!.style.display = 'block';
-      document.getElementById('contextmenu-share')!.style.display = 'block';
+      //document.getElementById('contextmenu-share')!.style.display = 'block';
 
       if ((event.target as HTMLElement).classList.contains('ds-list')) {
         document;
@@ -477,6 +480,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
         document.getElementById('contextmenu-delete--separator')!.style.display = 'none';
       } else if ((event.target as HTMLElement).classList.contains('ds-list--entity')) {
         this.selectedSurveyId = Number(event.target.dataset.id);
+        this.idEncuesta = Number(event.target.dataset.id);
         event.target.classList.add('active');
 
         let res = await this.encuestaService.find(this.selectedSurveyId).toPromise();
@@ -487,7 +491,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
         document.getElementById('contextmenu-edit--separator')!.style.display = 'block';
         document.getElementById('contextmenu-delete--separator')!.style.display = 'block';
         document.getElementById('contextmenu-edit')!.style.display = 'block';
-        document.getElementById('contextmenu-duplicate')!.style.display = 'block';
+        document.getElementById('contextmenu-preview')!.style.display = 'block';
 
         if (!this.isPublished) {
           document.getElementById('contextmenu-publish')!.style.display = 'block';
