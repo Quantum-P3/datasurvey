@@ -102,7 +102,6 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     protected modalService: NgbModal,
     protected ePreguntaCerradaService: EPreguntaCerradaService,
     protected ePreguntaCerradaOpcionService: EPreguntaCerradaOpcionService,
-    protected ePreguntaAbiertaService: EPreguntaAbiertaService,
     protected parametroAplicacionService: ParametroAplicacionService,
     protected ePreguntaAbiertaService: EPreguntaAbiertaService,
     protected router: Router
