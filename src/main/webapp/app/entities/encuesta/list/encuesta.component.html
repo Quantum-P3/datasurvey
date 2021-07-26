@@ -96,7 +96,9 @@
             <button type="button" id="contextmenu-edit"><fa-icon class="contextmenu__icon" [icon]="faEdit"></fa-icon>Editar</button>
           </li>
           <li>
-            <button type="button" id="contextmenu-duplicate"><fa-icon class="contextmenu__icon" [icon]="faCopy"></fa-icon>Duplicar</button>
+            <button type="button" (click)="openPreview()" id="contextmenu-preview">
+              <fa-icon class="contextmenu__icon" [icon]="faPollH"></fa-icon>Ver Vista Previa
+            </button>
           </li>
           <li>
             <button

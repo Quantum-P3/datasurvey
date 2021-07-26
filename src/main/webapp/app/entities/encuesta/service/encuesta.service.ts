@@ -45,6 +45,10 @@ export class EncuestaService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  findEncuesta(id: number): Observable<IEncuesta> {
+    return this.http.get<IEncuesta>(`${this.resourceUrl}/${id}`);
+  }
+
   findQuestions(id: number): Observable<EntityResponseType> {
     return this.http
       .get<any>(`${this.resourceUrl}/preguntas/${id}`, { observe: 'response' })
@@ -55,10 +59,6 @@ export class EncuestaService {
     return this.http
       .get<any>(`${this.resourceUrl}/preguntas-opciones/${id}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
-  }
-
-  findEncuesta(id: number): Observable<IEncuesta> {
-    return this.http.get<IEncuesta>(`${this.resourceUrl}/${id}`);
   }
 
   publishEncuesta(encuesta: IEncuesta): Observable<EntityResponseType> {
