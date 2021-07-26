@@ -299,4 +299,11 @@ public class EncuestaResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    @DeleteMapping("encuestas/notify/{id}")
+    public ResponseEntity<Void> notifyEncuestaDeleted(@PathVariable Long id, @Valid @RequestBody Encuesta encuesta) {
+        log.debug("REST request to notify {} of deleted Encuesta", encuesta.getUsuarioExtra().getUser().getEmail());
+        mailService.sendEncuestaDeleted(encuesta.getUsuarioExtra());
+        return ResponseEntity.noContent().build();
+    }
 }
