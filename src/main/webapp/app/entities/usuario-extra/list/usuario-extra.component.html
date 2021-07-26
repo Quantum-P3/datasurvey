@@ -1,6 +1,9 @@
 <div>
   <h2 id="page-heading" data-cy="UsuarioExtraHeading">
-    <span jhiTranslate="dataSurveyApp.usuarioExtra.home.title">Usuarios</span>
+    <div>
+      <span class="ds-title" jhiTranslate="dataSurveyApp.usuarioExtra.home.title">Usuarios</span>
+      <p class="ds-subtitle">Administre los usuarios registrados en la aplicación</p>
+    </div>
 
     <div class="d-flex justify-content-end">
       <button id="jh-create-entity" data-cy="entityCreateButton" class="ds-btn ds-btn--primary" [routerLink]="['/usuario-extra/new']">

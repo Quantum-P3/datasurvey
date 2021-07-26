@@ -28,12 +28,12 @@ export const ADMIN_ROUTES: RouteInfo[] = [
     type: 'link',
     icontype: 'nc-icon nc-paper',
   },
-  {
-    path: '/plantilla',
-    title: 'Plantillas',
-    type: 'link',
-    icontype: 'nc-icon nc-album-2',
-  },
+  // {
+  //   path: '/plantilla',
+  //   title: 'Plantillas',
+  //   type: 'link',
+  //   icontype: 'nc-icon nc-album-2',
+  // },
   {
     path: '/categoria',
     title: 'Categorías',
@@ -61,22 +61,22 @@ export const USER_ROUTES: RouteInfo[] = [
     type: 'link',
     icontype: 'nc-icon nc-paper',
   },
-  {
-    path: '/tienda',
-    title: 'Tienda',
-    type: 'link',
-    icontype: 'nc-icon nc-cart-simple',
-  },
-  {
-    path: '/plantilla',
-    title: 'Plantillas',
-    type: 'link',
-    icontype: 'nc-icon nc-album-2',
-  },
-  {
-    path: '/colaboraciones',
-    title: 'Colaboraciones',
-    type: 'link',
-    icontype: 'nc-icon nc-world-2',
-  },
+  // {
+  //   path: '/tienda',
+  //   title: 'Tienda',
+  //   type: 'link',
+  //   icontype: 'nc-icon nc-cart-simple',
+  // },
+  // {
+  //   path: '/plantilla',
+  //   title: 'Plantillas',
+  //   type: 'link',
+  //   icontype: 'nc-icon nc-album-2',
+  // },
+  // {
+  //   path: '/colaboraciones',
+  //   title: 'Colaboraciones',
+  //   type: 'link',
+  //   icontype: 'nc-icon nc-world-2',
+  // },
 ];
