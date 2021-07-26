@@ -136,10 +136,6 @@ export class SettingsComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const usuarioExtra = this.createFromForm();
-
-    console.log(usuarioExtra.iconoPerfil);
-    console.log(usuarioExtra.fechaNacimiento);
-
     this.subscribeToSaveResponse(this.usuarioExtraService.update(usuarioExtra));
   }
 
