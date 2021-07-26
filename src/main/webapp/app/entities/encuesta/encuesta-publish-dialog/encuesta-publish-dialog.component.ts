@@ -13,6 +13,8 @@ import { passwordResetFinishRoute } from '../../../account/password-reset/finish
 })
 export class EncuestaPublishDialogComponent implements OnInit {
   encuesta?: IEncuesta;
+  fechaFinalizar?: Date;
+  fechaFinalizarInvalid?: boolean;
 
   constructor(protected encuestaService: EncuestaService, protected activeModal: NgbActiveModal) {}
 
@@ -35,6 +37,12 @@ export class EncuestaPublishDialogComponent implements OnInit {
     });
   }
 
+  fechaFinalizarIsInvalid(): void {
+    const now = new Date();
+    debugger;
+    this.fechaFinalizarInvalid = now < this.fechaFinalizar!;
+  }
+
   generatePassword(): string {
     debugger;
     const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -46,5 +54,8 @@ export class EncuestaPublishDialogComponent implements OnInit {
     return password;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.fechaFinalizar = new Date();
+    this.fechaFinalizarInvalid = false;
+  }
 }
