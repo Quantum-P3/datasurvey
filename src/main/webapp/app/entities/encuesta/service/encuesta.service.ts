@@ -61,6 +61,10 @@ export class EncuestaService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  duplicate(id: number): Observable<EntityResponseType> {
+    return this.http.get<any>(`${this.resourceUrl}/duplicate/${id}`, { observe: 'response' });
+  }
+
   publishEncuesta(encuesta: IEncuesta): Observable<EntityResponseType> {
     //const copy = this.convertDateFromClient(encuesta);
     return this.http.put<IEncuesta>(`${this.resourceUrl}/publish/${getEncuestaIdentifier(encuesta) as number}`, encuesta, {
