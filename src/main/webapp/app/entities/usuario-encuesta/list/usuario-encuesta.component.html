@@ -1,21 +1,11 @@
 <div>
   <h2 id="page-heading" data-cy="UsuarioEncuestaHeading">
-    <span jhiTranslate="dataSurveyApp.usuarioEncuesta.home.title">Usuario Encuestas</span>
+    <span jhiTranslate="dataSurveyApp.usuarioEncuesta.home.title">Colaboraciones en Encuestas</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+      <button class="ds-btn ds-btn--secondary mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="dataSurveyApp.usuarioEncuesta.home.refreshListLabel">Refresh List</span>
-      </button>
-
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-usuario-encuesta"
-        [routerLink]="['/usuario-encuesta/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="dataSurveyApp.usuarioEncuesta.home.createLabel"> Create a new Usuario Encuesta </span>
       </button>
     </div>
   </h2>
@@ -32,56 +22,49 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioEncuesta.rol">Rol</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioEncuesta.estado">Estado</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioEncuesta.fechaAgregado">Fecha Agregado</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioEncuesta.usuarioExtra">Usuario Extra</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioEncuesta.encuesta">Encuesta</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioEncuesta.encuesta">Id encuesta</span></th>
+          <th scope="col"><span>Nombre encuesta</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let usuarioEncuesta of usuarioEncuestas; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/usuario-encuesta', usuarioEncuesta.id, 'view']">{{ usuarioEncuesta.id }}</a>
-          </td>
           <td jhiTranslate="{{ 'dataSurveyApp.RolColaborador.' + usuarioEncuesta.rol }}">{{ usuarioEncuesta.rol }}</td>
           <td jhiTranslate="{{ 'dataSurveyApp.EstadoColaborador.' + usuarioEncuesta.estado }}">{{ usuarioEncuesta.estado }}</td>
           <td>{{ usuarioEncuesta.fechaAgregado | formatMediumDatetime }}</td>
           <td>
-            <div *ngIf="usuarioEncuesta.usuarioExtra">
-              <a [routerLink]="['/usuario-extra', usuarioEncuesta.usuarioExtra?.id, 'view']">{{ usuarioEncuesta.usuarioExtra?.id }}</a>
+            <div *ngIf="usuarioEncuesta.encuesta">
+              <a>{{ usuarioEncuesta.encuesta?.id }}</a>
             </div>
           </td>
           <td>
             <div *ngIf="usuarioEncuesta.encuesta">
-              <a [routerLink]="['/encuesta', usuarioEncuesta.encuesta?.id, 'view']">{{ usuarioEncuesta.encuesta?.id }}</a>
+              <a>{{ usuarioEncuesta.encuesta?.nombre }}</a>
             </div>
           </td>
           <td class="text-right">
-            <div class="btn-group">
+            <div class="btn-group" *ngIf="usuarioEncuesta.encuesta">
               <button
-                type="submit"
-                [routerLink]="['/usuario-encuesta', usuarioEncuesta.id, 'view']"
-                class="btn btn-info btn-sm"
-                data-cy="entityDetailsButton"
+                *ngIf="usuarioEncuesta.rol === 'WRITE'"
+                type="button"
+                [routerLink]="['/encuesta', usuarioEncuesta.encuesta.id, 'edit']"
+                class="ds-btn ds-btn--primary"
+                [disabled]="isLoading"
               >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                <fa-icon [icon]="faPencilAlt"></fa-icon>&nbsp;&nbsp;<span>Editar encuesta</span>
               </button>
-
               <button
-                type="submit"
-                [routerLink]="['/usuario-encuesta', usuarioEncuesta.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
+                type="button"
+                [routerLink]="['/encuesta', usuarioEncuesta.encuesta.id, 'preview']"
+                class="ds-btn ds-btn--success"
+                [disabled]="isLoading"
               >
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                <fa-icon [icon]="faPollH"></fa-icon>&nbsp;&nbsp;<span>Ver vista previa</span>
               </button>
-
-              <button type="submit" (click)="delete(usuarioEncuesta)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              <button type="submit" (click)="delete(usuarioEncuesta)" class="ds-btn ds-btn--danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>
