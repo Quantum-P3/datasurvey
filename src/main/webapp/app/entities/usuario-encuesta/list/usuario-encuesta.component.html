@@ -13,7 +13,19 @@
   <jhi-alert-error></jhi-alert-error>
 
   <jhi-alert></jhi-alert>
-
+  <form class="ds-form">
+    <div class="input-group">
+      <div class="ds-filter">
+        <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+        <select name="searchRol" id="searchRol" [(ngModel)]="searchRol" style="width: 200px">
+          <option value="" selected="selected" disabled="disabled">Filtrar por rol</option>
+          <option value="">Todos los roles</option>
+          <option value="Read">Lector</option>
+          <option value="Write">Escritor</option>
+        </select>
+      </div>
+    </div>
+  </form>
   <div class="alert alert-warning" id="no-result" *ngIf="usuarioEncuestas?.length === 0">
     <span jhiTranslate="dataSurveyApp.usuarioEncuesta.home.notFound">No usuarioEncuestas found</span>
   </div>
@@ -31,7 +43,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let usuarioEncuesta of usuarioEncuestas; trackBy: trackId" data-cy="entityTable">
+        <tr *ngFor="let usuarioEncuesta of usuarioEncuestas | filter: 'rol':searchRol; trackBy: trackId" data-cy="entityTable">
           <td jhiTranslate="{{ 'dataSurveyApp.RolColaborador.' + usuarioEncuesta.rol }}">{{ usuarioEncuesta.rol }}</td>
           <td jhiTranslate="{{ 'dataSurveyApp.EstadoColaborador.' + usuarioEncuesta.estado }}">{{ usuarioEncuesta.estado }}</td>
           <td>{{ usuarioEncuesta.fechaAgregado | formatMediumDatetime }}</td>

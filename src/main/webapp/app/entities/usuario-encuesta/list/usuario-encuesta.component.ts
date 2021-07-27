@@ -28,6 +28,8 @@ export class UsuarioEncuestaComponent implements OnInit {
   usuarioExtra: IUsuarioExtra | null = null;
   user: IUser | null = null;
 
+  public searchRol: string;
+
   constructor(
     protected usuarioEncuestaService: UsuarioEncuestaService,
     protected modalService: NgbModal,
@@ -35,7 +37,9 @@ export class UsuarioEncuestaComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     protected accountService: AccountService,
     protected router: Router
-  ) {}
+  ) {
+    this.searchRol = '';
+  }
 
   loadAll(): void {
     this.isLoading = true;
@@ -56,6 +60,7 @@ export class UsuarioEncuestaComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.searchRol = '';
     this.accountService.getAuthenticationState().subscribe(account => {
       if (account !== null) {
         this.usuarioExtraService.find(account.id).subscribe(usuarioExtra => {
