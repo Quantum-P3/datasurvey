@@ -8,17 +8,27 @@ import { UsuarioExtraDeleteDialogComponent } from '../delete/usuario-extra-delet
 import { IUser } from '../../user/user.model';
 import { finalize } from 'rxjs/operators';
 
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
+
 @Component({
   selector: 'jhi-usuario-extra',
   templateUrl: './usuario-extra.component.html',
   styleUrls: ['./usuario-extra.component.scss'],
 })
 export class UsuarioExtraComponent implements OnInit {
+  faExchangeAlt = faExchangeAlt;
+
   usuarioExtras?: IUsuarioExtra[];
   publicUsers?: IUser[];
   isLoading = false;
+  successChange = false;
+  public searchNombreUsuario: string;
+  public searchEstadoUsuario: string;
 
-  constructor(protected usuarioExtraService: UsuarioExtraService, protected modalService: NgbModal) {}
+  constructor(protected usuarioExtraService: UsuarioExtraService, protected modalService: NgbModal) {
+    this.searchNombreUsuario = '';
+    this.searchEstadoUsuario = '';
+  }
 
   loadPublicUser(): void {
     this.usuarioExtraService
@@ -60,6 +70,8 @@ export class UsuarioExtraComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.searchNombreUsuario = '';
+    this.searchEstadoUsuario = '';
     this.loadAll();
   }
 
@@ -73,6 +85,7 @@ export class UsuarioExtraComponent implements OnInit {
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed.subscribe(reason => {
       if (reason === 'deleted') {
+        this.successChange = true;
         this.loadAll();
       }
     });

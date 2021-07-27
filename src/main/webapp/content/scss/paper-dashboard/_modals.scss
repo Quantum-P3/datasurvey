@@ -1,5 +1,6 @@
 .modal-header {
-  border-bottom: 1px solid $medium-gray;
+  // border-bottom: 1px solid $medium-gray;
+  border: none !important;
   padding: 20px;
   text-align: center;
   display: block !important;
@@ -41,9 +42,9 @@
 }
 
 .modal-content {
-  border: 0 none;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15), 0 0 1px 1px rgba(0, 0, 0, 0.1);
+  border: none !important;
+  border-radius: 3px !important;
+  box-shadow: none !important;
   .modal-header {
     h6 {
       margin-top: 10px;
@@ -59,8 +60,9 @@
   color: #000;
 }
 .modal-footer {
-  border-top: 1px solid $medium-gray;
-  padding: 0px;
+  // border-top: 1px solid $medium-gray;
+  border: none !important;
+  // padding: 0px;
 
   &.no-border-footer {
     border-top: 0 none;

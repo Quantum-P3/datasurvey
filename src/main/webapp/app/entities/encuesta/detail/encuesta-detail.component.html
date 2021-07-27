@@ -1,80 +1,201 @@
-<div class="row justify-content-center">
-  <div class="col-8">
-    <div *ngIf="encuesta">
-      <h2 data-cy="encuestaDetailsHeading"><span jhiTranslate="dataSurveyApp.encuesta.detail.title">Encuesta</span></h2>
+<div class="container-fluid" *ngIf="encuesta">
+  <div>
+    <h2 id="page-heading" data-cy="EPreguntaCerradaHeading">
+      <p class="ds-title">
+        Vista previa de {{ encuesta!.nombre }}
+        <fa-icon class="ds-info--icon" [icon]="faQuestion" data-toggle="modal" data-target="#verParametros"></fa-icon>
+      </p>
 
-      <hr />
+      <p class="ds-subtitle">Creada el día {{ encuesta!.fechaCreacion | formatShortDatetime | lowercase }}</p>
+      <div class="d-flex justify-content-end">
+        <button type="button" class="ds-btn ds-btn--secondary" (click)="previousState()">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+        <ng-container *ngIf="encuesta!.estado === 'DRAFT'">
+          <button type="button" class="ds-btn ds-btn--primary" (click)="publishSurvey()">Publicar encuesta</button>
+        </ng-container>
+      </div>
+    </h2>
 
-      <jhi-alert-error></jhi-alert-error>
-
-      <jhi-alert></jhi-alert>
-
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ encuesta.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.encuesta.nombre">Nombre</span></dt>
-        <dd>
-          <span>{{ encuesta.nombre }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.encuesta.descripcion">Descripcion</span></dt>
-        <dd>
-          <span>{{ encuesta.descripcion }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaCreacion">Fecha Creacion</span></dt>
-        <dd>
-          <span>{{ encuesta.fechaCreacion | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaPublicacion">Fecha Publicacion</span></dt>
-        <dd>
-          <span>{{ encuesta.fechaPublicacion | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaFinalizar">Fecha Finalizar</span></dt>
-        <dd>
-          <span>{{ encuesta.fechaFinalizar | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaFinalizada">Fecha Finalizada</span></dt>
-        <dd>
-          <span>{{ encuesta.fechaFinalizada | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.encuesta.calificacion">Calificacion</span></dt>
-        <dd>
-          <span>{{ encuesta.calificacion }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.encuesta.acceso">Acceso</span></dt>
-        <dd>
-          <span jhiTranslate="{{ 'dataSurveyApp.AccesoEncuesta.' + encuesta.acceso }}">{{ encuesta.acceso }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.encuesta.contrasenna">Contrasenna</span></dt>
-        <dd>
-          <span>{{ encuesta.contrasenna }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.encuesta.estado">Estado</span></dt>
-        <dd>
-          <span jhiTranslate="{{ 'dataSurveyApp.EstadoEncuesta.' + encuesta.estado }}">{{ encuesta.estado }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.encuesta.categoria">Categoria</span></dt>
-        <dd>
-          <div *ngIf="encuesta.categoria">
-            <a [routerLink]="['/categoria', encuesta.categoria?.id, 'view']">{{ encuesta.categoria?.nombre }}</a>
-          </div>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.encuesta.usuarioExtra">Usuario Extra</span></dt>
-        <dd>
-          <div *ngIf="encuesta.usuarioExtra">
-            <a [routerLink]="['/usuario-extra', encuesta.usuarioExtra?.id, 'view']">{{ encuesta.usuarioExtra?.id }}</a>
-          </div>
-        </dd>
-      </dl>
-
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+    <jhi-alert-error></jhi-alert-error>
+    <div *ngIf="successPublished" class="alert alert-success alert-dismissible fade show" role="alert">
+      Su encuesta fue publicada exitosamente
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
       </button>
+    </div>
 
-      <button type="button" [routerLink]="['/encuesta', encuesta.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-      </button>
+    <!-- <jhi-alert></jhi-alert> -->
+
+    <div class="alert alert-warning" id="no-result" *ngIf="ePreguntas?.length === 0">
+      <span>No se encontraron preguntas</span>
+    </div>
+
+    <div class="ds-survey preview-survey" id="entities" *ngIf="ePreguntas && ePreguntas.length > 0">
+      <div class="ds-survey--all-question-wrapper col-8">
+        <div class="ds-survey--question-wrapper card-encuesta lift" *ngFor="let ePregunta of ePreguntas; let i = index; trackBy: trackId">
+          <div
+            [attr.data-index]="ePregunta.id"
+            [attr.data-tipo]="ePregunta.tipo"
+            [attr.data-opcional]="ePregunta.opcional"
+            class="ds-survey--question"
+          >
+            <div class="ds-survey--titulo">
+              <span class="ds-survey--titulo--name">{{ i + 1 }}. {{ ePregunta.nombre }}</span>
+            </div>
+            <div>
+              <span *ngIf="ePregunta.tipo === 'SINGLE'" class="ds-subtitle"
+                >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.SINGLE' | translate | lowercase }}
+                {{ ePregunta.opcional ? '(opcional)' : '' }}</span
+              >
+              <span *ngIf="ePregunta.tipo === 'MULTIPLE'" class="ds-subtitle"
+                >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.MULTIPLE' | translate | lowercase }}
+                {{ ePregunta.opcional ? '(opcional)' : '' }}</span
+              >
+              <span *ngIf="!ePregunta.tipo" class="ds-subtitle"
+                >Pregunta de respuesta abierta {{ ePregunta.opcional ? '(opcional)' : '' }}</span
+              >
+            </div>
+            <ng-container *ngIf="ePregunta.tipo">
+              <ng-container *ngFor="let ePreguntaOpcion of ePreguntasOpciones; let j = index; trackBy: trackId">
+                <ng-container *ngFor="let ePreguntaOpcionFinal of ePreguntaOpcion">
+                  <ng-container *ngIf="ePregunta.id === ePreguntaOpcionFinal.epreguntaCerrada.id">
+                    <div
+                      class="ds-survey--option ds-survey--option--base ds-survey--closed-option can-delete"
+                      [attr.data-id]="ePreguntaOpcionFinal.id"
+                    >
+                      <div class="radio" *ngIf="ePregunta.tipo === 'SINGLE'">
+                        <input
+                          type="radio"
+                          style="border-radius: 3px"
+                          name="{{ 'radio' + ePregunta.id }}"
+                          id="{{ 'radio' + ePreguntaOpcionFinal.id }}"
+                        />
+                        <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
+                        <label for="{{ 'radio' + ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
+                      </div>
+                      <div class="checkbox" *ngIf="ePregunta.tipo === 'MULTIPLE'">
+                        <input type="checkbox" style="border-radius: 3px" id="{{ 'checkbox' + ePreguntaOpcionFinal.id }}" />
+                        <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
+                        <label for="{{ 'checkbox' + ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+            <div class="ds-survey--option ds-survey--option--base ds-survey--open-option" *ngIf="!ePregunta.tipo">
+              <textarea cols="30" rows="10" disabled></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="modal fade ds-modal"
+        id="verParametros"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title" id="exampleModalLongTitle">Información de encuesta</h1>
+            </div>
+
+            <div class="modal-body">
+              <div>
+                <div class="mb-5">
+                  <p style="font-size: 1.2em" class="ds-subtitle">Cantidad de preguntas:</p>
+                  <p>{{ ePreguntas?.length }}</p>
+                </div>
+
+                <!--<div>
+                    <p style="font-size: 1.2em" class="ds-survey--titulo--name">Colaboradores</p>
+                  </div>-->
+
+                <div class="mb-5">
+                  <p class="ds-subtitle" jhiTranslate="dataSurveyApp.encuesta.acceso">Acceso:</p>
+                  <p jhiTranslate="{{ 'dataSurveyApp.AccesoEncuesta.' + encuesta.acceso }}">{{ encuesta.acceso }}</p>
+                </div>
+
+                <div *ngIf="encuesta.acceso === 'PRIVATE'" class="mb-5">
+                  <p class="ds-subtitle">Contraseña:</p>
+                  <p>{{ encuesta.contrasenna }}</p>
+                </div>
+
+                <div class="mb-5">
+                  <p class="ds-subtitle">Estado:</p>
+                  <p jhiTranslate="{{ 'dataSurveyApp.EstadoEncuesta.' + encuesta.estado }}">{{ encuesta.estado }}</p>
+                </div>
+
+                <div *ngIf="encuesta.categoria" class="mb-5">
+                  <p class="ds-subtitle">Categoría:</p>
+                  <P> </P> {{ encuesta.categoria?.nombre }}
+                </div>
+
+                <div class="mb-5">
+                  <p class="ds-subtitle">Fecha de publicación:</p>
+                  <P
+                    >{{
+                      encuesta.fechaPublicacion === undefined
+                        ? 'Sin publicar'
+                        : (encuesta.fechaFinalizada | formatShortDatetime | lowercase)
+                    }}
+                  </P>
+                </div>
+
+                <!--<div class="mb-5">
+                <p jhiTranslate="dataSurveyApp.encuesta.fechaFinalizar" class="ds-subtitle" > Fecha Finalizar</p>
+                <p> </p></div>
+              <dl>
+                <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaFinalizar">Fecha Finalizar</span></dt>
+                <dd>
+                <span>
+                  -
+                  {{
+                  encuesta.fechaFinalizar === undefined
+                    ? 'Sin fecha de finalización'
+                    : (encuesta.fechaFinalizada | formatShortDatetime | lowercase)
+                  }}</span
+                >
+                </dd>
+              </dl>-->
+
+                <div class="mb-5">
+                  <p class="ds-subtitle">Fecha de finalización:</p>
+                  <P>
+                    {{
+                      encuesta.fechaFinalizada === undefined
+                        ? 'Sin finalizar'
+                        : (encuesta.fechaFinalizada | formatShortDatetime | lowercase)
+                    }}
+                  </P>
+                </div>
+
+                <div class="mb-5">
+                  <p class="ds-subtitle">Calificación:</p>
+                  <dd>
+                    <fa-icon *ngFor="let i of [].constructor(encuesta.calificacion)" class="entity-icon--star" [icon]="faStar"></fa-icon
+                    ><fa-icon
+                      *ngFor="let i of [].constructor(5 - encuesta.calificacion!)"
+                      class="entity-icon--star--off"
+                      [icon]="faStar"
+                    ></fa-icon>
+                  </dd>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button id="cancelBtnVerParametros" type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span>Volver</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

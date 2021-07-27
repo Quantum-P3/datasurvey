@@ -6,11 +6,15 @@ import { ICategoria } from '../categoria.model';
 import { CategoriaService } from '../service/categoria.service';
 import { CategoriaDeleteDialogComponent } from '../delete/categoria-delete-dialog.component';
 
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
+
 @Component({
   selector: 'jhi-categoria',
   templateUrl: './categoria.component.html',
 })
 export class CategoriaComponent implements OnInit {
+  faExchangeAlt = faExchangeAlt;
+
   categorias?: ICategoria[];
   isLoading = false;
   public searchString: string;
