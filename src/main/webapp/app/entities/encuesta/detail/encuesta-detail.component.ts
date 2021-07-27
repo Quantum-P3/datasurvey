@@ -28,7 +28,7 @@ import { EPreguntaAbiertaService } from '../../e-pregunta-abierta/service/e-preg
 import { EPreguntaCerradaOpcionService } from '../../e-pregunta-cerrada-opcion/service/e-pregunta-cerrada-opcion.service';
 import { PreguntaCerradaTipo } from 'app/entities/enumerations/pregunta-cerrada-tipo.model';
 
-import { faTimes, faPlus, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faPlus, faStar, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { EncuestaPublishDialogComponent } from '../encuesta-publish-dialog/encuesta-publish-dialog.component';
 
 @Component({
@@ -41,6 +41,7 @@ export class EncuestaDetailComponent implements OnInit {
   faTimes = faTimes;
   faPlus = faPlus;
   faStar = faStar;
+  faQuestion = faQuestion;
   encuesta: IEncuesta | null = null;
   isLoading = false;
   successPublished = false;

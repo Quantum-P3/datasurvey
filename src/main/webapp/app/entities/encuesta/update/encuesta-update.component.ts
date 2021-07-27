@@ -136,7 +136,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   async loadAplicationParameters(): Promise<void> {
     const params = await this.parametroAplicacionService.find(1).toPromise();
     this.parametrosAplicacion = params.body;
-    console.log(this.parametrosAplicacion);
+    //console.log(this.parametrosAplicacion);
   }
 
   ngOnInit(): void {

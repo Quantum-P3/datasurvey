@@ -2,7 +2,7 @@
   <div class="col">
     <div class="container-fluid navbar navbar-marketing navbar-expand-lg bg-white navbar-light">
       <div class="container px-5 py-4">
-        <a class="text-dark" href="index.html"
+        <a class="text-dark" routerLink="login"
           ><img src="http://datasurvey.org/content/img_datasurvey/datasurvey-logo-text-black.svg" width="300" alt=""
         /></a>
 
@@ -10,11 +10,11 @@
           <!--<a href="#">
             <button class="ds-btn ds-btn&#45;&#45;primary fw-500 ms-lg-4">Encuestas</button>
           </a>-->
-          <a href="login" [hidden]="!notAccount">
+          <a routerLink="login" [hidden]="!notAccount">
             <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Iniciar Sesión</button>
           </a>
 
-          <a href="account/register" [hidden]="!notAccount">
+          <a routerLink="account/register" [hidden]="!notAccount">
             <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Registrarse</button>
           </a>
         </div>
