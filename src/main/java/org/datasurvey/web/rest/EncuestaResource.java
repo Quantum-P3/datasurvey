@@ -126,6 +126,8 @@ public class EncuestaResource {
 
         Encuesta result = encuestaService.save(encuesta);
 
+        mailService.sendEncuestaDeleted(encuesta.getUsuarioExtra());
+
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, encuesta.getId().toString()))
