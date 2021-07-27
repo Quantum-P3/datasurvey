@@ -22,6 +22,8 @@ import { EstadoEncuesta } from 'app/entities/enumerations/estado-encuesta.model'
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { Router } from '@angular/router';
+import { EncuestaPublishDialogComponent } from '../encuesta-publish-dialog/encuesta-publish-dialog.component';
+import { IUser } from '../../user/user.model';
 
 import {
   faShareAlt,
@@ -34,6 +36,8 @@ import {
   faTrashAlt,
   faPlus,
   faStar,
+  faUpload,
+  faPollH,
 } from '@fortawesome/free-solid-svg-icons';
 
 import * as $ from 'jquery';
@@ -54,17 +58,30 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   faTrashAlt = faTrashAlt;
   faPlus = faPlus;
   faStar = faStar;
-
+  faUpload = faUpload;
+  isPublished: Boolean = false;
+  successPublished = false;
+  faPollH = faPollH;
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;
+  estadoDeleted = EstadoEncuesta.DELETED;
 
   encuestas?: IEncuesta[];
   isLoading = false;
-
+  selectedSurvey?: IEncuesta | null = null;
+  idEncuesta: number | null = null;
   isSaving = false;
 
   categoriasSharedCollection: ICategoria[] = [];
   usuarioExtrasSharedCollection: IUsuarioExtra[] = [];
+  userSharedCollection: IUser[] = [];
+
+  encuestaencontrada: IEncuesta | null = null;
+
+  public searchString: string;
+  public accesoEncuesta: string;
+  //public categoriaEncuesta: string;
+  public estadoEncuesta: string;
 
   editForm = this.fb.group({
     id: [],
@@ -83,6 +100,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   });
 
   createAnother: Boolean = false;
+  selectedSurveyId: number | null = null;
 
   constructor(
     protected encuestaService: EncuestaService,
@@ -93,7 +111,11 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     protected fb: FormBuilder,
     protected accountService: AccountService,
     protected router: Router
-  ) {}
+  ) {
+    this.searchString = '';
+    this.accesoEncuesta = '';
+    this.estadoEncuesta = '';
+  }
 
   resetForm(): void {
     this.editForm.reset();
@@ -102,19 +124,70 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   loadAll(): void {
     this.isLoading = true;
 
-    this.encuestaService.query().subscribe(
-      (res: HttpResponse<IEncuesta[]>) => {
-        this.isLoading = false;
-        const tmpEncuestas = res.body ?? [];
-        this.encuestas = tmpEncuestas.filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id);
-      },
-      () => {
-        this.isLoading = false;
-      }
-    );
+    this.usuarioExtraService
+      .retrieveAllPublicUsers()
+      .pipe(finalize(() => this.loadPublicUser()))
+      .subscribe(res => {
+        this.userSharedCollection = res;
+      });
+  }
+
+  loadPublicUser(): void {
+    this.usuarioExtraService
+      .retrieveAllPublicUsers()
+      .pipe(finalize(() => this.loadUserExtras()))
+      .subscribe(res => {
+        this.userSharedCollection = res;
+      });
+  }
+
+  loadUserExtras() {
+    this.usuarioExtraService
+      .query()
+      .pipe(
+        finalize(() =>
+          this.encuestaService.query().subscribe(
+            (res: HttpResponse<IEncuesta[]>) => {
+              this.isLoading = false;
+              const tmpEncuestas = res.body ?? [];
+              if (this.isAdmin()) {
+                this.encuestas = tmpEncuestas.filter(e => e.estado !== EstadoEncuesta.DELETED);
+
+                this.encuestas.forEach(e => {
+                  e.usuarioExtra = this.usuarioExtrasSharedCollection?.find(pU => pU.id == e.usuarioExtra?.id);
+                });
+              } else {
+                this.encuestas = tmpEncuestas
+                  .filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id)
+                  .filter(e => e.estado !== EstadoEncuesta.DELETED);
+              }
+            },
+            () => {
+              this.isLoading = false;
+            }
+          )
+        )
+      )
+      .subscribe(
+        (res: HttpResponse<IUsuarioExtra[]>) => {
+          this.isLoading = false;
+          this.usuarioExtrasSharedCollection = res.body ?? [];
+          this.usuarioExtrasSharedCollection.forEach(uE => {
+            uE.user = this.userSharedCollection?.find(pU => pU.id == uE.user?.id);
+          });
+        },
+        () => {
+          this.isLoading = false;
+        }
+      );
   }
 
   ngOnInit(): void {
+    this.searchString = '';
+    this.accesoEncuesta = '';
+    //this.categoriaEncuesta = '';
+    this.estadoEncuesta = '';
+
     document.body.addEventListener('click', e => {
       document.getElementById('contextmenu')!.classList.add('ds-contextmenu--closed');
       document.getElementById('contextmenu')!.classList.remove('ds-contextmenu--open');
@@ -147,6 +220,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
         this.usuarioExtraService.find(account.id).subscribe(usuarioExtra => {
           this.usuarioExtra = usuarioExtra.body;
           this.loadAll();
+
           this.loadRelationshipsOptions();
           if (this.usuarioExtra !== null) {
             if (this.usuarioExtra.id === undefined) {
@@ -163,7 +237,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {}
 
-  trackId(index: number, item: IEncuesta): number {
+  trackId(_index: number, item: IEncuesta): number {
     return item.id!;
   }
 
@@ -176,6 +250,48 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
         this.loadAll();
       }
     });
+  }
+
+  deleteSurvey(): void {
+    if (this.selectedSurveyId != null) {
+      this.getEncuesta(this.selectedSurveyId)
+        .pipe(
+          finalize(() => {
+            const modalRef = this.modalService.open(EncuestaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+            modalRef.componentInstance.encuesta = this.encuestaencontrada;
+
+            modalRef.closed.subscribe(reason => {
+              if (reason === 'deleted') {
+                this.loadAll();
+              }
+            });
+          })
+        )
+        .subscribe(data => {
+          this.encuestaencontrada = data;
+        });
+
+      /*const modalRef = this.modalService.open(EncuestaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+      modalRef.componentInstance.encuesta = this.getEncuesta(this.selectedSurvey)
+        .pipe(finalize(() =>
+          modalRef.closed.subscribe(reason => {
+            if (reason === 'deleted') {
+              this.loadAll();
+            }
+          })
+        ))
+        .subscribe(data=> {
+          console.log(data);
+          //this.encuestaencontrada = data;
+        });
+*/
+
+      // unsubscribe not needed because closed completes on modal close
+    }
+  }
+
+  getEncuesta(id: number) {
+    return this.encuestaService.findEncuesta(id);
   }
 
   previousState(): void {
@@ -193,11 +309,11 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     }
   }
 
-  trackCategoriaById(index: number, item: ICategoria): number {
+  trackCategoriaById(_index: number, item: ICategoria): number {
     return item.id!;
   }
 
-  trackUsuarioExtraById(index: number, item: IUsuarioExtra): number {
+  trackUsuarioExtraById(_index: number, item: IUsuarioExtra): number {
     return item.id!;
   }
 
@@ -307,11 +423,17 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   }
 
   openSurvey(event: any): void {
-    const surveyId = event.target.getAttribute('data-id');
-    this.router.navigate(['/encuesta', surveyId, 'edit']);
+    if (event === null) {
+      const surveyId = this.selectedSurveyId;
+      this.router.navigate(['/encuesta', surveyId, 'edit']);
+    } else {
+      const surveyId = event.target.dataset.id;
+      this.router.navigate(['/encuesta', surveyId, 'edit']);
+    }
   }
 
   selectSurvey(event: any): void {
+    this.idEncuesta = event.target.getAttribute('data-id');
     document.querySelectorAll('.ds-list--entity').forEach(e => {
       e.classList.remove('active');
     });
@@ -320,35 +442,45 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     }
   }
 
-  counter(i: number) {
-    return new Array(i);
+  openPreview() {
+    const surveyId = this.selectedSurveyId;
+    this.router.navigate(['/encuesta', surveyId, 'preview']);
   }
 
-  testMe(something: any) {
-    return 5 - something;
-  }
-
-  openContextMenu(event: any): void {
-    document.querySelectorAll('.ds-list--entity').forEach(e => {
-      e.classList.remove('active');
-    });
-
+  async openContextMenu(event: any): Promise<void> {
     if (event.type === 'contextmenu') {
       event.preventDefault();
-
-      document.getElementById('contextmenu-create--separator')!.style.display = 'block';
-      document.getElementById('contextmenu-edit--separator')!.style.display = 'block';
-      document.getElementById('contextmenu-delete--separator')!.style.display = 'block';
-      document.getElementById('contextmenu-edit')!.style.display = 'block';
-      document.getElementById('contextmenu-duplicate')!.style.display = 'block';
-      document.getElementById('contextmenu-rename')!.style.display = 'block';
-      document.getElementById('contextmenu-share')!.style.display = 'block';
+      if (event.target === null) return;
+      document.querySelectorAll('.ds-list--entity').forEach(e => {
+        e.classList.remove('active');
+      });
 
       if ((event.target as HTMLElement).classList.contains('ds-list')) {
+        document.getElementById('contextmenu-create--separator')!.style.display = 'block';
         document.getElementById('contextmenu-edit--separator')!.style.display = 'none';
         document.getElementById('contextmenu-delete--separator')!.style.display = 'none';
       } else if ((event.target as HTMLElement).classList.contains('ds-list--entity')) {
+        this.selectedSurveyId = Number(event.target.dataset.id);
         event.target.classList.add('active');
+
+        let res = await this.encuestaService.find(this.selectedSurveyId).toPromise();
+        this.selectedSurvey = res.body;
+        this.isPublished = this.selectedSurvey!.estado === 'ACTIVE' || this.selectedSurvey!.estado === 'FINISHED'; // QUE SE LE MUESTRE CUANDO ESTE EN DRAFT
+
+        document.getElementById('contextmenu-create--separator')!.style.display = 'none';
+        document.getElementById('contextmenu-edit--separator')!.style.display = 'block';
+        document.getElementById('contextmenu-delete--separator')!.style.display = 'block';
+        document.getElementById('contextmenu-edit')!.style.display = 'block';
+        document.getElementById('contextmenu-preview')!.style.display = 'block';
+
+        if (!this.isPublished) {
+          document.getElementById('contextmenu-publish')!.style.display = 'block';
+          document.getElementById('contextmenu-duplicate')!.style.display = 'block';
+        } else {
+          document.getElementById('contextmenu-publish')!.style.display = 'none';
+          document.getElementById('contextmenu-duplicate')!.style.display = 'none';
+        }
+        // document.getElementById('contextmenu-share')!.style.display = 'block';
         document.getElementById('contextmenu-create--separator')!.style.display = 'none';
       }
 
@@ -358,5 +490,22 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       document.getElementById('contextmenu')!.classList.add('ds-contextmenu--open');
       document.getElementById('contextmenu')!.style.maxHeight = '100%';
     }
+  }
+
+  publish(): void {
+    const modalRef = this.modalService.open(EncuestaPublishDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.encuesta = this.selectedSurvey;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'published') {
+        this.successPublished = true;
+        this.loadAll();
+      }
+    });
+  }
+
+  async duplicateSurvey(): Promise<void> {
+    const res = await this.encuestaService.duplicate(this.selectedSurveyId!).toPromise();
+    this.loadAll();
   }
 }

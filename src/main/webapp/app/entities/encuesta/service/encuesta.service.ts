@@ -15,6 +15,7 @@ export type EntityArrayResponseType = HttpResponse<IEncuesta[]>;
 @Injectable({ providedIn: 'root' })
 export class EncuestaService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/encuestas');
+  protected resourceUrlPublish = this.applicationConfigService.getEndpointFor('api/encuestas/publish');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -28,7 +29,7 @@ export class EncuestaService {
   update(encuesta: IEncuesta): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(encuesta);
     return this.http
-      .put<IEncuesta>(`${this.resourceUrl}/${getEncuestaIdentifier(encuesta) as number}`, copy, { observe: 'response' })
+      .put<IEncuesta>(`${this.resourceUrlPublish}/${getEncuestaIdentifier(encuesta) as number}`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
@@ -39,10 +40,42 @@ export class EncuestaService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
-  find(id: number): Observable<EntityResponseType> {
+  find(id: Number): Observable<EntityResponseType> {
     return this.http
       .get<IEncuesta>(`${this.resourceUrl}/${id}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  findEncuesta(id: number): Observable<IEncuesta> {
+    return this.http.get<IEncuesta>(`${this.resourceUrl}/${id}`);
+  }
+
+  findQuestions(id: number): Observable<EntityResponseType> {
+    return this.http
+      .get<any>(`${this.resourceUrl}/preguntas/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  findQuestionsOptions(id: number): Observable<EntityResponseType> {
+    return this.http
+      .get<any>(`${this.resourceUrl}/preguntas-opciones/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  duplicate(id: number): Observable<EntityResponseType> {
+    return this.http.get<any>(`${this.resourceUrl}/duplicate/${id}`, { observe: 'response' });
+  }
+
+  publishEncuesta(encuesta: IEncuesta): Observable<EntityResponseType> {
+    //const copy = this.convertDateFromClient(encuesta);
+    return this.http.put<IEncuesta>(`${this.resourceUrl}/publish/${getEncuestaIdentifier(encuesta) as number}`, encuesta, {
+      observe: 'response',
+    });
+  }
+
+  deleteEncuesta(encuesta: IEncuesta): Observable<EntityResponseType> {
+    //const copy = this.convertDateFromClient(encuesta);
+    return this.http.put<IEncuesta>(`${this.resourceUrl}/${getEncuestaIdentifier(encuesta) as number}`, encuesta, { observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
@@ -54,6 +87,10 @@ export class EncuestaService {
 
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  deletedNotification(encuesta: IEncuesta): Observable<HttpResponse<{}>> {
+    return this.http.delete(`${this.resourceUrl}/notify/${encuesta.id}`, { observe: 'response' });
   }
 
   addEncuestaToCollectionIfMissing(encuestaCollection: IEncuesta[], ...encuestasToCheck: (IEncuesta | null | undefined)[]): IEncuesta[] {

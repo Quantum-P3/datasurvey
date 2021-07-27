@@ -61,12 +61,21 @@
 }
 
 .ds-btn--danger {
-  background-color: transparent;
-  color: #e73636;
+  background-color: #e73636;
+  color: #fff;
 
   &:hover {
-    background-color: #f7f9ff;
-    color: #d33232;
+    background-color: #d33232;
+  }
+
+  &--light {
+    background-color: transparent;
+    color: #e73636;
+
+    &:hover {
+      background-color: #f7f9ff;
+      color: #d33232;
+    }
   }
 }
 

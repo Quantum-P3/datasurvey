@@ -3,11 +3,16 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IUsuarioExtra } from '../usuario-extra.model';
 import { UsuarioExtraService } from '../service/usuario-extra.service';
+import { EstadoUsuario } from '../../enumerations/estado-usuario.model';
+
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   templateUrl: './usuario-extra-delete-dialog.component.html',
 })
 export class UsuarioExtraDeleteDialogComponent {
+  faExchangeAlt = faExchangeAlt;
+
   usuarioExtra?: IUsuarioExtra;
 
   constructor(protected usuarioExtraService: UsuarioExtraService, protected activeModal: NgbActiveModal) {}
@@ -16,8 +21,13 @@ export class UsuarioExtraDeleteDialogComponent {
     this.activeModal.dismiss();
   }
 
-  confirmDelete(id: number): void {
-    this.usuarioExtraService.delete(id).subscribe(() => {
+  confirmDelete(usuarioExtra: IUsuarioExtra): void {
+    if (usuarioExtra.estado == EstadoUsuario.ACTIVE) {
+      usuarioExtra.estado = EstadoUsuario.SUSPENDED;
+    } else {
+      usuarioExtra.estado = EstadoUsuario.ACTIVE;
+    }
+    this.usuarioExtraService.updateEstado(usuarioExtra).subscribe(() => {
       this.activeModal.close('deleted');
     });
   }

@@ -2,15 +2,25 @@ package org.datasurvey.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import org.datasurvey.domain.EPreguntaAbierta;
+import org.datasurvey.domain.EPreguntaCerrada;
+import org.datasurvey.domain.EPreguntaCerradaOpcion;
 import org.datasurvey.domain.Encuesta;
+import org.datasurvey.domain.enumeration.AccesoEncuesta;
 import org.datasurvey.repository.EncuestaRepository;
+import org.datasurvey.service.*;
 import org.datasurvey.service.EncuestaQueryService;
 import org.datasurvey.service.EncuestaService;
+import org.datasurvey.service.MailService;
 import org.datasurvey.service.criteria.EncuestaCriteria;
 import org.datasurvey.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
@@ -41,14 +51,30 @@ public class EncuestaResource {
 
     private final EncuestaQueryService encuestaQueryService;
 
+    private final MailService mailService;
+
+    private final EPreguntaCerradaService ePreguntaCerradaService;
+
+    private final EPreguntaAbiertaService ePreguntaAbiertaService;
+
+    private final EPreguntaCerradaOpcionService ePreguntaCerradaOpcionService;
+
     public EncuestaResource(
         EncuestaService encuestaService,
         EncuestaRepository encuestaRepository,
-        EncuestaQueryService encuestaQueryService
+        EncuestaQueryService encuestaQueryService,
+        MailService mailService,
+        EPreguntaCerradaService ePreguntaCerradaService,
+        EPreguntaAbiertaService ePreguntaAbiertaService,
+        EPreguntaCerradaOpcionService ePreguntaCerradaOpcionService
     ) {
         this.encuestaService = encuestaService;
         this.encuestaRepository = encuestaRepository;
         this.encuestaQueryService = encuestaQueryService;
+        this.mailService = mailService;
+        this.ePreguntaCerradaService = ePreguntaCerradaService;
+        this.ePreguntaAbiertaService = ePreguntaAbiertaService;
+        this.ePreguntaCerradaOpcionService = ePreguntaCerradaOpcionService;
     }
 
     /**
@@ -74,7 +100,7 @@ public class EncuestaResource {
     /**
      * {@code PUT  /encuestas/:id} : Updates an existing encuesta.
      *
-     * @param id the id of the encuesta to save.
+     * @param id       the id of the encuesta to save.
      * @param encuesta the encuesta to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated encuesta,
      * or with status {@code 400 (Bad Request)} if the encuesta is not valid,
@@ -99,6 +125,39 @@ public class EncuestaResource {
         }
 
         Encuesta result = encuestaService.save(encuesta);
+
+        mailService.sendEncuestaDeleted(encuesta.getUsuarioExtra());
+
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, encuesta.getId().toString()))
+            .body(result);
+    }
+
+    @PutMapping("/encuestas/publish/{id}")
+    public ResponseEntity<Encuesta> publishEncuesta(
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody Encuesta encuesta
+    ) throws URISyntaxException {
+        log.debug("REST request to update Encuesta : {}, {}", id, encuesta);
+        if (encuesta.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, encuesta.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!encuestaRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Encuesta result = encuestaService.save(encuesta);
+
+        if (result.getAcceso().equals(AccesoEncuesta.PRIVATE)) {
+            mailService.sendPublishedPrivateMail(result.getUsuarioExtra(), result.getContrasenna());
+        } else {
+            mailService.sendPublishedPublicMail(result.getUsuarioExtra());
+        }
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, encuesta.getId().toString()))
@@ -108,7 +167,7 @@ public class EncuestaResource {
     /**
      * {@code PATCH  /encuestas/:id} : Partial updates given fields of an existing encuesta, field will ignore if it is null
      *
-     * @param id the id of the encuesta to save.
+     * @param id       the id of the encuesta to save.
      * @param encuesta the encuesta to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated encuesta,
      * or with status {@code 400 (Bad Request)} if the encuesta is not valid,
@@ -154,6 +213,55 @@ public class EncuestaResource {
         return ResponseEntity.ok().body(entityList);
     }
 
+    @GetMapping("/encuestas/preguntas/{id}")
+    public ResponseEntity<List<Object>> getPreguntasByIdEncuesta(@PathVariable Long id) {
+        List<EPreguntaCerrada> preguntasCerradas = ePreguntaCerradaService.findAll();
+        List<EPreguntaAbierta> preguntasAbiertas = ePreguntaAbiertaService.findAll();
+        List<Object> preguntas = Stream.concat(preguntasCerradas.stream(), preguntasAbiertas.stream()).collect(Collectors.toList());
+        List<Object> preguntasFiltered = new ArrayList<>();
+
+        for (Object obj : preguntas) {
+            if (obj.getClass() == EPreguntaCerrada.class) {
+                if (((EPreguntaCerrada) obj).getEncuesta() != null) {
+                    if (((EPreguntaCerrada) obj).getEncuesta().getId().equals(id)) {
+                        preguntasFiltered.add(obj);
+                    }
+                }
+            } else if (obj.getClass() == EPreguntaAbierta.class) {
+                if (((EPreguntaAbierta) obj).getEncuesta() != null) {
+                    if (((EPreguntaAbierta) obj).getEncuesta().getId().equals(id)) {
+                        preguntasFiltered.add(obj);
+                    }
+                }
+            }
+        }
+        return ResponseEntity.ok().body(preguntasFiltered);
+    }
+
+    @GetMapping("/encuestas/preguntas-opciones/{id}")
+    public ResponseEntity<List<List<EPreguntaCerradaOpcion>>> getPreguntaCerradaOpcionByIdEncuesta(@PathVariable Long id) {
+        List<List<EPreguntaCerradaOpcion>> res = new ArrayList<>();
+        List<EPreguntaCerrada> preguntasCerradas = ePreguntaCerradaService.findAll();
+        List<EPreguntaCerrada> preguntasCerradasFiltered = preguntasCerradas
+            .stream()
+            .filter(p -> Objects.nonNull(p.getEncuesta()))
+            .filter(p -> p.getEncuesta().getId().equals(id))
+            .collect(Collectors.toList());
+        List<EPreguntaCerradaOpcion> opciones = ePreguntaCerradaOpcionService.findAll();
+
+        for (EPreguntaCerrada ePreguntaCerrada : preguntasCerradasFiltered) {
+            long preguntaCerradaId = ePreguntaCerrada.getId();
+            List<EPreguntaCerradaOpcion> opcionesFiltered = opciones
+                .stream()
+                .filter(o -> Objects.nonNull(o.getEPreguntaCerrada()))
+                .filter(o -> o.getEPreguntaCerrada().getId().equals(preguntaCerradaId))
+                .collect(Collectors.toList());
+            res.add(opcionesFiltered);
+        }
+
+        return ResponseEntity.ok().body(res);
+    }
+
     /**
      * {@code GET  /encuestas/count} : count all the encuestas.
      *
@@ -193,5 +301,79 @@ public class EncuestaResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @DeleteMapping("encuestas/notify/{id}")
+    public ResponseEntity<Void> notifyEncuestaDeleted(@PathVariable Long id, @Valid @RequestBody Encuesta encuesta) {
+        log.debug("REST request to notify {} of deleted Encuesta", encuesta.getUsuarioExtra().getUser().getEmail());
+        mailService.sendEncuestaDeleted(encuesta.getUsuarioExtra());
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/encuestas/duplicate/{id}")
+    public ResponseEntity<Encuesta> getAllEncuestas(@PathVariable Long id) {
+        Optional<Encuesta> encuesta = encuestaService.findOne(id);
+        Encuesta newEncuesta = new Encuesta();
+
+        if (encuesta.isPresent()) {
+            // Encuesta
+            newEncuesta.setNombre(encuesta.get().getNombre());
+            newEncuesta.setDescripcion(encuesta.get().getDescripcion());
+            newEncuesta.setFechaCreacion(ZonedDateTime.now());
+            newEncuesta.setCalificacion(5d);
+            newEncuesta.setAcceso(encuesta.get().getAcceso());
+            newEncuesta.setEstado(encuesta.get().getEstado());
+            newEncuesta.setCategoria(encuesta.get().getCategoria());
+            newEncuesta.setUsuarioExtra(encuesta.get().getUsuarioExtra());
+
+            Encuesta encuestaCreated = encuestaService.save(newEncuesta);
+
+            // Preguntas cerradas
+            List<EPreguntaCerrada> preguntasCerradas = ePreguntaCerradaService.findAll();
+            for (EPreguntaCerrada ePreguntaCerrada : preguntasCerradas) {
+                if (ePreguntaCerrada.getEncuesta().getId().equals(id)) {
+                    EPreguntaCerrada newEPreguntaCerrada = new EPreguntaCerrada();
+                    newEPreguntaCerrada.setNombre(ePreguntaCerrada.getNombre());
+                    newEPreguntaCerrada.setTipo(ePreguntaCerrada.getTipo());
+                    newEPreguntaCerrada.setOpcional(ePreguntaCerrada.getOpcional());
+                    newEPreguntaCerrada.setOrden(ePreguntaCerrada.getOrden());
+                    newEPreguntaCerrada.setEncuesta(encuestaCreated);
+
+                    ePreguntaCerradaService.save(newEPreguntaCerrada);
+
+                    // Opciones de preguntas cerradas
+                    List<EPreguntaCerradaOpcion> opciones = ePreguntaCerradaOpcionService.findAll();
+                    for (EPreguntaCerradaOpcion ePreguntaCerradaOpcion : opciones) {
+                        if (ePreguntaCerradaOpcion.getEPreguntaCerrada().getId().equals(ePreguntaCerrada.getId())) {
+                            EPreguntaCerradaOpcion newEPreguntaCerradaOpcion = new EPreguntaCerradaOpcion();
+                            newEPreguntaCerradaOpcion.setNombre(ePreguntaCerradaOpcion.getNombre());
+                            newEPreguntaCerradaOpcion.setOrden(ePreguntaCerradaOpcion.getOrden());
+                            newEPreguntaCerradaOpcion.setCantidad(0);
+                            newEPreguntaCerradaOpcion.setEPreguntaCerrada(newEPreguntaCerrada);
+
+                            ePreguntaCerradaOpcionService.save(newEPreguntaCerradaOpcion);
+                        }
+                    }
+                }
+            }
+
+            // Preguntas abiertas
+            List<EPreguntaAbierta> preguntasAbiertas = ePreguntaAbiertaService.findAll();
+            for (EPreguntaAbierta ePreguntaAbierta : preguntasAbiertas) {
+                if (ePreguntaAbierta.getEncuesta().getId().equals(id)) {
+                    EPreguntaAbierta newEPreguntaAbierta = new EPreguntaAbierta();
+                    newEPreguntaAbierta.setNombre(ePreguntaAbierta.getNombre());
+                    newEPreguntaAbierta.setOpcional(ePreguntaAbierta.getOpcional());
+                    newEPreguntaAbierta.setOrden(ePreguntaAbierta.getOrden());
+                    newEPreguntaAbierta.setEncuesta(encuestaCreated);
+
+                    ePreguntaAbiertaService.save(newEPreguntaAbierta);
+                }
+            }
+
+            return ResponseEntity.ok().body(encuestaCreated);
+        }
+
+        return ResponseEntity.ok().body(null);
     }
 }

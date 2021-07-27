@@ -12,7 +12,7 @@
       "updated": "El usuario con el identificador {{ param }} ha sido actualizado",
       "deleted": "El usuario con el identificador {{ param }} ha sido eliminado",
       "delete": {
-        "question": "¿Seguro que quiere eliminar el usuario {{ id }}?"
+        "question": "¿Seguro que quiere cambiar el estado del usuario?"
       },
       "detail": {
         "title": "Usuario"

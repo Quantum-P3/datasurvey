@@ -76,6 +76,19 @@ public class UserService {
             );
     }
 
+    public Optional<User> modifyStatus(String login, Boolean estado) {
+        return userRepository
+            .findOneByLogin(login)
+            .map(
+                user -> {
+                    // activate given user for the registration key.
+                    user.setActivated(estado);
+                    log.debug("Activated user: {}", user);
+                    return user;
+                }
+            );
+    }
+
     public Optional<User> completePasswordReset(String newPassword, String key) {
         log.debug("Reset user password for reset key {}", key);
         return userRepository
@@ -381,11 +394,16 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneWithAuthoritiesByLogin(login);
+        //cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
     }
 
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+        //findOneWithAuthoritiesByLogin
+        //cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).clear();
+
+        //return user;
     }
 
     /**

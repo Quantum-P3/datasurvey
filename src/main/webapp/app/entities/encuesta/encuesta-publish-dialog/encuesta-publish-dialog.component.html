@@ -1,0 +1,61 @@
+<form *ngIf="encuesta" name="deleteForm" (ngSubmit)="confirmPublish(encuesta!)">
+  <div class="modal-header">
+    <!-- <h4 class="modal-title" data-cy="encuestaDeleteDialogHeading" jhiTranslate="entity.publish.title">Confirm delete operation</h4>-->
+  </div>
+
+  <div class="modal-body">
+    <div class="alert alert-danger" *ngIf="fechaFinalizarInvalid && !fechaFinalizarInvalidMax" data-cy="fechaError">
+      Debe ingresar un rango de fechas mayor al indicado
+    </div>
+
+    <div class="alert alert-danger" *ngIf="fechaFinalizarInvalidMax && !fechaFinalizarInvalid" data-cy="fechaError">
+      Debe ingresar un rango de fechas menor al indicado
+    </div>
+
+    <p id="jhi-delete-encuesta-heading">Elija la fecha de finalización de su encuesta</p>
+    <hr />
+    <!--<input type="date" onchange="fechaFinalizacionIsInvalid()" />-->
+    <div class="d-flex" [formGroup]="fechaForm">
+      <input
+        id="field_fechaFinalizacion"
+        data-cy="fechaFinalizacion"
+        type="date"
+        class="form-control"
+        name="fechaFinalizacion"
+        formControlName="fechaFinalizacion"
+        placeholder="YYYY-MM-DD HH:mm"
+      />
+    </div>
+
+    <div
+      *ngIf="
+        fechaForm.get('fechaFinalizacion')!.invalid &&
+        (fechaForm.get('fechaFinalizacion')!.dirty || fechaForm.get('fechaFinalizacion')!.touched)
+      "
+    >
+      <small
+        class="form-text text-danger"
+        *ngIf="fechaForm.get('fechaFinalizacion')?.errors?.required"
+        jhiTranslate="entity.validation.required"
+      >
+        This field is required.
+      </small>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    </button>
+
+    <button
+      [disabled]="fechaForm.invalid"
+      id="jhi-confirm-delete-encuesta"
+      data-cy="entityConfirmDeleteButton"
+      type="submit"
+      class="ds-btn ds-btn--primary"
+    >
+      &nbsp;<span jhiTranslate="entity.action.publish">Delete</span>
+    </button>
+  </div>
+</form>

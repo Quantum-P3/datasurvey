@@ -12,7 +12,13 @@
   .modal-header,
   .modal-footer {
     border: none;
-    padding: 2rem;
+    padding: 2rem !important;
+    display: flex;
+    align-items: center;
+
+    label {
+      margin: 0 0.2rem 0 0;
+    }
   }
 
   .modal-body {

@@ -1,6 +1,9 @@
 <div>
   <h2 id="page-heading" data-cy="CategoriaHeading">
-    <span jhiTranslate="dataSurveyApp.categoria.home.title">Categorias</span>
+    <div>
+      <span class="ds-title" jhiTranslate="dataSurveyApp.categoria.home.title">Categorias</span>
+      <p class="ds-subtitle">Categorice las encuestas de la aplicación</p>
+    </div>
 
     <div class="d-flex justify-content-end">
       <button
@@ -19,11 +22,16 @@
 
   </div>-->
 
-  <div>
-    <jhi-alert class="alert-success"></jhi-alert>
+  <div
+    *ngIf="success"
+    class="alert alert-success alert-dismissible fade show"
+    role="alert"
+    jhiTranslate="dataSurveyApp.categoria.delete.success"
+  >
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
-
-  <div class="alert alert-success" *ngIf="success" jhiTranslate="dataSurveyApp.categoria.delete.success"></div>
 
   <div class="alert alert-warning" id="no-result" *ngIf="categorias?.length === 0">
     <span jhiTranslate="dataSurveyApp.categoria.home.notFound">No categorias found</span>
@@ -59,7 +67,8 @@
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>
 
-              <button type="submit" (click)="toggleStatus(categoria)" class="btn-sm ds-btn ds-btn--toggle" data-cy="entityDeleteButton">
+              <button type="submit" (click)="toggleStatus(categoria)" class="ds-btn ds-btn--danger" data-cy="entityDeleteButton">
+                <fa-icon [icon]="faExchangeAlt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.toggleStatus">Toggle Status</span>
               </button>
             </div>

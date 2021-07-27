@@ -61,8 +61,11 @@ export class SidebarComponent {
       if (account !== null) {
         this.usuarioExtraService.find(account.id).subscribe(usuarioExtra => {
           this.usuarioExtra = usuarioExtra.body;
-          this.usuarioExtra!.nombre =
-            usuarioExtra.body!.nombre!.trim().split(' ')[0] + ' ' + usuarioExtra.body!.nombre!.trim().split(' ')[1];
+          const fullName = this.usuarioExtra!.nombre;
+          const firstName = fullName?.split(' ')[0] === undefined ? '' : fullName?.split(' ')[0];
+          const lastName = fullName?.split(' ')[1] === undefined ? '' : fullName?.split(' ')[1];
+
+          this.usuarioExtra!.nombre = `${firstName} ${lastName}`;
         });
       }
     });
