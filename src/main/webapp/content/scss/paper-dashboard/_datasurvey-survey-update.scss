@@ -162,3 +162,18 @@
     }
   }
 }
+
+.iconos-colab {
+  margin-right: -8px;
+  z-index: 1;
+}
+
+.photo-collab {
+  width: 40px;
+  border-radius: 50px;
+  border: 2px solid #fff;
+
+  &:hover {
+    margin-top: -4px;
+  }
+}
