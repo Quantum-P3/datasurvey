@@ -126,7 +126,9 @@ public class EncuestaResource {
 
         Encuesta result = encuestaService.save(encuesta);
 
-        mailService.sendEncuestaDeleted(encuesta.getUsuarioExtra());
+        if (encuesta.getUsuarioExtra().getUser() != null) {
+            mailService.sendEncuestaDeleted(encuesta.getUsuarioExtra());
+        }
 
         return ResponseEntity
             .ok()
