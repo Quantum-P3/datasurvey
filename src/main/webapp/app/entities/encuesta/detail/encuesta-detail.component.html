@@ -1,10 +1,10 @@
 <div class="container-fluid" *ngIf="encuesta">
   <div>
     <h2 id="page-heading" data-cy="EPreguntaCerradaHeading">
-      <p class="ds-title">
-        Vista previa de {{ encuesta!.nombre }}
-        <fa-icon class="ds-info--icon" [icon]="faQuestion" data-toggle="modal" data-target="#verParametros"></fa-icon>
-      </p>
+      <div class="d-flex align-items-center">
+        <p class="ds-title">Vista previa de {{ encuesta!.nombre }}</p>
+        &nbsp;&nbsp;<fa-icon class="ds-info--icon" [icon]="faQuestion" data-toggle="modal" data-target="#verParametros"></fa-icon>
+      </div>
 
       <p class="ds-subtitle">Creada el día {{ encuesta!.fechaCreacion | formatShortDatetime | lowercase }}</p>
       <div class="d-flex justify-content-end">
@@ -107,7 +107,7 @@
             <div class="modal-body">
               <div>
                 <div class="mb-5">
-                  <p style="font-size: 1.2em" class="ds-subtitle">Cantidad de preguntas:</p>
+                  <p style="font-size: 1.2em" class="ds-subtitle">Cantidad de preguntas</p>
                   <p>{{ ePreguntas?.length }}</p>
                 </div>
 
@@ -116,12 +116,12 @@
                   </div>-->
 
                 <div class="mb-5">
-                  <p class="ds-subtitle" jhiTranslate="dataSurveyApp.encuesta.acceso">Acceso:</p>
+                  <p class="ds-subtitle" jhiTranslate="dataSurveyApp.encuesta.acceso">Acceso</p>
                   <p jhiTranslate="{{ 'dataSurveyApp.AccesoEncuesta.' + encuesta.acceso }}">{{ encuesta.acceso }}</p>
                 </div>
 
                 <div *ngIf="encuesta.acceso === 'PRIVATE'" class="mb-5">
-                  <p class="ds-subtitle">Contraseña:</p>
+                  <p class="ds-subtitle">Contraseña</p>
                   <p>{{ encuesta.contrasenna }}</p>
                 </div>
 
@@ -131,12 +131,12 @@
                 </div>
 
                 <div *ngIf="encuesta.categoria" class="mb-5">
-                  <p class="ds-subtitle">Categoría:</p>
+                  <p class="ds-subtitle">Categoría</p>
                   <P> </P> {{ encuesta.categoria?.nombre }}
                 </div>
 
                 <div class="mb-5">
-                  <p class="ds-subtitle">Fecha de publicación:</p>
+                  <p class="ds-subtitle">Fecha de publicación</p>
                   <P
                     >{{
                       encuesta.fechaPublicacion === undefined
@@ -164,7 +164,7 @@
               </dl>-->
 
                 <div class="mb-5">
-                  <p class="ds-subtitle">Fecha de finalización:</p>
+                  <p class="ds-subtitle">Fecha de finalización</p>
                   <P>
                     {{
                       encuesta.fechaFinalizada === undefined
@@ -175,15 +175,15 @@
                 </div>
 
                 <div class="mb-5">
-                  <p class="ds-subtitle">Calificación:</p>
-                  <dd>
+                  <p class="ds-subtitle">Calificación</p>
+                  <div>
                     <fa-icon *ngFor="let i of [].constructor(encuesta.calificacion)" class="entity-icon--star" [icon]="faStar"></fa-icon
                     ><fa-icon
                       *ngFor="let i of [].constructor(5 - encuesta.calificacion!)"
                       class="entity-icon--star--off"
                       [icon]="faStar"
                     ></fa-icon>
-                  </dd>
+                  </div>
                 </div>
               </div>
             </div>
