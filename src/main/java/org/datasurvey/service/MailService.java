@@ -159,6 +159,7 @@ public class MailService {
         sendEmailFromTemplate(user.getUser(), "mail/encuestaPublicaEmail", "email.public.title");
     }
 
+    @Async
     public void sendEncuestaDeleted(UsuarioExtra user) {
         log.debug("Sending encuesta deletion notification mail to '{}'", user.getUser().getEmail());
         sendEmailFromTemplate(user.getUser(), "mail/encuestaDeletedEmail", "email.encuestaDeleted.title");
