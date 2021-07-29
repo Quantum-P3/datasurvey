@@ -33,6 +33,13 @@ export class EncuestaService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  updateSurvey(encuesta: IEncuesta): Observable<EntityResponseType> {
+    const copy = this.convertDateFromClient(encuesta);
+    return this.http
+      .put<IEncuesta>(`${this.resourceUrl}/update/${getEncuestaIdentifier(encuesta) as number}`, copy, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
   partialUpdate(encuesta: IEncuesta): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(encuesta);
     return this.http
