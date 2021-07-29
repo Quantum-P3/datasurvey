@@ -1,0 +1,120 @@
+<div class="row">
+  <div class="col">
+    <div class="container-fluid navbar navbar-marketing navbar-expand-lg bg-white navbar-light">
+      <div class="container px-5 py-4">
+        <h1 class="ds-title" [hidden]="notAccount">Inicio</h1>
+        <a class="text-dark" href=" " [hidden]="!notAccount">
+          <img src="http://datasurvey.org/content/img_datasurvey/datasurvey-logo-text-black.svg" width="300" alt="" />
+        </a>
+
+        <a href=" ">
+          <button class="ds-btn btn-outline-secondary fw-500 ms-lg-4">Sobre DataSurvey</button>
+        </a>
+
+        <div class="col-6" style="text-align: end">
+          <!--<a routerlink="" [hidden]="!notAccount">
+            <button class="ds-btn btn-light fw-500 ms-lg-4">Sobre DataSurvey</button>
+          </a>-->
+          <a routerLink="/login" [hidden]="!notAccount">
+            <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Iniciar Sesión</button>
+          </a>
+
+          <a routerLink="/account/register" [hidden]="!notAccount">
+            <button class="ds-btn ds-btn--primary fw-500 ms-lg-4">Registrarse</button>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-light py-10 container-encuestas">
+      <div class="container px-0">
+        <!--filtrado-->
+
+        <!--<div class="input-group">
+          <div class="ds-filter">
+            <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+            <input type="text" name="searchString" placeholder="Buscar por nombre..." [(ngModel)]="searchString" />
+          </div>
+          <div class="ds-filter">
+            <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+            <select name="accesoEncuestas" id="accesoEncuesta" [(ngModel)]="searchCategoria" style="width: 200px">
+              <option selected="selected" *ngFor="let categoria of categorias" [value]="categoria.nombre">{{categoria.nombre}}</option>
+            </select>
+          </div>
+
+
+        </div>-->
+
+        <div class="container">
+          <h1 class="ds-title">Encuestas</h1>
+
+          <hr />
+          <div class="social-box">
+            <h1>
+              <fa-icon [icon]="faFileAlt"></fa-icon>
+            </h1>
+          </div>
+        </div>
+
+        <!--Inicio de los cards-->
+
+        <!-- <div class="row gx-5" *ngIf="encuestas && encuestas.length > 0">
+          <div class="col-xl-4 col-lg-4 col-md-6 mb-5" *ngFor="let encuesta of encuestas; trackBy: trackId">
+            <div
+              class="card-encuesta lift h-100"
+
+              [attr.data-id]="encuesta.id"
+            >
+
+              &lt;!&ndash;(dblclick)="openSurvey($event)"
+             (click)="selectSurvey($event)"&ndash;&gt;
+
+
+
+             &lt;!&ndash; <div class="card-body p-3">
+                <div class="card-title mb-0">{{ encuesta.nombre }}</div>
+                <div class="entity-body&#45;&#45;row m-2">
+                  <span class="tag mt-2">{{ encuesta.categoria?.nombre | lowercase }}</span>
+                </div>
+                <div class="entity-body&#45;&#45;row m-2">
+                  <span class="subtitle mt-2">{{ encuesta.descripcion | titlecase }}</span>
+                </div>
+                <div class="text-xs text-gray-500">
+                  <div class="entity-body">
+                    <div class="entity-body&#45;&#45;row m-2">
+                      <span class="mt-2"
+                      >Fecha de inicio&nbsp;&nbsp;<fa-icon class="entity-icon&#45;&#45;access" [icon]="faCalendarAlt"></fa-icon>&nbsp;&nbsp;{{
+                        encuesta.fechaPublicacion | formatShortDatetime | titlecase
+                        }}</span
+                      >
+                    </div>
+                    <div class="entity-body&#45;&#45;row m-2">
+                      <span class="mt-2"
+                      >Fecha de finalización &nbsp;&nbsp;<fa-icon class="entity-icon&#45;&#45;access" [icon]="faCalendarAlt"></fa-icon
+                      >&nbsp;&nbsp;{{ encuesta.fechaFinalizar | formatShortDatetime | titlecase }}</span
+                      >
+                    </div>
+                    <div class="entity-body&#45;&#45;row m-2">
+                      <p>Calificacion</p>
+                      <fa-icon *ngFor="let i of [].constructor(encuesta.calificacion)" class="entity-icon&#45;&#45;star" [icon]="faStar"></fa-icon>
+                      <fa-icon
+                        *ngFor="let i of [].constructor(5 - encuesta.calificacion!)"
+                        class="entity-icon&#45;&#45;star&#45;&#45;off"
+                        [icon]="faStar"
+                      ></fa-icon>
+                    </div>
+                    <div class="entity-body&#45;&#45;row m-2">
+                      <button class="ds-btn btn-card"><fa-icon [icon]="faPollH"></fa-icon>&nbsp;&nbsp;Completar encuesta</button>
+                    </div>
+                  </div>
+                </div>
+              </div>&ndash;&gt;
+            </div>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  </div>
+
+  <!--Inicio de cards-->
+</div>
