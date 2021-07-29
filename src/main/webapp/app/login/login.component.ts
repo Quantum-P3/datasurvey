@@ -55,7 +55,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     // if already authenticated then navigate to home page
     this.accountService.identity().subscribe(() => {
       if (this.accountService.isAuthenticated()) {
-        this.router.navigate(['']);
+        this.router.navigate(['/pagina-principal']);
       }
     });
   }
@@ -90,7 +90,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         if (!this.router.getCurrentNavigation()) {
           this.localStorageService.store('IsGoogle', 'true');
           // There were no routing during login (eg from navigationToStoredUrl)
-          this.router.navigate(['']);
+          this.router.navigate(['/pagina-principal']);
         }
       },
       response => {
@@ -173,7 +173,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
           this.authenticationError = false;
           if (!this.router.getCurrentNavigation()) {
             // There were no routing during login (eg from navigationToStoredUrl)
-            this.router.navigate(['']);
+            this.router.navigate(['/pagina-principal']);
           }
           // }
         },
