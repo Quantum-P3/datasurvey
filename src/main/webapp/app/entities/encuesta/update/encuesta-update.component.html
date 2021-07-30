@@ -1,7 +1,7 @@
 <div>
   <h2 id="page-heading" data-cy="EPreguntaCerradaHeading">
     <div class="d-flex align-items-center">
-      <p class="ds-title ds-title--interactive" contenteditable="true" spellcheck="false" (blur)="updateSurveyName($event)">
+      <p class="ds-title ds-contenteditable" contenteditable="true" spellcheck="false" (blur)="updateSurveyName($event)">
         {{ encuesta!.nombre }}
       </p>
       &nbsp;&nbsp;<fa-icon
@@ -87,7 +87,18 @@
             class="ds-survey--question"
           >
             <div class="ds-survey--titulo">
-              <span class="ds-survey--titulo--name">{{ i + 1 }}. {{ ePregunta.nombre }}</span>
+              <span class="ds-survey--titulo--name">
+                <span>{{ i + 1 }}.</span>&nbsp;
+                <span
+                  class="ds-contenteditable"
+                  [attr.data-id]="ePregunta.id"
+                  [attr.data-tipo]="ePregunta.tipo"
+                  contenteditable="true"
+                  spellcheck="false"
+                  (blur)="updateQuestionName($event)"
+                  >{{ ePregunta.nombre }}</span
+                >
+              </span>
               <fa-icon
                 *ngIf="encuesta!.estado === 'DRAFT'"
                 class="ds-survey--titulo--icon"

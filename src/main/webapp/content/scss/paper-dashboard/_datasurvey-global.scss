@@ -9,20 +9,20 @@
   letter-spacing: 0.025rem;
   text-transform: uppercase;
   font-size: 1.2rem;
+}
 
-  &--interactive {
-    border: 2.25px solid transparent;
-    border-radius: 3px;
-    outline: 0;
-    text-transform: none;
+.ds-contenteditable {
+  border: 2.25px solid transparent;
+  border-radius: 3px;
+  outline: 0;
+  text-transform: none;
 
-    &:hover {
-      border: 2.25px solid #e5e5e5;
-    }
+  &:hover {
+    border: 2.25px solid #e5e5e5;
+  }
 
-    &:focus {
-      border: 2.25px solid #2962ff;
-    }
+  &:focus {
+    border: 2.25px solid #2962ff;
   }
 }
 
