@@ -176,7 +176,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    this.initListeners();
+    // this.initListeners();
   }
 
   trackId(index: number, item: IEPreguntaCerrada): number {
@@ -194,18 +194,18 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  initListeners(): void {
-    const checkboxes = document.getElementsByClassName('ds-survey--checkbox');
-    for (let i = 0; i < checkboxes.length; i++) {
-      checkboxes[i].addEventListener('click', e => {
-        if ((e.target as HTMLInputElement).checked) {
-          (e.target as HTMLElement).offsetParent!.classList.add('ds-survey--closed-option--active');
-        } else {
-          (e.target as HTMLElement).offsetParent!.classList.remove('ds-survey--closed-option--active');
-        }
-      });
-    }
-  }
+  // initListeners(): void {
+  //   const checkboxes = document.getElementsByClassName('ds-survey--checkbox');
+  //   for (let i = 0; i < checkboxes.length; i++) {
+  //     checkboxes[i].addEventListener('click', e => {
+  //       if ((e.target as HTMLInputElement).checked) {
+  //         (e.target as HTMLElement).offsetParent!.classList.add('ds-survey--closed-option--active');
+  //       } else {
+  //         (e.target as HTMLElement).offsetParent!.classList.remove('ds-survey--closed-option--active');
+  //       }
+  //     });
+  //   }
+  // }
 
   previousState(): void {
     window.history.back();
@@ -430,6 +430,18 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
 
   protected onSaveFinalizeQuestion(): void {
     this.isSavingQuestion = false;
+  }
+
+  updateSurveyName(event: any) {
+    const updatedSurveyName = event.target.innerText;
+    if (updatedSurveyName !== this.encuesta?.nombre) {
+      const survey = { ...this.encuesta };
+      survey.nombre = updatedSurveyName;
+      // Prevent user update by setting to null
+      survey.usuarioExtra!.user = null;
+
+      this.encuestaService.updateSurvey(survey).subscribe(res => {});
+    }
   }
 
   // previousState(): void {
