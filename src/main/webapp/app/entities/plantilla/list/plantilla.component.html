@@ -3,7 +3,7 @@
     <span jhiTranslate="dataSurveyApp.plantilla.home.title">Plantillas</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+      <button class="ds-btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="dataSurveyApp.plantilla.home.refreshListLabel">Refresh List</span>
       </button>
@@ -11,11 +11,11 @@
       <button
         id="jh-create-entity"
         data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-plantilla"
+        class="ds-btn ds-btn--primary jh-create-entity create-plantilla"
         [routerLink]="['/plantilla/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="dataSurveyApp.plantilla.home.createLabel"> Create a new Plantilla </span>
+        <span jhiTranslate="dataSurveyApp.plantilla.home.createLabel"> Create a new Template </span>
       </button>
     </div>
   </h2>
@@ -25,14 +25,13 @@
   <jhi-alert></jhi-alert>
 
   <div class="alert alert-warning" id="no-result" *ngIf="plantillas?.length === 0">
-    <span jhiTranslate="dataSurveyApp.plantilla.home.notFound">No plantillas found</span>
+    <span jhiTranslate="dataSurveyApp.plantilla.home.notFound">No templates found</span>
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="plantillas && plantillas.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.nombre">Nombre</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.descripcion">Descripcion</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.fechaCreacion">Fecha Creacion</span></th>
@@ -45,9 +44,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let plantilla of plantillas; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/plantilla', plantilla.id, 'view']">{{ plantilla.id }}</a>
-          </td>
           <td>{{ plantilla.nombre }}</td>
           <td>{{ plantilla.descripcion }}</td>
           <td>{{ plantilla.fechaCreacion | formatMediumDatetime }}</td>
@@ -64,7 +60,7 @@
               <button
                 type="submit"
                 [routerLink]="['/plantilla', plantilla.id, 'view']"
-                class="btn btn-info btn-sm"
+                class="ds-btn btn-info btn-sm"
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
@@ -74,14 +70,14 @@
               <button
                 type="submit"
                 [routerLink]="['/plantilla', plantilla.id, 'edit']"
-                class="btn btn-primary btn-sm"
+                class="ds-btn ds-btn--primary btn-sm"
                 data-cy="entityEditButton"
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>
 
-              <button type="submit" (click)="delete(plantilla)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              <button type="submit" (click)="delete(plantilla)" class="ds-btn ds-btn--danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>
