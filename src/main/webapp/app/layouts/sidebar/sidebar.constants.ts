@@ -22,6 +22,8 @@ export const ADMIN_ROUTES: RouteInfo[] = [
   //   type: 'link',
   //   icontype: 'nc-icon nc-chart-bar-32',
   // },
+
+  { path: '/pagina-principal', title: 'Inicio', type: 'link', icontype: 'nc-icon nc-world-2' },
   {
     path: '/encuesta',
     title: 'Encuestas',
@@ -55,6 +57,7 @@ export const ADMIN_ROUTES: RouteInfo[] = [
 ];
 
 export const USER_ROUTES: RouteInfo[] = [
+  { path: '/pagina-principal', title: 'Inicio', type: 'link', icontype: 'nc-icon nc-world-2' },
   {
     path: '/encuesta',
     title: 'Encuestas',

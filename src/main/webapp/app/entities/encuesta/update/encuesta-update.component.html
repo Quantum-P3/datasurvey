@@ -12,6 +12,25 @@
         (click)="loadAplicationParameters()"
       ></fa-icon>
       &nbsp;&nbsp;<fa-icon class="ds-info--icon" [icon]="faEye" (click)="openPreview()"></fa-icon>
+      <div class="d-flex px-4">
+        <div class="col-12">
+          <div class="row" style="flex-direction: row-reverse">
+            <div class="col-mb-2 iconos-colab">
+              <div class="add-collab">
+                <fa-icon icon="sync" [icon]="faPlus"></fa-icon>
+              </div>
+            </div>
+            <div class="col-mb-2 iconos-colab" *ngFor="let colaborador of usuariosColaboradores">
+              <img
+                class="photo-collab"
+                *ngIf="colaborador.usuarioExtra"
+                src="../../../../content/profile_icons/C{{ colaborador.usuarioExtra.iconoPerfil }}.png"
+                alt="{{ colaborador.usuarioExtra.nombre }}"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <p class="ds-subtitle">Creada el día {{ encuesta!.fechaCreacion | formatShortDatetime | lowercase }}</p>
@@ -226,7 +245,7 @@
         [formGroup]="editFormQuestion"
       >
         <div class="modal-header">
-          <h1 class="modal-title" id="exampleModalLongTitle2">Crear Pregunta</h1>
+          <h1 class="modal-title" id="exampleModalLongTitle1">Crear Pregunta</h1>
         </div>
         <div class="modal-body">
           <!-- Survey Create Question Modal -->
@@ -369,7 +388,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title" id="exampleModalLongTitle">Información de Encuesta</h1>
+        <h1 class="modal-title" id="exampleModalLongTitle2">Información de Encuesta</h1>
       </div>
 
       <!-- {
