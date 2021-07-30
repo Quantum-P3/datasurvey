@@ -141,7 +141,7 @@
                     >{{
                       encuesta.fechaPublicacion === undefined
                         ? 'Sin publicar'
-                        : (encuesta.fechaFinalizada | formatShortDatetime | lowercase)
+                        : (encuesta.fechaPublicacion | formatShortDatetime | lowercase)
                     }}
                   </P>
                 </div>
@@ -157,7 +157,7 @@
                   {{
                   encuesta.fechaFinalizar === undefined
                     ? 'Sin fecha de finalización'
-                    : (encuesta.fechaFinalizada | formatShortDatetime | lowercase)
+                    : (encuesta.fechaFinalizar | formatShortDatetime | lowercase)
                   }}</span
                 >
                 </dd>
