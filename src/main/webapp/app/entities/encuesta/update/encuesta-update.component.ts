@@ -36,6 +36,7 @@ import { Router } from '@angular/router';
 
 import { UsuarioEncuestaService } from 'app/entities/usuario-encuesta/service/usuario-encuesta.service';
 import { IUsuarioEncuesta } from '../../usuario-encuesta/usuario-encuesta.model';
+import { RolColaborador } from '../../enumerations/rol-colaborador.model';
 
 @Component({
   selector: 'jhi-encuesta-update',
@@ -50,10 +51,12 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
 
   isSaving = false;
   isSavingQuestion = false;
-
+  isSavingCollab = false;
+  public rolSeleccionado: RolColaborador | undefined = undefined;
   categoriasSharedCollection: ICategoria[] = [];
   usuarioExtrasSharedCollection: IUsuarioExtra[] = [];
   usuariosColaboradores: IUsuarioEncuesta[] = [];
+  colaborador: IUsuarioEncuesta | null = null;
 
   // editForm = this.fb.group({
   //   id: [],
@@ -85,6 +88,11 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     tipo: [PreguntaCerradaTipo.SINGLE],
     opcional: [false],
     tipopregunta: ['CLOSED'],
+  });
+
+  editFormUpdateCollab = this.fb.group({
+    id: [],
+    rol: [null, [Validators.required]],
   });
 
   ePreguntas?: any[];
@@ -548,4 +556,23 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   //     usuarioExtra: this.editForm.get(['usuarioExtra'])!.value,
   //   };
   // }
+
+  /* methods for colaborators*/
+
+  selectColaborator(c: IUsuarioEncuesta) {
+    this.colaborador = c;
+    this.rolSeleccionado = c.rol;
+  }
+
+  openColaborator(event: any) {}
+
+  saveCollab(): void {
+    this.isSavingCollab = true;
+    const collab = this.colaborador;
+    if (collab !== null) {
+      collab.rol = this.editFormUpdateCollab.get('rol')!.value;
+      collab.fechaAgregado = dayjs(this.colaborador?.fechaAgregado, DATE_TIME_FORMAT);
+      this.usuarioEncuestaService.update(collab);
+    }
+  }
 }

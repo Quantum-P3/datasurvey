@@ -18,7 +18,13 @@
                 <fa-icon icon="sync" [icon]="faPlus"></fa-icon>
               </div>
             </div>
-            <div class="col-mb-2 iconos-colab" *ngFor="let colaborador of usuariosColaboradores">
+            <div
+              class="col-mb-2 iconos-colab"
+              *ngFor="let colaborador of usuariosColaboradores"
+              (click)="selectColaborator(colaborador)"
+              data-toggle="modal"
+              data-target="#modalColaborators"
+            >
               <img
                 class="photo-collab"
                 *ngIf="colaborador.usuarioExtra"
@@ -414,6 +420,54 @@
           <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span>Volver</span>
         </button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ------------------------------------------------------------------------------------------------- -->
+
+<!-- ------------------------------------------------------------------------------------------------- -->
+
+<!-- Survey Parameters Information -->
+<div
+  class="modal fade ds-modal"
+  id="modalColaborators"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="verColaboradoresTitle"
+  aria-hidden="true"
+  *ngIf="colaborador"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <form class="ds-form" name="editFormUpdateCollab" role="form" (ngSubmit)="saveCollab()" [formGroup]="editFormUpdateCollab">
+        <div class="modal-header">
+          <h1 class="modal-title" id="modalColaboradores">Colaboradores</h1>
+        </div>
+        <div class="modal-body">
+          <div>
+            <div class="mb-5" *ngIf="colaborador.usuarioExtra">
+              <p class="ds-subtitle">Nombre</p>
+              <p>{{ colaborador!.usuarioExtra.nombre }}</p>
+            </div>
+            <div>
+              <label for="field_update_rol">Rol</label>
+              <select class="form-control" name="rol" formControlName="rol" id="field_update_rol" data-cy="rol">
+                <option value="READ" [selected]="colaborador.rol === 'READ'">Lector</option>
+                <option value="WRITE" [selected]="colaborador.rol === 'WRITE'">Escritor</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="btnCancelColaboradores" type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal">
+            <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span>Volver</span>
+          </button>
+          <button id="btnUpdateColaboradores" type="submit" class="ds-btn ds-btn--primary" data-cy="entityUpdateButton">
+            <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span>Guardar cambios</span>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
