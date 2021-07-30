@@ -421,13 +421,10 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     if (updatedSurveyName !== this.encuesta?.nombre) {
       const survey = { ...this.encuesta };
       survey.nombre = updatedSurveyName;
+      // Prevent user update by setting to null
       survey.usuarioExtra!.user = null;
-      console.log(survey);
 
-      this.encuestaService.updateSurvey(survey).subscribe(res => {
-        console.log('UPDATED');
-        console.log(res);
-      });
+      this.encuestaService.updateSurvey(survey).subscribe(res => {});
     }
   }
 

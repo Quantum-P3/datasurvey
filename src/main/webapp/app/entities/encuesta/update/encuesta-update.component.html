@@ -1,7 +1,9 @@
 <div>
   <h2 id="page-heading" data-cy="EPreguntaCerradaHeading">
     <div class="d-flex align-items-center">
-      <p class="ds-title ds-title--interactive" contenteditable="true" (blur)="updateSurveyName($event)">{{ encuesta!.nombre }}</p>
+      <p class="ds-title ds-title--interactive" contenteditable="true" spellcheck="false" (blur)="updateSurveyName($event)">
+        {{ encuesta!.nombre }}
+      </p>
       &nbsp;&nbsp;<fa-icon
         class="ds-info--icon"
         [icon]="faQuestion"
