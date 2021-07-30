@@ -124,12 +124,16 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   loadAll(): void {
     this.isLoading = true;
 
-    this.usuarioExtraService
-      .retrieveAllPublicUsers()
-      .pipe(finalize(() => this.loadPublicUser()))
-      .subscribe(res => {
-        this.userSharedCollection = res;
-      });
+    if (this.isAdmin()) {
+      this.usuarioExtraService
+        .retrieveAllPublicUsers()
+        .pipe(finalize(() => this.loadPublicUser()))
+        .subscribe(res => {
+          this.userSharedCollection = res;
+        });
+    } else {
+      this.loadEncuestas();
+    }
   }
 
   loadPublicUser(): void {
@@ -144,30 +148,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
   loadUserExtras() {
     this.usuarioExtraService
       .query()
-      .pipe(
-        finalize(() =>
-          this.encuestaService.query().subscribe(
-            (res: HttpResponse<IEncuesta[]>) => {
-              this.isLoading = false;
-              const tmpEncuestas = res.body ?? [];
-              if (this.isAdmin()) {
-                this.encuestas = tmpEncuestas.filter(e => e.estado !== EstadoEncuesta.DELETED);
-
-                this.encuestas.forEach(e => {
-                  e.usuarioExtra = this.usuarioExtrasSharedCollection?.find(pU => pU.id == e.usuarioExtra?.id);
-                });
-              } else {
-                this.encuestas = tmpEncuestas
-                  .filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id)
-                  .filter(e => e.estado !== EstadoEncuesta.DELETED);
-              }
-            },
-            () => {
-              this.isLoading = false;
-            }
-          )
-        )
-      )
+      .pipe(finalize(() => this.loadEncuestas()))
       .subscribe(
         (res: HttpResponse<IUsuarioExtra[]>) => {
           this.isLoading = false;
@@ -180,6 +161,29 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
           this.isLoading = false;
         }
       );
+  }
+
+  loadEncuestas() {
+    this.encuestaService.query().subscribe(
+      (res: HttpResponse<IEncuesta[]>) => {
+        this.isLoading = false;
+        const tmpEncuestas = res.body ?? [];
+        if (this.isAdmin()) {
+          this.encuestas = tmpEncuestas.filter(e => e.estado !== EstadoEncuesta.DELETED);
+
+          this.encuestas.forEach(e => {
+            e.usuarioExtra = this.usuarioExtrasSharedCollection?.find(pU => pU.id == e.usuarioExtra?.id);
+          });
+        } else {
+          this.encuestas = tmpEncuestas
+            .filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id)
+            .filter(e => e.estado !== EstadoEncuesta.DELETED);
+        }
+      },
+      () => {
+        this.isLoading = false;
+      }
+    );
   }
 
   ngOnInit(): void {
