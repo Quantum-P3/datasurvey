@@ -49,6 +49,12 @@ export class UsuarioEncuestaService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  findCollaborators(id: number): Observable<EntityResponseType> {
+    return this.http
+      .get<any>(`${this.resourceUrl}/encuesta/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http

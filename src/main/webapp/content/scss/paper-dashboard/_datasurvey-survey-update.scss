@@ -162,3 +162,38 @@
     }
   }
 }
+
+.iconos-colab {
+  margin-right: -8px;
+  z-index: 1;
+}
+
+.photo-collab {
+  width: 40px;
+  border-radius: 50px;
+  border: 2px solid #fff;
+
+  &:hover {
+    margin-top: -4px;
+    cursor: pointer;
+  }
+}
+
+.add-collab {
+  background: #c3c2c2;
+  text-align: center;
+  width: 40px;
+  height: 40px;
+  color: #fff;
+  padding: 4pt 7pt;
+  border-radius: 50px;
+  border: 2px solid #fff;
+  position: relative;
+  top: 0;
+  transition: all 0.1s ease-in-out;
+  &:hover {
+    /*margin-top: -4px;**/
+    top: -5px;
+    cursor: pointer;
+  }
+}

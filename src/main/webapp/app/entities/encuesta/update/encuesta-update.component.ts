@@ -34,6 +34,9 @@ import { ParametroAplicacionService } from './../../parametro-aplicacion/service
 import { IParametroAplicacion } from './../../parametro-aplicacion/parametro-aplicacion.model';
 import { Router } from '@angular/router';
 
+import { UsuarioEncuestaService } from 'app/entities/usuario-encuesta/service/usuario-encuesta.service';
+import { IUsuarioEncuesta } from '../../usuario-encuesta/usuario-encuesta.model';
+
 @Component({
   selector: 'jhi-encuesta-update',
   templateUrl: './encuesta-update.component.html',
@@ -50,6 +53,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
 
   categoriasSharedCollection: ICategoria[] = [];
   usuarioExtrasSharedCollection: IUsuarioExtra[] = [];
+  usuariosColaboradores: IUsuarioEncuesta[] = [];
 
   // editForm = this.fb.group({
   //   id: [],
@@ -105,6 +109,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     protected ePreguntaCerradaOpcionService: EPreguntaCerradaOpcionService,
     protected parametroAplicacionService: ParametroAplicacionService,
     protected ePreguntaAbiertaService: EPreguntaAbiertaService,
+    protected usuarioEncuestaService: UsuarioEncuestaService,
     protected router: Router
   ) {}
 
@@ -126,6 +131,17 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
       (res: any) => {
         this.isLoading = false;
         this.ePreguntasOpciones = res.body ?? [];
+      },
+      () => {
+        this.isLoading = false;
+      }
+    );
+
+    this.usuarioEncuestaService.findCollaborators(this.encuesta?.id!).subscribe(
+      (res: any) => {
+        this.isLoading = false;
+        this.usuariosColaboradores = res.body ?? [];
+        console.log(this.usuariosColaboradores);
       },
       () => {
         this.isLoading = false;
