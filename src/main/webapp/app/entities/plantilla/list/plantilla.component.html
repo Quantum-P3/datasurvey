@@ -32,7 +32,6 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.nombre">Nombre</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.descripcion">Descripcion</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.fechaCreacion">Fecha Creacion</span></th>
@@ -45,9 +44,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let plantilla of plantillas; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/plantilla', plantilla.id, 'view']">{{ plantilla.id }}</a>
-          </td>
           <td>{{ plantilla.nombre }}</td>
           <td>{{ plantilla.descripcion }}</td>
           <td>{{ plantilla.fechaCreacion | formatMediumDatetime }}</td>
