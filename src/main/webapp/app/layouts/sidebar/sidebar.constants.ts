@@ -30,12 +30,12 @@ export const ADMIN_ROUTES: RouteInfo[] = [
     type: 'link',
     icontype: 'nc-icon nc-paper',
   },
-  // {
-  //   path: '/plantilla',
-  //   title: 'Plantillas',
-  //   type: 'link',
-  //   icontype: 'nc-icon nc-album-2',
-  // },
+  {
+    path: '/plantilla',
+    title: 'Plantillas',
+    type: 'link',
+    icontype: 'nc-icon nc-album-2',
+  },
   {
     path: '/categoria',
     title: 'Categorías',
