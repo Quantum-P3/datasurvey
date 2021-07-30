@@ -15,7 +15,7 @@
         [routerLink]="['/plantilla/new']"
       >
         <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="dataSurveyApp.plantilla.home.createLabel"> Create a new Plantilla </span>
+        <span jhiTranslate="dataSurveyApp.plantilla.home.createLabel"> Create a new Template </span>
       </button>
     </div>
   </h2>
@@ -25,7 +25,7 @@
   <jhi-alert></jhi-alert>
 
   <div class="alert alert-warning" id="no-result" *ngIf="plantillas?.length === 0">
-    <span jhiTranslate="dataSurveyApp.plantilla.home.notFound">No plantillas found</span>
+    <span jhiTranslate="dataSurveyApp.plantilla.home.notFound">No templates found</span>
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="plantillas && plantillas.length > 0">
