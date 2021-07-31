@@ -1,4 +1,4 @@
-import { IEPreguntaAbierta } from './../../e-pregunta-abierta/e-pregunta-abierta.model';
+import { EPreguntaAbierta, IEPreguntaAbierta } from './../../e-pregunta-abierta/e-pregunta-abierta.model';
 import { EPreguntaCerrada } from './../../e-pregunta-cerrada/e-pregunta-cerrada.model';
 import { EPreguntaCerradaOpcion, IEPreguntaCerradaOpcion } from './../../e-pregunta-cerrada-opcion/e-pregunta-cerrada-opcion.model';
 import { EPreguntaAbiertaService } from './../../e-pregunta-abierta/service/e-pregunta-abierta.service';
@@ -34,6 +34,9 @@ import { ParametroAplicacionService } from './../../parametro-aplicacion/service
 import { IParametroAplicacion } from './../../parametro-aplicacion/parametro-aplicacion.model';
 import { Router } from '@angular/router';
 
+import { UsuarioEncuestaService } from 'app/entities/usuario-encuesta/service/usuario-encuesta.service';
+import { IUsuarioEncuesta } from '../../usuario-encuesta/usuario-encuesta.model';
+
 @Component({
   selector: 'jhi-encuesta-update',
   templateUrl: './encuesta-update.component.html',
@@ -50,6 +53,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
 
   categoriasSharedCollection: ICategoria[] = [];
   usuarioExtrasSharedCollection: IUsuarioExtra[] = [];
+  usuariosColaboradores: IUsuarioEncuesta[] = [];
 
   // editForm = this.fb.group({
   //   id: [],
@@ -105,6 +109,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     protected ePreguntaCerradaOpcionService: EPreguntaCerradaOpcionService,
     protected parametroAplicacionService: ParametroAplicacionService,
     protected ePreguntaAbiertaService: EPreguntaAbiertaService,
+    protected usuarioEncuestaService: UsuarioEncuestaService,
     protected router: Router
   ) {}
 
@@ -115,7 +120,6 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
       (res: any) => {
         this.isLoading = false;
         this.ePreguntas = res.body ?? [];
-        console.log(this.ePreguntas);
       },
       () => {
         this.isLoading = false;
@@ -131,12 +135,21 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
         this.isLoading = false;
       }
     );
+
+    this.usuarioEncuestaService.findCollaborators(this.encuesta?.id!).subscribe(
+      (res: any) => {
+        this.isLoading = false;
+        this.usuariosColaboradores = res.body ?? [];
+      },
+      () => {
+        this.isLoading = false;
+      }
+    );
   }
 
   async loadAplicationParameters(): Promise<void> {
     const params = await this.parametroAplicacionService.find(1).toPromise();
     this.parametrosAplicacion = params.body;
-    //console.log(this.parametrosAplicacion);
   }
 
   ngOnInit(): void {
@@ -160,7 +173,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    this.initListeners();
+    // this.initListeners();
   }
 
   trackId(index: number, item: IEPreguntaCerrada): number {
@@ -178,18 +191,18 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  initListeners(): void {
-    const checkboxes = document.getElementsByClassName('ds-survey--checkbox');
-    for (let i = 0; i < checkboxes.length; i++) {
-      checkboxes[i].addEventListener('click', e => {
-        if ((e.target as HTMLInputElement).checked) {
-          (e.target as HTMLElement).offsetParent!.classList.add('ds-survey--closed-option--active');
-        } else {
-          (e.target as HTMLElement).offsetParent!.classList.remove('ds-survey--closed-option--active');
-        }
-      });
-    }
-  }
+  // initListeners(): void {
+  //   const checkboxes = document.getElementsByClassName('ds-survey--checkbox');
+  //   for (let i = 0; i < checkboxes.length; i++) {
+  //     checkboxes[i].addEventListener('click', e => {
+  //       if ((e.target as HTMLInputElement).checked) {
+  //         (e.target as HTMLElement).offsetParent!.classList.add('ds-survey--closed-option--active');
+  //       } else {
+  //         (e.target as HTMLElement).offsetParent!.classList.remove('ds-survey--closed-option--active');
+  //       }
+  //     });
+  //   }
+  // }
 
   previousState(): void {
     window.history.back();
@@ -332,7 +345,6 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
 
   createQuestion(): void {
     const surveyId = this.encuesta?.id;
-    console.log(surveyId);
   }
 
   protected createFromFormClosedQuestion(): IEPreguntaCerrada {
@@ -414,6 +426,57 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
 
   protected onSaveFinalizeQuestion(): void {
     this.isSavingQuestion = false;
+  }
+
+  updateSurveyName(event: any) {
+    const updatedSurveyName = event.target.innerText;
+    if (updatedSurveyName !== this.encuesta?.nombre) {
+      const survey = { ...this.encuesta };
+      survey.nombre = updatedSurveyName;
+      // Prevent user update by setting to null
+      survey.usuarioExtra!.user = null;
+
+      this.encuestaService.updateSurvey(survey).subscribe(res => {});
+    }
+  }
+
+  updateQuestionName(event: any): void {
+    const questionType = event.target.dataset.tipo;
+    const questionId = event.target.dataset.id;
+    const questionName = event.target.innerText;
+    if (questionType) {
+      // Closed question
+      this.ePreguntaCerradaService.find(questionId).subscribe(res => {
+        const ePreguntaCerrada: EPreguntaCerrada | null = res.body ?? null;
+        const updatedEPreguntaCerrada = { ...ePreguntaCerrada };
+        if (questionName !== ePreguntaCerrada?.nombre && ePreguntaCerrada !== null) {
+          updatedEPreguntaCerrada.nombre = questionName;
+          this.ePreguntaCerradaService.update(updatedEPreguntaCerrada).subscribe(updatedQuestion => {
+            console.log(updatedQuestion);
+          });
+        }
+      });
+    } else {
+      // Open question
+      // Closed question
+      this.ePreguntaAbiertaService.find(questionId).subscribe(res => {
+        const ePreguntaAbierta: EPreguntaAbierta | null = res.body ?? null;
+        const updatedEPreguntaAbierta = { ...ePreguntaAbierta };
+        if (questionName !== ePreguntaAbierta?.nombre && ePreguntaAbierta !== null) {
+          updatedEPreguntaAbierta.nombre = questionName;
+          this.ePreguntaAbiertaService.update(updatedEPreguntaAbierta).subscribe(updatedQuestion => {
+            console.log(updatedQuestion);
+          });
+        }
+      });
+    }
+    // const questionId = event.target.dataset.id;
+    // const survey = { ...this.encuesta };
+    // survey.nombre = updatedQuestionName;
+    // // Prevent user update by setting to null
+    // survey.usuarioExtra!.user = null;
+
+    // this.encuestaService.updateSurvey(survey).subscribe(res => {});
   }
 
   // previousState(): void {
