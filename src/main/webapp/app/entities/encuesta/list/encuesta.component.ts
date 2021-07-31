@@ -533,7 +533,6 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     survey.categoria = this.surveyEditForm.get(['categoria'])!.value;
     // Prevent user update by setting to null
     survey.usuarioExtra!.user = null;
-    console.log(survey);
 
     this.encuestaService.updateSurvey(survey).subscribe(res => {
       this.loadAll();
