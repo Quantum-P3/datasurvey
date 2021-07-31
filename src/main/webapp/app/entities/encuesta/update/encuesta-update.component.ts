@@ -17,7 +17,7 @@ import { IEncuesta, Encuesta } from '../encuesta.model';
 import { EncuestaService } from '../service/encuesta.service';
 import { ICategoria } from 'app/entities/categoria/categoria.model';
 import { CategoriaService } from 'app/entities/categoria/service/categoria.service';
-import { IUsuarioExtra } from 'app/entities/usuario-extra/usuario-extra.model';
+import { IUsuarioExtra, UsuarioExtra } from 'app/entities/usuario-extra/usuario-extra.model';
 import { UsuarioExtraService } from 'app/entities/usuario-extra/service/usuario-extra.service';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -37,6 +37,8 @@ import { Router } from '@angular/router';
 import { UsuarioEncuestaService } from 'app/entities/usuario-encuesta/service/usuario-encuesta.service';
 import { IUsuarioEncuesta } from '../../usuario-encuesta/usuario-encuesta.model';
 import { RolColaborador } from '../../enumerations/rol-colaborador.model';
+import { Account } from '../../../core/auth/account.model';
+import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
   selector: 'jhi-encuesta-update',
@@ -58,6 +60,8 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   usuariosColaboradores: IUsuarioEncuesta[] = [];
   colaborador: IUsuarioEncuesta | null = null;
 
+  account: Account | null = null;
+  usuarioExtra: UsuarioExtra | null = null;
   // editForm = this.fb.group({
   //   id: [],
   //   nombre: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
@@ -118,7 +122,8 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     protected parametroAplicacionService: ParametroAplicacionService,
     protected ePreguntaAbiertaService: EPreguntaAbiertaService,
     protected usuarioEncuestaService: UsuarioEncuestaService,
-    protected router: Router
+    protected router: Router,
+    protected accountService: AccountService
   ) {}
 
   loadAll(): void {
@@ -180,6 +185,15 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
       // this.updateForm(encuesta);
 
       // this.loadRelationshipsOptions();
+    });
+
+    // Get jhi_user and usuario_extra information
+    this.accountService.getAuthenticationState().subscribe(account => {
+      if (account !== null) {
+        this.usuarioExtraService.find(account.id).subscribe(usuarioExtra => {
+          this.usuarioExtra = usuarioExtra.body;
+        });
+      }
     });
   }
 
@@ -576,15 +590,41 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     this.rolSeleccionado = c.rol;
   }
 
-  openColaborator(event: any) {}
-
   saveCollab(): void {
     this.isSavingCollab = true;
     const collab = this.colaborador;
     if (collab !== null) {
       collab.rol = this.editFormUpdateCollab.get('rol')!.value;
       collab.fechaAgregado = dayjs(this.colaborador?.fechaAgregado, DATE_TIME_FORMAT);
-      this.usuarioEncuestaService.update(collab);
+      /*this.usuarioEncuestaService.update(collab).subscribe(
+        res => {},
+      (error) => {console.log(error)}
+      );*/
+
+      this.subscribeToSaveResponseUpdateCollab(this.usuarioEncuestaService.update(collab));
     }
+  }
+  protected subscribeToSaveResponseUpdateCollab(result: Observable<HttpResponse<IUsuarioEncuesta>>): void {
+    result.pipe(finalize(() => this.onSaveFinalizeUpdateCollab())).subscribe(
+      () => this.onSaveSuccessUpdateCollab(),
+      () => this.onSaveErrorUpdateCollab()
+    );
+  }
+
+  protected onSaveSuccessUpdateCollab(): void {
+    this.loadAll();
+    $('#btnCancelUbdateColaboradores').click();
+  }
+
+  protected onSaveErrorUpdateCollab(): void {
+    // Api for inheritance.
+  }
+
+  protected onSaveFinalizeUpdateCollab(): void {
+    this.isSavingCollab = false;
+  }
+
+  isAutor() {
+    return this.usuarioExtra?.id == this.encuesta?.usuarioExtra?.id;
   }
 }

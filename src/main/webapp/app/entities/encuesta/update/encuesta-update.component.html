@@ -438,7 +438,7 @@
   role="dialog"
   aria-labelledby="verColaboradoresTitle"
   aria-hidden="true"
-  *ngIf="colaborador"
+  *ngIf="colaborador && isAutor()"
 >
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -462,11 +462,17 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button id="btnCancelColaboradores" type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal">
+          <button id="btnCancelUbdateColaboradores" type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal">
             <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span>Volver</span>
           </button>
-          <button id="btnUpdateColaboradores" type="submit" class="ds-btn ds-btn--primary" data-cy="entityUpdateButton">
-            <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span>Guardar cambios</span>
+          <button
+            id="btnUpdateColaboradores"
+            type="submit"
+            class="ds-btn ds-btn--primary"
+            data-cy="entityUpdateButton"
+            [disabled]="isSavingCollab"
+          >
+            &nbsp;<span>Guardar cambios</span>
           </button>
         </div>
       </form>
