@@ -9,6 +9,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EncuestaPublishDialogComponent } from './encuesta-publish-dialog/encuesta-publish-dialog.component';
 import { EncuestaDeleteQuestionDialogComponent } from './encuesta-delete-question-dialog/encuesta-delete-question-dialog.component';
 import { EncuestaDeleteOptionDialogComponent } from './encuesta-delete-option-dialog/encuesta-delete-option-dialog.component';
+import { EncuestaCompartirDialogComponent } from './encuesta-compartir-dialog/encuesta-compartir-dialog.component';
 
 @NgModule({
   imports: [SharedModule, EncuestaRoutingModule, FontAwesomeModule],
@@ -20,6 +21,7 @@ import { EncuestaDeleteOptionDialogComponent } from './encuesta-delete-option-di
     EncuestaPublishDialogComponent,
     EncuestaDeleteQuestionDialogComponent,
     EncuestaDeleteOptionDialogComponent,
+    EncuestaCompartirDialogComponent,
   ],
   entryComponents: [EncuestaDeleteDialogComponent],
 })
