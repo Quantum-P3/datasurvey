@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'jhi-encuesta-password-dialog',
@@ -6,7 +8,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./encuesta-password-dialog.component.scss'],
 })
 export class EncuestaPasswordDialogComponent implements OnInit {
-  constructor() {}
+  passwordForm = this.fb.group({
+    password: [null, [Validators.required]],
+  });
+
+  constructor(protected activeModal: NgbActiveModal, protected fb: FormBuilder) {}
 
   ngOnInit(): void {}
+
+  submitPassword() {}
+
+  cancel(): void {
+    this.activeModal.dismiss();
+  }
 }
