@@ -11,7 +11,7 @@
         <button type="button" class="ds-btn ds-btn--secondary" (click)="previousState()">
           <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.back">Back</span>
         </button>
-        <ng-container *ngIf="encuesta!.estado === 'DRAFT'">
+        <ng-container *ngIf="encuesta!.estado === 'DRAFT' && (isAutor() || isEscritor())">
           <button type="button" class="ds-btn ds-btn--primary" (click)="publishSurvey()">Publicar encuesta</button>
         </ng-container>
       </div>

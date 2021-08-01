@@ -1,21 +1,12 @@
 <div>
   <h2 id="page-heading" data-cy="UsuarioEncuestaHeading">
-    <span jhiTranslate="dataSurveyApp.usuarioEncuesta.home.title">Usuario Encuestas</span>
+    <span class="ds-title" jhiTranslate="dataSurveyApp.usuarioEncuesta.home.title">Colaboraciones </span>
+    <p class="ds-subtitle">Gestione las colaboraciones en encuestas a las que se encuentra agregado</p>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+      <button class="ds-btn ds-btn--secondary mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="dataSurveyApp.usuarioEncuesta.home.refreshListLabel">Refresh List</span>
-      </button>
-
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-usuario-encuesta"
-        [routerLink]="['/usuario-encuesta/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="dataSurveyApp.usuarioEncuesta.home.createLabel"> Create a new Usuario Encuesta </span>
       </button>
     </div>
   </h2>
@@ -23,7 +14,25 @@
   <jhi-alert-error></jhi-alert-error>
 
   <jhi-alert></jhi-alert>
-
+  <form class="ds-form">
+    <div class="input-group">
+      <div class="ds-filter">
+        <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+        <select name="searchRol" id="searchRol" [(ngModel)]="searchRol" style="width: 200px">
+          <option value="" selected="selected" disabled="disabled">Filtrar por rol</option>
+          <option value="">Todos los roles</option>
+          <option value="Read">Lector</option>
+          <option value="Write">Escritor</option>
+        </select>
+        <select name="searchRol" id="searchEstado" [(ngModel)]="searchEstado" style="width: 200px">
+          <option value="" selected="selected" disabled="disabled">Filtrar por estado</option>
+          <option value="">Todos los estados</option>
+          <option value="ACTIVE">Activos</option>
+          <option value="PENDING">Pendientes</option>
+        </select>
+      </div>
+    </div>
+  </form>
   <div class="alert alert-warning" id="no-result" *ngIf="usuarioEncuestas?.length === 0">
     <span jhiTranslate="dataSurveyApp.usuarioEncuesta.home.notFound">No usuarioEncuestas found</span>
   </div>
@@ -32,58 +41,39 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioEncuesta.rol">Rol</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioEncuesta.estado">Estado</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioEncuesta.fechaAgregado">Fecha Agregado</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioEncuesta.usuarioExtra">Usuario Extra</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioEncuesta.encuesta">Encuesta</span></th>
+          <th scope="col"><span>Encuesta</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let usuarioEncuesta of usuarioEncuestas; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/usuario-encuesta', usuarioEncuesta.id, 'view']">{{ usuarioEncuesta.id }}</a>
-          </td>
+        <tr
+          *ngFor="let usuarioEncuesta of usuarioEncuestas | filter: 'rol':searchRol | filter: 'estado':searchEstado; trackBy: trackId"
+          data-cy="entityTable"
+        >
           <td jhiTranslate="{{ 'dataSurveyApp.RolColaborador.' + usuarioEncuesta.rol }}">{{ usuarioEncuesta.rol }}</td>
           <td jhiTranslate="{{ 'dataSurveyApp.EstadoColaborador.' + usuarioEncuesta.estado }}">{{ usuarioEncuesta.estado }}</td>
-          <td>{{ usuarioEncuesta.fechaAgregado | formatMediumDatetime }}</td>
-          <td>
-            <div *ngIf="usuarioEncuesta.usuarioExtra">
-              <a [routerLink]="['/usuario-extra', usuarioEncuesta.usuarioExtra?.id, 'view']">{{ usuarioEncuesta.usuarioExtra?.id }}</a>
-            </div>
-          </td>
+          <td>{{ usuarioEncuesta.fechaAgregado | formatShortDatetime | titlecase }}</td>
           <td>
             <div *ngIf="usuarioEncuesta.encuesta">
-              <a [routerLink]="['/encuesta', usuarioEncuesta.encuesta?.id, 'view']">{{ usuarioEncuesta.encuesta?.id }}</a>
+              <a>{{ usuarioEncuesta.encuesta?.nombre }} (#{{ usuarioEncuesta.encuesta?.id }})</a>
             </div>
           </td>
           <td class="text-right">
-            <div class="btn-group">
+            <div class="btn-group" *ngIf="usuarioEncuesta.encuesta">
               <button
-                type="submit"
-                [routerLink]="['/usuario-encuesta', usuarioEncuesta.id, 'view']"
-                class="btn btn-info btn-sm"
-                data-cy="entityDetailsButton"
+                type="button"
+                [routerLink]="['/encuesta', usuarioEncuesta.encuesta.id, 'edit']"
+                class="ds-btn ds-btn--primary"
+                [disabled]="isLoading"
               >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                <span>Editar encuesta</span>
               </button>
-
-              <button
-                type="submit"
-                [routerLink]="['/usuario-encuesta', usuarioEncuesta.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
-              >
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </button>
-
-              <button type="submit" (click)="delete(usuarioEncuesta)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              <button type="submit" (click)="delete(usuarioEncuesta)" class="ds-btn ds-btn--danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="sign-out-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="dataSurveyApp.usuarioEncuesta.delete.getOut">Get Out</span>
               </button>
             </div>
           </td>

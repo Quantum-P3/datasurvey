@@ -42,6 +42,9 @@
     </div>
 
     <p class="ds-subtitle">Creada el día {{ encuesta!.fechaCreacion | formatShortDatetime | lowercase }}</p>
+    <button type="button" class="ds-btn ds-btn--danger" (click)="finalizar()" *ngIf="encuesta!.estado === 'ACTIVE'">
+      <fa-icon icon="sync" [icon]="faTimes"></fa-icon>&nbsp;&nbsp;<span>Finalizar</span>
+    </button>
 
     <div class="d-flex justify-content-end">
       <button type="button" class="ds-btn ds-btn--secondary" (click)="previousState()">
@@ -58,6 +61,7 @@
         [disabled]="isLoading"
         data-toggle="modal"
         data-target="#crearPregunta"
+        *ngIf="encuesta!.estado !== 'FINISHED' && (isAutor() || isEscritor())"
       >
         <fa-icon icon="sync" [icon]="faPlus"></fa-icon>&nbsp;&nbsp;<span>Crear pregunta</span>
       </button>
@@ -108,7 +112,7 @@
                 >
               </span>
               <fa-icon
-                *ngIf="encuesta!.estado === 'DRAFT'"
+                *ngIf="encuesta!.estado === 'DRAFT' && (isAutor() || isEscritor())"
                 class="ds-survey--titulo--icon"
                 [icon]="faTimes"
                 (click)="deleteQuestion($event)"
@@ -140,7 +144,7 @@
                       <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
                       <label for="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
                       <fa-icon
-                        *ngIf="encuesta!.estado === 'DRAFT'"
+                        *ngIf="encuesta!.estado === 'DRAFT' && (isAutor() || isEscritor())"
                         class="ds-survey--titulo--icon ds-survey--titulo--icon--small"
                         [icon]="faTimes"
                         (click)="deleteOption($event)"
@@ -156,6 +160,7 @@
                 data-toggle="modal"
                 data-target="#crearOpcion"
                 [attr.data-id]="ePregunta.id"
+                *ngIf="isAutor() || isEscritor()"
               >
                 <fa-icon
                   class="ds-survey--add-option--icon"
