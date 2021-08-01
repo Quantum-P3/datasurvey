@@ -42,7 +42,7 @@ import { RouterModule } from '@angular/router';
           import('./e-pregunta-cerrada-opcion/e-pregunta-cerrada-opcion.module').then(m => m.EPreguntaCerradaOpcionModule),
       },
       {
-        path: 'usuario-encuesta',
+        path: 'colaboraciones',
         data: { pageTitle: 'dataSurveyApp.usuarioEncuesta.home.title' },
         loadChildren: () => import('./usuario-encuesta/usuario-encuesta.module').then(m => m.UsuarioEncuestaModule),
       },
