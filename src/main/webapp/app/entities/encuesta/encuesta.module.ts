@@ -10,6 +10,7 @@ import { EncuestaPublishDialogComponent } from './encuesta-publish-dialog/encues
 import { EncuestaDeleteQuestionDialogComponent } from './encuesta-delete-question-dialog/encuesta-delete-question-dialog.component';
 import { EncuestaDeleteOptionDialogComponent } from './encuesta-delete-option-dialog/encuesta-delete-option-dialog.component';
 import { EncuestaCompartirDialogComponent } from './encuesta-compartir-dialog/encuesta-compartir-dialog.component';
+import { EncuestaFinalizarDialogComponent } from './encuesta-finalizar-dialog/encuesta-finalizar-dialog.component';
 
 @NgModule({
   imports: [SharedModule, EncuestaRoutingModule, FontAwesomeModule],
@@ -22,6 +23,7 @@ import { EncuestaCompartirDialogComponent } from './encuesta-compartir-dialog/en
     EncuestaDeleteQuestionDialogComponent,
     EncuestaDeleteOptionDialogComponent,
     EncuestaCompartirDialogComponent,
+    EncuestaFinalizarDialogComponent,
   ],
   entryComponents: [EncuestaDeleteDialogComponent],
 })

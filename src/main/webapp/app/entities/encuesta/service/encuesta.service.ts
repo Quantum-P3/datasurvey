@@ -26,6 +26,7 @@ export class EncuestaService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  //update para publicar
   update(encuesta: IEncuesta): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(encuesta);
     return this.http
@@ -33,6 +34,7 @@ export class EncuestaService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  //update normal
   updateSurvey(encuesta: IEncuesta): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(encuesta);
     return this.http
