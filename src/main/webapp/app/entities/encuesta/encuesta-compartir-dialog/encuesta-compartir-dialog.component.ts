@@ -11,6 +11,7 @@ export class EncuestaCompartirDialogComponent implements OnInit {
   encuesta?: IEncuesta;
   baseURL: string = '';
   imagen: string = '';
+  mensaje: string = 'Encuesta en DatasSurvey';
   name = 'ngx sharebuttons';
 
   constructor(protected activeModal: NgbActiveModal) {}
