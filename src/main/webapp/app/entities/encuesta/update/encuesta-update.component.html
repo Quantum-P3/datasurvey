@@ -16,7 +16,7 @@
         <div class="col-12 ds-list-collabs">
           <div class="row" style="flex-direction: row-reverse">
             <div class="col-mb-2 iconos-colab">
-              <div class="add-collab" data-toggle="modal" data-target="modalAddColaborators">
+              <div class="add-collab" data-toggle="modal" data-target="#modalAddColaborators">
                 <fa-icon icon="sync" [icon]="faPlus"></fa-icon>
               </div>
             </div>
@@ -519,18 +519,11 @@
           <div>
             <div class="mb-5">
               <p class="ds-subtitle">Correo electrónico</p>
-              <input
-                type="email"
-                class="form-control"
-                name="email_collab"
-                id="field_add_email"
-                data-cy="email_collab"
-                formControlName="email_collab"
-              />
+              <input type="email" class="form-control" name="email" id="field_add_email" data-cy="email" formControlName="email" />
             </div>
             <div>
               <label for="field_update_rol">Rol</label>
-              <select class="form-control" name="add_rol" formControlName="add_rol" id="field_add_rol" data-cy="rol">
+              <select class="form-control" name="rol" formControlName="rol" id="field_rol_add" data-cy="rol">
                 <option value="" selected disabled>Seleccione un rol</option>
                 <option value="READ">Lector</option>
                 <option value="WRITE">Escritor</option>

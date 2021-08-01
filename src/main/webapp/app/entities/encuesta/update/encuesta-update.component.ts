@@ -635,7 +635,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   protected createFromFormCollab(): UsuarioEncuesta {
     return {
       id: undefined,
-      rol: this.editFormAddCollab.get(['rol_add'])!.value,
+      rol: this.editFormAddCollab.get(['rol'])!.value,
     };
   }
 
@@ -662,22 +662,23 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   saveAddCollab(): void {
     this.isSavingCollab = true;
     const collab = this.createFromFormCollab();
-    let correoCollab = this.editFormAddCollab.get('email_collab')!.value;
+    let correoCollab = this.editFormAddCollab.get('email')!.value;
 
-    this.usuarioExtraService
+    this.userService
       .retrieveAllPublicUsers()
       .pipe(
         finalize(() => {
           if (this.userPublicCollab?.id !== undefined) {
             this.usuarioExtraService.find(this.userPublicCollab?.id).subscribe(res => {
               this.usuarioExtraCollab = res.body;
-              collab.fechaAgregado = dayjs(new Date(), DATE_TIME_FORMAT);
+              let now = new Date();
+              collab.fechaAgregado = dayjs(now);
               collab.usuarioExtra = this.usuarioExtraCollab;
               collab.estado = EstadoColaborador.PENDING;
               collab.encuesta = this.encuesta;
               let id = 0;
               this.subscribeToSaveResponseUpdateCollab(this.usuarioEncuestaService.create(collab));
-              this.sendInvitation(correoCollab);
+              // this.sendInvitation(correoCollab);
             });
           } else {
             this.userCollabNotExist = true;
@@ -732,7 +733,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     return this.usuarioExtra?.id == this.encuesta?.usuarioExtra?.id;
   }
 
-  sendInvitation(correo: string) {
-    this.encuestaService.sendCorreoInvitacion(correo);
-  }
+  /*sendInvitation(Colla) {
+    this.usuarioEncuestaService.sendCorreoInvitacion(correo);
+  }*/
 }
