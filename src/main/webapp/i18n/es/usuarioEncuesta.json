@@ -5,26 +5,27 @@
         "title": "Colaboraciones",
         "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Colaborador",
-        "createOrEditLabel": "Crear o editar Colaboración",
-        "notFound": "Ninguna colaboración encontrada"
+        "createOrEditLabel": "Crear o editar Colaborador",
+        "notFound": "Ningún Colaborador encontrado"
       },
-      "created": "Una nueva colaboración ha sido creada con el identificador {{ param }}",
-      "updated": "Una colaboración ha sido actualizada con el identificador {{ param }}",
-      "deleted": "Una colaboracióna ha sido eliminada con el identificador {{ param }}",
+      "created": "Un nuevo Usuario Encuesta ha sido creado con el identificador {{ param }}",
+      "updated": "Un Usuario Encuesta ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Colaborador ha sido expulsado de la encuesta",
       "delete": {
-        "question": "¿Seguro que quiere eliminar la colaboración {{ id }}?",
+        "question": "¿Seguro que quiere expulsar al colaborador de la encuesta?",
+        "action": "Expulsar",
         "questionGetOut": "¿Seguro que quiere salirse de la colaboracion de encuesta?",
         "getOut": "Salir"
       },
       "detail": {
-        "title": "Colaboración en encuesta"
+        "title": "Colaborador"
       },
       "id": "ID",
       "rol": "Rol",
       "estado": "Estado",
       "fechaAgregado": "Fecha Agregado",
       "usuarioExtra": "Usuario",
-      "encuesta": "Id de Encuesta"
+      "encuesta": "Encuesta"
     }
   }
 }
