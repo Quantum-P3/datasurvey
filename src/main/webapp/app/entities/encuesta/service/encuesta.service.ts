@@ -100,6 +100,8 @@ export class EncuestaService {
     return this.http.delete(`${this.resourceUrl}/notify/${encuesta.id}`, { observe: 'response' });
   }
 
+  sendCorreoInvitacion(correo: string) {}
+
   addEncuestaToCollectionIfMissing(encuestaCollection: IEncuesta[], ...encuestasToCheck: (IEncuesta | null | undefined)[]): IEncuesta[] {
     const encuestas: IEncuesta[] = encuestasToCheck.filter(isPresent);
     if (encuestas.length > 0) {

@@ -1,19 +1,19 @@
 import { EPreguntaAbierta, IEPreguntaAbierta } from './../../e-pregunta-abierta/e-pregunta-abierta.model';
 import { EPreguntaCerrada } from './../../e-pregunta-cerrada/e-pregunta-cerrada.model';
-import { EPreguntaCerradaOpcion, IEPreguntaCerradaOpcion } from './../../e-pregunta-cerrada-opcion/e-pregunta-cerrada-opcion.model';
+import { IEPreguntaCerradaOpcion } from './../../e-pregunta-cerrada-opcion/e-pregunta-cerrada-opcion.model';
 import { EPreguntaAbiertaService } from './../../e-pregunta-abierta/service/e-pregunta-abierta.service';
 import { EPreguntaCerradaOpcionService } from './../../e-pregunta-cerrada-opcion/service/e-pregunta-cerrada-opcion.service';
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 
-import { IEncuesta, Encuesta } from '../encuesta.model';
+import { Encuesta } from '../encuesta.model';
 import { EncuestaService } from '../service/encuesta.service';
 import { ICategoria } from 'app/entities/categoria/categoria.model';
 import { CategoriaService } from 'app/entities/categoria/service/categoria.service';
@@ -25,24 +25,25 @@ import { IEPreguntaCerrada } from 'app/entities/e-pregunta-cerrada/e-pregunta-ce
 import { EPreguntaCerradaService } from 'app/entities/e-pregunta-cerrada/service/e-pregunta-cerrada.service';
 import { EPreguntaCerradaDeleteDialogComponent } from 'app/entities/e-pregunta-cerrada/delete/e-pregunta-cerrada-delete-dialog.component';
 
-import { faTimes, faPlus, faQuestion, faPollH, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPlus, faPollH, faQuestion, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { PreguntaCerradaTipo } from 'app/entities/enumerations/pregunta-cerrada-tipo.model';
 import { EncuestaDeleteQuestionDialogComponent } from '../encuesta-delete-question-dialog/encuesta-delete-question-dialog.component';
 import { EncuestaDeleteOptionDialogComponent } from '../encuesta-delete-option-dialog/encuesta-delete-option-dialog.component';
 
 import { ParametroAplicacionService } from './../../parametro-aplicacion/service/parametro-aplicacion.service';
 import { IParametroAplicacion } from './../../parametro-aplicacion/parametro-aplicacion.model';
-import { Router } from '@angular/router';
 
 import { UsuarioEncuestaService } from 'app/entities/usuario-encuesta/service/usuario-encuesta.service';
-import { IUsuarioEncuesta } from '../../usuario-encuesta/usuario-encuesta.model';
+import { IUsuarioEncuesta, UsuarioEncuesta } from '../../usuario-encuesta/usuario-encuesta.model';
 import { RolColaborador } from '../../enumerations/rol-colaborador.model';
 import { Account } from '../../../core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
-import { EncuestaDeleteDialogComponent } from '../delete/encuesta-delete-dialog.component';
 import { EncuestaDeleteColaboratorDialogComponent } from '../encuesta-delete-colaborator-dialog/encuesta-delete-colaborator-dialog.component';
+import { IUser } from '../../user/user.model';
 
 import * as $ from 'jquery';
+import { UserService } from '../../user/user.service';
+import { EstadoColaborador } from '../../enumerations/estado-colaborador.model';
 
 @Component({
   selector: 'jhi-encuesta-update',
@@ -102,6 +103,10 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   editFormUpdateCollab = this.fb.group({
     rol: [null, [Validators.required]],
   });
+  editFormAddCollab = this.fb.group({
+    email: [null, [Validators.required, Validators.email]],
+    rol: [null, [Validators.required]],
+  });
 
   ePreguntas?: any[];
   ePreguntasOpciones?: any[];
@@ -114,6 +119,9 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   createAnotherQuestion: Boolean = false;
   selectedQuestionToCreateOption: IEPreguntaCerrada | null = null;
 
+  userPublicCollab: IUser | null = null;
+  usuarioExtraCollab: UsuarioExtra | null = null;
+  userCollabNotExist: boolean = false;
   constructor(
     protected encuestaService: EncuestaService,
     protected categoriaService: CategoriaService,
@@ -127,7 +135,8 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     protected ePreguntaAbiertaService: EPreguntaAbiertaService,
     protected usuarioEncuestaService: UsuarioEncuestaService,
     protected router: Router,
-    protected accountService: AccountService
+    protected accountService: AccountService,
+    protected userService: UserService
   ) {}
 
   loadAll(): void {
@@ -623,6 +632,13 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   // }
 
   /* methods for colaborators*/
+  protected createFromFormCollab(): UsuarioEncuesta {
+    return {
+      id: undefined,
+      rol: this.editFormAddCollab.get(['rol_add'])!.value,
+    };
+  }
+
   selectColaborator(c: IUsuarioEncuesta) {
     this.colaborador = c;
     this.rolSeleccionado = c.rol;
@@ -641,6 +657,40 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
 
       this.subscribeToSaveResponseUpdateCollab(this.usuarioEncuestaService.update(collab));
     }
+  }
+
+  saveAddCollab(): void {
+    this.isSavingCollab = true;
+    const collab = this.createFromFormCollab();
+    let correoCollab = this.editFormAddCollab.get('email_collab')!.value;
+
+    this.usuarioExtraService
+      .retrieveAllPublicUsers()
+      .pipe(
+        finalize(() => {
+          if (this.userPublicCollab?.id !== undefined) {
+            this.usuarioExtraService.find(this.userPublicCollab?.id).subscribe(res => {
+              this.usuarioExtraCollab = res.body;
+              collab.fechaAgregado = dayjs(new Date(), DATE_TIME_FORMAT);
+              collab.usuarioExtra = this.usuarioExtraCollab;
+              collab.estado = EstadoColaborador.PENDING;
+              collab.encuesta = this.encuesta;
+              let id = 0;
+              this.subscribeToSaveResponseUpdateCollab(this.usuarioEncuestaService.create(collab));
+              this.sendInvitation(correoCollab);
+            });
+          } else {
+            this.userCollabNotExist = true;
+          }
+        })
+      )
+      .subscribe(res => {
+        res.forEach(user => {
+          if (user.login === correoCollab) {
+            this.userPublicCollab = user;
+          }
+        });
+      });
   }
 
   protected subscribeToSaveResponseUpdateCollab(result: Observable<HttpResponse<IUsuarioEncuesta>>): void {
@@ -680,5 +730,9 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
 
   isAutor() {
     return this.usuarioExtra?.id == this.encuesta?.usuarioExtra?.id;
+  }
+
+  sendInvitation(correo: string) {
+    this.encuestaService.sendCorreoInvitacion(correo);
   }
 }
