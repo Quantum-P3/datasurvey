@@ -115,9 +115,11 @@
               <fa-icon class="contextmenu__icon" [icon]="faUpload"></fa-icon>Publicar
             </button>
           </li>
-          <!-- <li>
-            <button type="button" id="contextmenu-share"><fa-icon class="contextmenu__icon" [icon]="faShareAlt"></fa-icon>Compartir</button>
-          </li> -->
+          <li>
+            <button type="button" id="contextmenu-share" (click)="compartir()">
+              <fa-icon class="contextmenu__icon" [icon]="faShareAlt"></fa-icon>Compartir
+            </button>
+          </li>
         </div>
         <div class="ds-contextmenu__divider" id="contextmenu-delete--separator">
           <li>

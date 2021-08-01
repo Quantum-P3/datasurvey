@@ -34,6 +34,9 @@ import { ErrorComponent } from './layouts/error/error.component';
 import { SidebarComponent } from './layouts/sidebar/sidebar.component';
 import { PaginaPrincipalComponent } from './pagina-principal/pagina-principal.component';
 
+import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
+import { ShareIconsModule } from 'ngx-sharebuttons/icons';
+
 @NgModule({
   imports: [
     NgxWebstorageModule.forRoot(),
@@ -41,6 +44,10 @@ import { PaginaPrincipalComponent } from './pagina-principal/pagina-principal.co
     SharedModule,
     HomeModule,
     PaginaPrincipalModule,
+    ShareButtonsModule.withConfig({
+      debug: true,
+    }),
+    ShareIconsModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     EntityRoutingModule,
     AppRoutingModule,

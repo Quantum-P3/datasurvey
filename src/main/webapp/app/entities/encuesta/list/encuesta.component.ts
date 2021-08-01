@@ -41,6 +41,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import * as $ from 'jquery';
+import { EncuestaCompartirDialogComponent } from '../encuesta-compartir-dialog/encuesta-compartir-dialog.component';
 
 @Component({
   selector: 'jhi-encuesta',
@@ -491,12 +492,14 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
           document.getElementById('contextmenu-edit')!.style.display = 'block';
           document.getElementById('contextmenu-publish')!.style.display = 'block';
           document.getElementById('contextmenu-duplicate')!.style.display = 'block';
+          document.getElementById('contextmenu-share')!.style.display = 'none';
         } else {
           document.getElementById('contextmenu-edit')!.style.display = 'none';
           document.getElementById('contextmenu-publish')!.style.display = 'none';
           document.getElementById('contextmenu-duplicate')!.style.display = 'none';
+          document.getElementById('contextmenu-share')!.style.display = 'block';
         }
-        // document.getElementById('contextmenu-share')!.style.display = 'block';
+
         document.getElementById('contextmenu-create--separator')!.style.display = 'none';
       }
 
@@ -546,6 +549,18 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       descripcion: this.selectedSurvey!.descripcion,
       acceso: this.selectedSurvey!.acceso,
       categoria: this.selectedSurvey!.categoria,
+    });
+  }
+
+  compartir(): void {
+    const modalRef = this.modalService.open(EncuestaCompartirDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.encuesta = this.selectedSurvey;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'published') {
+        this.successPublished = true;
+        this.loadAll();
+      }
     });
   }
 }

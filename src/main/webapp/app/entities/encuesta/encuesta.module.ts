@@ -11,8 +11,10 @@ import { EncuestaDeleteQuestionDialogComponent } from './encuesta-delete-questio
 import { EncuestaDeleteOptionDialogComponent } from './encuesta-delete-option-dialog/encuesta-delete-option-dialog.component';
 import { EncuestaCompartirDialogComponent } from './encuesta-compartir-dialog/encuesta-compartir-dialog.component';
 
+import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
+
 @NgModule({
-  imports: [SharedModule, EncuestaRoutingModule, FontAwesomeModule],
+  imports: [SharedModule, EncuestaRoutingModule, FontAwesomeModule, ShareButtonsModule],
   declarations: [
     EncuestaComponent,
     EncuestaDetailComponent,
