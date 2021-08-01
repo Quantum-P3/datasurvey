@@ -1,0 +1,23 @@
+<form class="ds-form" *ngIf="colaborador" name="deleteForm" (ngSubmit)="confirmDelete(colaborador.id!)">
+  <div class="modal-body">
+    <p class="ds-title--small">Expulsar colaborador de encuesta</p>
+    <p
+      class="ds-subtitle"
+      id="jhi-delete-colaborador-heading"
+      jhiTranslate="dataSurveyApp.usuarioEncuesta.delete.question"
+      [translateValues]="{ id: colaborador.id }"
+    >
+      Are you sure you want to delete this Usuario Encuesta?
+    </p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    </button>
+
+    <button id="jhi-confirm-delete-usuarioEncuesta" data-cy="entityConfirmDeleteButton" type="submit" class="ds-btn ds-btn--danger">
+      <fa-icon icon="times"></fa-icon>&nbsp;<span jhiTranslate="dataSurveyApp.usuarioEncuesta.delete.action">Delete</span>
+    </button>
+  </div>
+</form>
