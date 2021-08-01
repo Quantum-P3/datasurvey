@@ -35,7 +35,7 @@
         <tr>
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.nombre">Nombre</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.descripcion">Descripcion</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.fechaCreacion">Fecha Creacion</span></th>
+          <!-- <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.fechaCreacion">Fecha Creacion</span></th> -->
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.fechaPublicacionTienda">Fecha Publicacion Tienda</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.estado">Estado</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.precio">Precio</span></th>
@@ -48,9 +48,10 @@
           <td>{{ plantilla.nombre }}</td>
           <td>{{ plantilla.descripcion }}</td>
           <!-- <td>{{ plantilla.fechaCreacion | formatMediumDatetime }}</td> -->
-          <td>{{ plantilla.fechaPublicacionTienda | formatShortDatetime | titlecase }}</td>
+          <td *ngIf="plantilla.fechaPublicacionTienda">{{ plantilla.fechaPublicacionTienda | formatShortDatetime | titlecase }}</td>
+          <td *ngIf="!plantilla.fechaPublicacionTienda">No establecida</td>
           <td jhiTranslate="{{ 'dataSurveyApp.EstadoPlantilla.' + plantilla.estado }}">{{ plantilla.estado }}</td>
-          <td>{{ plantilla.precio }}</td>
+          <td>{{ plantilla.precio | currency: 'USD':'symbol-narrow' }}</td>
           <td>{{ plantilla.categoria?.nombre }}</td>
           <td class="text-right">
             <div class="btn-group">
@@ -70,7 +71,6 @@
                 class="ds-btn ds-btn--primary btn-sm"
                 data-cy="entityEditButton"
               >
-                <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>
 
@@ -188,9 +188,9 @@
             </div>
 
             <div class="form-group">
-              <label class="form-control-label" jhiTranslate="dataSurveyApp.encuesta.categoria" for="field_categoria">Categoría</label>
+              <label class="form-control-label" jhiTranslate="dataSurveyApp.plantilla.categoria" for="field_categoria">Categoria</label>
               <select class="form-control" id="field_categoria" data-cy="categoria" name="categoria" formControlName="categoria">
-                <option [ngValue]="null" selected></option>
+                <option [ngValue]="null"></option>
                 <option
                   [ngValue]="
                     categoriaOption.id === templateCreateForm.get('categoria')!.value?.id
@@ -202,20 +202,6 @@
                   {{ categoriaOption.nombre }}
                 </option>
               </select>
-              <div
-                *ngIf="
-                  templateCreateForm.get('categoria')!.invalid &&
-                  (templateCreateForm.get('categoria')!.dirty || templateCreateForm.get('categoria')!.touched)
-                "
-              >
-                <small
-                  class="form-text text-danger"
-                  *ngIf="templateCreateForm.get('categoria')?.errors?.required"
-                  jhiTranslate="entity.validation.required"
-                >
-                  This field is required.
-                </small>
-              </div>
             </div>
           </div>
         </div>
