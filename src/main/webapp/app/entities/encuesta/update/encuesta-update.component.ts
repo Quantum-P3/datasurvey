@@ -671,6 +671,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed.subscribe(reason => {
       if (reason === 'deleted') {
+        $('#btnCancelUbdateColaboradores').click();
         this.loadAll();
       }
     });
