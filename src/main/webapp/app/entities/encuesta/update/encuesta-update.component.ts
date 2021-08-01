@@ -39,6 +39,10 @@ import { IUsuarioEncuesta } from '../../usuario-encuesta/usuario-encuesta.model'
 import { RolColaborador } from '../../enumerations/rol-colaborador.model';
 import { Account } from '../../../core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
+import { EncuestaDeleteDialogComponent } from '../delete/encuesta-delete-dialog.component';
+import { EncuestaDeleteColaboratorDialogComponent } from '../encuesta-delete-colaborator-dialog/encuesta-delete-colaborator-dialog.component';
+
+import * as $ from 'jquery';
 
 @Component({
   selector: 'jhi-encuesta-update',
@@ -62,6 +66,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
 
   account: Account | null = null;
   usuarioExtra: UsuarioExtra | null = null;
+
   // editForm = this.fb.group({
   //   id: [],
   //   nombre: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
@@ -95,7 +100,6 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   });
 
   editFormUpdateCollab = this.fb.group({
-    id: [],
     rol: [null, [Validators.required]],
   });
 
@@ -619,7 +623,6 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   // }
 
   /* methods for colaborators*/
-
   selectColaborator(c: IUsuarioEncuesta) {
     this.colaborador = c;
     this.rolSeleccionado = c.rol;
@@ -639,6 +642,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
       this.subscribeToSaveResponseUpdateCollab(this.usuarioEncuestaService.update(collab));
     }
   }
+
   protected subscribeToSaveResponseUpdateCollab(result: Observable<HttpResponse<IUsuarioEncuesta>>): void {
     result.pipe(finalize(() => this.onSaveFinalizeUpdateCollab())).subscribe(
       () => this.onSaveSuccessUpdateCollab(),
@@ -657,6 +661,20 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
 
   protected onSaveFinalizeUpdateCollab(): void {
     this.isSavingCollab = false;
+  }
+
+  deleteCollab(collab: IUsuarioEncuesta) {
+    //$('#btnCancelUbdateColaboradores').click();
+    //setTimeout(() => {
+    const modalRef = this.modalService.open(EncuestaDeleteColaboratorDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.colaborador = collab;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'deleted') {
+        this.loadAll();
+      }
+    });
+    //}, 500);
   }
 
   isAutor() {
