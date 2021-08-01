@@ -1,6 +1,7 @@
 <div>
   <h2 id="page-heading" data-cy="UsuarioEncuestaHeading">
-    <span jhiTranslate="dataSurveyApp.usuarioEncuesta.home.title">Colaboraciones en Encuestas</span>
+    <span class="ds-title" jhiTranslate="dataSurveyApp.usuarioEncuesta.home.title">Colaboraciones </span>
+    <p class="ds-subtitle">Gestione las colaboraciones en encuestas a las que se encuentra agregado</p>
 
     <div class="d-flex justify-content-end">
       <button class="ds-btn ds-btn--secondary mr-2" (click)="loadAll()" [disabled]="isLoading">
@@ -54,7 +55,7 @@
         >
           <td jhiTranslate="{{ 'dataSurveyApp.RolColaborador.' + usuarioEncuesta.rol }}">{{ usuarioEncuesta.rol }}</td>
           <td jhiTranslate="{{ 'dataSurveyApp.EstadoColaborador.' + usuarioEncuesta.estado }}">{{ usuarioEncuesta.estado }}</td>
-          <td>{{ usuarioEncuesta.fechaAgregado | formatMediumDatetime }}</td>
+          <td>{{ usuarioEncuesta.fechaAgregado | formatShortDatetime | titlecase }}</td>
           <td>
             <div *ngIf="usuarioEncuesta.encuesta">
               <a>{{ usuarioEncuesta.encuesta?.nombre }} (#{{ usuarioEncuesta.encuesta?.id }})</a>
@@ -63,25 +64,16 @@
           <td class="text-right">
             <div class="btn-group" *ngIf="usuarioEncuesta.encuesta">
               <button
-                *ngIf="usuarioEncuesta.rol === 'WRITE'"
                 type="button"
                 [routerLink]="['/encuesta', usuarioEncuesta.encuesta.id, 'edit']"
                 class="ds-btn ds-btn--primary"
                 [disabled]="isLoading"
               >
-                <fa-icon [icon]="faPencilAlt"></fa-icon>&nbsp;&nbsp;<span>Editar encuesta</span>
-              </button>
-              <button
-                type="button"
-                [routerLink]="['/encuesta', usuarioEncuesta.encuesta.id, 'preview']"
-                class="ds-btn ds-btn--success"
-                [disabled]="isLoading"
-              >
-                <fa-icon [icon]="faPollH"></fa-icon>&nbsp;&nbsp;<span>Ver vista previa</span>
+                <span>Editar encuesta</span>
               </button>
               <button type="submit" (click)="delete(usuarioEncuesta)" class="ds-btn ds-btn--danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                <fa-icon icon="sign-out-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="dataSurveyApp.usuarioEncuesta.delete.getOut">Get Out</span>
               </button>
             </div>
           </td>

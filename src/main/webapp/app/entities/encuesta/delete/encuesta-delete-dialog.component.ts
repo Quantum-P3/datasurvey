@@ -23,6 +23,6 @@ export class EncuestaDeleteDialogComponent {
     this.encuestaService.deleteEncuesta(encuesta).subscribe(() => {
       this.activeModal.close('deleted');
     });
-    this.encuestaService.deletedNotification(encuesta);
+    //this.encuestaService.deletedNotification(encuesta);
   }
 }

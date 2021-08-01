@@ -11,6 +11,21 @@
   font-size: 1.2rem;
 }
 
+.ds-contenteditable {
+  border: 2.25px solid transparent;
+  border-radius: 3px;
+  outline: 0;
+  text-transform: none;
+
+  &:hover {
+    border: 2.25px solid #e5e5e5;
+  }
+
+  &:focus {
+    border: 2.25px solid #2962ff;
+  }
+}
+
 .ds-title--small {
   color: #313747;
   font-weight: 900;

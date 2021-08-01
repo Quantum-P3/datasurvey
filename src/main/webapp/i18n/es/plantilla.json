@@ -4,13 +4,13 @@
       "home": {
         "title": "Plantillas",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Plantilla",
-        "createOrEditLabel": "Crear o editar Plantilla",
-        "notFound": "Ningún Plantillas encontrado"
+        "createLabel": "Crear nueva plantilla",
+        "createOrEditLabel": "Crear o editar plantilla",
+        "notFound": "No se encontró ninguna plantilla"
       },
-      "created": "Un nuevo Plantilla ha sido creado con el identificador {{ param }}",
-      "updated": "Un Plantilla ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Plantilla ha sido eliminado con el identificador {{ param }}",
+      "created": "Una nueva plantilla ha sido creada con el identificador {{ param }}",
+      "updated": "Una plantilla ha sido actualizada con el identificador {{ param }}",
+      "deleted": "Una plantilla ha sido eliminada con el identificador {{ param }}",
       "delete": {
         "question": "¿Seguro que quiere eliminar Plantilla {{ id }}?"
       },
@@ -19,9 +19,9 @@
       },
       "id": "ID",
       "nombre": "Nombre",
-      "descripcion": "Descripcion",
-      "fechaCreacion": "Fecha Creacion",
-      "fechaPublicacionTienda": "Fecha Publicacion Tienda",
+      "descripcion": "Descripción",
+      "fechaCreacion": "Fecha Creación",
+      "fechaPublicacionTienda": "Fecha Publicación Tienda",
       "estado": "Estado",
       "precio": "Precio",
       "pPreguntaCerrada": "P Pregunta Cerrada",

@@ -14,7 +14,7 @@ import { IEncuesta, Encuesta } from '../encuesta.model';
 import { EncuestaService } from '../service/encuesta.service';
 import { ICategoria } from 'app/entities/categoria/categoria.model';
 import { CategoriaService } from 'app/entities/categoria/service/categoria.service';
-import { IUsuarioExtra } from 'app/entities/usuario-extra/usuario-extra.model';
+import { IUsuarioExtra, UsuarioExtra } from 'app/entities/usuario-extra/usuario-extra.model';
 import { UsuarioExtraService } from 'app/entities/usuario-extra/service/usuario-extra.service';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -28,8 +28,12 @@ import { EPreguntaAbiertaService } from '../../e-pregunta-abierta/service/e-preg
 import { EPreguntaCerradaOpcionService } from '../../e-pregunta-cerrada-opcion/service/e-pregunta-cerrada-opcion.service';
 import { PreguntaCerradaTipo } from 'app/entities/enumerations/pregunta-cerrada-tipo.model';
 
-import { faTimes, faPlus, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faPlus, faStar, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { EncuestaPublishDialogComponent } from '../encuesta-publish-dialog/encuesta-publish-dialog.component';
+import { UsuarioEncuestaService } from 'app/entities/usuario-encuesta/service/usuario-encuesta.service';
+import { Account } from '../../../core/auth/account.model';
+import { AccountService } from 'app/core/auth/account.service';
+import { IUsuarioEncuesta } from '../../usuario-encuesta/usuario-encuesta.model';
 
 @Component({
   selector: 'jhi-encuesta-detail',
@@ -41,11 +45,14 @@ export class EncuestaDetailComponent implements OnInit {
   faTimes = faTimes;
   faPlus = faPlus;
   faStar = faStar;
+  faQuestion = faQuestion;
   encuesta: IEncuesta | null = null;
   isLoading = false;
   successPublished = false;
   ePreguntas?: any[];
   ePreguntasOpciones?: any[];
+  usuarioExtra: UsuarioExtra | null = null;
+  usuariosColaboradores: IUsuarioEncuesta[] = [];
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -56,7 +63,9 @@ export class EncuestaDetailComponent implements OnInit {
     protected modalService: NgbModal,
     protected ePreguntaCerradaService: EPreguntaCerradaService,
     protected ePreguntaCerradaOpcionService: EPreguntaCerradaOpcionService,
-    protected ePreguntaAbiertaService: EPreguntaAbiertaService
+    protected ePreguntaAbiertaService: EPreguntaAbiertaService,
+    protected accountService: AccountService,
+    protected usuarioEncuestaService: UsuarioEncuestaService
   ) {}
 
   ngOnInit(): void {
@@ -66,6 +75,15 @@ export class EncuestaDetailComponent implements OnInit {
         this.loadAll();
       } else {
         this.previousState();
+      }
+    });
+
+    // Get jhi_user and usuario_extra information
+    this.accountService.getAuthenticationState().subscribe(account => {
+      if (account !== null) {
+        this.usuarioExtraService.find(account.id).subscribe(usuarioExtra => {
+          this.usuarioExtra = usuarioExtra.body;
+        });
       }
     });
   }
@@ -144,6 +162,16 @@ export class EncuestaDetailComponent implements OnInit {
         this.isLoading = false;
       }
     );*/
+
+    this.usuarioEncuestaService.findCollaborators(this.encuesta?.id!).subscribe(
+      (res: any) => {
+        this.isLoading = false;
+        this.usuariosColaboradores = res.body ?? [];
+      },
+      () => {
+        this.isLoading = false;
+      }
+    );
   }
   publishSurvey(): void {
     const modalRef = this.modalService.open(EncuestaPublishDialogComponent, { size: 'lg', backdrop: 'static' });
@@ -159,5 +187,21 @@ export class EncuestaDetailComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  isAutor() {
+    return this.usuarioExtra?.id === this.encuesta?.usuarioExtra?.id;
+  }
+
+  isEscritor() {
+    let escritor = false;
+    this.usuariosColaboradores.forEach(c => {
+      if (this.usuarioExtra?.id === c.usuarioExtra?.id) {
+        if (c.rol === 'WRITE') {
+          escritor = true;
+        }
+      }
+    });
+    return escritor;
   }
 }

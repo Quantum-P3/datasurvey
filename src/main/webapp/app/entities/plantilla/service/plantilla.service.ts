@@ -45,6 +45,22 @@ export class PlantillaService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  findPlantilla(id: number): Observable<IPlantilla> {
+    return this.http.get<IPlantilla>(`${this.resourceUrl}/${id}`);
+  }
+
+  findQuestions(id: number): Observable<EntityResponseType> {
+    return this.http
+      .get<any>(`${this.resourceUrl}/preguntas/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  findQuestionsOptions(id: number): Observable<EntityResponseType> {
+    return this.http
+      .get<any>(`${this.resourceUrl}/preguntas-opciones/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http

@@ -27,8 +27,9 @@ export class UsuarioEncuestaService {
 
   update(usuarioEncuesta: IUsuarioEncuesta): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(usuarioEncuesta);
+    const url = `${this.resourceUrl}/${getUsuarioEncuestaIdentifier(usuarioEncuesta) as number}`;
     return this.http
-      .put<IUsuarioEncuesta>(`${this.resourceUrl}/${getUsuarioEncuestaIdentifier(usuarioEncuesta) as number}`, copy, {
+      .put<IUsuarioEncuesta>(url, copy, {
         observe: 'response',
       })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
@@ -36,8 +37,9 @@ export class UsuarioEncuestaService {
 
   partialUpdate(usuarioEncuesta: IUsuarioEncuesta): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(usuarioEncuesta);
+    const url = `${this.resourceUrl}/${getUsuarioEncuestaIdentifier(usuarioEncuesta) as number}`;
     return this.http
-      .patch<IUsuarioEncuesta>(`${this.resourceUrl}/${getUsuarioEncuestaIdentifier(usuarioEncuesta) as number}`, copy, {
+      .patch<IUsuarioEncuesta>(url, copy, {
         observe: 'response',
       })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
@@ -46,6 +48,12 @@ export class UsuarioEncuestaService {
   find(id: number): Observable<EntityResponseType> {
     return this.http
       .get<IUsuarioEncuesta>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  findCollaborators(id: number): Observable<EntityResponseType> {
+    return this.http
+      .get<any>(`${this.resourceUrl}/encuesta/${id}`, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 

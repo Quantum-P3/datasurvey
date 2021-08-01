@@ -18,7 +18,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HomeModule } from './home/home.module';
 import { EntityRoutingModule } from './entities/entity-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { PaginaPrincipalModule } from './pagina-principal/pagina-principal.module';
 import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
 import { GoogleLoginProvider } from 'angularx-social-login';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
@@ -32,6 +32,7 @@ import { FooterComponent } from './layouts/footer/footer.component';
 import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ErrorComponent } from './layouts/error/error.component';
 import { SidebarComponent } from './layouts/sidebar/sidebar.component';
+import { PaginaPrincipalComponent } from './pagina-principal/pagina-principal.component';
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import { SidebarComponent } from './layouts/sidebar/sidebar.component';
     BrowserModule,
     SharedModule,
     HomeModule,
+    PaginaPrincipalModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     EntityRoutingModule,
     AppRoutingModule,
