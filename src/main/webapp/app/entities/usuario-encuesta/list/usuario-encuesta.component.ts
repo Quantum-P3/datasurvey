@@ -29,6 +29,7 @@ export class UsuarioEncuestaComponent implements OnInit {
   user: IUser | null = null;
 
   public searchRol: string;
+  public searchEstado: string;
 
   constructor(
     protected usuarioEncuestaService: UsuarioEncuestaService,
@@ -39,6 +40,7 @@ export class UsuarioEncuestaComponent implements OnInit {
     protected router: Router
   ) {
     this.searchRol = '';
+    this.searchEstado = '';
   }
 
   loadAll(): void {
@@ -50,7 +52,6 @@ export class UsuarioEncuestaComponent implements OnInit {
         const tempUsuarioEncuestas = res.body ?? [];
         this.usuarioEncuestas = tempUsuarioEncuestas
           .filter(c => c.usuarioExtra?.id === this.usuarioExtra?.id)
-          .filter(c => c.estado === 'ACTIVE')
           .filter(c => c.encuesta?.estado !== 'DELETED');
       },
       () => {
@@ -61,6 +62,7 @@ export class UsuarioEncuestaComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchRol = '';
+    this.searchEstado = '';
     this.accountService.getAuthenticationState().subscribe(account => {
       if (account !== null) {
         this.usuarioExtraService.find(account.id).subscribe(usuarioExtra => {

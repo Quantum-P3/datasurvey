@@ -23,6 +23,12 @@
           <option value="Read">Lector</option>
           <option value="Write">Escritor</option>
         </select>
+        <select name="searchRol" id="searchEstado" [(ngModel)]="searchEstado" style="width: 200px">
+          <option value="" selected="selected" disabled="disabled">Filtrar por estado</option>
+          <option value="">Todos los estados</option>
+          <option value="ACTIVE">Activos</option>
+          <option value="PENDING">Pendientes</option>
+        </select>
       </div>
     </div>
   </form>
@@ -37,24 +43,21 @@
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioEncuesta.rol">Rol</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioEncuesta.estado">Estado</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioEncuesta.fechaAgregado">Fecha Agregado</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioEncuesta.encuesta">Id encuesta</span></th>
-          <th scope="col"><span>Nombre encuesta</span></th>
+          <th scope="col"><span>Encuesta</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let usuarioEncuesta of usuarioEncuestas | filter: 'rol':searchRol; trackBy: trackId" data-cy="entityTable">
+        <tr
+          *ngFor="let usuarioEncuesta of usuarioEncuestas | filter: 'rol':searchRol | filter: 'estado':searchEstado; trackBy: trackId"
+          data-cy="entityTable"
+        >
           <td jhiTranslate="{{ 'dataSurveyApp.RolColaborador.' + usuarioEncuesta.rol }}">{{ usuarioEncuesta.rol }}</td>
           <td jhiTranslate="{{ 'dataSurveyApp.EstadoColaborador.' + usuarioEncuesta.estado }}">{{ usuarioEncuesta.estado }}</td>
           <td>{{ usuarioEncuesta.fechaAgregado | formatMediumDatetime }}</td>
           <td>
             <div *ngIf="usuarioEncuesta.encuesta">
-              <a>{{ usuarioEncuesta.encuesta?.id }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="usuarioEncuesta.encuesta">
-              <a>{{ usuarioEncuesta.encuesta?.nombre }}</a>
+              <a>{{ usuarioEncuesta.encuesta?.nombre }} (#{{ usuarioEncuesta.encuesta?.id }})</a>
             </div>
           </td>
           <td class="text-right">
