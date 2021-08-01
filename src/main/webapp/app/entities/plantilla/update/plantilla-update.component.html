@@ -26,6 +26,26 @@
       >
         <fa-icon icon="sync" [icon]="faPlus"></fa-icon>&nbsp;&nbsp;<span>Crear pregunta</span>
       </button>
+
+      <button
+        type="button"
+        class="ds-btn ds-btn--primary"
+        (click)="publishTemplateToStore()"
+        [disabled]="isLoading"
+        *ngIf="plantilla!.estado === 'DRAFT' && pPreguntas && pPreguntas.length > 0"
+      >
+        <fa-icon icon="sync" [icon]="faStore"></fa-icon>&nbsp;&nbsp;<span>Publicar en tienda</span>
+      </button>
+
+      <button
+        type="button"
+        class="ds-btn ds-btn--danger"
+        (click)="deleteTemplateFromStore()"
+        [disabled]="isLoading"
+        *ngIf="plantilla!.estado === 'ACTIVE'"
+      >
+        <fa-icon icon="sync" [icon]="faStore"></fa-icon>&nbsp;&nbsp;<span>Eliminar de tienda</span>
+      </button>
     </div>
   </h2>
 

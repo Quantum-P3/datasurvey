@@ -12,7 +12,11 @@
       "updated": "Una plantilla ha sido actualizada con el identificador {{ param }}",
       "deleted": "Una plantilla ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Plantilla {{ id }}?"
+        "question": "¿Seguro que quiere eliminar Plantilla {{ id }}?",
+        "deletefromstore": "¿Seguro que quiere eliminar esta plantilla de la tienda?"
+      },
+      "publish": {
+        "store": "¿Seguro que quiere publicar esta plantilla a la tienda?"
       },
       "detail": {
         "title": "Plantilla"
