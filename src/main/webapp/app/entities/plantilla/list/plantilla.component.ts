@@ -34,7 +34,7 @@ export class PlantillaComponent implements OnInit {
     this.loadAll();
   }
 
-  trackId(index: number, item: IPlantilla): number {
+  trackId(_index: number, item: IPlantilla): number {
     return item.id!;
   }
 

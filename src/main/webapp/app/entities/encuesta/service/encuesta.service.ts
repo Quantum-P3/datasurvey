@@ -15,6 +15,7 @@ export type EntityArrayResponseType = HttpResponse<IEncuesta[]>;
 @Injectable({ providedIn: 'root' })
 export class EncuestaService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/encuestas');
+  protected resourceUrlPublish = this.applicationConfigService.getEndpointFor('api/encuestas/publish');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
@@ -28,7 +29,14 @@ export class EncuestaService {
   update(encuesta: IEncuesta): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(encuesta);
     return this.http
-      .put<IEncuesta>(`${this.resourceUrl}/${getEncuestaIdentifier(encuesta) as number}`, copy, { observe: 'response' })
+      .put<IEncuesta>(`${this.resourceUrlPublish}/${getEncuestaIdentifier(encuesta) as number}`, copy, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  updateSurvey(encuesta: IEncuesta): Observable<EntityResponseType> {
+    const copy = this.convertDateFromClient(encuesta);
+    return this.http
+      .put<IEncuesta>(`${this.resourceUrl}/update/${getEncuestaIdentifier(encuesta) as number}`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 

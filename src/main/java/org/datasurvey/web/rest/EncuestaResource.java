@@ -126,6 +126,35 @@ public class EncuestaResource {
 
         Encuesta result = encuestaService.save(encuesta);
 
+        if (encuesta.getUsuarioExtra().getUser() != null) {
+            mailService.sendEncuestaDeleted(encuesta.getUsuarioExtra());
+        }
+
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, encuesta.getId().toString()))
+            .body(result);
+    }
+
+    @PutMapping("/encuestas/update/{id}")
+    public ResponseEntity<Encuesta> updateEncuestaReal(
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody Encuesta encuesta
+    ) throws URISyntaxException {
+        log.debug("REST request to update Encuesta : {}, {}", id, encuesta);
+        if (encuesta.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, encuesta.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!encuestaRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Encuesta result = encuestaService.save(encuesta);
+
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, encuesta.getId().toString()))

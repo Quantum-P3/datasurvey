@@ -1,7 +1,9 @@
 <div>
   <h2 id="page-heading" data-cy="EPreguntaCerradaHeading">
     <div class="d-flex align-items-center">
-      <p class="ds-title">{{ encuesta!.nombre }}</p>
+      <p class="ds-title ds-contenteditable" contenteditable="true" spellcheck="false" (blur)="updateSurveyName($event)">
+        {{ encuesta!.nombre }}
+      </p>
       &nbsp;&nbsp;<fa-icon
         class="ds-info--icon"
         [icon]="faQuestion"
@@ -10,6 +12,31 @@
         (click)="loadAplicationParameters()"
       ></fa-icon>
       &nbsp;&nbsp;<fa-icon class="ds-info--icon" [icon]="faEye" (click)="openPreview()"></fa-icon>
+      <div class="d-flex px-4">
+        <div class="col-12">
+          <div class="row" style="flex-direction: row-reverse">
+            <div class="col-mb-2 iconos-colab">
+              <div class="add-collab">
+                <fa-icon icon="sync" [icon]="faPlus"></fa-icon>
+              </div>
+            </div>
+            <div
+              class="col-mb-2 iconos-colab"
+              *ngFor="let colaborador of usuariosColaboradores"
+              (click)="selectColaborator(colaborador)"
+              data-toggle="modal"
+              data-target="#modalColaborators"
+            >
+              <img
+                class="photo-collab"
+                *ngIf="colaborador.usuarioExtra"
+                src="../../../../content/profile_icons/C{{ colaborador.usuarioExtra.iconoPerfil }}.png"
+                alt="{{ colaborador.usuarioExtra.nombre }}"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <p class="ds-subtitle">Creada el día {{ encuesta!.fechaCreacion | formatShortDatetime | lowercase }}</p>
@@ -66,7 +93,18 @@
             class="ds-survey--question"
           >
             <div class="ds-survey--titulo">
-              <span class="ds-survey--titulo--name">{{ i + 1 }}. {{ ePregunta.nombre }}</span>
+              <span class="ds-survey--titulo--name">
+                <span>{{ i + 1 }}.</span>&nbsp;
+                <span
+                  class="ds-contenteditable"
+                  [attr.data-id]="ePregunta.id"
+                  [attr.data-tipo]="ePregunta.tipo"
+                  contenteditable="true"
+                  spellcheck="false"
+                  (blur)="updateQuestionName($event)"
+                  >{{ ePregunta.nombre }}</span
+                >
+              </span>
               <fa-icon
                 *ngIf="encuesta!.estado === 'DRAFT'"
                 class="ds-survey--titulo--icon"
@@ -224,7 +262,7 @@
         [formGroup]="editFormQuestion"
       >
         <div class="modal-header">
-          <h1 class="modal-title" id="exampleModalLongTitle2">Crear Pregunta</h1>
+          <h1 class="modal-title" id="exampleModalLongTitle1">Crear Pregunta</h1>
         </div>
         <div class="modal-body">
           <!-- Survey Create Question Modal -->
@@ -367,7 +405,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title" id="exampleModalLongTitle">Información de Encuesta</h1>
+        <h1 class="modal-title" id="exampleModalLongTitle2">Información de Encuesta</h1>
       </div>
 
       <!-- {
@@ -395,6 +433,60 @@
           <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span>Volver</span>
         </button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ------------------------------------------------------------------------------------------------- -->
+
+<!-- ------------------------------------------------------------------------------------------------- -->
+
+<!-- Survey Parameters Information -->
+<div
+  class="modal fade ds-modal"
+  id="modalColaborators"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="verColaboradoresTitle"
+  aria-hidden="true"
+  *ngIf="colaborador && isAutor()"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <form class="ds-form" name="editFormUpdateCollab" role="form" (ngSubmit)="saveCollab()" [formGroup]="editFormUpdateCollab">
+        <div class="modal-header">
+          <h1 class="modal-title" id="modalColaboradores">Colaboradores</h1>
+        </div>
+        <div class="modal-body">
+          <div>
+            <div class="mb-5" *ngIf="colaborador.usuarioExtra">
+              <p class="ds-subtitle">Nombre</p>
+              <p>{{ colaborador!.usuarioExtra.nombre }}</p>
+            </div>
+            <div>
+              <label for="field_update_rol">Rol</label>
+              <select class="form-control" name="rol" formControlName="rol" id="field_update_rol" data-cy="rol">
+                <option value="READ" [selected]="colaborador.rol === 'READ'">Lector</option>
+                <option value="WRITE" [selected]="colaborador.rol === 'WRITE'">Escritor</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="btnCancelUbdateColaboradores" type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal">
+            <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span>Cancelar</span>
+          </button>
+          <button
+            id="btnUpdateColaboradores"
+            type="submit"
+            class="ds-btn ds-btn--primary"
+            data-cy="entityUpdateButton"
+            [disabled]="isSavingCollab"
+          >
+            &nbsp;<span>Guardar cambios</span>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
