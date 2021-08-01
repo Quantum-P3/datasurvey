@@ -16,7 +16,7 @@
         <div class="col-12">
           <div class="row" style="flex-direction: row-reverse">
             <div class="col-mb-2 iconos-colab">
-              <div class="add-collab">
+              <div class="add-collab" *ngIf="isAutor()">
                 <fa-icon icon="sync" [icon]="faPlus"></fa-icon>
               </div>
             </div>
@@ -56,6 +56,7 @@
         [disabled]="isLoading"
         data-toggle="modal"
         data-target="#crearPregunta"
+        *ngIf="isAutor() || isEscritor()"
       >
         <fa-icon icon="sync" [icon]="faPlus"></fa-icon>&nbsp;&nbsp;<span>Crear pregunta</span>
       </button>
@@ -106,7 +107,7 @@
                 >
               </span>
               <fa-icon
-                *ngIf="encuesta!.estado === 'DRAFT'"
+                *ngIf="encuesta!.estado === 'DRAFT' && (isAutor() || isEscritor())"
                 class="ds-survey--titulo--icon"
                 [icon]="faTimes"
                 (click)="deleteQuestion($event)"
@@ -138,7 +139,7 @@
                       <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
                       <label for="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
                       <fa-icon
-                        *ngIf="encuesta!.estado === 'DRAFT'"
+                        *ngIf="encuesta!.estado === 'DRAFT' && (isAutor() || isEscritor())"
                         class="ds-survey--titulo--icon ds-survey--titulo--icon--small"
                         [icon]="faTimes"
                         (click)="deleteOption($event)"
@@ -154,6 +155,7 @@
                 data-toggle="modal"
                 data-target="#crearOpcion"
                 [attr.data-id]="ePregunta.id"
+                *ngIf="isAutor() || isEscritor()"
               >
                 <fa-icon
                   class="ds-survey--add-option--icon"

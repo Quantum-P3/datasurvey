@@ -2,7 +2,7 @@
   "dataSurveyApp": {
     "usuarioEncuesta": {
       "home": {
-        "title": "Colaboraciones en Encuestas",
+        "title": "Colaboraciones",
         "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Colaborador",
         "createOrEditLabel": "Crear o editar Colaboración",
@@ -12,7 +12,9 @@
       "updated": "Una colaboración ha sido actualizada con el identificador {{ param }}",
       "deleted": "Una colaboracióna ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar la colaboración {{ id }}?"
+        "question": "¿Seguro que quiere eliminar la colaboración {{ id }}?",
+        "questionGetOut": "¿Seguro que quiere salirse de la colaboracion de encuesta?",
+        "getOut": "Salir"
       },
       "detail": {
         "title": "Colaboración en encuesta"

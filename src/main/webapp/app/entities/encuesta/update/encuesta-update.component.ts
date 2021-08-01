@@ -35,7 +35,7 @@ import { IParametroAplicacion } from './../../parametro-aplicacion/parametro-apl
 import { Router } from '@angular/router';
 
 import { UsuarioEncuestaService } from 'app/entities/usuario-encuesta/service/usuario-encuesta.service';
-import { IUsuarioEncuesta } from '../../usuario-encuesta/usuario-encuesta.model';
+import { IUsuarioEncuesta, UsuarioEncuesta } from '../../usuario-encuesta/usuario-encuesta.model';
 import { RolColaborador } from '../../enumerations/rol-colaborador.model';
 import { Account } from '../../../core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
@@ -660,6 +660,18 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   }
 
   isAutor() {
-    return this.usuarioExtra?.id == this.encuesta?.usuarioExtra?.id;
+    return this.usuarioExtra?.id === this.encuesta?.usuarioExtra?.id;
+  }
+
+  isEscritor() {
+    let escritor = false;
+    this.usuariosColaboradores.forEach(c => {
+      if (this.usuarioExtra?.id === c.usuarioExtra?.id) {
+        if (c.rol === 'WRITE') {
+          escritor = true;
+        }
+      }
+    });
+    return escritor;
   }
 }
