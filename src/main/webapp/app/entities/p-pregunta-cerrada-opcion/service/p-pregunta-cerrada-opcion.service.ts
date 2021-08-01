@@ -16,8 +16,8 @@ export class PPreguntaCerradaOpcionService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(pPreguntaCerradaOpcion: IPPreguntaCerradaOpcion): Observable<EntityResponseType> {
-    return this.http.post<IPPreguntaCerradaOpcion>(this.resourceUrl, pPreguntaCerradaOpcion, { observe: 'response' });
+  create(pPreguntaCerradaOpcion: IPPreguntaCerradaOpcion, preguntaId?: number): Observable<EntityResponseType> {
+    return this.http.post<IPPreguntaCerradaOpcion>(`${this.resourceUrl}/${preguntaId}`, pPreguntaCerradaOpcion, { observe: 'response' });
   }
 
   update(pPreguntaCerradaOpcion: IPPreguntaCerradaOpcion): Observable<EntityResponseType> {
@@ -47,6 +47,10 @@ export class PPreguntaCerradaOpcionService {
 
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  deleteMany(ids: number[]): Observable<EntityResponseType> {
+    return this.http.post<IPPreguntaCerradaOpcion>(`${this.resourceUrl}/deleteMany`, ids, { observe: 'response' });
   }
 
   addPPreguntaCerradaOpcionToCollectionIfMissing(

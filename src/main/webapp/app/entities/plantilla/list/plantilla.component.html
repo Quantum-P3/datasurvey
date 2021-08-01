@@ -1,23 +1,28 @@
 <div>
   <h2 id="page-heading" data-cy="PlantillaHeading">
-    <span jhiTranslate="dataSurveyApp.plantilla.home.title">Plantillas</span>
+    <div class="d-flex flex-sm-row flex-column justify-content-between align-items-center">
+      <div>
+        <span class="ds-title" jhiTranslate="dataSurveyApp.plantilla.home.title">Encuestas</span>
+        <p class="ds-subtitle">Administre las plantillas comprables de la tienda</p>
+      </div>
 
-    <div class="d-flex justify-content-end">
-      <button class="ds-btn ds-btn--secondary" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="dataSurveyApp.plantilla.home.refreshListLabel">Refresh List</span>
-      </button>
+      <div>
+        <button class="ds-btn ds-btn--secondary" (click)="loadAll()" [disabled]="isLoading">
+          <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+          <span jhiTranslate="dataSurveyApp.plantilla.home.refreshListLabel">Refresh List</span>
+        </button>
 
-      <button
-        *ngIf="isAdmin() && isAuthenticated()"
-        type="button"
-        class="ds-btn ds-btn--primary"
-        (click)="resetCreateTemplateForm()"
-        data-toggle="modal"
-        data-target="#crearPlantilla"
-      >
-        Crear plantilla
-      </button>
+        <button
+          *ngIf="isAdmin() && isAuthenticated()"
+          type="button"
+          class="ds-btn ds-btn--primary"
+          (click)="resetCreateTemplateForm()"
+          data-toggle="modal"
+          data-target="#crearPlantilla"
+        >
+          Crear plantilla
+        </button>
+      </div>
     </div>
   </h2>
 
@@ -58,11 +63,11 @@
               <button
                 type="submit"
                 [routerLink]="['/plantilla', plantilla.id, 'view']"
-                class="ds-btn btn-info btn-sm"
+                class="ds-btn ds-btn--secondary btn-sm"
                 data-cy="entityDetailsButton"
               >
                 <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                <span class="d-none d-md-inline">Vista previa</span>
               </button>
 
               <button
