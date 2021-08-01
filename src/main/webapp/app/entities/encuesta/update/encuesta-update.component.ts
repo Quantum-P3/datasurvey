@@ -39,6 +39,10 @@ import { IUsuarioEncuesta } from '../../usuario-encuesta/usuario-encuesta.model'
 import { RolColaborador } from '../../enumerations/rol-colaborador.model';
 import { Account } from '../../../core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
+
+import { EncuestaPublishDialogComponent } from '../encuesta-publish-dialog/encuesta-publish-dialog.component';
+import { EncuestaFinalizarDialogComponent } from '../encuesta-finalizar-dialog/encuesta-finalizar-dialog.component';
+
 import { EncuestaDeleteDialogComponent } from '../delete/encuesta-delete-dialog.component';
 import { EncuestaDeleteColaboratorDialogComponent } from '../encuesta-delete-colaborator-dialog/encuesta-delete-colaborator-dialog.component';
 
@@ -58,6 +62,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   isSaving = false;
   isSavingQuestion = false;
   isSavingCollab = false;
+  finalizada = false;
   public rolSeleccionado: RolColaborador | undefined = undefined;
   categoriasSharedCollection: ICategoria[] = [];
   usuarioExtrasSharedCollection: IUsuarioExtra[] = [];
@@ -680,5 +685,17 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
 
   isAutor() {
     return this.usuarioExtra?.id == this.encuesta?.usuarioExtra?.id;
+  }
+
+  finalizar(): void {
+    const modalRef = this.modalService.open(EncuestaFinalizarDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.encuesta = this.encuesta;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'finalized') {
+        this.finalizada = true;
+        this.loadAll();
+      }
+    });
   }
 }

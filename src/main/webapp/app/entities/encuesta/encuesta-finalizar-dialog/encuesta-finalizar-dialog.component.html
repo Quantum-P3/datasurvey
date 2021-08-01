@@ -1,0 +1,19 @@
+<form *ngIf="encuesta" name="deleteForm" (ngSubmit)="confirmFinalizar(encuesta!)">
+  <div class="modal-header">
+    <h4 class="ds-title--small" data-cy="encuestaDeleteDialogHeading">Finalizar encuesta</h4>
+  </div>
+
+  <div class="modal-body">
+    <p class="ds-subtitle" id="jhi-delete-encuesta-heading">¿Está seguro de querer finalizar la encuesta?</p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    </button>
+
+    <button id="jhi-confirm-delete-encuesta" data-cy="entityConfirmDeleteButton" type="submit" class="ds-btn ds-btn--danger">
+      &nbsp;<span>Finalizar</span>
+    </button>
+  </div>
+</form>
