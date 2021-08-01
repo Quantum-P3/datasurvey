@@ -13,25 +13,27 @@
       ></fa-icon>
       &nbsp;&nbsp;<fa-icon class="ds-info--icon" [icon]="faEye" (click)="openPreview()"></fa-icon>
       <div class="d-flex px-4">
-        <div class="col-12">
+        <div class="col-12 ds-list-collabs">
           <div class="row" style="flex-direction: row-reverse">
             <div class="col-mb-2 iconos-colab">
               <div class="add-collab">
                 <fa-icon icon="sync" [icon]="faPlus"></fa-icon>
               </div>
             </div>
+
             <div
               class="col-mb-2 iconos-colab"
               *ngFor="let colaborador of usuariosColaboradores"
               (click)="selectColaborator(colaborador)"
               data-toggle="modal"
-              data-target="#modalColaborators"
+              data-target="#modalUpdateColaborators"
             >
               <img
                 class="photo-collab"
                 *ngIf="colaborador.usuarioExtra"
                 src="../../../../content/profile_icons/C{{ colaborador.usuarioExtra.iconoPerfil }}.png"
                 alt="{{ colaborador.usuarioExtra.nombre }}"
+                [attr.data-id]="colaborador.id"
               />
             </div>
           </div>
@@ -448,7 +450,7 @@
 <!-- Survey Parameters Information -->
 <div
   class="modal fade ds-modal"
-  id="modalColaborators"
+  id="modalUpdateColaborators"
   tabindex="-1"
   role="dialog"
   aria-labelledby="verColaboradoresTitle"
@@ -459,7 +461,7 @@
     <div class="modal-content">
       <form class="ds-form" name="editFormUpdateCollab" role="form" (ngSubmit)="saveCollab()" [formGroup]="editFormUpdateCollab">
         <div class="modal-header">
-          <h1 class="modal-title" id="modalColaboradores">Colaboradores</h1>
+          <h1 class="modal-title" id="modalColaboradores">Colaborador</h1>
         </div>
         <div class="modal-body">
           <div>
@@ -480,6 +482,10 @@
           <button id="btnCancelUbdateColaboradores" type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal">
             <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span>Cancelar</span>
           </button>
+          <button type="button" (click)="deleteCollab(colaborador)" class="ds-btn ds-btn--danger btn-sm" data-cy="entityDeleteButton">
+            <fa-icon icon="times"></fa-icon>
+            <span class="d-none d-md-inline" jhiTranslate="dataSurveyApp.usuarioEncuesta.delete.action">Delete</span>
+          </button>
           <button
             id="btnUpdateColaboradores"
             type="submit"
@@ -487,7 +493,7 @@
             data-cy="entityUpdateButton"
             [disabled]="isSavingCollab"
           >
-            &nbsp;<span>Guardar cambios</span>
+            &nbsp;<span>Guardar</span>
           </button>
         </div>
       </form>
