@@ -13,7 +13,9 @@
       "deleted": "Un Colaborador ha sido expulsado de la encuesta",
       "delete": {
         "question": "¿Seguro que quiere expulsar al colaborador de la encuesta?",
-        "action": "Expulsar"
+        "action": "Expulsar",
+        "questionGetOut": "¿Seguro que quiere salirse de la colaboracion de encuesta?",
+        "getOut": "Salir"
       },
       "detail": {
         "title": "Colaborador"
