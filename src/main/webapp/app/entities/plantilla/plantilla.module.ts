@@ -8,6 +8,8 @@ import { PlantillaRoutingModule } from './route/plantilla-routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PlantillaDeleteQuestionDialogComponent } from './plantilla-delete-question-dialog/plantilla-delete-question-dialog.component';
 import { PlantillaDeleteOptionDialogComponent } from './plantilla-delete-option-dialog/plantilla-delete-option-dialog.component';
+import { PlantillaPublishStoreDialogComponent } from './plantilla-publish-store-dialog/plantilla-publish-store-dialog.component';
+import { PlantillaDeleteStoreDialogComponent } from './plantilla-delete-store-dialog/plantilla-delete-store-dialog.component';
 
 @NgModule({
   imports: [SharedModule, PlantillaRoutingModule, FontAwesomeModule],
@@ -18,6 +20,8 @@ import { PlantillaDeleteOptionDialogComponent } from './plantilla-delete-option-
     PlantillaDeleteDialogComponent,
     PlantillaDeleteQuestionDialogComponent,
     PlantillaDeleteOptionDialogComponent,
+    PlantillaPublishStoreDialogComponent,
+    PlantillaDeleteStoreDialogComponent,
   ],
   entryComponents: [PlantillaDeleteDialogComponent],
 })
