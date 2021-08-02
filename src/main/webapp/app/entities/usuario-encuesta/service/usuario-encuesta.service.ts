@@ -68,6 +68,10 @@ export class UsuarioEncuestaService {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  sendCorreoInvitacion(colaborator: IUsuarioEncuesta) {
+    return this.http.post(`${this.resourceUrl}/notify/${colaborator.id}`, { body: colaborator, observe: 'response' });
+  }
+
   addUsuarioEncuestaToCollectionIfMissing(
     usuarioEncuestaCollection: IUsuarioEncuesta[],
     ...usuarioEncuestasToCheck: (IUsuarioEncuesta | null | undefined)[]
