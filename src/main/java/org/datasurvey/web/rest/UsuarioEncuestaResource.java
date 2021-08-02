@@ -2,15 +2,18 @@ package org.datasurvey.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import org.datasurvey.domain.Encuesta;
 import org.datasurvey.domain.UsuarioEncuesta;
+import org.datasurvey.domain.UsuarioExtra;
 import org.datasurvey.repository.UsuarioEncuestaRepository;
-import org.datasurvey.service.UsuarioEncuestaQueryService;
-import org.datasurvey.service.UsuarioEncuestaService;
+import org.datasurvey.service.*;
 import org.datasurvey.service.criteria.UsuarioEncuestaCriteria;
 import org.datasurvey.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
@@ -36,19 +39,29 @@ public class UsuarioEncuestaResource {
     private String applicationName;
 
     private final UsuarioEncuestaService usuarioEncuestaService;
+    private final UsuarioExtraService usuarioExtraService;
+    private final EncuestaService encuestaService;
 
     private final UsuarioEncuestaRepository usuarioEncuestaRepository;
 
     private final UsuarioEncuestaQueryService usuarioEncuestaQueryService;
 
+    private final MailService mailService;
+
     public UsuarioEncuestaResource(
         UsuarioEncuestaService usuarioEncuestaService,
         UsuarioEncuestaRepository usuarioEncuestaRepository,
-        UsuarioEncuestaQueryService usuarioEncuestaQueryService
+        UsuarioEncuestaQueryService usuarioEncuestaQueryService,
+        UsuarioExtraService usuarioExtraService,
+        EncuestaService encuestaService,
+        MailService mailService
     ) {
         this.usuarioEncuestaService = usuarioEncuestaService;
         this.usuarioEncuestaRepository = usuarioEncuestaRepository;
         this.usuarioEncuestaQueryService = usuarioEncuestaQueryService;
+        this.usuarioExtraService = usuarioExtraService;
+        this.encuestaService = encuestaService;
+        this.mailService = mailService;
     }
 
     /**
@@ -66,6 +79,9 @@ public class UsuarioEncuestaResource {
             throw new BadRequestAlertException("A new usuarioEncuesta cannot already have an ID", ENTITY_NAME, "idexists");
         }
         UsuarioEncuesta result = usuarioEncuestaService.save(usuarioEncuesta);
+        if (result.getId() != null) {
+            mailService.sendInvitationColaborator(usuarioEncuesta);
+        }
         return ResponseEntity
             .created(new URI("/api/usuario-encuestas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -189,10 +205,40 @@ public class UsuarioEncuestaResource {
     @DeleteMapping("/usuario-encuestas/{id}")
     public ResponseEntity<Void> deleteUsuarioEncuesta(@PathVariable Long id) {
         log.debug("REST request to delete UsuarioEncuesta : {}", id);
+        Optional<UsuarioEncuesta> usuarioEncuesta = usuarioEncuestaService.findOne(id);
         usuarioEncuestaService.delete(id);
+        if (usuarioEncuesta != null) {
+            mailService.sendNotifyDeleteColaborator(usuarioEncuesta.get());
+        }
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/usuario-encuestas/encuesta/{id}")
+    public ResponseEntity<List<UsuarioEncuesta>> getColaboradores(@PathVariable Long id) {
+        List<UsuarioExtra> usuariosExtras = usuarioExtraService.findAll();
+        List<UsuarioEncuesta> usuariosEncuestas = usuarioEncuestaService
+            .findAll()
+            .stream()
+            .filter(uE -> Objects.nonNull(uE.getEncuesta()))
+            .filter(uE -> uE.getEncuesta().getId().equals(id))
+            .collect(Collectors.toList());
+
+        for (UsuarioEncuesta usuarioEncuesta : usuariosEncuestas) {
+            long usuarioExtraId = usuarioEncuesta.getUsuarioExtra().getId();
+            UsuarioExtra usuarioExtra = usuariosExtras.stream().filter(u -> u.getId() == usuarioExtraId).findFirst().get();
+            usuarioEncuesta.getUsuarioExtra().setNombre(usuarioExtra.getNombre());
+            usuarioEncuesta.getUsuarioExtra().setIconoPerfil(usuarioExtra.getIconoPerfil());
+        }
+        return ResponseEntity.ok().body(usuariosEncuestas);
+    }
+
+    @PostMapping("/usuario-encuestas/notify/{id}")
+    public ResponseEntity<Void> notifyInvitationColaborator(@PathVariable Long id, @Valid @RequestBody UsuarioEncuesta usuarioEncuesta) {
+        log.debug("REST request to notify {} of invitation to Encuesta", usuarioEncuesta.getUsuarioExtra().getUser().getEmail());
+        mailService.sendInvitationColaborator(usuarioEncuesta);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -3,7 +3,7 @@
     "EstadoPlantilla": {
       "null": "",
       "DRAFT": "Borrador",
-      "ACTIVE": "Activa",
+      "ACTIVE": "En tienda",
       "DELETED": "Eliminada",
       "DISABLED": "Desactivada"
     }

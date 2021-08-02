@@ -1,7 +1,9 @@
 <div>
   <h2 id="page-heading" data-cy="EPreguntaCerradaHeading">
     <div class="d-flex align-items-center">
-      <p class="ds-title">{{ encuesta!.nombre }}</p>
+      <p class="ds-title ds-contenteditable" contenteditable="true" spellcheck="false" (blur)="updateSurveyName($event)">
+        {{ encuesta!.nombre }}
+      </p>
       &nbsp;&nbsp;<fa-icon
         class="ds-info--icon"
         [icon]="faQuestion"
@@ -10,9 +12,39 @@
         (click)="loadAplicationParameters()"
       ></fa-icon>
       &nbsp;&nbsp;<fa-icon class="ds-info--icon" [icon]="faEye" (click)="openPreview()"></fa-icon>
+      <div class="d-flex px-4">
+        <div class="col-12 ds-list-collabs">
+          <div class="row" style="flex-direction: row-reverse">
+            <div class="col-mb-2 iconos-colab">
+              <div class="add-collab" data-toggle="modal" data-target="#modalAddColaborators">
+                <fa-icon icon="sync" [icon]="faPlus"></fa-icon>
+              </div>
+            </div>
+
+            <div
+              class="col-mb-2 iconos-colab"
+              *ngFor="let colaborador of usuariosColaboradores"
+              (click)="selectColaborator(colaborador)"
+              data-toggle="modal"
+              data-target="#modalUpdateColaborators"
+            >
+              <img
+                class="photo-collab"
+                *ngIf="colaborador.usuarioExtra"
+                src="../../../../content/profile_icons/C{{ colaborador.usuarioExtra.iconoPerfil }}.png"
+                alt="{{ colaborador.usuarioExtra.nombre }}"
+                [attr.data-id]="colaborador.id"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <p class="ds-subtitle">Creada el día {{ encuesta!.fechaCreacion | formatShortDatetime | lowercase }}</p>
+    <button type="button" class="ds-btn ds-btn--danger" (click)="finalizar()" *ngIf="encuesta!.estado === 'ACTIVE'">
+      <fa-icon icon="sync" [icon]="faTimes"></fa-icon>&nbsp;&nbsp;<span>Finalizar</span>
+    </button>
 
     <div class="d-flex justify-content-end">
       <button type="button" class="ds-btn ds-btn--secondary" (click)="previousState()">
@@ -29,6 +61,7 @@
         [disabled]="isLoading"
         data-toggle="modal"
         data-target="#crearPregunta"
+        *ngIf="encuesta!.estado !== 'FINISHED' && (isAutor() || isEscritor())"
       >
         <fa-icon icon="sync" [icon]="faPlus"></fa-icon>&nbsp;&nbsp;<span>Crear pregunta</span>
       </button>
@@ -66,9 +99,20 @@
             class="ds-survey--question"
           >
             <div class="ds-survey--titulo">
-              <span class="ds-survey--titulo--name">{{ i + 1 }}. {{ ePregunta.nombre }}</span>
+              <span class="ds-survey--titulo--name">
+                <span>{{ i + 1 }}.</span>&nbsp;
+                <span
+                  class="ds-contenteditable"
+                  [attr.data-id]="ePregunta.id"
+                  [attr.data-tipo]="ePregunta.tipo"
+                  contenteditable="true"
+                  spellcheck="false"
+                  (blur)="updateQuestionName($event)"
+                  >{{ ePregunta.nombre }}</span
+                >
+              </span>
               <fa-icon
-                *ngIf="encuesta!.estado === 'DRAFT'"
+                *ngIf="encuesta!.estado === 'DRAFT' && (isAutor() || isEscritor())"
                 class="ds-survey--titulo--icon"
                 [icon]="faTimes"
                 (click)="deleteQuestion($event)"
@@ -100,7 +144,7 @@
                       <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
                       <label for="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
                       <fa-icon
-                        *ngIf="encuesta!.estado === 'DRAFT'"
+                        *ngIf="encuesta!.estado === 'DRAFT' && (isAutor() || isEscritor())"
                         class="ds-survey--titulo--icon ds-survey--titulo--icon--small"
                         [icon]="faTimes"
                         (click)="deleteOption($event)"
@@ -116,6 +160,7 @@
                 data-toggle="modal"
                 data-target="#crearOpcion"
                 [attr.data-id]="ePregunta.id"
+                *ngIf="isAutor() || isEscritor()"
               >
                 <fa-icon
                   class="ds-survey--add-option--icon"
@@ -224,7 +269,7 @@
         [formGroup]="editFormQuestion"
       >
         <div class="modal-header">
-          <h1 class="modal-title" id="exampleModalLongTitle2">Crear Pregunta</h1>
+          <h1 class="modal-title" id="exampleModalLongTitle1">Crear Pregunta</h1>
         </div>
         <div class="modal-body">
           <!-- Survey Create Question Modal -->
@@ -367,7 +412,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title" id="exampleModalLongTitle">Información de Encuesta</h1>
+        <h1 class="modal-title" id="exampleModalLongTitle2">Información de Encuesta</h1>
       </div>
 
       <!-- {
@@ -395,6 +440,166 @@
           <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span>Volver</span>
         </button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ------------------------------------------------------------------------------------------------- -->
+
+<!-- ------------------------------------------------------------------------------------------------- -->
+
+<!-- Survey Update Colaborator -->
+<div
+  class="modal fade ds-modal"
+  id="modalUpdateColaborators"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="verColaboradoresTitle"
+  aria-hidden="true"
+  *ngIf="colaborador && isAutor()"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <form class="ds-form" name="editFormUpdateCollab" role="form" (ngSubmit)="saveCollab()" [formGroup]="editFormUpdateCollab">
+        <div class="modal-header">
+          <h1 class="modal-title" id="modalColaboradores">Colaborador</h1>
+        </div>
+        <div class="modal-body">
+          <div>
+            <div class="mb-5" *ngIf="colaborador.usuarioExtra">
+              <p class="ds-subtitle">Nombre</p>
+              <p>{{ colaborador!.usuarioExtra.nombre }}</p>
+            </div>
+            <div>
+              <label for="field_update_rol">Rol</label>
+              <select class="form-control" name="rol" formControlName="rol" id="field_update_rol" data-cy="rol">
+                <option value="READ" [selected]="colaborador.rol === 'READ'">Lector</option>
+                <option value="WRITE" [selected]="colaborador.rol === 'WRITE'">Escritor</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="btnCancelUbdateColaboradores" type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal">
+            <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span>Cancelar</span>
+          </button>
+          <button type="button" (click)="deleteCollab(colaborador)" class="ds-btn ds-btn--danger btn-sm" data-cy="entityDeleteButton">
+            <fa-icon icon="times"></fa-icon>
+            <span class="d-none d-md-inline" jhiTranslate="dataSurveyApp.usuarioEncuesta.delete.action">Delete</span>
+          </button>
+          <button
+            id="btnUpdateColaboradores"
+            type="submit"
+            class="ds-btn ds-btn--primary"
+            data-cy="entityUpdateButton"
+            [disabled]="isSavingCollab"
+          >
+            &nbsp;<span>Guardar</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ------------------------------------------------------------------------------------------------- -->
+
+<!-- Survey Add Colaborator -->
+<div
+  class="modal fade ds-modal"
+  id="modalAddColaborators"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="verColaboradoresTitle"
+  aria-hidden="true"
+  *ngIf="isAutor()"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <form class="ds-form" name="editFormAddCollab" role="form" (ngSubmit)="saveAddCollab()" [formGroup]="editFormAddCollab">
+        <div class="modal-header">
+          <h1 class="modal-title" id="modalAddColaboradores">Añadir Colaborador</h1>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="userCollabNotExist" class="alert alert-danger alert-dismissible fade show" role="alert">
+            No existe un usuario con ese correo
+          </div>
+          <div *ngIf="userCollabIsCollab" class="alert alert-danger alert-dismissible fade show" role="alert">
+            Este usuario ya se encuentra colaborando
+          </div>
+          <div *ngIf="userCollabIsAutor" class="alert alert-danger alert-dismissible fade show" role="alert">
+            Usted es el autor de la encuesta, no puede ser colaborador
+          </div>
+          <div>
+            <div class="mb-5">
+              <p class="ds-subtitle">Correo electrónico</p>
+              <input type="email" class="form-control" name="email_add" id="field_add_email" data-cy="email" formControlName="email_add" />
+              <div
+                *ngIf="
+                  editFormAddCollab.get('email_add')!.invalid &&
+                  (editFormAddCollab.get('email_add')!.dirty || editFormAddCollab.get('email_add')!.touched)
+                "
+              >
+                <small
+                  class="form-text text-danger"
+                  *ngIf="editFormAddCollab.get('email_add')?.errors?.required"
+                  jhiTranslate="entity.validation.required"
+                >
+                  This field is required.
+                </small>
+                <small
+                  class="form-text text-danger"
+                  *ngIf="editFormAddCollab.get('email_add')?.errors?.invalid"
+                  jhiTranslate="global.messages.validate.email.invalid"
+                >
+                  Your email is invalid.
+                </small>
+              </div>
+            </div>
+            <div>
+              <label for="field_update_rol">Rol</label>
+              <select class="form-control" name="rol_add" formControlName="rol_add" id="field_rol_add" data-cy="rol_add">
+                <option value="READ">Lector</option>
+                <option value="WRITE">Escritor</option>
+              </select>
+              <div
+                *ngIf="
+                  editFormAddCollab.get('rol_add')!.invalid &&
+                  (editFormAddCollab.get('rol_add')!.dirty || editFormAddCollab.get('rol_add')!.touched)
+                "
+              >
+                <small
+                  class="form-text text-danger"
+                  *ngIf="editFormAddCollab.get('rol_add')?.errors?.required"
+                  jhiTranslate="entity.validation.required"
+                >
+                  This field is required.
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            id="btnCancelAddColaboradores"
+            (click)="resetFormAddCollab()"
+            type="button"
+            class="ds-btn ds-btn--secondary"
+            data-dismiss="modal"
+          >
+            <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span>Cancelar</span>
+          </button>
+          <button
+            id="btnAddColaboradores"
+            type="submit"
+            class="ds-btn ds-btn--primary"
+            data-cy="entityAddButton"
+            [disabled]="editFormAddCollab.invalid || isSavingAddCollab"
+          >
+            <span>Añadir</span>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
