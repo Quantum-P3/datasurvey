@@ -12,6 +12,8 @@ import { EncuestaDeleteOptionDialogComponent } from './encuesta-delete-option-di
 import { EncuestaCompartirDialogComponent } from './encuesta-compartir-dialog/encuesta-compartir-dialog.component';
 import { EncuestaCompleteComponent } from './complete/complete.component';
 import { EncuestaPasswordDialogComponent } from './encuesta-password-dialog/encuesta-password-dialog.component';
+import { EncuestaFinalizarDialogComponent } from './encuesta-finalizar-dialog/encuesta-finalizar-dialog.component';
+import { EncuestaDeleteColaboratorDialogComponent } from './encuesta-delete-colaborator-dialog/encuesta-delete-colaborator-dialog.component';
 
 @NgModule({
   imports: [SharedModule, EncuestaRoutingModule, FontAwesomeModule],
@@ -26,6 +28,8 @@ import { EncuestaPasswordDialogComponent } from './encuesta-password-dialog/encu
     EncuestaCompartirDialogComponent,
     EncuestaCompleteComponent,
     EncuestaPasswordDialogComponent,
+    EncuestaFinalizarDialogComponent,
+    EncuestaDeleteColaboratorDialogComponent,
   ],
   entryComponents: [EncuestaDeleteDialogComponent],
 })

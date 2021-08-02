@@ -2,15 +2,17 @@ package org.datasurvey.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import org.datasurvey.domain.Plantilla;
+import org.datasurvey.domain.*;
 import org.datasurvey.repository.PlantillaRepository;
-import org.datasurvey.service.PlantillaQueryService;
-import org.datasurvey.service.PlantillaService;
+import org.datasurvey.service.*;
 import org.datasurvey.service.criteria.PlantillaCriteria;
 import org.datasurvey.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
@@ -41,14 +43,26 @@ public class PlantillaResource {
 
     private final PlantillaQueryService plantillaQueryService;
 
+    private final PPreguntaCerradaService pPreguntaCerradaService;
+
+    private final PPreguntaAbiertaService pPreguntaAbiertaService;
+
+    private final PPreguntaCerradaOpcionService pPreguntaCerradaOpcionService;
+
     public PlantillaResource(
         PlantillaService plantillaService,
         PlantillaRepository plantillaRepository,
-        PlantillaQueryService plantillaQueryService
+        PlantillaQueryService plantillaQueryService,
+        PPreguntaCerradaService pPreguntaCerradaService,
+        PPreguntaAbiertaService pPreguntaAbiertaService,
+        PPreguntaCerradaOpcionService ePreguntaCerradaOpcionService
     ) {
         this.plantillaService = plantillaService;
         this.plantillaRepository = plantillaRepository;
         this.plantillaQueryService = plantillaQueryService;
+        this.pPreguntaCerradaService = pPreguntaCerradaService;
+        this.pPreguntaAbiertaService = pPreguntaAbiertaService;
+        this.pPreguntaCerradaOpcionService = ePreguntaCerradaOpcionService;
     }
 
     /**
@@ -152,6 +166,55 @@ public class PlantillaResource {
         log.debug("REST request to get Plantillas by criteria: {}", criteria);
         List<Plantilla> entityList = plantillaQueryService.findByCriteria(criteria);
         return ResponseEntity.ok().body(entityList);
+    }
+
+    @GetMapping("/plantillas/preguntas/{id}")
+    public ResponseEntity<List<Object>> getPreguntasByIdPlantilla(@PathVariable Long id) {
+        List<PPreguntaCerrada> preguntasCerradas = pPreguntaCerradaService.findAll();
+        List<PPreguntaAbierta> preguntasAbiertas = pPreguntaAbiertaService.findAll();
+        List<Object> preguntas = Stream.concat(preguntasCerradas.stream(), preguntasAbiertas.stream()).collect(Collectors.toList());
+        List<Object> preguntasFiltered = new ArrayList<>();
+
+        for (Object obj : preguntas) {
+            if (obj.getClass() == PPreguntaCerrada.class) {
+                if (((PPreguntaCerrada) obj).getPlantilla() != null) {
+                    if (((PPreguntaCerrada) obj).getPlantilla().getId().equals(id)) {
+                        preguntasFiltered.add(obj);
+                    }
+                }
+            } else if (obj.getClass() == PPreguntaAbierta.class) {
+                if (((PPreguntaAbierta) obj).getPlantilla() != null) {
+                    if (((PPreguntaAbierta) obj).getPlantilla().getId().equals(id)) {
+                        preguntasFiltered.add(obj);
+                    }
+                }
+            }
+        }
+        return ResponseEntity.ok().body(preguntasFiltered);
+    }
+
+    @GetMapping("/plantillas/preguntas-opciones/{id}")
+    public ResponseEntity<List<List<PPreguntaCerradaOpcion>>> getPreguntaCerradaOpcionByIdPlantilla(@PathVariable Long id) {
+        List<List<PPreguntaCerradaOpcion>> res = new ArrayList<>();
+        List<PPreguntaCerrada> preguntasCerradas = pPreguntaCerradaService.findAll();
+        List<PPreguntaCerrada> preguntasCerradasFiltered = preguntasCerradas
+            .stream()
+            .filter(p -> Objects.nonNull(p.getPlantilla()))
+            .filter(p -> p.getPlantilla().getId().equals(id))
+            .collect(Collectors.toList());
+        List<PPreguntaCerradaOpcion> opciones = pPreguntaCerradaOpcionService.findAll();
+
+        for (PPreguntaCerrada pPreguntaCerrada : preguntasCerradasFiltered) {
+            long preguntaCerradaId = pPreguntaCerrada.getId();
+            List<PPreguntaCerradaOpcion> opcionesFiltered = opciones
+                .stream()
+                .filter(o -> Objects.nonNull(o.getPPreguntaCerrada()))
+                .filter(o -> o.getPPreguntaCerrada().getId().equals(preguntaCerradaId))
+                .collect(Collectors.toList());
+            res.add(opcionesFiltered);
+        }
+
+        return ResponseEntity.ok().body(res);
     }
 
     /**
