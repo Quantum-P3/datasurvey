@@ -33,10 +33,10 @@ export class PlantillaComponent implements OnInit {
 
   templateCreateForm = this.fb.group({
     id: [],
-    nombre: [null, [Validators.minLength(1), Validators.maxLength(50)]],
-    descripcion: [],
-    precio: [null, [Validators.required]],
-    categoria: [],
+    nombre: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
+    descripcion: [[Validators.required]],
+    precio: [null, [Validators.required, Validators.min(0)]],
+    categoria: [null, [Validators.required]],
   });
 
   constructor(
