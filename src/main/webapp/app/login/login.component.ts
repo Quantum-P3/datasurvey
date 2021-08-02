@@ -94,7 +94,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
         }
       },
       response => {
-        debugger;
         if (response.status == 401 && response.error.detail == 'Bad credentials') {
           this.activateGoogle();
         } else {
@@ -109,7 +108,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   processError(response: HttpErrorResponse): void {
-    debugger;
     if (response.status === 400 && response.error.type === LOGIN_ALREADY_USED_TYPE) {
       this.errorUserExists = true;
     } else if (response.status === 400 && response.error.type === EMAIL_ALREADY_USED_TYPE) {
@@ -153,7 +151,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
   login(): void {
     this.error = false;
     this.userSuspended = false;
-    debugger;
     this.loginService
       .login({
         username: this.loginForm.get('username')!.value,
@@ -162,9 +159,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
       })
       .subscribe(
         value => {
-          debugger;
-          console.log(value);
-
           /*if (value?.activated == false){
               this.userSuspended = true;
 
@@ -178,7 +172,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
           // }
         },
         response => {
-          debugger;
           if (response.status == 401 && response.error.detail == 'Bad credentials') {
             this.error = true;
           } else {

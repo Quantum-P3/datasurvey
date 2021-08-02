@@ -76,10 +76,10 @@ export const USER_ROUTES: RouteInfo[] = [
   //   type: 'link',
   //   icontype: 'nc-icon nc-album-2',
   // },
-  // {
-  //   path: '/colaboraciones',
-  //   title: 'Colaboraciones',
-  //   type: 'link',
-  //   icontype: 'nc-icon nc-world-2',
-  // },
+  {
+    path: '/colaboraciones',
+    title: 'Colaboraciones',
+    type: 'link',
+    icontype: 'nc-icon nc-world-2',
+  },
 ];

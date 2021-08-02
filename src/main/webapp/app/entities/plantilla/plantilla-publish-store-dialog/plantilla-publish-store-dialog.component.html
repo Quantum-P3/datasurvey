@@ -1,0 +1,24 @@
+<form class="ds-form" name="deleteForm" (ngSubmit)="confirmPublishToStore()">
+  <div class="modal-header">
+    <!-- <h2 class="ds-title" data-cy="encuestaDeleteDialogHeading" jhiTranslate="entity.delete.title">Confirm delete operation</h2>
+
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>-->
+  </div>
+
+  <div class="modal-body">
+    <p class="ds-title--small">Publicar en la tienda</p>
+    <p class="ds-subtitle" id="jhi-delete-encuesta-heading" jhiTranslate="dataSurveyApp.plantilla.publish.store">
+      Are you sure you want to publish this template to the store?
+    </p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    </button>
+
+    <button id="jhi-confirm-delete-option" data-cy="entityConfirmDeleteButton" type="submit" class="ds-btn ds-btn--primary">
+      <fa-icon [icon]="faStore"></fa-icon>&nbsp;<span jhiTranslate="entity.action.publish">Publish</span>
+    </button>
+  </div>
+</form>

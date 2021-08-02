@@ -2,11 +2,14 @@ package org.datasurvey.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import org.datasurvey.domain.EPreguntaCerrada;
+import org.datasurvey.domain.PPreguntaCerrada;
 import org.datasurvey.domain.PPreguntaCerradaOpcion;
 import org.datasurvey.repository.PPreguntaCerradaOpcionRepository;
 import org.datasurvey.service.PPreguntaCerradaOpcionQueryService;
@@ -58,10 +61,15 @@ public class PPreguntaCerradaOpcionResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new pPreguntaCerradaOpcion, or with status {@code 400 (Bad Request)} if the pPreguntaCerradaOpcion has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/p-pregunta-cerrada-opcions")
+    @PostMapping("/p-pregunta-cerrada-opcions/{id}")
     public ResponseEntity<PPreguntaCerradaOpcion> createPPreguntaCerradaOpcion(
-        @Valid @RequestBody PPreguntaCerradaOpcion pPreguntaCerradaOpcion
+        @Valid @RequestBody PPreguntaCerradaOpcion pPreguntaCerradaOpcion,
+        @PathVariable(value = "id", required = false) final Long id
     ) throws URISyntaxException {
+        PPreguntaCerrada pPreguntaCerrada = new PPreguntaCerrada();
+        pPreguntaCerrada.setId(id);
+        pPreguntaCerradaOpcion.setPPreguntaCerrada(pPreguntaCerrada);
+
         log.debug("REST request to save PPreguntaCerradaOpcion : {}", pPreguntaCerradaOpcion);
         if (pPreguntaCerradaOpcion.getId() != null) {
             throw new BadRequestAlertException("A new pPreguntaCerradaOpcion cannot already have an ID", ENTITY_NAME, "idexists");
@@ -194,6 +202,17 @@ public class PPreguntaCerradaOpcionResource {
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .build();
+    }
+
+    @PostMapping("/p-pregunta-cerrada-opcions/deleteMany")
+    public ResponseEntity<Void> deleteManyPPreguntaCerradaOpcion(@Valid @RequestBody int[] ids) {
+        for (int id : ids) {
+            pPreguntaCerradaOpcionService.delete((long) id);
+        }
+        return ResponseEntity
+            .noContent()
+            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, Arrays.toString(ids)))
             .build();
     }
 }
