@@ -126,6 +126,8 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   userPublicCollab: IUser | null = null;
   usuarioExtraCollab: UsuarioExtra | null = null;
   userCollabNotExist: boolean = false;
+  userCollabIsCollab: boolean = false;
+  userCollabIsAutor: boolean = false;
   constructor(
     protected encuestaService: EncuestaService,
     protected categoriaService: CategoriaService,
@@ -663,8 +665,17 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  resetFormAddCollab(): void {
+    this.editFormAddCollab.reset();
+    this.userPublicCollab = null;
+  }
+
   saveAddCollab(): void {
     this.isSavingAddCollab = true;
+    this.userCollabIsAutor = false;
+    this.userCollabIsCollab = false;
+    this.userCollabNotExist = false;
+
     const collab = this.createFromFormCollab();
     let rol = this.editFormAddCollab.get('rol_add')!.value;
     if (rol === 'READ') {
@@ -679,25 +690,39 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
       .pipe(
         finalize(() => {
           if (this.userPublicCollab?.id !== undefined) {
-            this.usuarioExtraService.find(this.userPublicCollab?.id).subscribe(res => {
-              this.usuarioExtraCollab = res.body;
-              let now = new Date();
-              collab.fechaAgregado = dayjs(now);
-              collab.usuarioExtra = this.usuarioExtraCollab;
-              collab.estado = EstadoColaborador.PENDING;
-              collab.encuesta = this.encuesta;
-              let id = 0;
-              this.subscribeToSaveResponseAddCollab(this.usuarioEncuestaService.create(collab));
-            });
+            if (correoCollab === this.usuarioExtra?.user?.login) {
+              this.userCollabIsAutor = true;
+              this.isSavingAddCollab = false;
+            } else if (this.validarUserIsCollab(correoCollab)) {
+              this.userCollabIsCollab = true;
+              this.isSavingAddCollab = false;
+            } else {
+              this.usuarioExtraService.find(this.userPublicCollab?.id).subscribe(res => {
+                this.usuarioExtraCollab = res.body;
+                let now = new Date();
+                collab.fechaAgregado = dayjs(now);
+                collab.usuarioExtra = this.usuarioExtraCollab;
+                collab.estado = EstadoColaborador.PENDING;
+                collab.encuesta = this.encuesta;
+                let id = 0;
+                this.subscribeToSaveResponseAddCollab(this.usuarioEncuestaService.create(collab));
+              });
+            }
           } else {
             this.userCollabNotExist = true;
+            this.isSavingAddCollab = false;
           }
+          this.resetFormAddCollab();
         })
       )
       .subscribe(res => {
         res.forEach(user => {
           if (user.login === correoCollab) {
             this.userPublicCollab = user;
+          }
+          if (user.id === this.usuarioExtra?.id) {
+            // @ts-ignore
+            this.usuarioExtra?.user?.login = user.login;
           }
         });
       });
@@ -771,6 +796,16 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
       }
     });
     return escritor;
+  }
+
+  validarUserIsCollab(correoCollab: string) {
+    let isCollab = false;
+    this.usuariosColaboradores.forEach(c => {
+      if (c.usuarioExtra?.id === this.userPublicCollab?.id) {
+        isCollab = true;
+      }
+    });
+    return isCollab;
   }
 
   finalizar(): void {

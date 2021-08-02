@@ -524,6 +524,12 @@
           <div *ngIf="userCollabNotExist" class="alert alert-danger alert-dismissible fade show" role="alert">
             No existe un usuario con ese correo
           </div>
+          <div *ngIf="userCollabIsCollab" class="alert alert-danger alert-dismissible fade show" role="alert">
+            Este usuario ya se encuentra colaborando
+          </div>
+          <div *ngIf="userCollabIsAutor" class="alert alert-danger alert-dismissible fade show" role="alert">
+            Usted es el autor de la encuesta, no puede ser colaborador
+          </div>
           <div>
             <div class="mb-5">
               <p class="ds-subtitle">Correo electrónico</p>
@@ -575,7 +581,13 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button id="btnCancelAddColaboradores" type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal">
+          <button
+            id="btnCancelAddColaboradores"
+            (click)="resetFormAddCollab()"
+            type="button"
+            class="ds-btn ds-btn--secondary"
+            data-dismiss="modal"
+          >
             <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span>Cancelar</span>
           </button>
           <button
