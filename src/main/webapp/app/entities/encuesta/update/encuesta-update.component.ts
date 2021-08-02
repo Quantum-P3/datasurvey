@@ -38,11 +38,7 @@ import { IUsuarioEncuesta, UsuarioEncuesta } from '../../usuario-encuesta/usuari
 import { RolColaborador } from '../../enumerations/rol-colaborador.model';
 import { Account } from '../../../core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
-
-import { EncuestaPublishDialogComponent } from '../encuesta-publish-dialog/encuesta-publish-dialog.component';
 import { EncuestaFinalizarDialogComponent } from '../encuesta-finalizar-dialog/encuesta-finalizar-dialog.component';
-
-import { EncuestaDeleteDialogComponent } from '../delete/encuesta-delete-dialog.component';
 import { EncuestaDeleteColaboratorDialogComponent } from '../encuesta-delete-colaborator-dialog/encuesta-delete-colaborator-dialog.component';
 import { IUser } from '../../user/user.model';
 
@@ -64,6 +60,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   isSaving = false;
   isSavingQuestion = false;
   isSavingCollab = false;
+  isSavingAddCollab = false;
   finalizada = false;
   public rolSeleccionado: RolColaborador | undefined = undefined;
   categoriasSharedCollection: ICategoria[] = [];
@@ -109,9 +106,10 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   editFormUpdateCollab = this.fb.group({
     rol: [null, [Validators.required]],
   });
+
   editFormAddCollab = this.fb.group({
-    email: [null, [Validators.required, Validators.email]],
-    rol: [null, [Validators.required]],
+    email_add: [null, [Validators.required, Validators.email]],
+    rol_add: [null, [Validators.required]],
   });
 
   ePreguntas?: any[];
@@ -641,7 +639,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   protected createFromFormCollab(): UsuarioEncuesta {
     return {
       id: undefined,
-      rol: this.editFormAddCollab.get(['rol'])!.value,
+      rol: this.editFormAddCollab.get(['rol_add'])!.value,
     };
   }
 
@@ -666,9 +664,15 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
   }
 
   saveAddCollab(): void {
-    this.isSavingCollab = true;
+    this.isSavingAddCollab = true;
     const collab = this.createFromFormCollab();
-    let correoCollab = this.editFormAddCollab.get('email')!.value;
+    let rol = this.editFormAddCollab.get('rol_add')!.value;
+    if (rol === 'READ') {
+      collab.rol = RolColaborador.READ;
+    } else if (rol === 'WRITE') {
+      collab.rol = RolColaborador.WRITE;
+    }
+    let correoCollab = this.editFormAddCollab.get('email_add')!.value;
 
     this.userService
       .retrieveAllPublicUsers()
@@ -683,8 +687,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
               collab.estado = EstadoColaborador.PENDING;
               collab.encuesta = this.encuesta;
               let id = 0;
-              this.subscribeToSaveResponseUpdateCollab(this.usuarioEncuestaService.create(collab));
-              // this.sendInvitation(correoCollab);
+              this.subscribeToSaveResponseAddCollab(this.usuarioEncuestaService.create(collab));
             });
           } else {
             this.userCollabNotExist = true;
@@ -720,6 +723,25 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
     this.isSavingCollab = false;
   }
 
+  protected subscribeToSaveResponseAddCollab(result: Observable<HttpResponse<IUsuarioEncuesta>>): void {
+    result.pipe(finalize(() => this.onSaveFinalizeAddCollab())).subscribe(
+      () => this.onSaveSuccessAddCollab(),
+      () => this.onSaveErrorAddCollab()
+    );
+  }
+
+  protected onSaveSuccessAddCollab(): void {
+    this.loadAll();
+    $('#btnCancelAddColaboradores').click();
+  }
+
+  protected onSaveErrorAddCollab(): void {
+    // Api for inheritance.
+  }
+
+  protected onSaveFinalizeAddCollab(): void {
+    this.isSavingAddCollab = false;
+  }
   deleteCollab(collab: IUsuarioEncuesta) {
     //$('#btnCancelUbdateColaboradores').click();
     //setTimeout(() => {

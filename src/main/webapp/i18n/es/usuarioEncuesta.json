@@ -8,8 +8,8 @@
         "createOrEditLabel": "Crear o editar Colaborador",
         "notFound": "Ningún Colaborador encontrado"
       },
-      "created": "Un nuevo Usuario Encuesta ha sido creado con el identificador {{ param }}",
-      "updated": "Un Usuario Encuesta ha sido actualizado con el identificador {{ param }}",
+      "created": "Un Colaborador ha sido creado con el identificador {{ param }}",
+      "updated": "Ha aceptado la colaboración en la encuesta #{{ param }}",
       "deleted": "Un Colaborador ha sido expulsado de la encuesta",
       "delete": {
         "question": "¿Seguro que quiere expulsar al colaborador de la encuesta?",

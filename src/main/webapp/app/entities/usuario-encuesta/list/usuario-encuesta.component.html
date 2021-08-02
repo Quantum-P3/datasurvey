@@ -64,12 +64,22 @@
           <td class="text-right">
             <div class="btn-group" *ngIf="usuarioEncuesta.encuesta">
               <button
+                *ngIf="usuarioEncuesta.estado === 'ACTIVE'"
                 type="button"
                 [routerLink]="['/encuesta', usuarioEncuesta.encuesta.id, 'edit']"
                 class="ds-btn ds-btn--primary"
                 [disabled]="isLoading"
               >
                 <span>Editar encuesta</span>
+              </button>
+              <button
+                *ngIf="usuarioEncuesta.estado === 'PENDING'"
+                type="button"
+                (click)="aceptarInvitacion(usuarioEncuesta)"
+                class="ds-btn btn-success"
+                [disabled]="isLoading"
+              >
+                <span>Aceptar invitación</span>
               </button>
               <button type="submit" (click)="delete(usuarioEncuesta)" class="ds-btn ds-btn--danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="sign-out-alt"></fa-icon>

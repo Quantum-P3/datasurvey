@@ -192,4 +192,15 @@ public class MailService {
             "email.invitation.title"
         );
     }
+
+    @Async
+    public void sendNotifyDeleteColaborator(UsuarioEncuesta user) {
+        log.debug("Sending delete collaboration notification mail to '{}'", user.getUsuarioExtra().getUser().getEmail());
+        sendEmailFromTemplateUsuarioEncuesta(
+            user.getUsuarioExtra().getUser(),
+            user,
+            "mail/deleteColaboratorEmail",
+            "email.deleteColaborator.title"
+        );
+    }
 }

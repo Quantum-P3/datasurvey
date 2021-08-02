@@ -6,14 +6,18 @@ import { IUsuarioEncuesta } from '../usuario-encuesta.model';
 import { UsuarioEncuestaService } from '../service/usuario-encuesta.service';
 import { UsuarioEncuestaDeleteDialogComponent } from '../delete/usuario-encuesta-delete-dialog.component';
 import * as dayjs from 'dayjs';
-import { faPollH, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+import { faPencilAlt, faPollH } from '@fortawesome/free-solid-svg-icons';
 
 import { AccountService } from 'app/core/auth/account.service';
-import { Account } from 'app/core/auth/account.model';
-import { IUsuarioExtra, UsuarioExtra } from 'app/entities/usuario-extra/usuario-extra.model';
+import { IUsuarioExtra } from 'app/entities/usuario-extra/usuario-extra.model';
 import { IUser } from '../../user/user.model';
 import { UsuarioExtraService } from 'app/entities/usuario-extra/service/usuario-extra.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EstadoColaborador } from '../../enumerations/estado-colaborador.model';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+import * as $ from 'jquery';
+import { DATE_TIME_FORMAT } from '../../../config/input.constants';
 
 @Component({
   selector: 'jhi-usuario-encuesta',
@@ -27,7 +31,7 @@ export class UsuarioEncuestaComponent implements OnInit {
   isLoading = false;
   usuarioExtra: IUsuarioExtra | null = null;
   user: IUser | null = null;
-
+  isSavingCollab = false;
   public searchRol: string;
   public searchEstado: string;
 
@@ -92,5 +96,30 @@ export class UsuarioEncuestaComponent implements OnInit {
         this.loadAll();
       }
     });
+  }
+
+  aceptarInvitacion(usuarioEncuesta: IUsuarioEncuesta) {
+    usuarioEncuesta.estado = EstadoColaborador.ACTIVE;
+    usuarioEncuesta.fechaAgregado = dayjs(usuarioEncuesta.fechaAgregado, DATE_TIME_FORMAT);
+    this.subscribeToSaveResponseCollab(this.usuarioEncuestaService.update(usuarioEncuesta));
+  }
+
+  protected subscribeToSaveResponseCollab(result: Observable<HttpResponse<IUsuarioEncuesta>>): void {
+    result.pipe(finalize(() => this.onSaveFinalizeCollab())).subscribe(
+      () => this.onSaveSuccessCollab(),
+      () => this.onSaveErrorCollab()
+    );
+  }
+
+  protected onSaveSuccessCollab(): void {
+    this.loadAll();
+  }
+
+  protected onSaveErrorCollab(): void {
+    // Api for inheritance.
+  }
+
+  protected onSaveFinalizeCollab(): void {
+    this.isSavingCollab = false;
   }
 }

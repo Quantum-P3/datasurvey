@@ -518,21 +518,59 @@
     <div class="modal-content">
       <form class="ds-form" name="editFormAddCollab" role="form" (ngSubmit)="saveAddCollab()" [formGroup]="editFormAddCollab">
         <div class="modal-header">
-          <h1 class="modal-title" id="modalAddColaboradores">Colaborador</h1>
+          <h1 class="modal-title" id="modalAddColaboradores">Añadir Colaborador</h1>
         </div>
         <div class="modal-body">
+          <div *ngIf="userCollabNotExist" class="alert alert-danger alert-dismissible fade show" role="alert">
+            No existe un usuario con ese correo
+          </div>
           <div>
             <div class="mb-5">
               <p class="ds-subtitle">Correo electrónico</p>
-              <input type="email" class="form-control" name="email" id="field_add_email" data-cy="email" formControlName="email" />
+              <input type="email" class="form-control" name="email_add" id="field_add_email" data-cy="email" formControlName="email_add" />
+              <div
+                *ngIf="
+                  editFormAddCollab.get('email_add')!.invalid &&
+                  (editFormAddCollab.get('email_add')!.dirty || editFormAddCollab.get('email_add')!.touched)
+                "
+              >
+                <small
+                  class="form-text text-danger"
+                  *ngIf="editFormAddCollab.get('email_add')?.errors?.required"
+                  jhiTranslate="entity.validation.required"
+                >
+                  This field is required.
+                </small>
+                <small
+                  class="form-text text-danger"
+                  *ngIf="editFormAddCollab.get('email_add')?.errors?.invalid"
+                  jhiTranslate="global.messages.validate.email.invalid"
+                >
+                  Your email is invalid.
+                </small>
+              </div>
             </div>
             <div>
               <label for="field_update_rol">Rol</label>
-              <select class="form-control" name="rol" formControlName="rol" id="field_rol_add" data-cy="rol">
+              <select class="form-control" name="rol_add" formControlName="rol_add" id="field_rol_add" data-cy="rol_add">
                 <option value="" selected disabled>Seleccione un rol</option>
                 <option value="READ">Lector</option>
                 <option value="WRITE">Escritor</option>
               </select>
+              <div
+                *ngIf="
+                  editFormAddCollab.get('rol_add')!.invalid &&
+                  (editFormAddCollab.get('rol_add')!.dirty || editFormAddCollab.get('rol_add')!.touched)
+                "
+              >
+                <small
+                  class="form-text text-danger"
+                  *ngIf="editFormAddCollab.get('rol_add')?.errors?.required"
+                  jhiTranslate="entity.validation.required"
+                >
+                  This field is required.
+                </small>
+              </div>
             </div>
           </div>
         </div>
@@ -545,9 +583,9 @@
             type="submit"
             class="ds-btn ds-btn--primary"
             data-cy="entityAddButton"
-            [disabled]="isSavingCollab"
+            [disabled]="editFormAddCollab.invalid || isSavingAddCollab"
           >
-            <span>Guardar</span>
+            <span>Añadir</span>
           </button>
         </div>
       </form>

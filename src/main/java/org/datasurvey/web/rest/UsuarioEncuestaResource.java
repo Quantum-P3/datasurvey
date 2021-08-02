@@ -205,7 +205,11 @@ public class UsuarioEncuestaResource {
     @DeleteMapping("/usuario-encuestas/{id}")
     public ResponseEntity<Void> deleteUsuarioEncuesta(@PathVariable Long id) {
         log.debug("REST request to delete UsuarioEncuesta : {}", id);
+        Optional<UsuarioEncuesta> usuarioEncuesta = usuarioEncuestaService.findOne(id);
         usuarioEncuestaService.delete(id);
+        if (usuarioEncuesta != null) {
+            mailService.sendNotifyDeleteColaborator(usuarioEncuesta.get());
+        }
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
@@ -232,7 +236,7 @@ public class UsuarioEncuestaResource {
     }
 
     @PostMapping("/usuario-encuestas/notify/{id}")
-    public ResponseEntity<Void> notifyEncuestaDeleted(@PathVariable Long id, @Valid @RequestBody UsuarioEncuesta usuarioEncuesta) {
+    public ResponseEntity<Void> notifyInvitationColaborator(@PathVariable Long id, @Valid @RequestBody UsuarioEncuesta usuarioEncuesta) {
         log.debug("REST request to notify {} of invitation to Encuesta", usuarioEncuesta.getUsuarioExtra().getUser().getEmail());
         mailService.sendInvitationColaborator(usuarioEncuesta);
         return ResponseEntity.noContent().build();
