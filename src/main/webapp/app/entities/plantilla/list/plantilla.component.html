@@ -26,9 +26,9 @@
     </div>
   </h2>
 
-  <jhi-alert-error></jhi-alert-error>
+  <!-- <jhi-alert-error></jhi-alert-error>
 
-  <jhi-alert></jhi-alert>
+  <jhi-alert></jhi-alert> -->
 
   <div class="alert alert-warning" id="no-result" *ngIf="plantillas?.length === 0">
     <span jhiTranslate="dataSurveyApp.plantilla.home.notFound">No templates found</span>
@@ -56,7 +56,8 @@
           <td *ngIf="plantilla.fechaPublicacionTienda">{{ plantilla.fechaPublicacionTienda | formatShortDatetime | titlecase }}</td>
           <td *ngIf="!plantilla.fechaPublicacionTienda">No establecida</td>
           <td jhiTranslate="{{ 'dataSurveyApp.EstadoPlantilla.' + plantilla.estado }}">{{ plantilla.estado }}</td>
-          <td>{{ plantilla.precio | currency: 'USD':'symbol-narrow' }}</td>
+          <td *ngIf="plantilla.precio! > 0">${{ plantilla.precio | number: '1.2' }}</td>
+          <td *ngIf="plantilla.precio! === 0">Gratis</td>
           <td>{{ plantilla.categoria?.nombre }}</td>
           <td class="text-right">
             <div class="btn-group">
@@ -168,7 +169,7 @@
 
             <div class="form-group">
               <label class="form-control-label" jhiTranslate="dataSurveyApp.plantilla.precio" for="field_precio">Precio</label>
-              <input type="number" class="form-control" name="precio" id="field_precio" data-cy="precio" formControlName="precio" />
+              <input type="number" min="0" class="form-control" name="precio" id="field_precio" data-cy="precio" formControlName="precio" />
               <div
                 *ngIf="
                   templateCreateForm.get('precio')!.invalid &&
@@ -189,6 +190,13 @@
                 >
                   This field should be a number.
                 </small>
+                <small
+                  class="form-text text-danger"
+                  [hidden]="!templateCreateForm.get('precio')?.errors?.min"
+                  jhiTranslate="entity.validation.minoigual"
+                >
+                  This field should be great than or equals to 0.
+                </small>
               </div>
             </div>
 
@@ -207,6 +215,20 @@
                   {{ categoriaOption.nombre }}
                 </option>
               </select>
+              <div
+                *ngIf="
+                  templateCreateForm.get('categoria')!.invalid &&
+                  (templateCreateForm.get('categoria')!.dirty || templateCreateForm.get('categoria')!.touched)
+                "
+              >
+                <small
+                  class="form-text text-danger"
+                  *ngIf="templateCreateForm.get('categoria')?.errors?.required"
+                  jhiTranslate="entity.validation.required"
+                >
+                  This field is required.
+                </small>
+              </div>
             </div>
           </div>
         </div>
