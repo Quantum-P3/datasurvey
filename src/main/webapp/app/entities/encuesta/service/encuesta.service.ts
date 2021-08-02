@@ -26,6 +26,13 @@ export class EncuestaService {
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
   }
 
+  createFromTemplate(encuesta: IEncuesta, plantillaId: Number): Observable<EntityResponseType> {
+    const copy = this.convertDateFromClient(encuesta);
+    return this.http
+      .post<IEncuesta>(`${this.resourceUrl}/${plantillaId}`, copy, { observe: 'response' })
+      .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
   //update para publicar
   update(encuesta: IEncuesta): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(encuesta);

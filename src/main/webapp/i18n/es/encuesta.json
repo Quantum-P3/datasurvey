@@ -34,7 +34,8 @@
       "ePreguntaAbierta": "Pregunta Abierta",
       "ePreguntaCerrada": "Pregunta Cerrada",
       "categoria": "Categoría",
-      "usuarioExtra": "Correo Usuario"
+      "usuarioExtra": "Correo Usuario",
+      "plantilla": "Plantilla"
     }
   }
 }

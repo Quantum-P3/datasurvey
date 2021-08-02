@@ -317,7 +317,11 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
     if (encuesta.id !== undefined) {
       this.subscribeToSaveResponse(this.encuestaService.update(encuesta));
     } else {
-      this.subscribeToSaveResponse(this.encuestaService.create(encuesta));
+      // TMP CREATE SURVEY FROM TEMPLATE
+      const templateId: Number = 20;
+
+      // this.subscribeToSaveResponse(this.encuestaService.create(encuesta));
+      this.subscribeToSaveResponse(this.encuestaService.createFromTemplate(encuesta, templateId));
     }
   }
 
