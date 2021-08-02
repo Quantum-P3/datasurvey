@@ -1,58 +1,86 @@
-<div class="row justify-content-center">
-  <div class="col-8">
-    <div *ngIf="plantilla">
-      <h2 data-cy="plantillaDetailsHeading"><span jhiTranslate="dataSurveyApp.plantilla.detail.title">Plantilla</span></h2>
+<div class="container-fluid" *ngIf="plantilla">
+  <div>
+    <h2 id="page-heading" data-cy="PPreguntaCerradaHeading">
+      <div class="d-flex align-items-center">
+        <p class="ds-title">Vista previa de {{ plantilla!.nombre }}</p>
+      </div>
 
-      <hr />
+      <p class="ds-subtitle">Creada el día {{ plantilla!.fechaCreacion | formatShortDatetime | lowercase }}</p>
+      <div class="d-flex justify-content-end">
+        <button type="button" class="ds-btn ds-btn--secondary" (click)="previousState()">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+      </div>
+    </h2>
 
-      <jhi-alert-error></jhi-alert-error>
+    <jhi-alert-error></jhi-alert-error>
 
-      <jhi-alert></jhi-alert>
+    <!-- <jhi-alert></jhi-alert> -->
 
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ plantilla.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.plantilla.nombre">Nombre</span></dt>
-        <dd>
-          <span>{{ plantilla.nombre }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.plantilla.descripcion">Descripcion</span></dt>
-        <dd>
-          <span>{{ plantilla.descripcion }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.plantilla.fechaCreacion">Fecha Creacion</span></dt>
-        <dd>
-          <span>{{ plantilla.fechaCreacion | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.plantilla.fechaPublicacionTienda">Fecha Publicacion Tienda</span></dt>
-        <dd>
-          <span>{{ plantilla.fechaPublicacionTienda | formatMediumDatetime }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.plantilla.estado">Estado</span></dt>
-        <dd>
-          <span jhiTranslate="{{ 'dataSurveyApp.EstadoPlantilla.' + plantilla.estado }}">{{ plantilla.estado }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.plantilla.precio">Precio</span></dt>
-        <dd>
-          <span>{{ plantilla.precio }}</span>
-        </dd>
-        <dt><span jhiTranslate="dataSurveyApp.plantilla.categoria">Categoria</span></dt>
-        <dd>
-          <div *ngIf="plantilla.categoria">
-            <a [routerLink]="['/categoria', plantilla.categoria?.id, 'view']">{{ plantilla.categoria?.nombre }}</a>
+    <div class="ds-survey preview-survey" id="entities">
+      <div class="ds-survey--all-question-wrapper col-8">
+        <ng-container *ngIf="pPreguntas && pPreguntas.length === 0">
+          <p class="ds-title text-center">Plantilla vacía</p>
+          <p class="ds-subtitle text-center">Inicie creando preguntas y opciones para su plantilla.</p>
+        </ng-container>
+
+        <div class="ds-survey--question-wrapper card-plantilla lift" *ngFor="let pPregunta of pPreguntas; let i = index; trackBy: trackId">
+          <div
+            [attr.data-index]="pPregunta.id"
+            [attr.data-tipo]="pPregunta.tipo"
+            [attr.data-opcional]="pPregunta.opcional"
+            class="ds-survey--question"
+          >
+            <div class="ds-survey--titulo">
+              <span class="ds-survey--titulo--name">{{ i + 1 }}. {{ pPregunta.nombre }}</span>
+            </div>
+            <div>
+              <span *ngIf="pPregunta.tipo === 'SINGLE'" class="ds-subtitle"
+                >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.SINGLE' | translate | lowercase }}
+                {{ pPregunta.opcional ? '(opcional)' : '' }}</span
+              >
+              <span *ngIf="pPregunta.tipo === 'MULTIPLE'" class="ds-subtitle"
+                >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.MULTIPLE' | translate | lowercase }}
+                {{ pPregunta.opcional ? '(opcional)' : '' }}</span
+              >
+              <span *ngIf="!pPregunta.tipo" class="ds-subtitle"
+                >Pregunta de respuesta abierta {{ pPregunta.opcional ? '(opcional)' : '' }}</span
+              >
+            </div>
+            <ng-container *ngIf="pPregunta.tipo">
+              <ng-container *ngFor="let pPreguntaOpcion of pPreguntasOpciones; let j = index; trackBy: trackId">
+                <ng-container *ngFor="let pPreguntaOpcionFinal of pPreguntaOpcion">
+                  <ng-container *ngIf="pPregunta.id === pPreguntaOpcionFinal.ppreguntaCerrada.id">
+                    <div
+                      class="ds-survey--option ds-survey--option--base ds-survey--closed-option can-delete"
+                      [attr.data-id]="pPreguntaOpcionFinal.id"
+                    >
+                      <div class="radio" *ngIf="pPregunta.tipo === 'SINGLE'">
+                        <input
+                          type="radio"
+                          style="border-radius: 3px"
+                          name="{{ 'radio' + pPregunta.id }}"
+                          id="{{ 'radio' + pPreguntaOpcionFinal.id }}"
+                        />
+                        <!-- <input class="ds-survey--checkbox" id="{{ pPregunta.id }}-{{ pPreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
+                        <label for="{{ 'radio' + pPreguntaOpcionFinal.id }}">{{ pPreguntaOpcionFinal.nombre }}</label>
+                      </div>
+                      <div class="checkbox" *ngIf="pPregunta.tipo === 'MULTIPLE'">
+                        <input type="checkbox" style="border-radius: 3px" id="{{ 'checkbox' + pPreguntaOpcionFinal.id }}" />
+                        <!-- <input class="ds-survey--checkbox" id="{{ pPregunta.id }}-{{ pPreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
+                        <label for="{{ 'checkbox' + pPreguntaOpcionFinal.id }}">{{ pPreguntaOpcionFinal.nombre }}</label>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+            <div class="ds-survey--option ds-survey--option--base ds-survey--open-option" *ngIf="!pPregunta.tipo">
+              <textarea cols="30" rows="10" disabled></textarea>
+            </div>
           </div>
-        </dd>
-      </dl>
-
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-      </button>
-
-      <button type="button" [routerLink]="['/plantilla', plantilla.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-      </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
