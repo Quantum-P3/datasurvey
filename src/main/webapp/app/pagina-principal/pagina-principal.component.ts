@@ -114,8 +114,8 @@ export class PaginaPrincipalComponent implements OnInit {
 
   completeEncuesta(encuesta: IEncuesta): void {
     if (encuesta.acceso === AccesoEncuesta.PRIVATE) {
+      this.confirmPassword(encuesta);
     }
-    this.confirmPassword(encuesta);
   }
 
   confirmPassword(encuesta: IEncuesta): void {
