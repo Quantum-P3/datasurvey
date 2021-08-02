@@ -25,7 +25,7 @@ import { IPPreguntaCerrada } from 'app/entities/p-pregunta-cerrada/p-pregunta-ce
 import { PPreguntaCerradaService } from 'app/entities/p-pregunta-cerrada/service/p-pregunta-cerrada.service';
 import { PPreguntaCerradaDeleteDialogComponent } from 'app/entities/p-pregunta-cerrada/delete/p-pregunta-cerrada-delete-dialog.component';
 
-import { faTimes, faPlus, faQuestion, faPollH, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faPlus, faQuestion, faPollH, faEye, faStore } from '@fortawesome/free-solid-svg-icons';
 import { PreguntaCerradaTipo } from 'app/entities/enumerations/pregunta-cerrada-tipo.model';
 import { PlantillaDeleteQuestionDialogComponent } from '../plantilla-delete-question-dialog/plantilla-delete-question-dialog.component';
 import { PlantillaDeleteOptionDialogComponent } from '../plantilla-delete-option-dialog/plantilla-delete-option-dialog.component';
@@ -33,6 +33,9 @@ import { PlantillaDeleteOptionDialogComponent } from '../plantilla-delete-option
 import { ParametroAplicacionService } from './../../parametro-aplicacion/service/parametro-aplicacion.service';
 import { IParametroAplicacion } from './../../parametro-aplicacion/parametro-aplicacion.model';
 import { Router } from '@angular/router';
+import { EstadoPlantilla } from 'app/entities/enumerations/estado-plantilla.model';
+import { PlantillaDeleteStoreDialogComponent } from '../plantilla-delete-store-dialog/plantilla-delete-store-dialog.component';
+import { PlantillaPublishStoreDialogComponent } from '../plantilla-publish-store-dialog/plantilla-publish-store-dialog.component';
 
 @Component({
   selector: 'jhi-plantilla-update',
@@ -44,6 +47,7 @@ export class PlantillaUpdateComponent implements OnInit, AfterViewChecked {
   faPollH = faPollH;
   faQuestion = faQuestion;
   faEye = faEye;
+  faStore = faStore;
 
   isSaving = false;
   isSavingQuestion = false;
@@ -448,5 +452,25 @@ export class PlantillaUpdateComponent implements OnInit, AfterViewChecked {
 
   trackUsuarioExtraById(index: number, item: IUsuarioExtra): number {
     return item.id!;
+  }
+
+  publishTemplateToStore(): void {
+    const modalRef = this.modalService.open(PlantillaPublishStoreDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'confirm') {
+        this.plantilla!.estado = EstadoPlantilla.ACTIVE;
+        this.plantillaService.update(this.plantilla!).subscribe(res => {});
+      }
+    });
+  }
+
+  deleteTemplateFromStore(): void {
+    const modalRef = this.modalService.open(PlantillaDeleteStoreDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'confirm') {
+        this.plantilla!.estado = EstadoPlantilla.DRAFT;
+        this.plantillaService.update(this.plantilla!).subscribe(res => {});
+      }
+    });
   }
 }
