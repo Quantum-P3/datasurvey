@@ -102,6 +102,10 @@ export class EncuestaService {
     return this.http.delete(`${this.resourceUrl}/notify/${encuesta.id}`, { observe: 'response' });
   }
 
+  /*sendCorreoInvitacion(correo: string) {
+    return this.http.post(`${this.resourceUrl}/notify/${encuesta.id}`, { observe: 'response' });
+  }*/
+
   addEncuestaToCollectionIfMissing(encuestaCollection: IEncuesta[], ...encuestasToCheck: (IEncuesta | null | undefined)[]): IEncuesta[] {
     const encuestas: IEncuesta[] = encuestasToCheck.filter(isPresent);
     if (encuestas.length > 0) {

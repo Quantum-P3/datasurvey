@@ -5,6 +5,7 @@ import java.util.Locale;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import org.datasurvey.domain.User;
+import org.datasurvey.domain.UsuarioEncuesta;
 import org.datasurvey.domain.UsuarioExtra;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,6 +113,22 @@ public class MailService {
     }
 
     @Async
+    public void sendEmailFromTemplateUsuarioEncuesta(User user, UsuarioEncuesta usuarioEncuesta, String templateName, String titleKey) {
+        if (user.getEmail() == null) {
+            log.debug("Email doesn't exist for user '{}'", user.getLogin());
+            return;
+        }
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(USER, user);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        context.setVariable("colaborador", usuarioEncuesta);
+        String content = templateEngine.process(templateName, context);
+        String subject = messageSource.getMessage(titleKey, null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    @Async
     public void sendActivationEmail(User user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
@@ -163,5 +180,27 @@ public class MailService {
     public void sendEncuestaDeleted(UsuarioExtra user) {
         log.debug("Sending encuesta deletion notification mail to '{}'", user.getUser().getEmail());
         sendEmailFromTemplate(user.getUser(), "mail/encuestaDeletedEmail", "email.encuestaDeleted.title");
+    }
+
+    @Async
+    public void sendInvitationColaborator(UsuarioEncuesta user) {
+        log.debug("Sending encuesta invitation collaboration notification mail to '{}'", user.getUsuarioExtra().getUser().getEmail());
+        sendEmailFromTemplateUsuarioEncuesta(
+            user.getUsuarioExtra().getUser(),
+            user,
+            "mail/invitationColaboratorEmail",
+            "email.invitation.title"
+        );
+    }
+
+    @Async
+    public void sendNotifyDeleteColaborator(UsuarioEncuesta user) {
+        log.debug("Sending delete collaboration notification mail to '{}'", user.getUsuarioExtra().getUser().getEmail());
+        sendEmailFromTemplateUsuarioEncuesta(
+            user.getUsuarioExtra().getUser(),
+            user,
+            "mail/deleteColaboratorEmail",
+            "email.deleteColaborator.title"
+        );
     }
 }
