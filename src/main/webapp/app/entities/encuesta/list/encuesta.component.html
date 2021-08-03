@@ -172,8 +172,8 @@
             style="animation-delay: 3s"
           ></div>
         </div>
-        <div class="entity-share">
-          <span><fa-icon [icon]="faShareAlt"></fa-icon></span>
+        <div class="entity-share" *ngIf="encuesta.estado == 'ACTIVE'">
+          <span><fa-icon [icon]="faShareAlt" (click)="compartir()"></fa-icon></span>
         </div>
       </div>
 

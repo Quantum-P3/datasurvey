@@ -500,6 +500,10 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
           document.getElementById('contextmenu-share')!.style.display = 'block';
         }
 
+        if (this.selectedSurvey!.estado === 'FINISHED') {
+          document.getElementById('contextmenu-share')!.style.display = 'none';
+        }
+
         document.getElementById('contextmenu-create--separator')!.style.display = 'none';
       }
 
