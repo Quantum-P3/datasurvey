@@ -12,24 +12,25 @@ export class EncuestaPasswordDialogComponent implements OnInit {
   passwordForm = this.fb.group({
     password: [null, [Validators.required]],
   });
-  isEval: boolean = false;
   encuesta?: IEncuesta;
+  isWrong?: boolean;
+  passwordInput?: string;
 
   constructor(protected activeModal: NgbActiveModal, protected fb: FormBuilder) {}
 
   ngOnInit(): void {}
 
   submitPassword() {
-    this.isEval = true;
     const password = this.passwordForm.get(['password'])!.value;
 
     if (this.passwordForm.valid && password === this.encuesta!.contrasenna) {
-      this.isEval = false;
-      //navegar a la vara
+      this.activeModal.close('success');
+    } else {
+      this.isWrong = true;
     }
   }
 
   cancel(): void {
-    this.activeModal.dismiss();
+    this.activeModal.close('cancel');
   }
 }
