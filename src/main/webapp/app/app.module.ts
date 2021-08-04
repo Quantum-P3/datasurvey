@@ -44,10 +44,6 @@ import { ShareIconsModule } from 'ngx-sharebuttons/icons';
     SharedModule,
     HomeModule,
     PaginaPrincipalModule,
-    ShareButtonsModule.withConfig({
-      debug: true,
-    }),
-    ShareIconsModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     EntityRoutingModule,
     AppRoutingModule,
@@ -67,6 +63,8 @@ import { ShareIconsModule } from 'ngx-sharebuttons/icons';
         useFactory: missingTranslationHandler,
       },
     }),
+    ShareButtonsModule,
+    ShareIconsModule,
   ],
   providers: [
     Title,
