@@ -13,6 +13,8 @@ import { EPreguntaCerradaService } from 'app/entities/e-pregunta-cerrada/service
 import { EPreguntaAbiertaService } from '../../e-pregunta-abierta/service/e-pregunta-abierta.service';
 import { EPreguntaCerradaOpcionService } from '../../e-pregunta-cerrada-opcion/service/e-pregunta-cerrada-opcion.service';
 import { faStar, faQuestion } from '@fortawesome/free-solid-svg-icons';
+import { AccesoEncuesta } from 'app/entities/enumerations/acceso-encuesta.model';
+import { EncuestaPasswordDialogComponent } from '../encuesta-password-dialog/encuesta-password-dialog.component';
 
 @Component({
   selector: 'jhi-complete',
@@ -23,10 +25,11 @@ export class EncuestaCompleteComponent implements OnInit {
   usuarioExtrasSharedCollection: IUsuarioExtra[] = [];
   faStar = faStar;
   faQuestion = faQuestion;
-  encuesta: IEncuesta | null = null;
+  encuesta?: IEncuesta;
   isLoading = false;
   ePreguntas?: any[];
   ePreguntasOpciones?: any[];
+  isLocked?: boolean;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -43,11 +46,27 @@ export class EncuestaCompleteComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ encuesta }) => {
       if (encuesta) {
         this.encuesta = encuesta;
-        this.loadAll();
-      } else {
+      }
+      this.isLocked = this.verifyPassword();
+      if (this.isLocked) {
         this.previousState();
+      } else {
+        this.loadAll();
       }
     });
+  }
+
+  verifyPassword(): boolean {
+    if (this.encuesta!.acceso === AccesoEncuesta.PUBLIC) {
+      return false;
+    } else {
+      const modalRef = this.modalService.open(EncuestaPasswordDialogComponent, { size: 'lg', backdrop: 'static' });
+      modalRef.componentInstance.encuesta = this.encuesta;
+      modalRef.closed.subscribe(reason => {
+        return reason === 'success';
+      });
+    }
+    return true;
   }
 
   ngAfterViewChecked(): void {
