@@ -11,21 +11,10 @@
         <button type="button" class="ds-btn ds-btn--secondary" (click)="previousState()">
           <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.back">Back</span>
         </button>
-        <ng-container *ngIf="encuesta!.estado === 'DRAFT'">
-          <button type="button" class="ds-btn ds-btn--primary" (click)="publishSurvey()">Publicar encuesta</button>
-        </ng-container>
       </div>
     </h2>
 
     <jhi-alert-error></jhi-alert-error>
-    <div *ngIf="successPublished" class="alert alert-success alert-dismissible fade show" role="alert">
-      Su encuesta fue publicada exitosamente
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-
-    <!-- <jhi-alert></jhi-alert> -->
 
     <div class="alert alert-warning" id="no-result" *ngIf="ePreguntas?.length === 0">
       <span>No se encontraron preguntas</span>
@@ -71,12 +60,10 @@
                           name="{{ 'radio' + ePregunta.id }}"
                           id="{{ 'radio' + ePreguntaOpcionFinal.id }}"
                         />
-                        <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
                         <label for="{{ 'radio' + ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
                       </div>
                       <div class="checkbox" *ngIf="ePregunta.tipo === 'MULTIPLE'">
                         <input type="checkbox" style="border-radius: 3px" id="{{ 'checkbox' + ePreguntaOpcionFinal.id }}" />
-                        <!-- <input class="ds-survey--checkbox" id="{{ ePregunta.id }}-{{ ePreguntaOpcionFinal.id }}" type="checkbox" disabled /> -->
                         <label for="{{ 'checkbox' + ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
                       </div>
                     </div>
@@ -111,10 +98,6 @@
                   <p>{{ ePreguntas?.length }}</p>
                 </div>
 
-                <!--<div>
-                    <p style="font-size: 1.2em" class="ds-survey--titulo--name">Colaboradores</p>
-                  </div>-->
-
                 <div class="mb-5">
                   <p class="ds-subtitle" jhiTranslate="dataSurveyApp.encuesta.acceso">Acceso</p>
                   <p jhiTranslate="{{ 'dataSurveyApp.AccesoEncuesta.' + encuesta.acceso }}">{{ encuesta.acceso }}</p>
@@ -145,23 +128,6 @@
                     }}
                   </P>
                 </div>
-
-                <!--<div class="mb-5">
-                <p jhiTranslate="dataSurveyApp.encuesta.fechaFinalizar" class="ds-subtitle" > Fecha Finalizar</p>
-                <p> </p></div>
-              <dl>
-                <dt><span jhiTranslate="dataSurveyApp.encuesta.fechaFinalizar">Fecha Finalizar</span></dt>
-                <dd>
-                <span>
-                  -
-                  {{
-                  encuesta.fechaFinalizar === undefined
-                    ? 'Sin fecha de finalización'
-                    : (encuesta.fechaFinalizar | formatShortDatetime | lowercase)
-                  }}</span
-                >
-                </dd>
-              </dl>-->
 
                 <div class="mb-5">
                   <p class="ds-subtitle">Fecha de finalización</p>
