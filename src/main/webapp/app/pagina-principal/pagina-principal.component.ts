@@ -113,11 +113,7 @@ export class PaginaPrincipalComponent implements OnInit {
   }
 
   completeEncuesta(encuesta: IEncuesta): void {
-    if (encuesta.acceso === AccesoEncuesta.PRIVATE) {
-      this.confirmPassword(encuesta);
-    } else {
-      //navigate to form
-    }
+    this.router.navigate(['/encuesta', encuesta.id, 'complete']);
   }
 
   confirmPassword(encuesta: IEncuesta): void {
