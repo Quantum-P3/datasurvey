@@ -53,7 +53,8 @@ export class PlantillaComponent implements OnInit {
     this.plantillaService.query().subscribe(
       (res: HttpResponse<IPlantilla[]>) => {
         this.isLoading = false;
-        this.plantillas = res.body ?? [];
+        const tempPlantillas = res.body ?? [];
+        this.plantillas = tempPlantillas.filter(p => p.estado !== EstadoPlantilla.DELETED);
       },
       () => {
         this.isLoading = false;

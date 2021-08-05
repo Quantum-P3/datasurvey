@@ -39,7 +39,6 @@
       <thead>
         <tr>
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.nombre">Nombre</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.descripcion">Descripcion</span></th>
           <!-- <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.fechaCreacion">Fecha Creacion</span></th> -->
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.fechaPublicacionTienda">Fecha Publicacion Tienda</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.estado">Estado</span></th>
@@ -51,7 +50,6 @@
       <tbody>
         <tr *ngFor="let plantilla of plantillas; trackBy: trackId" data-cy="entityTable">
           <td>{{ plantilla.nombre }}</td>
-          <td>{{ plantilla.descripcion }}</td>
           <!-- <td>{{ plantilla.fechaCreacion | formatMediumDatetime }}</td> -->
           <td *ngIf="plantilla.fechaPublicacionTienda">{{ plantilla.fechaPublicacionTienda | formatShortDatetime | titlecase }}</td>
           <td *ngIf="!plantilla.fechaPublicacionTienda">No establecida</td>
@@ -61,16 +59,6 @@
           <td>{{ plantilla.categoria?.nombre }}</td>
           <td class="text-right">
             <div class="btn-group">
-              <button
-                type="submit"
-                [routerLink]="['/plantilla', plantilla.id, 'view']"
-                class="ds-btn ds-btn--secondary btn-sm"
-                data-cy="entityDetailsButton"
-              >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline">Vista previa</span>
-              </button>
-
               <button
                 type="submit"
                 [routerLink]="['/plantilla', plantilla.id, 'edit']"
