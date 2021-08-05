@@ -10,6 +10,7 @@ import { PlantillaDeleteQuestionDialogComponent } from './plantilla-delete-quest
 import { PlantillaDeleteOptionDialogComponent } from './plantilla-delete-option-dialog/plantilla-delete-option-dialog.component';
 import { PlantillaPublishStoreDialogComponent } from './plantilla-publish-store-dialog/plantilla-publish-store-dialog.component';
 import { PlantillaDeleteStoreDialogComponent } from './plantilla-delete-store-dialog/plantilla-delete-store-dialog.component';
+import { PlantillaChangeStatusDialogComponent } from './plantilla-change-status-dialog/plantilla-change-status-dialog.component';
 
 @NgModule({
   imports: [SharedModule, PlantillaRoutingModule, FontAwesomeModule],
@@ -22,6 +23,7 @@ import { PlantillaDeleteStoreDialogComponent } from './plantilla-delete-store-di
     PlantillaDeleteOptionDialogComponent,
     PlantillaPublishStoreDialogComponent,
     PlantillaDeleteStoreDialogComponent,
+    PlantillaChangeStatusDialogComponent,
   ],
   entryComponents: [PlantillaDeleteDialogComponent],
 })
