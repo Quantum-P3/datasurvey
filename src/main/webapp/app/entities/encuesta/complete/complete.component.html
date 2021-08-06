@@ -56,6 +56,8 @@
                       <div class="radio" *ngIf="ePregunta.tipo === 'SINGLE'">
                         <input
                           type="radio"
+                          (change)="onCheck(ePreguntaOpcionFinal)"
+                          [value]="ePreguntaOpcionFinal.id"
                           style="border-radius: 3px"
                           name="{{ 'radio' + ePregunta.id }}"
                           id="{{ 'radio' + ePreguntaOpcionFinal.id }}"
@@ -63,7 +65,12 @@
                         <label for="{{ 'radio' + ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
                       </div>
                       <div class="checkbox" *ngIf="ePregunta.tipo === 'MULTIPLE'">
-                        <input type="checkbox" style="border-radius: 3px" id="{{ 'checkbox' + ePreguntaOpcionFinal.id }}" />
+                        <input
+                          (change)="toggleOption(ePreguntaOpcionFinal)"
+                          type="checkbox"
+                          style="border-radius: 3px"
+                          id="{{ 'checkbox' + ePreguntaOpcionFinal.id }}"
+                        />
                         <label for="{{ 'checkbox' + ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
                       </div>
                     </div>
@@ -76,6 +83,7 @@
             </div>
           </div>
         </div>
+        <button class="ds-btn ds-btn--primary" (click)="finish()">Terminar</button>
       </div>
       <div
         class="modal fade ds-modal"

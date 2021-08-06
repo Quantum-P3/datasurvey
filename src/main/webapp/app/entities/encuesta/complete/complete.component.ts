@@ -11,10 +11,13 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IEPreguntaCerrada } from 'app/entities/e-pregunta-cerrada/e-pregunta-cerrada.model';
 import { EPreguntaCerradaService } from 'app/entities/e-pregunta-cerrada/service/e-pregunta-cerrada.service';
 import { EPreguntaAbiertaService } from '../../e-pregunta-abierta/service/e-pregunta-abierta.service';
+import { EPreguntaAbiertaRespuestaService } from '../../e-pregunta-abierta-respuesta/service/e-pregunta-abierta-respuesta.service';
 import { EPreguntaCerradaOpcionService } from '../../e-pregunta-cerrada-opcion/service/e-pregunta-cerrada-opcion.service';
 import { faStar, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { AccesoEncuesta } from 'app/entities/enumerations/acceso-encuesta.model';
 import { EncuestaPasswordDialogComponent } from '../encuesta-password-dialog/encuesta-password-dialog.component';
+import { EPreguntaCerradaOpcion } from 'app/entities/e-pregunta-cerrada-opcion/e-pregunta-cerrada-opcion.model';
+import { PreguntaCerradaTipo } from 'app/entities/enumerations/pregunta-cerrada-tipo.model';
 
 @Component({
   selector: 'jhi-complete',
@@ -30,6 +33,9 @@ export class EncuestaCompleteComponent implements OnInit {
   ePreguntas?: any[];
   ePreguntasOpciones?: any[];
   isLocked?: boolean;
+  selectedOpenOptions: any;
+  selectedSingleOptions: any;
+  selectedMultiOptions: any;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -39,9 +45,13 @@ export class EncuestaCompleteComponent implements OnInit {
     protected modalService: NgbModal,
     protected ePreguntaCerradaService: EPreguntaCerradaService,
     protected ePreguntaCerradaOpcionService: EPreguntaCerradaOpcionService,
-    protected ePreguntaAbiertaService: EPreguntaAbiertaService
-  ) {}
-
+    protected ePreguntaAbiertaService: EPreguntaAbiertaService,
+    protected ePreguntaAbiertaAbiertaRespuestaService: EPreguntaAbiertaRespuestaService
+  ) {
+    this.selectedOpenOptions = {};
+    this.selectedSingleOptions = {};
+    this.selectedMultiOptions = [];
+  }
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ encuesta }) => {
       if (encuesta) {
@@ -54,6 +64,11 @@ export class EncuestaCompleteComponent implements OnInit {
         this.loadAll();
       }
     });
+    for (let pregunta of this.ePreguntas!) {
+      if (pregunta.tipo && pregunta.tipo === PreguntaCerradaTipo.SINGLE) {
+        this.selectedSingleOptions[pregunta.id] = null;
+      }
+    }
   }
 
   verifyPassword(): boolean {
@@ -74,16 +89,20 @@ export class EncuestaCompleteComponent implements OnInit {
   }
 
   initListeners(): void {
-    const checkboxes = document.getElementsByClassName('ds-survey--checkbox');
-    for (let i = 0; i < checkboxes.length; i++) {
-      checkboxes[i].addEventListener('click', e => {
-        if ((e.target as HTMLInputElement).checked) {
-          (e.target as HTMLElement).offsetParent!.classList.add('ds-survey--closed-option--active');
-          debugger;
-        } else {
-          (e.target as HTMLElement).offsetParent!.classList.remove('ds-survey--closed-option--active');
-        }
-      });
+    const questions = document.getElementsByClassName('ds-survey--question-wrapper');
+    for (let i = 0; i < questions.length; i++) {
+      if (questions[i].classList.contains('ds-survey--closed-option')) {
+        questions[i].addEventListener('click', e => {
+          if ((e.target as HTMLInputElement).checked) {
+            (e.target as HTMLElement).offsetParent!.classList.add('ds-survey--closed-option--active');
+            (e.target as HTMLElement).id;
+            debugger;
+          } else {
+            (e.target as HTMLElement).offsetParent!.classList.remove('ds-survey--closed-option--active');
+            debugger;
+          }
+        });
+      }
     }
   }
 
@@ -136,5 +155,30 @@ export class EncuestaCompleteComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  onCheck(preguntaOpcion: { epreguntaCerrada: any; id: any }): void {
+    this.selectedSingleOptions[preguntaOpcion.epreguntaCerrada!.id!] = preguntaOpcion.id;
+    console.log(this.selectedSingleOptions);
+    debugger;
+  }
+
+  toggleOption(ePreguntaOpcionFinal: { id: any }): void {
+    if (this.selectedMultiOptions.includes(ePreguntaOpcionFinal.id)) {
+      for (let i = 0; i < this.selectedMultiOptions.length; i++) {
+        if (this.selectedMultiOptions[i] === ePreguntaOpcionFinal.id) {
+          this.selectedMultiOptions.splice(i, 1);
+        }
+      }
+    } else {
+      this.selectedMultiOptions.push(ePreguntaOpcionFinal.id);
+    }
+    debugger;
+  }
+
+  finish(): void {
+    console.log(this.selectedMultiOptions);
+    console.log(this.selectedSingleOptions);
+    console.log(this.selectedOpenOptions);
   }
 }
