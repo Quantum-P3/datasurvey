@@ -79,6 +79,7 @@ export class EncuestaCompleteComponent implements OnInit {
       checkboxes[i].addEventListener('click', e => {
         if ((e.target as HTMLInputElement).checked) {
           (e.target as HTMLElement).offsetParent!.classList.add('ds-survey--closed-option--active');
+          debugger;
         } else {
           (e.target as HTMLElement).offsetParent!.classList.remove('ds-survey--closed-option--active');
         }
@@ -128,6 +129,9 @@ export class EncuestaCompleteComponent implements OnInit {
           this.isLoading = false;
         }
       );
+    if (this.ePreguntas!.length == 0) {
+      this.previousState();
+    }
   }
 
   previousState(): void {
