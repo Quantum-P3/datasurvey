@@ -25,7 +25,36 @@
       </div>
     </div>
   </h2>
+  <form class="ds-form" *ngIf="isAdmin() && isAuthenticated()">
+    <div class="input-group">
+      <div class="ds-filter">
+        <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+        <input type="text" name="searchString" placeholder="Buscar por nombre..." [(ngModel)]="searchString" />
+      </div>
+      <div class="ds-filter">
+        <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+        <select name="estadoPlantilla" id="estadoPlantilla" [(ngModel)]="estadoPlantilla" style="width: 200px">
+          <option value="" selected="selected" disabled="disabled">Filtrar por estado</option>
+          <option value="">Todos Estados</option>
+          <option value="Draft">Borradores</option>
+          <option value="Active">En tienda</option>
+          <option value="Disabled">Desactivadas</option>
+        </select>
+      </div>
 
+      <!--<div class="col-3">
+          <div class="input-group-addon "><i class="glyphicon glyphicon-search"></i></div>
+          <select id="categoriaEncuesta"  name="categoriaEncuesta" [(ngModel)]="categoriaEncuesta">
+            <option [ngValue]="null" selected>Filtre por categoría</option>
+            <option
+              *ngFor="let categoriaOption of categoriasSharedCollection; trackBy: trackCategoriaById"
+              [ngValue]="categoriaOption.nombre"    >
+              {{ categoriaOption.nombre }}
+            </option>
+          </select>
+        </div>-->
+    </div>
+  </form>
   <!-- <jhi-alert-error></jhi-alert-error>
 
   <jhi-alert></jhi-alert> -->
@@ -48,7 +77,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let plantilla of plantillas; trackBy: trackId" data-cy="entityTable">
+        <tr
+          *ngFor="let plantilla of plantillas | filter: 'nombre':searchString | filter: 'estado':estadoPlantilla; trackBy: trackId"
+          data-cy="entityTable"
+        >
           <td>{{ plantilla.nombre }}</td>
           <!-- <td>{{ plantilla.fechaCreacion | formatMediumDatetime }}</td> -->
           <td *ngIf="plantilla.fechaPublicacionTienda">{{ plantilla.fechaPublicacionTienda | formatShortDatetime | titlecase }}</td>
