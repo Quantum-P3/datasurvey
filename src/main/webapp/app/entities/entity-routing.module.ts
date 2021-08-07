@@ -77,6 +77,11 @@ import { RouterModule } from '@angular/router';
         loadChildren: () =>
           import('./p-pregunta-cerrada-opcion/p-pregunta-cerrada-opcion.module').then(m => m.PPreguntaCerradaOpcionModule),
       },
+      {
+        path: 'mis-plantillas',
+        data: { pageTitle: 'dataSurveyApp.usuarioExtra.plantillas.title' },
+        loadChildren: () => import('./usuario-plantillas/usuario-plantillas.module').then(m => m.UsuarioPlantillasModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

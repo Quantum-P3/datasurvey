@@ -70,12 +70,12 @@ export const USER_ROUTES: RouteInfo[] = [
   //   type: 'link',
   //   icontype: 'nc-icon nc-cart-simple',
   // },
-  // {
-  //   path: '/plantilla',
-  //   title: 'Plantillas',
-  //   type: 'link',
-  //   icontype: 'nc-icon nc-album-2',
-  // },
+  {
+    path: '/mis-plantillas',
+    title: 'Mis Plantillas',
+    type: 'link',
+    icontype: 'nc-icon nc-album-2',
+  },
   {
     path: '/colaboraciones',
     title: 'Colaboraciones',
