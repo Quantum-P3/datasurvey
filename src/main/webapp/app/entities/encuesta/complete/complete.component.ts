@@ -16,8 +16,10 @@ import { EPreguntaCerradaOpcionService } from '../../e-pregunta-cerrada-opcion/s
 import { faStar, faQuestion } from '@fortawesome/free-solid-svg-icons';
 import { AccesoEncuesta } from 'app/entities/enumerations/acceso-encuesta.model';
 import { EncuestaPasswordDialogComponent } from '../encuesta-password-dialog/encuesta-password-dialog.component';
-import { EPreguntaCerradaOpcion } from 'app/entities/e-pregunta-cerrada-opcion/e-pregunta-cerrada-opcion.model';
 import { PreguntaCerradaTipo } from 'app/entities/enumerations/pregunta-cerrada-tipo.model';
+import { EPreguntaAbiertaRespuesta } from 'app/entities/e-pregunta-abierta-respuesta/e-pregunta-abierta-respuesta.model';
+import { Observable } from 'rxjs/internal/Observable';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'jhi-complete',
@@ -36,6 +38,7 @@ export class EncuestaCompleteComponent implements OnInit {
   selectedOpenOptions: any;
   selectedSingleOptions: any;
   selectedMultiOptions: any;
+  error: boolean;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -46,12 +49,14 @@ export class EncuestaCompleteComponent implements OnInit {
     protected ePreguntaCerradaService: EPreguntaCerradaService,
     protected ePreguntaCerradaOpcionService: EPreguntaCerradaOpcionService,
     protected ePreguntaAbiertaService: EPreguntaAbiertaService,
-    protected ePreguntaAbiertaAbiertaRespuestaService: EPreguntaAbiertaRespuestaService
+    protected ePreguntaAbiertaRespuestaService: EPreguntaAbiertaRespuestaService
   ) {
     this.selectedOpenOptions = {};
     this.selectedSingleOptions = {};
     this.selectedMultiOptions = [];
+    this.error = false;
   }
+
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ encuesta }) => {
       if (encuesta) {
@@ -171,5 +176,54 @@ export class EncuestaCompleteComponent implements OnInit {
     }
   }
 
-  finish(): void {}
+  finish(): void {
+    this.getOpenQuestionAnswers();
+    this.registerOpenQuestionAnswers();
+    this.updateClosedOptionsCount();
+  }
+
+  updateClosedOptionsCount() {
+    for (let key in this.selectedSingleOptions) {
+      this.subscribeToSaveResponse(this.ePreguntaCerradaOpcionService.updateCount(this.selectedSingleOptions[key]));
+    }
+    this.selectedMultiOptions.forEach((option: any) => {
+      this.subscribeToSaveResponse(this.ePreguntaCerradaOpcionService.updateCount(option));
+    });
+  }
+
+  registerOpenQuestionAnswers() {
+    for (let id in this.selectedOpenOptions) {
+      let pregunta = this.ePreguntas!.find(p => {
+        return p.id == id;
+      });
+      let newRespuesta = new EPreguntaAbiertaRespuesta(0, this.selectedOpenOptions[id], pregunta);
+      this.subscribeToSaveResponse(this.ePreguntaAbiertaRespuestaService.create(newRespuesta));
+    }
+  }
+
+  protected onSaveFinalize(): void {
+    // this.isSaving = false;
+  }
+
+  processError(response: HttpErrorResponse): void {
+    if (response.status === 400) {
+      this.error = true;
+    }
+  }
+
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<any>>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
+      () => this.previousState(),
+      response => this.processError(response)
+    );
+  }
+
+  getOpenQuestionAnswers() {
+    this.ePreguntas!.forEach(pregunta => {
+      if (!pregunta.tipo) {
+        let textValue = (document.getElementById(pregunta.id) as HTMLInputElement).value;
+        this.selectedOpenOptions[pregunta.id] = textValue;
+      }
+    });
+  }
 }
