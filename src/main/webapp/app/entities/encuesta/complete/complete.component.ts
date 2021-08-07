@@ -96,10 +96,8 @@ export class EncuestaCompleteComponent implements OnInit {
           if ((e.target as HTMLInputElement).checked) {
             (e.target as HTMLElement).offsetParent!.classList.add('ds-survey--closed-option--active');
             (e.target as HTMLElement).id;
-            debugger;
           } else {
             (e.target as HTMLElement).offsetParent!.classList.remove('ds-survey--closed-option--active');
-            debugger;
           }
         });
       }
@@ -159,8 +157,6 @@ export class EncuestaCompleteComponent implements OnInit {
 
   onCheck(preguntaOpcion: { epreguntaCerrada: any; id: any }): void {
     this.selectedSingleOptions[preguntaOpcion.epreguntaCerrada!.id!] = preguntaOpcion.id;
-    console.log(this.selectedSingleOptions);
-    debugger;
   }
 
   toggleOption(ePreguntaOpcionFinal: { id: any }): void {
@@ -173,12 +169,7 @@ export class EncuestaCompleteComponent implements OnInit {
     } else {
       this.selectedMultiOptions.push(ePreguntaOpcionFinal.id);
     }
-    debugger;
   }
 
-  finish(): void {
-    console.log(this.selectedMultiOptions);
-    console.log(this.selectedSingleOptions);
-    console.log(this.selectedOpenOptions);
-  }
+  finish(): void {}
 }
