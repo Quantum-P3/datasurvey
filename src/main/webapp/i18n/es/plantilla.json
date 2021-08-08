@@ -9,7 +9,10 @@
         "notFound": "No se encontró ninguna plantilla"
       },
       "created": "Una nueva plantilla ha sido creada con el identificador {{ param }}",
-      "updated": "Una plantilla ha sido actualizada con el identificador {{ param }}",
+      "updated": {
+        "detail": "Una plantilla ha sido actualizada con el identificador {{ param }}",
+        "buttonChangeEstado": "Cambiar estado"
+      },
       "deleted": "Una plantilla ha sido eliminada con el identificador {{ param }}",
       "delete": {
         "question": "¿Seguro que quiere eliminar esta plantilla?",
@@ -20,6 +23,14 @@
       },
       "detail": {
         "title": "Plantilla"
+      },
+      "desactivar": {
+        "titulo": "Desactivar plantilla",
+        "question": "¿Seguro que quiere desactivar la plantilla?"
+      },
+      "activar": {
+        "titulo": "Activar plantilla",
+        "question": "¿Seguro que quiere activar la plantilla?. Esta será activada en estado de 'Borrador'"
       },
       "id": "ID",
       "nombre": "Nombre",
