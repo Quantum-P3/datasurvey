@@ -1,0 +1,19 @@
+<form name="deleteForm">
+  <div class="modal-header">
+    <!-- <h4 class="modal-title" data-cy="encuestaDeleteDialogHeading" jhiTranslate="entity.publish.title">Confirm delete operation</h4>-->
+  </div>
+
+  <div class="modal-body">
+    <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    </button>
+
+    <button id="jhi-confirm-delete-encuesta" data-cy="entityConfirmDeleteButton" type="submit" class="ds-btn ds-btn--primary">
+      &nbsp;<span jhiTranslate="entity.action.publish">Delete</span>
+    </button>
+  </div>
+</form>

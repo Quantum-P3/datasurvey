@@ -64,6 +64,7 @@ export const USER_ROUTES: RouteInfo[] = [
     type: 'link',
     icontype: 'nc-icon nc-paper',
   },
+  { path: '/tienda-plantilla', title: 'Tienda', type: 'link', icontype: 'nc-icon nc-shop' },
   // {
   //   path: '/tienda',
   //   title: 'Tienda',
@@ -80,6 +81,6 @@ export const USER_ROUTES: RouteInfo[] = [
     path: '/colaboraciones',
     title: 'Colaboraciones',
     type: 'link',
-    icontype: 'nc-icon nc-world-2',
+    icontype: 'nc-icon nc-single-02',
   },
 ];
