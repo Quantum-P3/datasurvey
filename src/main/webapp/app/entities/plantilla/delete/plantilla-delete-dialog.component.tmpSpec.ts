@@ -1,6 +1,5 @@
-jest.mock('@ng-bootstrap/ng-bootstrap');
-
-import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
+import { Plantilla } from '../plantilla.model';
+import { ComponentFixture, fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { of } from 'rxjs';
@@ -9,6 +8,9 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PlantillaService } from '../service/plantilla.service';
 
 import { PlantillaDeleteDialogComponent } from './plantilla-delete-dialog.component';
+import { EstadoPlantilla } from '../../enumerations/estado-plantilla.model';
+
+jest.mock('@ng-bootstrap/ng-bootstrap');
 
 describe('Component Tests', () => {
   describe('Plantilla Management Delete Component', () => {
@@ -37,9 +39,12 @@ describe('Component Tests', () => {
         fakeAsync(() => {
           // GIVEN
           jest.spyOn(service, 'delete').mockReturnValue(of(new HttpResponse({})));
+          const pPlantilla = new Plantilla();
 
+          pPlantilla.id = 123;
+          pPlantilla.estado = EstadoPlantilla.DELETED;
           // WHEN
-          comp.confirmDelete(123);
+          comp.confirmDelete(pPlantilla);
           tick();
 
           // THEN
