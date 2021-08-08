@@ -61,6 +61,15 @@
             <div class="btn-group">
               <button
                 type="submit"
+                [routerLink]="['/plantilla', plantilla.id, 'view']"
+                class="ds-btn ds-btn--secondary btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">Vista previa</span>
+              </button>
+              <button
+                type="submit"
                 [routerLink]="['/plantilla', plantilla.id, 'edit']"
                 class="ds-btn ds-btn--primary btn-sm"
                 data-cy="entityEditButton"

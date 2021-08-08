@@ -24,7 +24,7 @@
           <p class="ds-subtitle text-center">Inicie creando preguntas y opciones para su plantilla.</p>
         </ng-container>
 
-        <div class="ds-survey--question-wrapper card-plantilla lift" *ngFor="let pPregunta of pPreguntas; let i = index; trackBy: trackId">
+        <div class="ds-survey--question-wrapper card-plantilla" *ngFor="let pPregunta of pPreguntas; let i = index; trackBy: trackId">
           <div
             [attr.data-index]="pPregunta.id"
             [attr.data-tipo]="pPregunta.tipo"
