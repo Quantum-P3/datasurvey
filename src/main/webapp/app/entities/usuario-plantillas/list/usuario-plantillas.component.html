@@ -1,0 +1,57 @@
+<div *ngIf="usuarioExtra">
+  <h2 id="page-heading" data-cy="UsuarioEncuestaHeading">
+    <span class="ds-title" jhiTranslate="dataSurveyApp.usuarioExtra.plantillas.title">Mis Plantillas </span>
+    <p class="ds-subtitle">Hola</p>
+
+    <div class="d-flex justify-content-end">
+      <button class="ds-btn ds-btn--secondary mr-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="dataSurveyApp.usuarioExtra.home.refreshListLabel">Refresh List</span>
+      </button>
+    </div>
+  </h2>
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="misPlantillas?.length === 0">
+    <span jhiTranslate="dataSurveyApp.usuarioExtra.plantillas.notFound">No usuarioEncuestas found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="misPlantillas && misPlantillas.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.nombre">Nombre</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.descripcion">Descripcion</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.categoria">Categoria</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let miPlantilla of misPlantillas; trackBy: trackId" data-cy="entityTable">
+          <td>{{ miPlantilla.nombre }}</td>
+          <td>{{ miPlantilla.descripcion }}</td>
+          <td>{{ miPlantilla.categoria?.nombre }}</td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/plantilla', miPlantilla.id, 'preview']"
+                class="ds-btn ds-btn--secondary btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">Vista previa</span>
+              </button>
+
+              <button type="submit" class="ds-btn ds-btn--primary btn-sm" data-cy="entityCreateButton">
+                <span class="d-none d-md-inline" jhiTranslate="dataSurveyApp.usuarioExtra.plantillas.crearEncuesta">Crear Encuesta</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
