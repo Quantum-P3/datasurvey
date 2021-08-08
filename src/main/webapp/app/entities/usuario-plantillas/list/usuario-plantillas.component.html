@@ -17,9 +17,9 @@
   <!-- <div class="alert alert-warning" id="no-result" *ngIf="misPlantillas?.length === 0">
     <span jhiTranslate="dataSurveyApp.usuarioExtra.plantillas.notFound">No usuarioEncuestas found</span>
   </div> -->
-  <div class="ds-survey" id="entities">
+  <div class="ds-survey" id="entities" *ngIf="misPlantillas?.length === 0">
     <div class="ds-survey--all-question-wrapper">
-      <ng-container class="" *ngIf="misPlantillas?.length === 0">
+      <ng-container class="">
         <p class="ds-title text-center">No posee plantillas</p>
         <p class="ds-subtitle text-center">Adquiera y compre diferentes plantillas disponibles en nuestra tienda</p>
       </ng-container>
@@ -53,7 +53,12 @@
                 <span class="d-none d-md-inline">Vista previa</span>
               </button>
 
-              <button type="submit" class="ds-btn ds-btn--primary btn-sm" data-cy="entityCreateButton">
+              <button
+                type="submit"
+                class="ds-btn ds-btn--primary btn-sm"
+                data-cy="entityCreateButton"
+                (click)="crearEncuesta(miPlantilla.id)"
+              >
                 <span class="d-none d-md-inline" jhiTranslate="dataSurveyApp.usuarioExtra.plantillas.crearEncuesta">Crear Encuesta</span>
               </button>
             </div>
