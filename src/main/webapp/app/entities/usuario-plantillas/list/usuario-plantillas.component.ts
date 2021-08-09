@@ -11,7 +11,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { AccountService } from '../../../core/auth/account.service';
 import * as dayjs from 'dayjs';
+import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { Account } from '../../../core/auth/account.model';
+import { IEncuesta, Encuesta } from './../../encuesta/encuesta.model';
+import { EncuestaService } from 'app/entities/encuesta/service/encuesta.service';
+import { AccesoEncuesta } from 'app/entities/enumerations/acceso-encuesta.model';
+import { EstadoEncuesta } from 'app/entities/enumerations/estado-encuesta.model';
 
 @Component({
   selector: 'jhi-usuario-plantillas',
@@ -32,6 +37,7 @@ export class UsuarioPlantillasComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
     protected accountService: AccountService,
+    protected encuestaService: EncuestaService,
     protected router: Router
   ) {}
 
@@ -64,5 +70,29 @@ export class UsuarioPlantillasComponent implements OnInit {
 
   trackId(index: number, item: IPlantilla): number {
     return item.id!;
+  }
+
+  crearEncuesta(plantillaId: any): void {
+    const now = dayjs();
+
+    const newSurvey = {
+      ...new Encuesta(),
+      id: undefined,
+      nombre: 'This is a survey',
+      descripcion: 'This is a survey',
+      fechaCreacion: dayjs(now, DATE_TIME_FORMAT),
+      calificacion: 5,
+      acceso: AccesoEncuesta.PUBLIC,
+      contrasenna: undefined,
+      estado: EstadoEncuesta.DRAFT,
+      categoria: undefined,
+      usuarioExtra: this.usuarioExtra,
+    };
+
+    console.log(plantillaId, newSurvey);
+
+    this.encuestaService.createFromTemplate(newSurvey, plantillaId).subscribe(res => {
+      this.router.navigate(['/encuesta']);
+    });
   }
 }

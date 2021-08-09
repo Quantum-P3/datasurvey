@@ -1,7 +1,7 @@
 <div *ngIf="usuarioExtra">
   <h2 id="page-heading" data-cy="UsuarioEncuestaHeading">
     <span class="ds-title" jhiTranslate="dataSurveyApp.usuarioExtra.plantillas.title">Mis Plantillas </span>
-    <p class="ds-subtitle">Hola</p>
+    <p class="ds-subtitle">Cree encuestas a partir de las plantillas previamente compradas</p>
 
     <div class="d-flex justify-content-end">
       <button class="ds-btn ds-btn--secondary mr-2" (click)="loadAll()" [disabled]="isLoading">
@@ -14,8 +14,16 @@
 
   <jhi-alert></jhi-alert>
 
-  <div class="alert alert-warning" id="no-result" *ngIf="misPlantillas?.length === 0">
+  <!-- <div class="alert alert-warning" id="no-result" *ngIf="misPlantillas?.length === 0">
     <span jhiTranslate="dataSurveyApp.usuarioExtra.plantillas.notFound">No usuarioEncuestas found</span>
+  </div> -->
+  <div class="ds-survey" id="entities" *ngIf="misPlantillas?.length === 0">
+    <div class="ds-survey--all-question-wrapper">
+      <ng-container class="">
+        <p class="ds-title text-center">No posee plantillas</p>
+        <p class="ds-subtitle text-center">Adquiera y compre diferentes plantillas disponibles en nuestra tienda</p>
+      </ng-container>
+    </div>
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="misPlantillas && misPlantillas.length > 0">
@@ -45,7 +53,12 @@
                 <span class="d-none d-md-inline">Vista previa</span>
               </button>
 
-              <button type="submit" class="ds-btn ds-btn--primary btn-sm" data-cy="entityCreateButton">
+              <button
+                type="submit"
+                class="ds-btn ds-btn--primary btn-sm"
+                data-cy="entityCreateButton"
+                (click)="crearEncuesta(miPlantilla.id)"
+              >
                 <span class="d-none d-md-inline" jhiTranslate="dataSurveyApp.usuarioExtra.plantillas.crearEncuesta">Crear Encuesta</span>
               </button>
             </div>

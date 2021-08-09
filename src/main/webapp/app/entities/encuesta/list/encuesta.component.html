@@ -40,10 +40,6 @@
     </button>
   </div>
 
-  <div class="alert alert-warning" id="no-result" *ngIf="encuestas?.length === 0">
-    <span jhiTranslate="dataSurveyApp.encuesta.home.notFound">No surveys found</span>
-  </div>
-
   <form class="ds-form">
     <div class="input-group">
       <div class="ds-filter">
@@ -83,8 +79,17 @@
     </div>
   </form>
 
+  <div class="ds-survey" id="entities" *ngIf="encuestas?.length === 0">
+    <div class="ds-survey--all-question-wrapper">
+      <ng-container class="">
+        <p class="ds-title text-center">No posee encuestas</p>
+        <p class="ds-subtitle text-center">Incie a explorar, colaborar y adquirir datos al crear encuestas mundialmente</p>
+      </ng-container>
+    </div>
+  </div>
+
   <!-- Lista de Encuestas del Usuario -->
-  <div class="ds-list" (contextmenu)="openContextMenu($event)" *ngIf="!isAdmin()">
+  <div class="ds-list" (contextmenu)="openContextMenu($event)" *ngIf="!isAdmin() && encuestas?.length !== 0">
     <!-- Context Menu -->
     <div class="ds-contextmenu ds-contextmenu--closed" id="contextmenu">
       <ul id="ds-context-menu__list">
