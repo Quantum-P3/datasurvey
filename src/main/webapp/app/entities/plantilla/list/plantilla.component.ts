@@ -43,17 +43,25 @@ export class PlantillaComponent implements OnInit {
   });
 
   faExchangeAlt = faExchangeAlt;
+
+  public searchString: string;
+  public estadoPlantilla: string;
+
   constructor(
     protected plantillaService: PlantillaService,
     protected modalService: NgbModal,
     protected accountService: AccountService,
     protected fb: FormBuilder,
     protected categoriaService: CategoriaService
-  ) {}
+  ) {
+    this.searchString = '';
+    this.estadoPlantilla = '';
+  }
 
   loadAll(): void {
     this.isLoading = true;
-
+    this.searchString = '';
+    this.estadoPlantilla = '';
     this.plantillaService.query().subscribe(
       (res: HttpResponse<IPlantilla[]>) => {
         this.isLoading = false;
