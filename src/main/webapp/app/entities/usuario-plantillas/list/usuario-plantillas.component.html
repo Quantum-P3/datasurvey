@@ -14,12 +14,15 @@
 
   <jhi-alert></jhi-alert>
 
-  <!-- <div class="alert alert-warning" id="no-result" *ngIf="misPlantillas?.length === 0">
-    <span jhiTranslate="dataSurveyApp.usuarioExtra.plantillas.notFound">No usuarioEncuestas found</span>
-  </div> -->
+  <form *ngIf="misPlantillas?.length === 0" class="ds-form">
+    <div class="input-group">
+      <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+      <input type="text" name="searchString" placeholder="Buscar..." [(ngModel)]="searchString" />
+    </div>
+  </form>
   <div class="ds-survey" id="entities" *ngIf="misPlantillas?.length === 0">
     <div class="ds-survey--all-question-wrapper">
-      <ng-container class="">
+      <ng-container>
         <p class="ds-title text-center">No posee plantillas</p>
         <p class="ds-subtitle text-center">Adquiera y compre diferentes plantillas disponibles en nuestra tienda</p>
       </ng-container>
@@ -37,7 +40,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let miPlantilla of misPlantillas; trackBy: trackId" data-cy="entityTable">
+        <tr *ngFor="let miPlantilla of misPlantillas | filter: 'nombre':searchString; trackBy: trackId" data-cy="entityTable">
           <td>{{ miPlantilla.nombre }}</td>
           <td>{{ miPlantilla.descripcion }}</td>
           <td>{{ miPlantilla.categoria?.nombre }}</td>
