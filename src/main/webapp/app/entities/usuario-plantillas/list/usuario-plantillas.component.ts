@@ -27,6 +27,7 @@ export class UsuarioPlantillasComponent implements OnInit {
   isLoading = false;
   usuarioExtra: UsuarioExtra | null = null;
   account: Account | null = null;
+  searchString: string;
 
   constructor(
     protected plantillaService: PlantillaService,
@@ -38,7 +39,9 @@ export class UsuarioPlantillasComponent implements OnInit {
     protected accountService: AccountService,
     protected encuestaService: EncuestaService,
     protected router: Router
-  ) {}
+  ) {
+    this.searchString = '';
+  }
 
   ngOnInit(): void {
     this.accountService.getAuthenticationState().subscribe(account => {
