@@ -70,7 +70,7 @@ export class UsuarioPlantillasComponent implements OnInit {
     }
   }
 
-  trackId(index: number, item: IPlantilla): number {
+  trackId(_index: number, item: IPlantilla): number {
     return item.id!;
   }
 
@@ -93,7 +93,7 @@ export class UsuarioPlantillasComponent implements OnInit {
 
     console.log(plantillaId, newSurvey);
 
-    this.encuestaService.createFromTemplate(newSurvey, plantillaId).subscribe(res => {
+    this.encuestaService.createFromTemplate(newSurvey, plantillaId).subscribe(_res => {
       this.router.navigate(['/encuesta']);
     });
   }
