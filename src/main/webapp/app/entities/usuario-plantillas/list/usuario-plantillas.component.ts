@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { IUsuarioExtra, UsuarioExtra } from '../../usuario-extra/usuario-extra.model';
+import { UsuarioExtra } from '../../usuario-extra/usuario-extra.model';
 import { IPlantilla } from '../../plantilla/plantilla.model';
-import { HttpResponse } from '@angular/common/http';
 
 import { PlantillaService } from '../../plantilla/service/plantilla.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -13,7 +12,7 @@ import { AccountService } from '../../../core/auth/account.service';
 import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { Account } from '../../../core/auth/account.model';
-import { IEncuesta, Encuesta } from './../../encuesta/encuesta.model';
+import { Encuesta } from './../../encuesta/encuesta.model';
 import { EncuestaService } from 'app/entities/encuesta/service/encuesta.service';
 import { AccesoEncuesta } from 'app/entities/enumerations/acceso-encuesta.model';
 import { EstadoEncuesta } from 'app/entities/enumerations/estado-encuesta.model';
