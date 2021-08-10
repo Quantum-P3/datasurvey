@@ -83,12 +83,12 @@ import { RouterModule } from '@angular/router';
         loadChildren: () => import('./usuario-plantillas/usuario-plantillas.module').then(m => m.UsuarioPlantillasModule),
       },
       {
-        path: 'dashboard/admin',
+        path: 'dashboard',
         data: { pageTitle: 'dataSurveyApp.Dashboard.title' },
         loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
       },
       {
-        path: 'dashboard/user',
+        path: 'dashboard',
         data: { pageTitle: 'dataSurveyApp.Dashboard.title' },
         loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
       },
