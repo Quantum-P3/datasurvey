@@ -33,6 +33,8 @@ import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ErrorComponent } from './layouts/error/error.component';
 import { SidebarComponent } from './layouts/sidebar/sidebar.component';
 import { PaginaPrincipalComponent } from './pagina-principal/pagina-principal.component';
+import { DashboardUserComponent } from './entities/dashboard/dashboard-user/dashboard-user.component';
+import { DashboardAdminComponent } from './entities/dashboard/dashboard-admin/dashboard-admin.component';
 
 @NgModule({
   imports: [
@@ -79,7 +81,16 @@ import { PaginaPrincipalComponent } from './pagina-principal/pagina-principal.co
       } as SocialAuthServiceConfig,
     },
   ],
-  declarations: [MainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent, SidebarComponent],
+  declarations: [
+    MainComponent,
+    NavbarComponent,
+    ErrorComponent,
+    PageRibbonComponent,
+    FooterComponent,
+    SidebarComponent,
+    DashboardUserComponent,
+    DashboardAdminComponent,
+  ],
   bootstrap: [MainComponent],
 })
 export class AppModule {
