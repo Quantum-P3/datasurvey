@@ -4,16 +4,17 @@
   </div>
 
   <div class="modal-body">
+    <h1 class="ds-title">Plantilla: {{ plantilla!.nombre }}</h1>
+    <h2 class="ds-title--small">Cantidad: 1</h2>
+    <h2 class="ds-title--small">Total: ${{ plantilla!.precio }}</h2>
+
+    <hr />
     <ngx-paypal [config]="payPalConfig"></ngx-paypal>
   </div>
 
   <div class="modal-footer">
     <button type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal" (click)="cancel()">
       <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-    </button>
-
-    <button id="jhi-confirm-delete-encuesta" data-cy="entityConfirmDeleteButton" type="submit" class="ds-btn ds-btn--primary">
-      &nbsp;<span jhiTranslate="entity.action.publish">Delete</span>
     </button>
   </div>
 </form>

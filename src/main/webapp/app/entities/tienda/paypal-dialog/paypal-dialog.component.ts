@@ -4,6 +4,7 @@ import { ParametroAplicacionService } from '../../parametro-aplicacion/service/p
 import { EncuestaService } from '../../encuesta/service/encuesta.service';
 import { FormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { IPlantilla } from '../../plantilla/plantilla.model';
 
 @Component({
   selector: 'jhi-paypal-dialog',
@@ -13,6 +14,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class PaypalDialogComponent implements OnInit {
   public payPalConfig?: IPayPalConfig;
   showSuccess = false;
+  plantilla?: IPlantilla;
 
   constructor(protected activeModal: NgbActiveModal) {}
 
@@ -21,6 +23,7 @@ export class PaypalDialogComponent implements OnInit {
   }
 
   private initConfig(): void {
+    debugger;
     this.payPalConfig = {
       currency: 'USD',
       clientId: 'sb',
@@ -30,23 +33,22 @@ export class PaypalDialogComponent implements OnInit {
           purchase_units: [
             {
               amount: {
-                currency_code: 'EUR',
-                value: '9.99',
+                currency_code: 'USD',
+                value: String(this.plantilla?.precio),
                 breakdown: {
                   item_total: {
-                    currency_code: 'EUR',
-                    value: '9.99',
+                    currency_code: 'USD',
+                    value: String(this.plantilla?.precio),
                   },
                 },
               },
               items: [
                 {
-                  name: 'Enterprise Subscription',
+                  name: this.plantilla?.nombre,
                   quantity: '1',
-                  category: 'DIGITAL_GOODS',
                   unit_amount: {
-                    currency_code: 'EUR',
-                    value: '9.99',
+                    currency_code: 'USD',
+                    value: String(this.plantilla?.precio),
                   },
                 },
               ],
@@ -61,23 +63,16 @@ export class PaypalDialogComponent implements OnInit {
         layout: 'vertical',
       },
       onApprove: (data, actions) => {
+        debugger;
         console.log('onApprove - transaction was approved, but not authorized', data, actions);
         actions.order.get().then((details: any) => {
+          //calls baxkend
           console.log('onApprove - you can get full order details inside onApprove: ', details);
         });
       },
       onClientAuthorization: data => {
         console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
         this.showSuccess = true;
-      },
-      onCancel: (data, actions) => {
-        console.log('OnCancel', data, actions);
-      },
-      onError: err => {
-        console.log('OnError', err);
-      },
-      onClick: (data, actions) => {
-        console.log('onClick', data, actions);
       },
     };
   }
