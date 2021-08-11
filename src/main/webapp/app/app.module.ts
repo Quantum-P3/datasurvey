@@ -32,11 +32,12 @@ import { FooterComponent } from './layouts/footer/footer.component';
 import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ErrorComponent } from './layouts/error/error.component';
 import { SidebarComponent } from './layouts/sidebar/sidebar.component';
-import { PaginaPrincipalComponent } from './pagina-principal/pagina-principal.component';
-import { ListarTiendaPlantillaComponent } from './entities/tienda/listar-tienda-plantilla/listar-tienda-plantilla.component';
 import { ListarPlantillaTiendaModule } from './entities/tienda/listar-tienda-plantilla/listar-plantilla-tienda.module';
 import { PaypalDialogComponent } from './entities/tienda/paypal-dialog/paypal-dialog.component';
 import { NgxPayPalModule } from 'ngx-paypal';
+
+import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
+import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 
 @NgModule({
   imports: [
@@ -65,6 +66,8 @@ import { NgxPayPalModule } from 'ngx-paypal';
         useFactory: missingTranslationHandler,
       },
     }),
+    ShareButtonsModule,
+    ShareIconsModule,
     NgxPayPalModule,
   ],
   providers: [
