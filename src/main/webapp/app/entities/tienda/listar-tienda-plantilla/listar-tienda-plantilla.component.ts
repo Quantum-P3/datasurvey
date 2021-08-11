@@ -27,6 +27,7 @@ import { PaypalDialogComponent } from '../paypal-dialog/paypal-dialog.component'
 export class ListarTiendaPlantillaComponent implements OnInit {
   public searchString: string;
   public searchCategoria: string;
+  public searchPrecio: string;
   categorias?: ICategoria[];
   account: Account | null = null;
   public searchEncuestaPublica: string;
@@ -58,6 +59,7 @@ export class ListarTiendaPlantillaComponent implements OnInit {
     this.searchEncuestaPublica = '';
     this.searchString = '';
     this.searchCategoria = '';
+    this.searchPrecio = '';
   }
 
   ngOnInit(): void {
