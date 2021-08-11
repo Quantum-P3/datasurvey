@@ -44,7 +44,7 @@
         <input type="text" name="searchString" placeholder="Buscar..." [(ngModel)]="searchString" />
       </div>
     </form>
-    <table class="table table-striped" aria-describedby="page-heading">
+    <table class="ds-table table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
           <th scope="col"><span jhiTranslate="dataSurveyApp.categoria.nombre">Nombre</span></th>
@@ -67,7 +67,7 @@
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>
 
-              <button type="submit" (click)="toggleStatus(categoria)" class="ds-btn ds-btn--danger" data-cy="entityDeleteButton">
+              <button type="submit" (click)="toggleStatus(categoria)" class="ds-btn ds-btn--toggle" data-cy="entityDeleteButton">
                 <fa-icon [icon]="faExchangeAlt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.toggleStatus">Toggle Status</span>
               </button>
