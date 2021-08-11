@@ -1,1 +1,39 @@
-<p>encuesta-compartir-dialog works!</p>
+<form class="ds-form" name="deleteForm">
+  <div class="modal-header">
+    <h2 class="ds-title" data-cy="encuestaDeleteDialogHeading">Compartir encuesta</h2>
+  </div>
+
+  <div class="modal-body">
+    <p class="ds-subtitle" id="jhi-delete-encuesta-heading">Puede copiar el enlace o compartirlo en redes sociales</p>
+
+    <hr />
+    <input class="compartir" readonly type="url" id="inputCompartir" [value]="baseURL" /> <br /><br />
+    <share-buttons
+      [theme]="'material-dark'"
+      [include]="['facebook', 'twitter', 'email']"
+      [show]="5"
+      [showText]="true"
+      [size]="1"
+      [url]="baseURL"
+      [title]="'Encuesta DataSurvey'"
+      [image]="'../../../content/img_datasurvey/datasurvey-logo-text-white-PNG.png'"
+      [autoSetMeta]="false"
+    ></share-buttons>
+
+    <!-- <share-buttons [theme]="'modern-dark'"
+                   [include]="['facebook','twitter']"
+                   [show]="5"
+                   [showText]="true"
+                   [size]="2"
+                   [url]="baseURL"
+                   [title]="'Encuesta DataSurvey'"
+                   [autoSetMeta]="false"
+    ></share-buttons>-->
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    </button>
+  </div>
+</form>
