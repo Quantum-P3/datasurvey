@@ -8,9 +8,12 @@ import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.datasurvey.domain.Factura;
+import org.datasurvey.domain.UsuarioExtra;
 import org.datasurvey.repository.FacturaRepository;
 import org.datasurvey.service.FacturaQueryService;
 import org.datasurvey.service.FacturaService;
+import org.datasurvey.service.MailService;
+import org.datasurvey.service.UsuarioExtraService;
 import org.datasurvey.service.criteria.FacturaCriteria;
 import org.datasurvey.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
@@ -41,10 +44,22 @@ public class FacturaResource {
 
     private final FacturaQueryService facturaQueryService;
 
-    public FacturaResource(FacturaService facturaService, FacturaRepository facturaRepository, FacturaQueryService facturaQueryService) {
+    private final UsuarioExtraService userExtraService;
+
+    private final MailService mailService;
+
+    public FacturaResource(
+        FacturaService facturaService,
+        FacturaRepository facturaRepository,
+        FacturaQueryService facturaQueryService,
+        UsuarioExtraService userExtraService,
+        MailService mailService
+    ) {
         this.facturaService = facturaService;
         this.facturaRepository = facturaRepository;
         this.facturaQueryService = facturaQueryService;
+        this.userExtraService = userExtraService;
+        this.mailService = mailService;
     }
 
     /**
@@ -60,11 +75,22 @@ public class FacturaResource {
         if (factura.getId() != null) {
             throw new BadRequestAlertException("A new factura cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        Optional<UsuarioExtra> usuarioExtra = userExtraService.findOne(Long.parseLong(factura.getNombreUsuario()));
+
+        factura.setNombreUsuario(usuarioExtra.get().getNombre());
+
         Factura result = facturaService.save(factura);
+
+        mailService.sendReceiptUser(usuarioExtra.get(), factura);
+
         return ResponseEntity
             .created(new URI("/api/facturas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+        //retrieve yser
+
+        //Enviar el correo
     }
 
     /**
