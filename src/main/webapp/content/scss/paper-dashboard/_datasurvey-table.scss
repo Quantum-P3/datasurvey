@@ -1,0 +1,25 @@
+.ds-table {
+  thead {
+    th span {
+      color: #2f4159;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+  }
+
+  tbody {
+    tr:nth-child(odd) {
+      background-color: #f1f5f9;
+    }
+
+    td {
+      border: 0;
+      color: #2f4159;
+    }
+  }
+}
+
+.table-responsive {
+  overflow: auto;
+}
