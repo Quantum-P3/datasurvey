@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { IEncuesta } from '../encuesta.model';
 
 @Component({
   selector: 'jhi-encuesta-compartir-dialog',
@@ -6,7 +8,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./encuesta-compartir-dialog.component.scss'],
 })
 export class EncuestaCompartirDialogComponent implements OnInit {
-  constructor() {}
+  encuesta?: IEncuesta;
+  baseURL: string = '';
+  imagen: string = '';
+  mensaje: string = 'Encuesta en DatasSurvey';
+  name = 'ngx sharebuttons';
 
-  ngOnInit(): void {}
+  constructor(protected activeModal: NgbActiveModal) {}
+
+  ngOnInit(): void {
+    this.baseURL = location.origin + '/' + this.encuesta?.id + '/complete';
+  }
+
+  compartir(): void {}
+
+  cancel(): void {
+    this.activeModal.dismiss();
+  }
 }

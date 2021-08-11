@@ -42,7 +42,7 @@ export class CategoriaDeleteDialogComponent {
       this.encuestas!.forEach(encuesta => {
         if (encuesta.categoria != null && encuesta.categoria!.id === categoria.id) {
           encuesta.categoria = categoriaNula;
-          this.subscribeToSaveResponse(this.encuestaService.update(encuesta));
+          this.subscribeToSaveResponse(this.encuestaService.updateSurvey(encuesta));
         }
       });
       categoria.estado = EstadoCategoria.INACTIVE;

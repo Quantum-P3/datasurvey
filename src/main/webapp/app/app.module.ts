@@ -33,6 +33,12 @@ import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ErrorComponent } from './layouts/error/error.component';
 import { SidebarComponent } from './layouts/sidebar/sidebar.component';
 import { PaginaPrincipalComponent } from './pagina-principal/pagina-principal.component';
+import { ChartistModule } from 'ng-chartist';
+import { ListarPlantillaTiendaModule } from './entities/tienda/listar-tienda-plantilla/listar-plantilla-tienda.module';
+import { PaypalDialogComponent } from './entities/tienda/paypal-dialog/paypal-dialog.component';
+import { NgxPayPalModule } from 'ngx-paypal';
+import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
+import { ShareIconsModule } from 'ngx-sharebuttons/icons';
 
 @NgModule({
   imports: [
@@ -41,6 +47,7 @@ import { PaginaPrincipalComponent } from './pagina-principal/pagina-principal.co
     SharedModule,
     HomeModule,
     PaginaPrincipalModule,
+    ListarPlantillaTiendaModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     EntityRoutingModule,
     AppRoutingModule,
@@ -60,6 +67,10 @@ import { PaginaPrincipalComponent } from './pagina-principal/pagina-principal.co
         useFactory: missingTranslationHandler,
       },
     }),
+    ChartistModule, // add ChartistModule to your imports
+    ShareButtonsModule,
+    ShareIconsModule,
+    NgxPayPalModule,
   ],
   providers: [
     Title,
@@ -79,7 +90,15 @@ import { PaginaPrincipalComponent } from './pagina-principal/pagina-principal.co
       } as SocialAuthServiceConfig,
     },
   ],
-  declarations: [MainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, FooterComponent, SidebarComponent],
+  declarations: [
+    MainComponent,
+    NavbarComponent,
+    ErrorComponent,
+    PageRibbonComponent,
+    FooterComponent,
+    SidebarComponent,
+    PaypalDialogComponent,
+  ],
   bootstrap: [MainComponent],
 })
 export class AppModule {
