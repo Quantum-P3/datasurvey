@@ -33,6 +33,7 @@ import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ErrorComponent } from './layouts/error/error.component';
 import { SidebarComponent } from './layouts/sidebar/sidebar.component';
 import { PaginaPrincipalComponent } from './pagina-principal/pagina-principal.component';
+import { ChartistModule } from 'ng-chartist';
 
 @NgModule({
   imports: [
@@ -60,6 +61,7 @@ import { PaginaPrincipalComponent } from './pagina-principal/pagina-principal.co
         useFactory: missingTranslationHandler,
       },
     }),
+    ChartistModule, // add ChartistModule to your imports
   ],
   providers: [
     Title,

@@ -43,7 +43,11 @@
               { "glob": "axios.min.js", "input": "./node_modules/axios/dist", "output": "swagger-ui" },
               { "glob": "**/*", "input": "src/main/webapp/swagger-ui/", "output": "swagger-ui" }
             ],
-            "styles": ["src/main/webapp/content/scss/paper-dashboard.scss", "./node_modules/swiper/swiper-bundle.min.css"],
+            "styles": [
+              "src/main/webapp/content/scss/paper-dashboard.scss",
+              "./node_modules/swiper/swiper-bundle.min.css",
+              "node_modules/chartist/dist/chartist.css"
+            ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",
               "src/main/webapp/content/js/jquery.bootstrap.wizard.min.js",
