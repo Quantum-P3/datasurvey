@@ -6,6 +6,7 @@ import { EncuestaComponent } from '../list/encuesta.component';
 import { EncuestaDetailComponent } from '../detail/encuesta-detail.component';
 import { EncuestaUpdateComponent } from '../update/encuesta-update.component';
 import { EncuestaRoutingResolveService } from './encuesta-routing-resolve.service';
+import { EncuestaCompleteComponent } from '../complete/complete.component';
 
 const encuestaRoute: Routes = [
   {
@@ -32,6 +33,14 @@ const encuestaRoute: Routes = [
   {
     path: ':id/edit',
     component: EncuestaUpdateComponent,
+    resolve: {
+      encuesta: EncuestaRoutingResolveService,
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: ':id/complete',
+    component: EncuestaCompleteComponent,
     resolve: {
       encuesta: EncuestaRoutingResolveService,
     },

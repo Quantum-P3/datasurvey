@@ -17,6 +17,9 @@ import { CategoriaService } from 'app/entities/categoria/service/categoria.servi
 
 import * as dayjs from 'dayjs';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
+import { PlantillaChangeStatusDialogComponent } from '../plantilla-change-status-dialog/plantilla-change-status-dialog.component';
+
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'jhi-plantilla',
@@ -39,21 +42,31 @@ export class PlantillaComponent implements OnInit {
     categoria: [null, [Validators.required]],
   });
 
+  faExchangeAlt = faExchangeAlt;
+
+  public searchString: string;
+  public estadoPlantilla: string;
+
   constructor(
     protected plantillaService: PlantillaService,
     protected modalService: NgbModal,
     protected accountService: AccountService,
     protected fb: FormBuilder,
     protected categoriaService: CategoriaService
-  ) {}
+  ) {
+    this.searchString = '';
+    this.estadoPlantilla = '';
+  }
 
   loadAll(): void {
     this.isLoading = true;
-
+    this.searchString = '';
+    this.estadoPlantilla = '';
     this.plantillaService.query().subscribe(
       (res: HttpResponse<IPlantilla[]>) => {
         this.isLoading = false;
-        this.plantillas = res.body ?? [];
+        const tempPlantillas = res.body ?? [];
+        this.plantillas = tempPlantillas.filter(p => p.estado !== EstadoPlantilla.DELETED);
       },
       () => {
         this.isLoading = false;
@@ -76,6 +89,17 @@ export class PlantillaComponent implements OnInit {
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed.subscribe(reason => {
       if (reason === 'deleted') {
+        this.loadAll();
+      }
+    });
+  }
+
+  cambiarEstado(plantilla: IPlantilla): void {
+    const modalRef = this.modalService.open(PlantillaChangeStatusDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.plantilla = plantilla;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'updated') {
         this.loadAll();
       }
     });

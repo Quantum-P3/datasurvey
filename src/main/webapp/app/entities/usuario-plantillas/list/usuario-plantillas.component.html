@@ -1,0 +1,73 @@
+<div *ngIf="usuarioExtra">
+  <h2 id="page-heading" data-cy="UsuarioEncuestaHeading">
+    <span class="ds-title" jhiTranslate="dataSurveyApp.usuarioExtra.plantillas.title">Mis Plantillas </span>
+    <p class="ds-subtitle">Cree encuestas a partir de las plantillas previamente compradas</p>
+
+    <div class="d-flex justify-content-end">
+      <button class="ds-btn ds-btn--secondary mr-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="dataSurveyApp.usuarioExtra.home.refreshListLabel">Refresh List</span>
+      </button>
+    </div>
+  </h2>
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <form *ngIf="misPlantillas?.length === 0" class="ds-form">
+    <div class="input-group">
+      <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+      <input type="text" name="searchString" placeholder="Buscar..." [(ngModel)]="searchString" />
+    </div>
+  </form>
+  <div class="ds-survey" id="entities" *ngIf="misPlantillas?.length === 0">
+    <div class="ds-survey--all-question-wrapper">
+      <ng-container>
+        <p class="ds-title text-center">No posee plantillas</p>
+        <p class="ds-subtitle text-center">Adquiera y compre diferentes plantillas disponibles en nuestra tienda</p>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="misPlantillas && misPlantillas.length > 0">
+    <table class="ds-table table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.nombre">Nombre</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.descripcion">Descripcion</span></th>
+          <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.categoria">Categoria</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let miPlantilla of misPlantillas | filter: 'nombre':searchString; trackBy: trackId" data-cy="entityTable">
+          <td>{{ miPlantilla.nombre }}</td>
+          <td>{{ miPlantilla.descripcion }}</td>
+          <td>{{ miPlantilla.categoria?.nombre }}</td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/plantilla', miPlantilla.id, 'preview']"
+                class="ds-btn ds-btn--secondary btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">Vista previa</span>
+              </button>
+
+              <button
+                type="submit"
+                class="ds-btn ds-btn--primary btn-sm"
+                data-cy="entityCreateButton"
+                (click)="crearEncuesta(miPlantilla.id)"
+              >
+                <span class="d-none d-md-inline" jhiTranslate="dataSurveyApp.usuarioExtra.plantillas.crearEncuesta">Crear Encuesta</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

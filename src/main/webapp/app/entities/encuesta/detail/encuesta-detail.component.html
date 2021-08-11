@@ -34,7 +34,7 @@
           <p class="ds-subtitle text-center">Inicie creando preguntas y opciones para su encuesta.</p>
         </ng-container>
 
-        <div class="ds-survey--question-wrapper card-encuesta lift" *ngFor="let ePregunta of ePreguntas; let i = index; trackBy: trackId">
+        <div class="ds-survey--question-wrapper card-encuesta" *ngFor="let ePregunta of ePreguntas; let i = index; trackBy: trackId">
           <div
             [attr.data-index]="ePregunta.id"
             [attr.data-tipo]="ePregunta.tipo"
