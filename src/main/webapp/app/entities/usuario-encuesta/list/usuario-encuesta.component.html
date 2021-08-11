@@ -33,12 +33,18 @@
       </div>
     </div>
   </form>
-  <div class="alert alert-warning" id="no-result" *ngIf="usuarioEncuestas?.length === 0">
-    <span jhiTranslate="dataSurveyApp.usuarioEncuesta.home.notFound">No usuarioEncuestas found</span>
+
+  <div class="ds-survey" id="entities" *ngIf="usuarioEncuestas?.length === 0">
+    <div class="ds-survey--all-question-wrapper">
+      <ng-container class="">
+        <p class="ds-title text-center">No posee colaboraciones</p>
+        <p class="ds-subtitle text-center">Inicie colaborando con otros usuarios mundialmente al recibir una invitación</p>
+      </ng-container>
+    </div>
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="usuarioEncuestas && usuarioEncuestas.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
+    <table class="ds-table table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioEncuesta.rol">Rol</span></th>

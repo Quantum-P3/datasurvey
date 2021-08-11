@@ -106,7 +106,9 @@
                       ></fa-icon>
                     </div>
                     <div class="entity-body--row m-2">
-                      <button class="ds-btn btn-card"><fa-icon [icon]="faPollH"></fa-icon>&nbsp;&nbsp;Completar encuesta</button>
+                      <button (click)="completeEncuesta(encuesta)" class="ds-btn btn-card">
+                        <fa-icon [icon]="faPollH"></fa-icon>&nbsp;&nbsp;Completar encuesta
+                      </button>
                     </div>
                   </div>
                 </div>

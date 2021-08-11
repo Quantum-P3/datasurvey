@@ -64,7 +64,7 @@ public class UsuarioExtra implements Serializable {
         joinColumns = @JoinColumn(name = "usuario_extra_id"),
         inverseJoinColumns = @JoinColumn(name = "plantilla_id")
     )
-    @JsonIgnoreProperties(value = { "pPreguntaCerradas", "pPreguntaAbiertas", "categoria", "usuarioExtras" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "pPreguntaCerradas", "pPreguntaAbiertas", "usuarioExtras" }, allowSetters = true)
     private Set<Plantilla> plantillas = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
