@@ -28,8 +28,11 @@ export const createPDFTableHeaders = (keys: any): any[] => {
   return result;
 };
 
-export const generatePDFTable = (doc: jsPDF, _docData: any, _docHeaders: string[]): void => {
-  doc.table(1, 1, _docData, _docHeaders, { autoSize: true });
-  const generatedFileName = generateFileName('reporte_general', PDF_EXTENSION);
+export const generatePDFTable = (doc: jsPDF, _docData: any, _docHeaders: string[], _fileName: string, _docTitle: string): void => {
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text(_docTitle, 20, 20);
+  doc.table(20, 30, _docData, _docHeaders, { autoSize: true });
+  const generatedFileName = generateFileName(_fileName, PDF_EXTENSION);
   doc.save(generatedFileName);
 };

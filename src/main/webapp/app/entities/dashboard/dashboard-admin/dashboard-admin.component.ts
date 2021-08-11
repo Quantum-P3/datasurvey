@@ -28,7 +28,8 @@ export class DashboardAdminComponent implements OnInit {
     const _reporteUsuarios = { usuarios_activos: 100, usuarios_bloqueados: 50 };
 
     const _excelFinalData = [_reporteUsuarios];
-    exportAsExcelFile(_sheets, _excelFinalData, 'reporte_general');
+    const _fileName = 'reporte_general';
+    exportAsExcelFile(_sheets, _excelFinalData, _fileName);
   }
 
   exportReportesGeneralesAdministradorPDF(): void {
@@ -47,7 +48,9 @@ export class DashboardAdminComponent implements OnInit {
 
     const _headers = ['usuarios_activos', 'usuarios_bloqueados'];
     const _docHeaders = createPDFTableHeaders(_headers);
+    const _fileName = 'reporte_general';
+    const _docTitle = 'Reportes Generales de la Aplicación';
 
-    generatePDFTable(doc, _docData, _docHeaders);
+    generatePDFTable(doc, _docData, _docHeaders, _fileName, _docTitle);
   }
 }
