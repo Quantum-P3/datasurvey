@@ -39,7 +39,7 @@ export class EncuestaCompleteComponent implements OnInit {
   selectedSingleOptions: any;
   selectedMultiOptions: any;
   error: boolean;
-  rating: Number;
+  rating?: Number;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -56,7 +56,6 @@ export class EncuestaCompleteComponent implements OnInit {
     this.selectedSingleOptions = {};
     this.selectedMultiOptions = [];
     this.error = false;
-    this.rating = 5;
   }
 
   ngOnInit(): void {
