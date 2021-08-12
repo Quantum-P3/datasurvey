@@ -227,4 +227,9 @@ export class EncuestaCompleteComponent implements OnInit {
       }
     });
   }
+
+  joinRatingValues(totalValue: Number, ratingCount: Number): Number {
+    const result = totalValue.toString() + '.' + ratingCount.toString();
+    return parseFloat(result);
+  }
 }
