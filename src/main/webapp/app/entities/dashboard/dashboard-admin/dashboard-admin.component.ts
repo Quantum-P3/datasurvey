@@ -31,6 +31,13 @@ export class DashboardAdminComponent implements OnInit {
   faWallet = faWallet;
   faUsers = faUsers;
   faUsersSlash = faUsersSlash;
+  encuestasPublicadas: number = 0;
+  encuestasFinalizadas: number = 0;
+  encuestasBorrador: number = 0;
+  encuestasCompletadas: number = 0;
+
+  reportsGeneral = true;
+  reportForUsers = false;
 
   chartFechas = [];
 
@@ -83,7 +90,20 @@ export class DashboardAdminComponent implements OnInit {
       .pipe(finalize(() => this.cargarCategorias()))
       .subscribe(res => {
         const tmpEncuestas = res.body;
-        this.encuestas = tmpEncuestas?.filter(e => e.estado === 'ACTIVE' || e.estado === 'FINISHED');
+        this.encuestas = tmpEncuestas?.filter(e => e.estado === 'ACTIVE' || e.estado === 'FINISHED' || e.estado === 'DRAFT');
+        if (tmpEncuestas) {
+          this.encuestasPublicadas = tmpEncuestas.filter(e => e.estado === 'ACTIVE').length;
+          this.encuestasFinalizadas = tmpEncuestas.filter(e => e.estado === 'FINISHED').length;
+          this.encuestasBorrador = tmpEncuestas.filter(e => e.estado === 'DRAFT').length;
+          let cantidadCompletadas: number = 0;
+          tmpEncuestas
+            .filter(e => e.estado === 'ACTIVE')
+            .forEach(e => {
+              const _contadorCompletadas = e.calificacion;
+              cantidadCompletadas = cantidadCompletadas + (Number(_contadorCompletadas?.toString().split('.')[1]) - 1);
+            });
+          this.encuestasCompletadas = cantidadCompletadas;
+        }
       });
   }
 
@@ -94,11 +114,12 @@ export class DashboardAdminComponent implements OnInit {
       .subscribe(res => {
         const tmpCategorias = res.body;
         this.categorias = tmpCategorias?.filter(c => c.estado === 'ACTIVE');
-        let cantPublicadas = 0;
-        let cantFinalizadas = 0;
+
         const publicadas: number[] | null = [];
         const finalizadas: number[] | null = [];
         this.categorias?.forEach(c => {
+          let cantPublicadas = 0;
+          let cantFinalizadas = 0;
           this.encuestas?.forEach(e => {
             if (e.categoria?.id === c.id && e.estado === 'ACTIVE') {
               cantPublicadas = cantPublicadas + 1;
