@@ -56,6 +56,7 @@ export class EncuestaCompleteComponent implements OnInit {
     this.selectedSingleOptions = {};
     this.selectedMultiOptions = [];
     this.error = false;
+    this.calificacion = 4;
   }
 
   ngOnInit(): void {
@@ -231,5 +232,19 @@ export class EncuestaCompleteComponent implements OnInit {
   joinRatingValues(totalValue: Number, ratingCount: Number): Number {
     const result = totalValue.toString() + '.' + ratingCount.toString();
     return parseFloat(result);
+  }
+
+  updateRating(value: number) {
+    this.calificacion = value;
+    this.stars.forEach(starNumber => {
+      let starElement = document.getElementById(`star-${starNumber}`);
+      if (starNumber > this.calificacion!) {
+        starElement!.classList.add('entity-icon--star--off');
+        starElement!.classList.remove('entity-icon--star');
+      } else {
+        starElement!.classList.add('entity-icon--star');
+        starElement!.classList.remove('entity-icon--star--off');
+      }
+    });
   }
 }
