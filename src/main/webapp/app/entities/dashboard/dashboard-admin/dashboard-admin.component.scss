@@ -31,3 +31,16 @@
 .por-categoria {
   padding: 5% 0;
 }
+.encuestas-por-usuario .table-responsive {
+  height: 500px;
+  max-height: 500px;
+}
+
+.encuestas-por-usuario .photo {
+  width: 40px;
+  height: 40px;
+}
+
+.encuestas-por-usuario .photo img {
+  border-radius: 100%;
+}
