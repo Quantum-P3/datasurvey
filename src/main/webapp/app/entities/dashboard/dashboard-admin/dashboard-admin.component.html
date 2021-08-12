@@ -138,5 +138,47 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="col-lg-3 col-sm-6">
+        <div class="card card-circle-chart" data-background-color="blue" style="background-color: #88c5d6eb">
+          <div class="card-header text-center">
+            <h5 class="card-title ds-subtitle" style="color: #082463">Encuestas En Borrador</h5>
+          </div>
+          <div class="card-content">
+            <div id="surveyDraft" class="chart-circle">{{ encuestasBorrador }}<canvas height="160" width="160"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="card card-circle-chart" data-background-color="green" style="background-color: #67ceb6">
+          <div class="card-header text-center">
+            <h5 class="card-title ds-subtitle" style="color: #0a2922">Encuestas Publicadas</h5>
+          </div>
+          <div class="card-content">
+            <div id="surveyActive" class="chart-circle">{{ encuestasPublicadas }}<canvas height="160" width="160"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="card card-circle-chart" style="background-color: #de8e78">
+          <div class="card-header text-center">
+            <h5 class="card-title ds-subtitle" style="color: #671a04">Encuestas Finalizadas</h5>
+          </div>
+          <div class="card-content">
+            <div id="surveyFinished" class="chart-circle">{{ encuestasFinalizadas }}<canvas height="160" width="160"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="card card-circle-chart" data-background-color="brown" style="background-color: #d6c1ab">
+          <div class="card-header text-center">
+            <h5 class="card-title ds-subtitle" style="color: #252422">Encuestas Completadas por Usuarios</h5>
+          </div>
+          <div class="card-content">
+            <div id="surveyCountCompletede" class="chart-circle">{{ encuestasCompletadas }}<canvas height="160" width="160"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
