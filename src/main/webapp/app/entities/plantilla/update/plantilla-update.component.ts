@@ -186,7 +186,7 @@ export class PlantillaUpdateComponent implements OnInit, AfterViewChecked {
 
   openPreview() {
     const surveyId = this.plantilla?.id;
-    this.router.navigate(['/plantilla', surveyId, 'preview']);
+    this.router.navigate(['/plantilla', surveyId, 'view']);
   }
 
   resetForm(event: any): void {
