@@ -17,6 +17,7 @@ import { finalize } from 'rxjs/operators';
 import * as Chartist from 'chartist';
 
 import { faWallet, faUsers, faUsersSlash } from '@fortawesome/free-solid-svg-icons';
+import { IUsuarioExtra } from '../../usuario-extra/usuario-extra.model';
 
 @Component({
   selector: 'jhi-dashboard-admin',
@@ -33,6 +34,7 @@ export class DashboardAdminComponent implements OnInit {
   gananciasTotales: number = 0;
   categorias: ICategoria[] | undefined = [];
   encuestas: IEncuesta[] | undefined = [];
+  usuarios: IUsuarioExtra[] | null = [];
   faWallet = faWallet;
   faUsers = faUsers;
   faUsersSlash = faUsersSlash;
@@ -77,6 +79,7 @@ export class DashboardAdminComponent implements OnInit {
   cargarCantidadUsuarios() {
     this.usuarioExtraService.query().subscribe(res => {
       const tmpUsuarios = res.body;
+      this.usuarios = tmpUsuarios;
       this.cantUsuarioActivos = tmpUsuarios?.filter(u => u.estado === 'ACTIVE').length;
       this.cantUsuarioBloqueados = tmpUsuarios?.filter(u => u.estado === 'SUSPENDED').length;
     });
