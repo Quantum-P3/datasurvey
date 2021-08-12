@@ -1,0 +1,26 @@
+<form name="deleteForm">
+  <div class="modal-header">
+    <!-- <h4 class="modal-title" data-cy="encuestaDeleteDialogHeading" jhiTranslate="entity.publish.title">Confirm delete operation</h4>-->
+  </div>
+
+  <div class="modal-body">
+    <h1 class="ds-title">Plantilla: {{ plantilla!.nombre }}</h1>
+    <h2 class="ds-title--small">Cantidad: 1</h2>
+    <h2 class="ds-title--small">Total: ${{ plantilla!.precio }}</h2>
+
+    <hr />
+
+    <h2 class="entity-body--row m-2">La plantilla ha comprar no tiene costo alguno</h2>
+    <button type="button" class="ds-btn btn-outline-success fc-center" data-dismiss="modal" (click)="freePurchase()">
+      <fa-icon [icon]="faCheck"></fa-icon>&nbsp;<span>Finalizar compra</span>
+    </button>
+
+    <ngx-paypal [config]="payPalConfig" *ngIf="plantilla!.precio != 0"></ngx-paypal>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    </button>
+  </div>
+</form>

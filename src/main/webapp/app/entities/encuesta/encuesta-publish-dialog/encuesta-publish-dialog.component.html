@@ -1,6 +1,6 @@
 <form *ngIf="encuesta" name="deleteForm" (ngSubmit)="confirmPublish(encuesta!)">
   <div class="modal-header">
-    <!-- <h4 class="modal-title" data-cy="encuestaDeleteDialogHeading" jhiTranslate="entity.publish.title">Confirm delete operation</h4>-->
+    <h4 class="modal-title" data-cy="encuestaDeleteDialogHeading">Publique su encuesta</h4>
   </div>
 
   <div class="modal-body">
@@ -48,13 +48,7 @@
       <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
     </button>
 
-    <button
-      [disabled]="fechaForm.invalid"
-      id="jhi-confirm-delete-encuesta"
-      data-cy="entityConfirmDeleteButton"
-      type="submit"
-      class="ds-btn ds-btn--primary"
-    >
+    <button id="jhi-confirm-delete-encuesta" data-cy="entityConfirmDeleteButton" type="submit" class="ds-btn ds-btn--primary">
       &nbsp;<span jhiTranslate="entity.action.publish">Delete</span>
     </button>
   </div>

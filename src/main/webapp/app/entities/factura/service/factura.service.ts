@@ -19,6 +19,7 @@ export class FacturaService {
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   create(factura: IFactura): Observable<EntityResponseType> {
+    debugger;
     const copy = this.convertDateFromClient(factura);
     return this.http
       .post<IFactura>(this.resourceUrl, copy, { observe: 'response' })
