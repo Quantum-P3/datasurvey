@@ -4,6 +4,7 @@
       <p class="ds-title ds-contenteditable" contenteditable="true" spellcheck="false" (blur)="updateTemplateName($event)">
         {{ plantilla!.nombre }}
       </p>
+      &nbsp;&nbsp;<fa-icon class="ds-info--icon" [icon]="faEye" (click)="openPreview()"></fa-icon>
     </div>
 
     <p class="ds-subtitle">Creada el día {{ plantilla!.fechaCreacion | formatShortDatetime | lowercase }}</p>
