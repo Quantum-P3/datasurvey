@@ -177,6 +177,13 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       (res: HttpResponse<IEncuesta[]>) => {
         this.isLoading = false;
         const tmpEncuestas = res.body ?? [];
+
+        // Fix calificacion
+        tmpEncuestas.forEach(encuesta => {
+          const _calificacion = encuesta.calificacion;
+          encuesta.calificacion = Number(_calificacion?.toString().split('.')[0]);
+        });
+
         if (this.isAdmin()) {
           this.encuestas = tmpEncuestas.filter(e => e.estado !== EstadoEncuesta.DELETED);
 
@@ -418,7 +425,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       nombre: this.editForm.get(['nombre'])!.value,
       descripcion: this.editForm.get(['descripcion'])!.value,
       fechaCreacion: dayjs(now, DATE_TIME_FORMAT),
-      calificacion: 5,
+      calificacion: 5.1,
       acceso: this.editForm.get(['acceso'])!.value,
       contrasenna: undefined,
       estado: EstadoEncuesta.DRAFT,
