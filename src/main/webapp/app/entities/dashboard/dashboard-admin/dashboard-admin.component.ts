@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { jsPDF } from 'jspdf';
-import { exportAsExcelFile } from '../export/export_excel';
+import { exportAsExcelFile, exportAsExcelTable } from '../export/export_excel';
 import { generatePDFTableData, createPDFTableHeaders, generatePDFTable } from '../export/export_pdf';
 
 import { FacturaService } from '../../factura/service/factura.service';
@@ -99,11 +99,11 @@ export class DashboardAdminComponent implements OnInit {
       .subscribe(res => {
         const tmpCategorias = res.body;
         this.categorias = tmpCategorias?.filter(c => c.estado === 'ACTIVE');
-        let cantPublicadas = 0;
-        let cantFinalizadas = 0;
         const publicadas: number[] | null = [];
         const finalizadas: number[] | null = [];
         this.categorias?.forEach(c => {
+          let cantPublicadas = 0;
+          let cantFinalizadas = 0;
           this.encuestas?.forEach(e => {
             if (e.categoria?.id === c.id && e.estado === 'ACTIVE') {
               cantPublicadas = cantPublicadas + 1;
@@ -198,13 +198,63 @@ export class DashboardAdminComponent implements OnInit {
       Cantidad de encuestas publicadas por categoría
       Cantidad de encuestas finalizadas por categoría
       Cantidad de encuestas publicadas por mes y año
+
+      Cantidad de encuestas
+      Cantidad de personas que han completado sus encuestas
+      Cantidad de encuestas activas
+      Cantidad de encuestas finalizadas
+      Cantidad de comentarios de retroalimentación
     */
 
-    const _sheets = ['reportes generales'];
-    const _reporteUsuarios = { usuarios_activos: 100, usuarios_bloqueados: 50 };
+    const _sheets = ['reportes generales', 'enc. publicadas', 'enc. publicadas categoría', 'enc. finalizadas categoría'];
 
-    const _excelFinalData = [_reporteUsuarios];
-    const _fileName = 'reporte_general';
+    const _reporteUsuarios = [
+      {
+        ganancias_plantillas: this.gananciasTotales,
+        usuarios_activos: this.cantUsuarioActivos,
+        usuarios_bloqueados: this.cantUsuarioBloqueados,
+      },
+    ];
+
+    // listaMesesAnnos
+    // encuestasPublicadasMesAnno
+    const _reporteEncuestasPublicadas: any[] = [];
+    this.listaMesesAnnos.forEach((date: any, index) => {
+      let _report: any = {};
+      _report['fecha'] = date;
+      _report['cantidad'] = this.encuestasPublicadasMesAnno[index];
+      _reporteEncuestasPublicadas.push(_report);
+    });
+
+    // this.categorias
+    // this.encuestasPublicadasCategoria
+    const _reporteCantidadEncuestasPublicadasCategoria: any[] = [];
+    this.categorias!.forEach((categoria: any, index) => {
+      let _report: any = {};
+      _report['categoria'] = categoria.nombre;
+      _report['cantidad'] = this.encuestasPublicadasCategoria[index];
+      _reporteCantidadEncuestasPublicadasCategoria.push(_report);
+    });
+
+    // this.categorias
+    // this.encuestasFinalzadasCategoria
+    const _reporteCantidadEncuestasFinalizadasCategoria: any[] = [];
+    this.categorias!.forEach((categoria: any, index) => {
+      let _report: any = {};
+      _report['categoria'] = categoria.nombre;
+      _report['cantidad'] = this.encuestasFinalzadasCategoria[index];
+      _reporteCantidadEncuestasFinalizadasCategoria.push(_report);
+    });
+
+    // exportAsExcelTable();
+
+    const _excelFinalData = [
+      _reporteUsuarios,
+      _reporteEncuestasPublicadas,
+      _reporteCantidadEncuestasPublicadasCategoria,
+      _reporteCantidadEncuestasFinalizadasCategoria,
+    ];
+    const _fileName = 'reportes_datasurvey';
     exportAsExcelFile(_sheets, _excelFinalData, _fileName);
   }
 
@@ -215,6 +265,13 @@ export class DashboardAdminComponent implements OnInit {
       Cantidad de encuestas publicadas por categoría
       Cantidad de encuestas finalizadas por categoría
       Cantidad de encuestas publicadas por mes y año
+
+      Cantidad de encuestas
+      Cantidad de personas que han completado sus encuestas
+      Cantidad de encuestas activas
+      Cantidad de encuestas finalizadas
+      Cantidad de comentarios de retroalimentación
+
     */
 
     const doc = new jsPDF();

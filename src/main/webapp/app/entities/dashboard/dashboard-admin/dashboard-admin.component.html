@@ -1,4 +1,7 @@
 <div class="content">
+  <button type="button" class="ds-btn ds-btn--primary" (click)="exportReportesGeneralesAdministradorExcel()">Export as Excel</button>
+  <button type="button" class="ds-btn ds-btn--primary" (click)="exportReportesGeneralesAdministradorPDF()">Export as PDF</button>
+
   <div class="container-fluid">
     <div class="row justify-content-around">
       <div class="col-lg-3 col-sm-6">
@@ -13,7 +16,7 @@
               <div class="col-xs-7 w-50">
                 <div class="numbers">
                   <p class="ds-title">Ganancias por plantillas</p>
-                  {{ gananciasTotales | currency: 'CR' }}
+                  ${{ gananciasTotales | number: '1.2' }}
                 </div>
               </div>
             </div>
@@ -137,5 +140,3 @@
     </div>
   </div>
 </div>
-<button type="button" class="ds-btn ds-btn--primary" (click)="exportReportesGeneralesAdministradorPDF()">Export as PDF</button>
-<button type="button" class="ds-btn ds-btn--primary" (click)="exportReportesGeneralesAdministradorExcel()">Export as Excel</button>

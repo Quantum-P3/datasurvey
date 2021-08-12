@@ -10,7 +10,7 @@ export const exportAsExcelFile = (sheetNames: string[], arrayOfData: any[], exce
 
   arrayOfData.forEach((data, index) => {
     let sheetName = sheetNames[index];
-    let worksheet = XLSX.utils.json_to_sheet([data]);
+    let worksheet = XLSX.utils.json_to_sheet(data);
     XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
   });
 
@@ -23,4 +23,15 @@ const saveAsExcelFile = (buffer: any, fileName: any) => {
   const generatedFileName = generateFileName(fileName, EXCEL_EXTENSION);
 
   FileSaver.saveAs(data, generatedFileName);
+};
+
+export const exportAsExcelTable = () => {
+  const workbook = XLSX.utils.book_new();
+
+  let worksheet = XLSX.utils.json_to_sheet([{ test: 1 }, { test: 2 }]);
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'test');
+
+  const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+  saveAsExcelFile(excelBuffer, 'test');
 };
