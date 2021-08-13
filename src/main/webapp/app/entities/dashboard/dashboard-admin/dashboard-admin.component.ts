@@ -17,6 +17,8 @@ import { finalize } from 'rxjs/operators';
 import * as Chartist from 'chartist';
 
 import { faWallet, faUsers, faUsersSlash } from '@fortawesome/free-solid-svg-icons';
+import { IUsuarioExtra } from '../../usuario-extra/usuario-extra.model';
+import { IUser } from '../../user/user.model';
 
 @Component({
   selector: 'jhi-dashboard-admin',
@@ -33,6 +35,7 @@ export class DashboardAdminComponent implements OnInit {
   gananciasTotales: number = 0;
   categorias: ICategoria[] | undefined = [];
   encuestas: IEncuesta[] | undefined = [];
+  usuarios: IUsuarioExtra[] | undefined = [];
   faWallet = faWallet;
   faUsers = faUsers;
   faUsersSlash = faUsersSlash;
@@ -40,9 +43,15 @@ export class DashboardAdminComponent implements OnInit {
   encuestasFinalizadas: number = 0;
   encuestasBorrador: number = 0;
   encuestasCompletadas: number = 0;
+  encuestasUsuario: number[] = [];
+  encuestasUsuarioPublicadas: number[] = [];
+  encuestasUsuarioFinalizadas: number[] = [];
+  encuestasUsuarioBorrador: number[] = [];
+  encuestasUsuarioCompletadas: number[] = [];
+  usuariosGenerales: IUser[] | null = [];
 
-  reportsGeneral = true;
-  reportForUsers = false;
+  reportsGeneral = false;
+  reportForUsers = true;
 
   chartFechas = [];
 
@@ -61,32 +70,71 @@ export class DashboardAdminComponent implements OnInit {
     return item.id!;
   }
 
+  trackIdUsuario(_index: number, item: IUsuarioExtra): number {
+    return item.id!;
+  }
+
+  cambiarVista() {
+    if (this.reportsGeneral) {
+      this.reportsGeneral = false;
+      this.reportForUsers = true;
+    } else if (this.reportForUsers) {
+      this.reportsGeneral = true;
+      this.reportForUsers = false;
+    }
+  }
+
   loadAll() {
     this.cargarGananciasTotales();
-    this.cargarCantidadUsuarios();
-    this.cargarEncuestas();
+    this.cargarUsers();
   }
 
   cargarGananciasTotales() {
-    this.facturaService.query().subscribe(
-      res => {
-        const tempFacturas = res.body;
-        tempFacturas?.forEach(f => {
-          if (f.costo != undefined) {
-            this.gananciasTotales += f.costo;
+    this.facturaService.query().subscribe(res => {
+      const tempFacturas = res.body;
+      tempFacturas?.forEach(f => {
+        if (f.costo != undefined) {
+          this.gananciasTotales += f.costo;
+        }
+      });
+    });
+  }
+
+  cargarUsers() {
+    this.usuarioExtraService
+      .retrieveAllPublicUsers()
+      .pipe(finalize(() => this.cargarCantidadUsuarios()))
+      .subscribe(res => {
+        res.forEach(user => {
+          let rolList: string[] | undefined;
+          rolList = user.authorities;
+          let a = rolList?.pop();
+          if (a == 'ROLE_ADMIN') {
+            user.authorities = ['Admin'];
+          } else if (a == 'ROLE_USER') {
+            user.authorities = ['Usuario'];
           }
         });
-      },
-      () => {}
-    );
+        this.usuariosGenerales = res;
+      });
   }
 
   cargarCantidadUsuarios() {
-    this.usuarioExtraService.query().subscribe(res => {
-      const tmpUsuarios = res.body;
-      this.cantUsuarioActivos = tmpUsuarios?.filter(u => u.estado === 'ACTIVE').length;
-      this.cantUsuarioBloqueados = tmpUsuarios?.filter(u => u.estado === 'SUSPENDED').length;
-    });
+    this.usuarioExtraService
+      .query()
+      .pipe(finalize(() => this.cargarEncuestas()))
+      .subscribe(res => {
+        const tmpUsuarios = res.body;
+
+        if (tmpUsuarios) {
+          tmpUsuarios.forEach(u => {
+            u.user = this.usuariosGenerales?.find(g => g.id == u.user?.id);
+          });
+        }
+        this.usuarios = tmpUsuarios?.filter(u => u.user?.authorities && u.user?.authorities[0] === 'Usuario');
+        this.cantUsuarioActivos = tmpUsuarios?.filter(u => u.estado === 'ACTIVE').length;
+        this.cantUsuarioBloqueados = tmpUsuarios?.filter(u => u.estado === 'SUSPENDED').length;
+      });
   }
 
   cargarEncuestas() {
@@ -108,6 +156,47 @@ export class DashboardAdminComponent implements OnInit {
               cantidadCompletadas = cantidadCompletadas + (Number(_contadorCompletadas?.toString().split('.')[1]) - 1);
             });
           this.encuestasCompletadas = cantidadCompletadas;
+
+          //reportes generales de todos los usuarios
+          const publicadasUser: number[] | null = [];
+          const finalizadasUser: number[] | null = [];
+          const borradoresUser: number[] | null = [];
+          const encuestasUser: number[] | null = [];
+          const encuestasCompletadasUser: number[] | null = [];
+
+          if (this.usuarios) {
+            this.usuarios.forEach(u => {
+              let cantEncuestas = 0;
+              let cantPublicadas = 0;
+              let cantFinalizadas = 0;
+              let cantBorradores = 0;
+              cantEncuestas = tmpEncuestas.filter(
+                e => e.estado !== 'DELETED' && e.usuarioExtra?.id === u.id && e.usuarioExtra?.user?.authorities
+              ).length;
+              cantPublicadas = tmpEncuestas.filter(e => e.estado === 'ACTIVE' && e.usuarioExtra?.id === u.id).length;
+              cantFinalizadas = tmpEncuestas.filter(e => e.estado === 'FINISHED' && e.usuarioExtra?.id === u.id).length;
+              cantBorradores = tmpEncuestas.filter(e => e.estado === 'DRAFT' && e.usuarioExtra?.id === u.id).length;
+
+              encuestasUser.push(cantEncuestas);
+              borradoresUser.push(cantBorradores);
+              publicadasUser.push(cantPublicadas);
+              finalizadasUser.push(cantFinalizadas);
+
+              let cantidadCompletadasUser: number = 0;
+              tmpEncuestas
+                .filter(e => e.estado === 'ACTIVE' && e.usuarioExtra?.id === u.id)
+                .forEach(e => {
+                  const _contadorCompletadas = e.calificacion;
+                  cantidadCompletadasUser = cantidadCompletadasUser + (Number(_contadorCompletadas?.toString().split('.')[1]) - 1);
+                });
+              encuestasCompletadasUser.push(cantidadCompletadasUser);
+            });
+            this.encuestasUsuarioCompletadas = encuestasCompletadasUser;
+            this.encuestasUsuario = encuestasUser;
+            this.encuestasUsuarioBorrador = borradoresUser;
+            this.encuestasUsuarioPublicadas = publicadasUser;
+            this.encuestasUsuarioFinalizadas = finalizadasUser;
+          }
         }
       });
   }
