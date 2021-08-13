@@ -89,7 +89,9 @@
     "chart.js": "^3.5.0",
     "chartist": "^0.11.4",
     "dayjs": "1.10.5",
+    "file-saver": "^2.0.5",
     "jquery": "^3.6.0",
+    "jspdf": "^2.3.1",
     "jw-angular-social-buttons": "^1.0.0",
     "ng-chartist": "^5.0.0",
     "ngx-infinite-scroll": "10.0.1",
@@ -102,6 +104,7 @@
     "swiper": "^6.7.5",
     "tslib": "2.3.0",
     "webstomp-client": "1.2.6",
+    "xlsx": "^0.17.0",
     "zone.js": "0.11.4"
   },
   "devDependencies": {
@@ -113,6 +116,7 @@
     "@angular/service-worker": "12.0.5",
     "@types/bootstrap": "^5.0.17",
     "@types/chartist": "^0.11.1",
+    "@types/file-saver": "^2.0.3",
     "@types/jest": "26.0.23",
     "@types/jquery": "^3.5.6",
     "@types/node": "15.12.2",

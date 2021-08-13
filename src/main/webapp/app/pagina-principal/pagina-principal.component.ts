@@ -86,6 +86,13 @@ export class PaginaPrincipalComponent implements OnInit {
       (res: HttpResponse<IEncuesta[]>) => {
         this.isLoading = false;
         const tmpEncuestas = res.body ?? [];
+
+        // Fix calificacion
+        tmpEncuestas.forEach(encuesta => {
+          const _calificacion = encuesta.calificacion;
+          encuesta.calificacion = Number(_calificacion?.toString().split('.')[0]);
+        });
+
         this.encuestas = tmpEncuestas.filter(e => e.estado === 'ACTIVE' && e.acceso === 'PUBLIC');
       },
       () => {

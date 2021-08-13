@@ -72,6 +72,11 @@ export class EncuestaDetailComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ encuesta }) => {
       if (encuesta) {
         this.encuesta = encuesta;
+
+        // Fix calificacion
+        const _calificacion = encuesta.calificacion;
+        this.encuesta!.calificacion = Number(_calificacion?.toString().split('.')[0]);
+
         this.loadAll();
       } else {
         this.previousState();

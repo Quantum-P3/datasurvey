@@ -83,7 +83,7 @@ export class UsuarioPlantillasComponent implements OnInit {
       nombre: 'This is a survey',
       descripcion: 'This is a survey',
       fechaCreacion: dayjs(now, DATE_TIME_FORMAT),
-      calificacion: 5,
+      calificacion: 5.1,
       acceso: AccesoEncuesta.PUBLIC,
       contrasenna: undefined,
       estado: EstadoEncuesta.DRAFT,
