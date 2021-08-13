@@ -169,9 +169,9 @@
                 <div class="mb-5">
                   <p class="ds-subtitle">Calificación</p>
                   <div>
-                    <fa-icon *ngFor="let i of [].constructor(encuesta.calificacion)" class="entity-icon--star" [icon]="faStar"></fa-icon
+                    <fa-icon *ngFor="let i of [].constructor(this.avgCalificacion)" class="entity-icon--star" [icon]="faStar"></fa-icon
                     ><fa-icon
-                      *ngFor="let i of [].constructor(5 - encuesta.calificacion!)"
+                      *ngFor="let i of [].constructor(5 - this.avgCalificacion)"
                       class="entity-icon--star--off"
                       [icon]="faStar"
                     ></fa-icon>

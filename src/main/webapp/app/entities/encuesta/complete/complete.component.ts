@@ -39,7 +39,11 @@ export class EncuestaCompleteComponent implements OnInit {
   selectedSingleOptions: any;
   selectedMultiOptions: any;
   error: boolean;
-  rating?: Number;
+  calificacion: number;
+  stars: number[] = [1, 2, 3, 4, 5];
+  cantidadCalificaciones: number = 0;
+  avgCalificacion: number = 0;
+  sumCalificacion: number = 0;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -56,13 +60,16 @@ export class EncuestaCompleteComponent implements OnInit {
     this.selectedSingleOptions = {};
     this.selectedMultiOptions = [];
     this.error = false;
-    this.calificacion = 4;
+    this.calificacion = 0;
   }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ encuesta }) => {
       if (encuesta) {
         this.encuesta = encuesta;
+        this.avgCalificacion = parseInt(this.encuesta!.calificacion!.toString().split('.')[0]);
+        this.cantidadCalificaciones = parseInt(this.encuesta!.calificacion!.toString().split('.')[1]);
+        this.sumCalificacion = this.avgCalificacion * this.cantidadCalificaciones;
       }
       this.isLocked = this.verifyPassword();
       if (this.isLocked) {
@@ -179,17 +186,29 @@ export class EncuestaCompleteComponent implements OnInit {
   }
 
   finish(): void {
+    this.updateEncuestaRating();
     this.getOpenQuestionAnswers();
     this.registerOpenQuestionAnswers();
     this.updateClosedOptionsCount();
   }
 
+  updateEncuestaRating() {
+    if (this.calificacion !== 0) {
+      const newSumCalificacion = this.sumCalificacion + this.calificacion;
+      const newCantidadCalificacion = this.cantidadCalificaciones + 1;
+      const newAvgCalificacion = newSumCalificacion / newCantidadCalificacion;
+      const newRating = this.joinRatingValues(newAvgCalificacion, newCantidadCalificacion);
+      this.encuesta!.calificacion = Number(newRating);
+      this.encuestaService.updateSurvey(this.encuesta!);
+    }
+  }
+
   updateClosedOptionsCount() {
     for (let key in this.selectedSingleOptions) {
-      this.subscribeToSaveResponse(this.ePreguntaCerradaOpcionService.updateCount(this.selectedSingleOptions[key]));
+      this.ePreguntaCerradaOpcionService.updateCount(this.selectedSingleOptions[key]);
     }
     this.selectedMultiOptions.forEach((option: any) => {
-      this.subscribeToSaveResponse(this.ePreguntaCerradaOpcionService.updateCount(option));
+      this.ePreguntaCerradaOpcionService.updateCount(option);
     });
   }
 
@@ -199,7 +218,7 @@ export class EncuestaCompleteComponent implements OnInit {
         return p.id == id;
       });
       let newRespuesta = new EPreguntaAbiertaRespuesta(0, this.selectedOpenOptions[id], pregunta);
-      this.subscribeToSaveResponse(this.ePreguntaAbiertaRespuestaService.create(newRespuesta));
+      this.ePreguntaAbiertaRespuestaService.create(newRespuesta);
     }
   }
 
@@ -229,7 +248,7 @@ export class EncuestaCompleteComponent implements OnInit {
     });
   }
 
-  joinRatingValues(totalValue: Number, ratingCount: Number): Number {
+  joinRatingValues(totalValue: number, ratingCount: number): Number {
     const result = totalValue.toString() + '.' + ratingCount.toString();
     return parseFloat(result);
   }
