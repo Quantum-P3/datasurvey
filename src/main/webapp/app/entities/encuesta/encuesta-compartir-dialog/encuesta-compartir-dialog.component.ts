@@ -17,7 +17,7 @@ export class EncuestaCompartirDialogComponent implements OnInit {
   constructor(protected activeModal: NgbActiveModal) {}
 
   ngOnInit(): void {
-    this.baseURL = location.origin + '/' + this.encuesta?.id + '/complete';
+    this.baseURL = location.origin + '/encuesta/' + this.encuesta?.id + '/complete';
   }
 
   compartir(): void {}
