@@ -315,7 +315,14 @@ export class DashboardAdminComponent implements OnInit {
       Cantidad de comentarios de retroalimentación
     */
 
-    const _sheets = ['reportes generales', 'enc. publicadas', 'enc. publicadas categoría', 'enc. finalizadas categoría'];
+    const _sheets = [
+      'usuarios generales',
+      'enc. publicadas',
+      'enc. publicadas categoría',
+      'enc. finalizadas categoría',
+      'encuestas generales',
+      'reporte de usuarios',
+    ];
 
     const _reporteUsuarios = [
       {
@@ -355,13 +362,44 @@ export class DashboardAdminComponent implements OnInit {
       _reporteCantidadEncuestasFinalizadasCategoria.push(_report);
     });
 
-    // exportAsExcelTable();
+    // this.encuestasPublicadas
+    // this.encuestasFinalizadas
+    // this.encuestasBorrador
+    // this.encuestasCompletadas
+    const _reporteEncuestasReportesGenerales = [
+      {
+        encuestas_borrador: this.encuestasBorrador,
+        encuestas_publicadas: this.encuestasPublicadas,
+        encuestas_finalizadas: this.encuestasFinalizadas,
+        encuestas_completadas: this.encuestasCompletadas,
+      },
+    ];
+
+    // this.encuestasUsuario;
+    // this.encuestasUsuarioPublicadas;
+    // this.encuestasUsuarioFinalizadas;
+    // this.encuestasUsuarioBorrador;
+    // this.encuestasUsuarioCompletadas;
+    // this.usuarios;
+    const _reporteEncuestasUsuarios: any[] = [];
+    this.usuarios!.forEach((user, index) => {
+      let _report: any = {};
+      _report['usuario_nombre'] = user.nombre;
+      _report['usuario_encuestas'] = this.encuestasUsuario[index];
+      _report['encuestas_borrador'] = this.encuestasUsuarioBorrador[index];
+      _report['encuestas_publicadas'] = this.encuestasUsuarioPublicadas[index];
+      _report['encuestas_finalizadas'] = this.encuestasUsuarioFinalizadas[index];
+      _report['encuestas_completadas_usuarios'] = this.encuestasUsuarioCompletadas[index];
+      _reporteEncuestasUsuarios.push(_report);
+    });
 
     const _excelFinalData = [
       _reporteUsuarios,
       _reporteEncuestasPublicadas,
       _reporteCantidadEncuestasPublicadasCategoria,
       _reporteCantidadEncuestasFinalizadasCategoria,
+      _reporteEncuestasReportesGenerales,
+      _reporteEncuestasUsuarios,
     ];
     const _fileName = 'reportes_datasurvey';
     exportAsExcelFile(_sheets, _excelFinalData, _fileName);
