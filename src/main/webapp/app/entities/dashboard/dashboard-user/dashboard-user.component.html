@@ -2,11 +2,27 @@
   <div class="py-2">
     <!--<button type="button" class="ds-btn ds-btn&#45;&#45;primary" (click)="exportReportesGeneralesUserExcel()">Exportar como Excel</button>
     <button type="button" class="ds-btn ds-btn&#45;&#45;primary" (click)="exportReportesGeneralesUserPDF()">Exportar como PDF</button>-->
-    <button type="button" [hidden]="reportForEncuestas" class="ds-btn ds-btn--primary" style="float: right" (click)="cambiarVista()">
+    <button
+      type="button"
+      [hidden]="!reportsGeneral || reportForEncuestas"
+      class="ds-btn ds-btn--primary"
+      style="float: right"
+      (click)="cambiarVista()"
+    >
       Ver reportes generales
     </button>
-    <button type="button" [hidden]="reportsGeneral" class="ds-btn ds-btn--primary" style="float: right" (click)="cambiarVista()">
+    <button
+      type="button"
+      [hidden]="!reportForEncuestas || reportsGeneral"
+      class="ds-btn ds-btn--primary"
+      style="float: right"
+      (click)="cambiarVista()"
+    >
       Ver reportes por encuestas
+    </button>
+
+    <button type="button" [hidden]="reportPreguntas" class="ds-btn ds-btn--primary" style="float: right" (click)="cambiarVista()">
+      Volver
     </button>
   </div>
 
@@ -19,6 +35,11 @@
     <div class="py-2" [hidden]="reportForEncuestas">
       <h1>Reportes por encuesta</h1>
       <h2>En esta sección encontrará los reportes de cada una de sus encuestas</h2>
+    </div>
+
+    <div class="py-2" [hidden]="reportPreguntas">
+      <h1>Detalles de la encuesta</h1>
+      <h2>En esta sección encontrará los reportes dcon respecto al contenido de las preguntas de su encuesta</h2>
     </div>
     <hr />
 
@@ -142,8 +163,8 @@
                     ></fa-icon>
                   </div>
                   <div class="entity-body--row m-2">
-                    <button (click)="detallesPreguntas()" class="ds-btn btn-card ds-btn--primary">
-                      <fa-icon [icon]="faEye"></fa-icon>&nbsp;&nbsp;Reporte de contenido
+                    <button (click)="detallesPreguntas(encuesta)" class="ds-btn btn-card ds-btn--primary">
+                      <fa-icon [icon]="faEye"></fa-icon>&nbsp;&nbsp;Detalle
                     </button>
                   </div>
                 </div>
@@ -156,81 +177,83 @@
 
     <!--REPORTES DE LAS PREGUNTAS-->
 
-    <!--<div class="container-fluid" *ngIf="encuesta">
+    <div class="container-fluid" *ngIf="encuesta" [hidden]="reportPreguntas">
       <div>
-
         <div class="alert alert-warning" id="no-result" *ngIf="ePreguntas?.length === 0">
           <span>No se encontraron preguntas</span>
         </div>
 
         <div class="ds-survey preview-survey" id="entities" *ngIf="ePreguntas && ePreguntas.length > 0">
-          <div class="ds-survey&#45;&#45;all-question-wrapper col-8">
-            <div class="ds-survey&#45;&#45;question-wrapper card-encuesta lift" *ngFor="let ePregunta of ePreguntas; let i = index; trackBy: trackId">
+          <div class="ds-survey--all-question-wrapper col-8">
+            <div class="ds-survey--question-wrapper card-encuesta" *ngFor="let ePregunta of ePreguntas; let i = index">
               <div
                 [attr.data-index]="ePregunta.id"
                 [attr.data-tipo]="ePregunta.tipo"
                 [attr.data-opcional]="ePregunta.opcional"
-                class="ds-survey&#45;&#45;question"
+                class="ds-survey--question"
               >
-                <div class="ds-survey&#45;&#45;titulo">
-                  <span class="ds-survey&#45;&#45;titulo&#45;&#45;name">{{ i + 1 }}. {{ ePregunta.nombre }}</span>
+                <div class="ds-survey--titulo">
+                  <span class="ds-survey--titulo--name">{{ i + 1 }}. {{ ePregunta.nombre }}</span>
                 </div>
                 <div>
-              <span *ngIf="ePregunta.tipo === 'SINGLE'" class="ds-subtitle"
-              >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.SINGLE' | translate | lowercase }}
-                {{ ePregunta.opcional ? '(opcional)' : '' }}</span
-              >
+                  <span *ngIf="ePregunta.tipo === 'SINGLE'" class="ds-subtitle"
+                    >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.SINGLE' | translate | lowercase }}
+                    {{ ePregunta.opcional ? '(opcional)' : '' }}</span
+                  >
                   <span *ngIf="ePregunta.tipo === 'MULTIPLE'" class="ds-subtitle"
-                  >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.MULTIPLE' | translate | lowercase }}
+                    >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.MULTIPLE' | translate | lowercase }}
                     {{ ePregunta.opcional ? '(opcional)' : '' }}</span
                   >
                   <span *ngIf="!ePregunta.tipo" class="ds-subtitle"
-                  >Pregunta de respuesta abierta {{ ePregunta.opcional ? '(opcional)' : '' }}</span
+                    >Pregunta de respuesta abierta {{ ePregunta.opcional ? '(opcional)' : '' }}</span
                   >
                 </div>
                 <ng-container *ngIf="ePregunta.tipo">
-                  <ng-container *ngFor="let ePreguntaOpcion of ePreguntasOpciones; let j = index; trackBy: trackId">
+                  <ng-container *ngFor="let ePreguntaOpcion of ePreguntasOpciones; let j = index">
                     <ng-container *ngFor="let ePreguntaOpcionFinal of ePreguntaOpcion">
                       <ng-container *ngIf="ePregunta.id === ePreguntaOpcionFinal.epreguntaCerrada.id">
                         <div
-                          class="ds-survey&#45;&#45;option ds-survey&#45;&#45;option&#45;&#45;base ds-survey&#45;&#45;closed-option can-delete"
+                          class="ds-survey--option ds-survey--option--base ds-survey--closed-option can-delete"
                           [attr.data-id]="ePreguntaOpcionFinal.id"
                         >
                           <div class="radio" *ngIf="ePregunta.tipo === 'SINGLE'">
-                            <input
-                              type="radio"
-                              (change)="onCheck(ePreguntaOpcionFinal)"
-                              [value]="ePreguntaOpcionFinal.id"
+                            <!--<input
+                              type="text"
+                              readonly
                               style="border-radius: 3px"
                               name="{{ 'radio' + ePregunta.id }}"
-                              id="{{ 'radio' + ePreguntaOpcionFinal.id }}"
-                            />
-                            <label for="{{ 'radio' + ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
+                              id="'radio'"
+                            />-->
+                            <label>{{
+                              ePreguntaOpcionFinal.nombre + ' / Cantidad de veces seleccionada: ' + ePreguntaOpcionFinal.cantidad
+                            }}</label>
                           </div>
                           <div class="checkbox" *ngIf="ePregunta.tipo === 'MULTIPLE'">
-                            <input
-                              (change)="toggleOption(ePreguntaOpcionFinal)"
+                            <!--<input
+
                               type="checkbox"
                               style="border-radius: 3px"
                               id="{{ 'checkbox' + ePreguntaOpcionFinal.id }}"
-                            />
-                            <label for="{{ 'checkbox' + ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
+                            />-->
+                            <label>{{
+                              ePreguntaOpcionFinal.nombre + ' / Cantidad de veces seleccionada: ' + ePreguntaOpcionFinal.cantidad
+                            }}</label>
                           </div>
                         </div>
                       </ng-container>
                     </ng-container>
                   </ng-container>
                 </ng-container>
-                <div class="ds-survey&#45;&#45;option ds-survey&#45;&#45;option&#45;&#45;base ds-survey&#45;&#45;open-option" *ngIf="!ePregunta.tipo">
-                  <textarea id="{{ ePregunta.id }}" cols="33" rows="10"></textarea>
+                <div class="ds-survey--option ds-survey--option--base ds-survey--open-option" *ngIf="!ePregunta.tipo">
+                  <ul>
+                    <li>{{ ePregunta }}</li>
+                  </ul>
                 </div>
               </div>
             </div>
-
           </div>
-
         </div>
       </div>
-    </div>-->
+    </div>
   </div>
 </div>

@@ -9,6 +9,7 @@ import { AccountService } from '../../../core/auth/account.service';
 import { UsuarioExtraService } from '../../usuario-extra/service/usuario-extra.service';
 import { faListAlt, faUser, faEye, faStar, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import * as Chartist from 'chartist';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-dashboard-user',
@@ -30,12 +31,15 @@ export class DashboardUserComponent implements OnInit {
   faCalendarAlt = faCalendarAlt;
   reportsGeneral = false;
   reportForEncuestas = true;
+  reportPreguntas = true;
   duracion?: number = 0;
-
+  ePreguntas?: any[];
+  ePreguntasOpciones?: any[];
   isLoading = false;
   encuestas?: IEncuesta[];
   usuarioExtra: UsuarioExtra | null = null;
   account: Account | null = null;
+  encuesta: IEncuesta | null = null;
 
   constructor(
     protected encuestaService: EncuestaService,
@@ -51,9 +55,15 @@ export class DashboardUserComponent implements OnInit {
     if (this.reportsGeneral) {
       this.reportsGeneral = false;
       this.reportForEncuestas = true;
+      this.reportPreguntas = true;
     } else if (this.reportForEncuestas) {
       this.reportsGeneral = true;
       this.reportForEncuestas = false;
+      this.reportPreguntas = true;
+    } else if (this.reportPreguntas) {
+      this.reportForEncuestas = false;
+      this.reportPreguntas = true;
+      this.reportsGeneral = true;
     }
   }
 
@@ -126,5 +136,46 @@ export class DashboardUserComponent implements OnInit {
     new Chartist.Pie('#chartAcceso', dataAcceso);
   }
 
-  detallesPreguntas(): void {}
+  detallesPreguntas(encuesta: IEncuesta): void {
+    if (!this.reportForEncuestas) {
+      this.reportPreguntas = false;
+      this.reportForEncuestas = true;
+      this.reportsGeneral = true;
+    }
+
+    this.encuesta = encuesta;
+
+    this.isLoading = true;
+    this.encuestaService
+      .findQuestions(encuesta?.id!)
+      .pipe(
+        finalize(() =>
+          this.encuestaService.findQuestionsOptions(encuesta?.id!).subscribe(
+            (res: any) => {
+              this.isLoading = false;
+              this.ePreguntasOpciones = res.body ?? [];
+            },
+            () => {
+              this.isLoading = false;
+            }
+          )
+        )
+      )
+      .subscribe(
+        (res: any) => {
+          this.isLoading = false;
+          this.ePreguntas = res.body ?? [];
+        },
+        () => {
+          this.isLoading = false;
+        }
+      );
+    if (this.ePreguntas!.length == 0) {
+      this.previousState();
+    }
+  }
+
+  previousState(): void {
+    window.history.back();
+  }
 }
