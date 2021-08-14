@@ -20,8 +20,7 @@ export const createPDFTableHeaders = (keys: any): any[] => {
       id: keys[i],
       name: keys[i],
       prompt: keys[i],
-      width: 65,
-      align: 'center',
+      align: 'left',
       padding: 0,
     });
   }
@@ -34,8 +33,7 @@ export const generatePDFTable = (doc: jsPDF, _docData: any, _docHeaders: string[
   doc.text(_docTitle, 20, 20);
   doc.setFont('helvetica');
 
-  doc.setFontSize(12);
-  doc.table(20, 30, _docData, _docHeaders, { autoSize: true });
+  doc.table(20, 30, _docData, _docHeaders, { fontSize: 10, autoSize: true });
 };
 
 export const saveGeneratedPDF = (doc: jsPDF, _fileName: string) => {
