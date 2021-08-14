@@ -170,9 +170,7 @@ export class DashboardAdminComponent implements OnInit {
               let cantPublicadas = 0;
               let cantFinalizadas = 0;
               let cantBorradores = 0;
-              cantEncuestas = tmpEncuestas.filter(
-                e => e.estado !== 'DELETED' && e.usuarioExtra?.id === u.id && e.usuarioExtra?.user?.authorities
-              ).length;
+              cantEncuestas = tmpEncuestas.filter(e => e.estado !== 'DELETED' && e.usuarioExtra?.id === u.id).length;
               cantPublicadas = tmpEncuestas.filter(e => e.estado === 'ACTIVE' && e.usuarioExtra?.id === u.id).length;
               cantFinalizadas = tmpEncuestas.filter(e => e.estado === 'FINISHED' && e.usuarioExtra?.id === u.id).length;
               cantBorradores = tmpEncuestas.filter(e => e.estado === 'DRAFT' && e.usuarioExtra?.id === u.id).length;

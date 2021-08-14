@@ -106,7 +106,6 @@ export class PaypalDialogComponent implements OnInit {
         });
       },
       onClientAuthorization: data => {
-        debugger;
         console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
         this.updateUser();
         this.sendReceipt();
@@ -119,7 +118,6 @@ export class PaypalDialogComponent implements OnInit {
   }
 
   getUser(): void {
-    debugger;
     // Get jhi_user and usuario_extra information
     if (this.account !== null) {
       this.usuarioExtraService.find(this.account.id).subscribe(usuarioExtra => {
@@ -138,7 +136,6 @@ export class PaypalDialogComponent implements OnInit {
   sendReceipt(): void {
     const now = dayjs();
 
-    debugger;
     this.factura = {
       nombreUsuario: String(this.usuarioExtra?.id!),
       nombrePlantilla: this.plantilla?.nombre!,
