@@ -245,9 +245,9 @@
                   </ng-container>
                 </ng-container>
                 <div class="ds-survey--option ds-survey--option--base ds-survey--open-option" *ngIf="!ePregunta.tipo">
-                  <ul>
-                    <li>{{ ePregunta }}</li>
-                  </ul>
+                  <div *ngFor="let res of eRespuestaAbierta">
+                    <textarea class="ds-survey--textarea" cols="33" rows="10"> {{ res }}</textarea>
+                  </div>
                 </div>
               </div>
             </div>

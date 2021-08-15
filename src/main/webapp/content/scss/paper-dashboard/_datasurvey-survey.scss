@@ -99,7 +99,12 @@
   }
 }
 
-.ds-survey--option {
+.ds-survey--textarea {
+  width: 100% !important;
+}
+
+.ds-survey--option,
+.ds-survey--rating {
   @media screen and (max-width: 991px) {
     width: 21rem !important;
   }

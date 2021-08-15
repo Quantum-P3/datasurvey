@@ -10,6 +10,8 @@ import { UsuarioExtraService } from '../../usuario-extra/service/usuario-extra.s
 import { faListAlt, faUser, faEye, faStar, faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import * as Chartist from 'chartist';
 import { finalize } from 'rxjs/operators';
+import { EPreguntaAbiertaRespuestaService } from '../../e-pregunta-abierta-respuesta/service/e-pregunta-abierta-respuesta.service';
+import { each } from 'chart.js/helpers';
 
 @Component({
   selector: 'jhi-dashboard-user',
@@ -35,6 +37,7 @@ export class DashboardUserComponent implements OnInit {
   duracion?: number = 0;
   ePreguntas?: any[];
   ePreguntasOpciones?: any[];
+  eRespuestaAbierta?: any[];
   isLoading = false;
   encuestas?: IEncuesta[];
   usuarioExtra: UsuarioExtra | null = null;
@@ -44,7 +47,8 @@ export class DashboardUserComponent implements OnInit {
   constructor(
     protected encuestaService: EncuestaService,
     protected accountService: AccountService,
-    protected usuarioExtraService: UsuarioExtraService
+    protected usuarioExtraService: UsuarioExtraService,
+    protected resAbierta: EPreguntaAbiertaRespuestaService
   ) {}
 
   ngOnInit(): void {
@@ -84,8 +88,6 @@ export class DashboardUserComponent implements OnInit {
         tmpEncuestas.forEach(encuesta => {
           const _calificacion = encuesta.calificacion;
           encuesta.calificacion = Number(_calificacion?.toString().split('.')[0]);
-
-          debugger;
 
           if (encuesta.fechaFinalizada == null) {
             this.duracion = -1;
@@ -144,7 +146,7 @@ export class DashboardUserComponent implements OnInit {
     }
 
     this.encuesta = encuesta;
-
+    debugger;
     this.isLoading = true;
     this.encuestaService
       .findQuestions(encuesta?.id!)
@@ -154,6 +156,20 @@ export class DashboardUserComponent implements OnInit {
             (res: any) => {
               this.isLoading = false;
               this.ePreguntasOpciones = res.body ?? [];
+
+              debugger;
+
+              this.ePreguntas!.forEach(pregunta => {
+                debugger;
+                if (!pregunta.tipo) {
+                  this.resAbierta.find(pregunta.id).subscribe(res => {
+                    const respuesta = res.body ?? [];
+
+                    this.eRespuestaAbierta?.push(respuesta);
+                  });
+                }
+              });
+              //this.getOpenQuestionAnswers()
             },
             () => {
               this.isLoading = false;
@@ -177,5 +193,19 @@ export class DashboardUserComponent implements OnInit {
 
   previousState(): void {
     window.history.back();
+  }
+
+  getOpenQuestionAnswers() {
+    debugger;
+    this.ePreguntas!.forEach(pregunta => {
+      debugger;
+      if (!pregunta.tipo) {
+        this.resAbierta.find(pregunta.id).subscribe(res => {
+          const respuesta = res.body ?? [];
+
+          this.eRespuestaAbierta?.push(respuesta);
+        });
+      }
+    });
   }
 }
