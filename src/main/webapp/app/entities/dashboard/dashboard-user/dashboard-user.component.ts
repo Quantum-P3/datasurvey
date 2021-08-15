@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UsuarioEncuestaService } from '../../usuario-encuesta/service/usuario-encuesta.service';
+import { IUser } from '../../user/user.model';
 import { HttpResponse } from '@angular/common/http';
 import { IEncuesta } from '../../encuesta/encuesta.model';
 import { EstadoEncuesta } from '../../enumerations/estado-encuesta.model';
@@ -11,8 +13,8 @@ import { faListAlt, faUser, faEye, faStar, faCalendarAlt } from '@fortawesome/fr
 import * as Chartist from 'chartist';
 import { finalize } from 'rxjs/operators';
 import { EPreguntaAbiertaRespuestaService } from '../../e-pregunta-abierta-respuesta/service/e-pregunta-abierta-respuesta.service';
-import { each } from 'chart.js/helpers';
 import { IEPreguntaAbiertaRespuesta } from '../../e-pregunta-abierta-respuesta/e-pregunta-abierta-respuesta.model';
+import { IUsuarioEncuesta } from '../../usuario-encuesta/usuario-encuesta.model';
 
 @Component({
   selector: 'jhi-dashboard-user',
@@ -20,6 +22,7 @@ import { IEPreguntaAbiertaRespuesta } from '../../e-pregunta-abierta-respuesta/e
   styleUrls: ['./dashboard-user.component.scss'],
 })
 export class DashboardUserComponent implements OnInit {
+  user: IUser | null = null;
   cantEncuestas: number = 0;
   cantPersonas: number = 0;
   cantActivas: number = 0;
@@ -35,6 +38,8 @@ export class DashboardUserComponent implements OnInit {
   reportsGeneral = false;
   reportForEncuestas = true;
   reportPreguntas = true;
+  reportColaboraciones = true;
+  reportColaboracionPreguntas = true;
   duracion?: number = 0;
   ePreguntas?: any[];
   ePreguntasOpciones?: any[];
@@ -44,12 +49,21 @@ export class DashboardUserComponent implements OnInit {
   usuarioExtra: UsuarioExtra | null = null;
   account: Account | null = null;
   encuesta: IEncuesta | null = null;
+  colaboracion: IEncuesta | null = null;
   preguntaId?: number = 0;
+  usuarioEncuestas?: IUsuarioEncuesta[];
+  colaboraciones?: IEncuesta[];
+  duracionColaboracion?: number = 0;
+  ePreguntasColaboracion?: any[];
+  ePreguntasOpcionesColaboracion?: any[];
+  respuestaAbiertaColaboracion?: IEPreguntaAbiertaRespuesta[];
+  preguntaIdColaboracion?: number = 0;
 
   constructor(
     protected encuestaService: EncuestaService,
     protected accountService: AccountService,
     protected usuarioExtraService: UsuarioExtraService,
+    protected usuarioEncuestaService: UsuarioEncuestaService,
     protected resAbierta: EPreguntaAbiertaRespuestaService
   ) {}
 
@@ -62,14 +76,36 @@ export class DashboardUserComponent implements OnInit {
       this.reportsGeneral = false;
       this.reportForEncuestas = true;
       this.reportPreguntas = true;
+      this.reportColaboraciones = true;
+      this.reportColaboracionPreguntas = true;
     } else if (this.reportForEncuestas) {
       this.reportsGeneral = true;
       this.reportForEncuestas = false;
       this.reportPreguntas = true;
+      this.reportColaboraciones = true;
+      this.reportColaboracionPreguntas = true;
     } else if (this.reportPreguntas) {
       this.reportForEncuestas = false;
       this.reportPreguntas = true;
       this.reportsGeneral = true;
+      this.reportColaboraciones = true;
+      this.reportColaboracionPreguntas = true;
+    }
+  }
+
+  cambiarVistaColaboracion(cambio: string) {
+    if (cambio === 'colaboracion') {
+      this.reportForEncuestas = true;
+      this.reportPreguntas = true;
+      this.reportsGeneral = true;
+      this.reportColaboraciones = false;
+      this.reportColaboracionPreguntas = true;
+    } else if (cambio === 'preguntasColaboracion') {
+      this.reportForEncuestas = true;
+      this.reportPreguntas = true;
+      this.reportsGeneral = true;
+      this.reportColaboraciones = true;
+      this.reportColaboracionPreguntas = false;
     }
   }
 
@@ -79,13 +115,17 @@ export class DashboardUserComponent implements OnInit {
         this.isLoading = false;
         const tmpEncuestas = res.body ?? [];
 
-        this.encuestas = tmpEncuestas.filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id);
+        this.encuestas = tmpEncuestas.filter(e => e.usuarioExtra?.id === this.usuarioExtra?.id && e.estado !== 'DELETED');
         this.cantEncuestas = this.encuestas.length;
         this.cantActivas = tmpEncuestas.filter(e => e.estado === 'ACTIVE' && e.usuarioExtra?.id === this.usuarioExtra?.id).length;
         this.cantDraft = tmpEncuestas.filter(e => e.estado === 'DRAFT' && e.usuarioExtra?.id === this.usuarioExtra?.id).length;
         this.cantFinalizadas = tmpEncuestas.filter(e => e.estado === 'FINISHED' && e.usuarioExtra?.id === this.usuarioExtra?.id).length;
-        this.cantPublicas = tmpEncuestas.filter(e => e.acceso === 'PUBLIC' && e.usuarioExtra?.id === this.usuarioExtra?.id).length;
-        this.cantPrivadas = tmpEncuestas.filter(e => e.acceso === 'PRIVATE' && e.usuarioExtra?.id === this.usuarioExtra?.id).length;
+        this.cantPublicas = tmpEncuestas.filter(
+          e => e.acceso === 'PUBLIC' && e.usuarioExtra?.id === this.usuarioExtra?.id && e.estado !== 'DELETED'
+        ).length;
+        this.cantPrivadas = tmpEncuestas.filter(
+          e => e.acceso === 'PRIVATE' && e.usuarioExtra?.id === this.usuarioExtra?.id && e.estado !== 'DELETED'
+        ).length;
 
         tmpEncuestas.forEach(encuesta => {
           const _calificacion = encuesta.calificacion;
@@ -98,7 +138,9 @@ export class DashboardUserComponent implements OnInit {
           }
         });
 
-        this.cantPersonas = tmpEncuestas.filter(e => e.calificacion && e.usuarioExtra?.id === this.usuarioExtra?.id).length;
+        this.cantPersonas = tmpEncuestas.filter(
+          e => e.calificacion && e.usuarioExtra?.id === this.usuarioExtra?.id && e.estado !== 'DELETED'
+        ).length;
         //cantidad de personas que han completado la encuesta
 
         this.loadFirstChart();
@@ -120,6 +162,7 @@ export class DashboardUserComponent implements OnInit {
     });
 
     this.loadEncuestas();
+    this.loadAllColaboraciones();
   }
 
   loadFirstChart(): void {
@@ -211,6 +254,100 @@ export class DashboardUserComponent implements OnInit {
           })
 */
           console.log(this.respuestaAbierta);
+        });
+      }
+    });
+  }
+
+  loadAllColaboraciones(): void {
+    this.usuarioEncuestaService.query().subscribe((res: HttpResponse<IUsuarioEncuesta[]>) => {
+      const tempUsuarioEncuestas = res.body ?? [];
+      this.usuarioEncuestas = tempUsuarioEncuestas
+        .filter(c => c.usuarioExtra?.id === this.usuarioExtra?.id)
+        .filter(c => c.encuesta?.estado !== 'DELETED');
+
+      // Fix calificacion
+      tempUsuarioEncuestas.forEach(colaboracion => {
+        if (colaboracion.encuesta) {
+          const _calificacion = colaboracion.encuesta.calificacion;
+          colaboracion.encuesta.calificacion = Number(_calificacion?.toString().split('.')[0]);
+
+          if (colaboracion.encuesta.fechaFinalizada == null) {
+            this.duracionColaboracion = -1;
+          } else {
+            this.duracionColaboracion = colaboracion.encuesta.fechaPublicacion?.diff(colaboracion.encuesta.fechaFinalizada!, 'days');
+          }
+        }
+      });
+    });
+  }
+
+  detallesPreguntasColaboracion(encuesta: IEncuesta): void {
+    if (!this.reportColaboraciones) {
+      this.reportPreguntas = true;
+      this.reportForEncuestas = true;
+      this.reportsGeneral = true;
+      this.reportColaboraciones = true;
+      this.reportColaboracionPreguntas = false;
+    }
+
+    this.colaboracion = encuesta;
+    debugger;
+    this.isLoading = true;
+    this.encuestaService
+      .findQuestions(encuesta?.id!)
+      .pipe(
+        finalize(() =>
+          this.encuestaService.findQuestionsOptions(encuesta?.id!).subscribe(
+            (res: any) => {
+              this.isLoading = false;
+              this.ePreguntasOpcionesColaboracion = res.body ?? [];
+
+              //debugger;
+
+              this.getOpenQuestionAnswersColaboracion();
+            },
+            () => {
+              this.isLoading = false;
+            }
+          )
+        )
+      )
+      .subscribe(
+        (res: any) => {
+          this.isLoading = false;
+          this.ePreguntasColaboracion = res.body ?? [];
+        },
+        () => {
+          this.isLoading = false;
+        }
+      );
+  }
+
+  getOpenQuestionAnswersColaboracion() {
+    this.ePreguntasColaboracion!.forEach(pregunta => {
+      debugger;
+      if (!pregunta.tipo) {
+        this.resAbierta.query().subscribe(res => {
+          debugger;
+
+          this.preguntaIdColaboracion = pregunta.id;
+
+          this.respuestaAbiertaColaboracion = res.body ?? [];
+          /* const respuesta = res.body ?? [];
+
+          respuesta.forEach( e => {
+            debugger
+
+
+            if (e.epreguntaAbierta?.id == pregunta.id){
+              this.respuestaAbierta?.push(e);
+            }
+            /!*debugger
+            this.eRespuestaAbierta?.push(respuesta.filter(e.ePreguntaAbierta?.id == pregunta.id));*!/
+          })
+*/
+          console.log(this.respuestaAbiertaColaboracion);
         });
       }
     });

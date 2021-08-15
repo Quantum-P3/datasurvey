@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col">
-    <div class="container-fluid navbar navbar-marketing navbar-expand-lg bg-white navbar-light">
+    <div class="container-fluid navbar navbar-marketing navbar-expand-lg bg-white navbar-light" style="background-color: #fbfafa">
       <div class="container px-5 py-4">
         <h1 class="ds-title" [hidden]="notAccount">Inicio</h1>
         <a class="text-dark" href=" " [hidden]="!notAccount">
@@ -25,15 +25,29 @@
         </div>
       </div>
     </div>
+    <div
+      class="page-header-ui page-header-ui-dark bg-img-cover overlay overlay-40"
+      style="background-image: url('../../content/img_datasurvey/banner1.webp'); background-position-y: -325px"
+    >
+      <div class="page-header-ui-content py-5 position-relative" style="height: 330px">
+        <div class="container px-5">
+          <div class="row gx-5 justify-content-center">
+            <div class="col-xl-8 col-lg-10 text-center">
+              <div data-aos="fade-up"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="bg-light py-10 container-encuestas">
       <div class="container px-0">
         <!--filtrado-->
 
-        <div class="input-group">
+        <div class="input-group ds-form">
           <div class="ds-filter">
             <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
-            <input class="form-control" type="text" name="searchString" placeholder="Buscar por nombre..." [(ngModel)]="searchString" />
+            <input class="ds-form-control" type="text" name="searchString" placeholder="Buscar por nombre..." [(ngModel)]="searchString" />
           </div>
           <!--<div class="ds-filter">
             <select name="searchCategoria" class="form-control" [(ngModel)]="searchCategoria" style="width: 200px">

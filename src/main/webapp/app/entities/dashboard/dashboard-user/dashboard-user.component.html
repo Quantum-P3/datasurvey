@@ -4,7 +4,7 @@
     <button type="button" class="ds-btn ds-btn&#45;&#45;primary" (click)="exportReportesGeneralesUserPDF()">Exportar como PDF</button>-->
     <button
       type="button"
-      [hidden]="!reportsGeneral || reportForEncuestas"
+      [hidden]="!reportsGeneral || (reportForEncuestas && reportColaboraciones)"
       class="ds-btn ds-btn--primary"
       style="float: right"
       (click)="cambiarVista()"
@@ -13,16 +13,34 @@
     </button>
     <button
       type="button"
-      [hidden]="!reportForEncuestas || reportsGeneral"
+      [hidden]="!reportForEncuestas || (reportsGeneral && reportColaboraciones)"
       class="ds-btn ds-btn--primary"
       style="float: right"
       (click)="cambiarVista()"
     >
       Ver reportes por encuestas
     </button>
+    <button
+      type="button"
+      [hidden]="!reportColaboraciones || (reportsGeneral && reportForEncuestas)"
+      class="ds-btn ds-btn--primary"
+      style="float: right"
+      (click)="cambiarVistaColaboracion('colaboracion')"
+    >
+      Ver reportes de colaboraciones
+    </button>
 
-    <button type="button" [hidden]="reportPreguntas" class="ds-btn ds-btn--primary" style="float: right" (click)="cambiarVista()">
-      Volver
+    <button type="button" [hidden]="reportPreguntas" class="ds-btn ds-btn--secondary" style="float: right" (click)="cambiarVista()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp; Volver
+    </button>
+    <button
+      type="button"
+      [hidden]="reportColaboracionPreguntas"
+      class="ds-btn ds-btn--secondary"
+      style="float: right"
+      (click)="cambiarVista()"
+    >
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp; Volver
     </button>
   </div>
 
@@ -40,6 +58,14 @@
     <div class="py-2" [hidden]="reportPreguntas">
       <h1>Detalles de la encuesta</h1>
       <h2>En esta sección encontrará los reportes con respecto al contenido de las preguntas de su encuesta</h2>
+    </div>
+    <div class="py-2" [hidden]="reportColaboraciones">
+      <h1>Reportes de colaboraciones</h1>
+      <h2>En esta sección encontrará los reportes generales de todas las colaboraciones en las que esté participando</h2>
+    </div>
+    <div class="py-2" [hidden]="reportColaboracionPreguntas">
+      <h1>Detalles de la encuesta en la que colabora</h1>
+      <h2>En esta sección encontrará los reportes con respecto al contenido de las preguntas de la encuesta a la que colabora</h2>
     </div>
     <hr />
 
@@ -123,6 +149,13 @@
     <!--REPORTE POR ENCUESTA-->
 
     <div class="container-fluid" [hidden]="reportForEncuestas">
+      <div class="ds-survey" id="entitiesEncuestas" *ngIf="encuestas && encuestas?.length === 0">
+        <div class="ds-survey--all-question-wrapper">
+          <ng-container class="">
+            <p class="ds-title text-center">No posee encuestas</p>
+          </ng-container>
+        </div>
+      </div>
       <div class="row gx-5" *ngIf="encuestas && encuestas.length > 0">
         <div class="col-xl-4 col-lg-4 col-md-6 mb-5" *ngFor="let encuesta of encuestas">
           <div class="card-encuesta lift h-100" [attr.data-id]="encuesta.id">
@@ -178,11 +211,14 @@
     <!--REPORTES DE LAS PREGUNTAS-->
 
     <div class="container-fluid" *ngIf="encuesta" [hidden]="reportPreguntas">
-      <div>
-        <div class="alert alert-warning" id="no-result" *ngIf="ePreguntas?.length === 0">
-          <span>No se encontraron preguntas</span>
+      <div class="ds-survey" id="entitiesPreguntas" *ngIf="ePreguntas && ePreguntas?.length === 0">
+        <div class="ds-survey--all-question-wrapper">
+          <ng-container class="">
+            <p class="ds-title text-center">No se encontraron preguntas</p>
+          </ng-container>
         </div>
-
+      </div>
+      <div>
         <div class="ds-survey preview-survey" id="entities" *ngIf="ePreguntas && ePreguntas.length > 0">
           <div class="ds-survey--all-question-wrapper col-8">
             <div class="ds-survey--question-wrapper card-encuesta" *ngFor="let ePregunta of ePreguntas; let i = index">
@@ -252,6 +288,172 @@
                     <!-- <textarea readonly class="ds-survey&#45;&#45;textarea" cols="33" rows="10" *ngIf="res.epreguntaAbierta?.id == preguntaId" > {{ res.respuesta }} </textarea>-->
 
                     <div *ngIf="res.epreguntaAbierta?.id == preguntaId">
+                      <label> {{ '- ' + res.respuesta }}</label> <br />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--REPORTE POR COLABORACION-->
+
+    <div class="container-fluid" [hidden]="reportColaboraciones">
+      <div class="ds-survey" id="entitiesColaboraciones" *ngIf="usuarioEncuestas && usuarioEncuestas?.length === 0">
+        <div class="ds-survey--all-question-wrapper">
+          <ng-container class="">
+            <p class="ds-title text-center">No posee colaboraciones</p>
+          </ng-container>
+        </div>
+      </div>
+      <div class="row gx-5" *ngIf="usuarioEncuestas && usuarioEncuestas.length > 0">
+        <div class="col-xl-4 col-lg-4 col-md-6 mb-5" *ngFor="let colaboracion of usuarioEncuestas">
+          <div class="card-encuesta lift h-100" *ngIf="colaboracion.encuesta" [attr.data-id]="colaboracion.encuesta.id">
+            <div class="card-body p-3">
+              <div class="card-title mb-0">{{ colaboracion.encuesta.nombre }}</div>
+              <div class="entity-body--row m-2">
+                <span class="tag mt-2">{{ colaboracion.encuesta.categoria?.nombre | lowercase }}</span>
+              </div>
+              <div class="entity-body--row m-2">
+                <span class="subtitle mt-2">{{ colaboracion.encuesta.descripcion | titlecase }}</span>
+              </div>
+              <div class="text-xs text-gray-500">
+                <div class="entity-body">
+                  <div class="entity-body--row m-2">
+                    <span class="mt-2" *ngIf="duracionColaboracion! > 0"
+                      ><fa-icon class="entity-icon--access" [icon]="faCalendarAlt"></fa-icon> Duración: &nbsp;&nbsp;&nbsp;&nbsp;{{
+                        duracionColaboracion
+                      }}</span
+                    >
+                    <span class="mt-2" *ngIf="duracionColaboracion! == 0"
+                      ><fa-icon class="entity-icon--access" [icon]="faCalendarAlt"></fa-icon> Duración: &nbsp;&nbsp;&nbsp;&nbsp;Un día o
+                      menos</span
+                    >
+
+                    <span class="mt-2" *ngIf="duracionColaboracion! == -1"
+                      ><fa-icon class="entity-icon--access" [icon]="faCalendarAlt"></fa-icon> Duración: &nbsp;&nbsp;&nbsp;&nbsp;No ha
+                      finalizado</span
+                    >
+                  </div>
+
+                  <div class="entity-body--row m-2">
+                    <p>Calificación:</p>
+                    <fa-icon
+                      *ngFor="let i of [].constructor(colaboracion.encuesta.calificacion)"
+                      class="entity-icon--star"
+                      [icon]="faStar"
+                    ></fa-icon>
+                    <fa-icon
+                      *ngFor="let i of [].constructor(5 - colaboracion.encuesta.calificacion!)"
+                      class="entity-icon--star--off"
+                      [icon]="faStar"
+                    ></fa-icon>
+                  </div>
+                  <div class="entity-body--row m-2">
+                    <button (click)="detallesPreguntasColaboracion(colaboracion.encuesta)" class="ds-btn btn-card ds-btn--primary">
+                      <fa-icon [icon]="faEye"></fa-icon>&nbsp;&nbsp;Detalle
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--REPORTES DE LAS PREGUNTAS DE LA COLABORACION-->
+
+    <div class="container-fluid" *ngIf="colaboracion" [hidden]="reportColaboracionPreguntas">
+      <div>
+        <div
+          class="ds-survey"
+          id="entitiesPreguntasColaboracion"
+          *ngIf="ePreguntasOpcionesColaboracion && ePreguntasOpcionesColaboracion?.length === 0"
+        >
+          <div class="ds-survey--all-question-wrapper">
+            <ng-container class="">
+              <p class="ds-title text-center">No se encontraron preguntas</p>
+            </ng-container>
+          </div>
+        </div>
+
+        <div
+          class="ds-survey preview-survey"
+          id="entitiesColaboration"
+          *ngIf="ePreguntasOpcionesColaboracion && ePreguntasOpcionesColaboracion.length > 0"
+        >
+          <div class="ds-survey--all-question-wrapper col-8">
+            <div class="ds-survey--question-wrapper card-encuesta" *ngFor="let ePregunta of ePreguntasOpcionesColaboracion; let i = index">
+              <div
+                [attr.data-index]="ePregunta.id"
+                [attr.data-tipo]="ePregunta.tipo"
+                [attr.data-opcional]="ePregunta.opcional"
+                class="ds-survey--question"
+              >
+                <div class="ds-survey--titulo">
+                  <span class="ds-survey--titulo--name">{{ i + 1 }}. {{ ePregunta.nombre }}</span>
+                </div>
+                <div>
+                  <span *ngIf="ePregunta.tipo === 'SINGLE'" class="ds-subtitle"
+                    >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.SINGLE' | translate | lowercase }}
+                    {{ ePregunta.opcional ? '(opcional)' : '' }}</span
+                  >
+                  <span *ngIf="ePregunta.tipo === 'MULTIPLE'" class="ds-subtitle"
+                    >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.MULTIPLE' | translate | lowercase }}
+                    {{ ePregunta.opcional ? '(opcional)' : '' }}</span
+                  >
+                  <span *ngIf="!ePregunta.tipo" class="ds-subtitle"
+                    >Pregunta de respuesta abierta {{ ePregunta.opcional ? '(opcional)' : '' }}</span
+                  >
+                </div>
+                <ng-container *ngIf="ePregunta.tipo">
+                  <ng-container *ngFor="let ePreguntaOpcion of ePreguntasOpcionesColaboracion; let j = index">
+                    <ng-container *ngFor="let ePreguntaOpcionFinal of ePreguntaOpcion">
+                      <ng-container *ngIf="ePregunta.id === ePreguntaOpcionFinal.epreguntaCerrada.id">
+                        <div
+                          class="ds-survey--option ds-survey--option--base ds-survey--closed-option can-delete"
+                          [attr.data-id]="ePreguntaOpcionFinal.id"
+                        >
+                          <div class="radio" *ngIf="ePregunta.tipo === 'SINGLE'">
+                            <!--<input
+                              type="text"
+                              readonly
+                              style="border-radius: 3px"
+                              name="{{ 'radio' + ePregunta.id }}"
+                              id="'radio'"
+                            />-->
+                            <label>{{
+                              ePreguntaOpcionFinal.nombre + ' / Cantidad de veces seleccionada: ' + ePreguntaOpcionFinal.cantidad
+                            }}</label>
+                          </div>
+                          <div class="checkbox" *ngIf="ePregunta.tipo === 'MULTIPLE'">
+                            <!--<input
+
+                              type="checkbox"
+                              style="border-radius: 3px"
+                              id="{{ 'checkbox' + ePreguntaOpcionFinal.id }}"
+                            />-->
+                            <label>{{
+                              ePreguntaOpcionFinal.nombre + ' / Cantidad de veces seleccionada: ' + ePreguntaOpcionFinal.cantidad
+                            }}</label>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+                <div *ngIf="!ePregunta.tipo">
+                  <div *ngFor="let res of respuestaAbiertaColaboracion">
+                    <!-- <ul>
+                      <li *ngIf="res.epreguntaAbierta?.id == preguntaId"> {{ res.respuesta }}</li>
+                    </ul>-->
+                    <!-- <textarea readonly class="ds-survey&#45;&#45;textarea" cols="33" rows="10" *ngIf="res.epreguntaAbierta?.id == preguntaId" > {{ res.respuesta }} </textarea>-->
+
+                    <div *ngIf="res.epreguntaAbierta?.id == preguntaIdColaboracion">
                       <label> {{ '- ' + res.respuesta }}</label> <br />
                     </div>
                   </div>
