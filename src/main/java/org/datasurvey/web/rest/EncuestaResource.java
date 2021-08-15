@@ -432,7 +432,7 @@ public class EncuestaResource {
             newEncuesta.setNombre(encuesta.get().getNombre());
             newEncuesta.setDescripcion(encuesta.get().getDescripcion());
             newEncuesta.setFechaCreacion(ZonedDateTime.now());
-            newEncuesta.setCalificacion(5d);
+            newEncuesta.setCalificacion(5.1d);
             newEncuesta.setAcceso(encuesta.get().getAcceso());
             newEncuesta.setEstado(encuesta.get().getEstado());
             newEncuesta.setCategoria(encuesta.get().getCategoria());
