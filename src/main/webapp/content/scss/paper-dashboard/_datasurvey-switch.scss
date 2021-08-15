@@ -1,0 +1,30 @@
+.ds-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  & input {
+    display: flex;
+    align-items: center;
+  }
+
+  & label {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #757d94;
+    margin: 0;
+
+    &::before {
+      top: 2px !important;
+      display: flex;
+      align-items: center;
+    }
+
+    &::after {
+      top: 3.5px !important;
+      display: flex;
+      align-items: center;
+    }
+  }
+}

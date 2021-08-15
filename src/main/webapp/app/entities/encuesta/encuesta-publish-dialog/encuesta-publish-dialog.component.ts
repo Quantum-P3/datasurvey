@@ -107,7 +107,6 @@ export class EncuestaPublishDialogComponent implements OnInit {
 
   fechaFinalizacionIsInvalid(fechaFinalizar: dayjs.Dayjs, fechaPublicacion: dayjs.Dayjs): boolean {
     let numberDays: number;
-    debugger;
 
     numberDays = fechaFinalizar?.diff(fechaPublicacion, 'days');
 

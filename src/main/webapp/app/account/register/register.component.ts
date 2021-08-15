@@ -91,7 +91,7 @@ export class RegisterComponent implements AfterViewInit {
           login,
           email,
           password,
-          langKey: this.translateService.currentLang,
+          langKey: this.translateService.currentLang!,
           name,
           firstName,
           profileIcon: this.profileIcon,

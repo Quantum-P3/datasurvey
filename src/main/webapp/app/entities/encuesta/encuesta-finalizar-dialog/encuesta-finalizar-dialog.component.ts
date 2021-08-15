@@ -19,7 +19,6 @@ export class EncuestaFinalizarDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   confirmFinalizar(encuesta: IEncuesta): void {
-    debugger;
     const now = dayjs();
 
     encuesta.estado = EstadoEncuesta.FINISHED;

@@ -1,24 +1,23 @@
-<form *ngIf="plantilla" name="deleteForm" (ngSubmit)="confirmDelete(plantilla.id!)">
-  <div class="modal-header">
-    <h4 class="modal-title" data-cy="plantillaDeleteDialogHeading" jhiTranslate="entity.delete.title">Confirm delete operation</h4>
-
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
-  </div>
-
+<form class="ds-form" *ngIf="plantilla" name="deleteForm" (ngSubmit)="confirmDelete(plantilla)">
   <div class="modal-body">
     <jhi-alert-error></jhi-alert-error>
-
-    <p id="jhi-delete-plantilla-heading" jhiTranslate="dataSurveyApp.plantilla.delete.question" [translateValues]="{ id: plantilla.id }">
+    <p class="ds-title--small">Eliminar plantilla</p>
+    <p
+      class="ds-subtitle"
+      id="jhi-delete-plantilla-heading"
+      jhiTranslate="dataSurveyApp.plantilla.delete.question"
+      [translateValues]="{ id: plantilla.id }"
+    >
       Are you sure you want to delete this Plantilla?
     </p>
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
-      <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    <button type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
     </button>
 
-    <button id="jhi-confirm-delete-plantilla" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger">
+    <button id="jhi-confirm-delete-plantilla" data-cy="entityConfirmDeleteButton" type="submit" class="ds-btn ds-btn--danger">
       <fa-icon icon="times"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete">Delete</span>
     </button>
   </div>

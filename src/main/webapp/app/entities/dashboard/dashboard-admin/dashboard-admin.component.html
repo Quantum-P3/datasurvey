@@ -1,0 +1,246 @@
+<div class="content">
+  <div class="py-2">
+    <button type="button" class="ds-btn ds-btn--primary" (click)="exportReportesGeneralesAdministradorExcel()">Export as Excel</button>
+    <button type="button" class="ds-btn ds-btn--primary" (click)="exportReportesGeneralesAdministradorPDF()">Export as PDF</button>
+    <button type="button" [hidden]="reportsGeneral" class="ds-btn ds-btn--primary" style="float: right" (click)="cambiarVista()">
+      Ver Reporte de Usuarios
+    </button>
+    <button type="button" [hidden]="reportForUsers" class="ds-btn ds-btn--primary" style="float: right" (click)="cambiarVista()">
+      Ver Reporte Generales
+    </button>
+  </div>
+  <div class="container-fluid py-5" [hidden]="reportsGeneral">
+    <div class="row justify-content-around">
+      <div class="col-lg-3 col-sm-6">
+        <div class="card">
+          <div class="card-content">
+            <div class="row">
+              <div class="col-xs-5 w-25 px-1">
+                <div class="icon-big icon-success text-center">
+                  <fa-icon [icon]="faWallet"></fa-icon>
+                </div>
+              </div>
+              <div class="col-xs-7 w-50">
+                <div class="numbers">
+                  <p class="ds-title">Ganancias por plantillas</p>
+                  ${{ gananciasTotales | number: '1.2' }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <hr />
+            <br />
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="card">
+          <div class="card-content">
+            <div class="row justify-content-center">
+              <div class="col-xs-5 w-25 px-1">
+                <div class="icon-big icon-users-active text-center">
+                  <fa-icon [icon]="faUsers"></fa-icon>
+                </div>
+              </div>
+              <div class="col-xs-7 w-75">
+                <div class="numbers">
+                  <p class="ds-title">Cantidad usuarios activos</p>
+                  {{ cantUsuarioActivos }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <hr />
+            <br />
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-sm-6">
+        <div class="card">
+          <div class="card-content">
+            <div class="row justify-content-center">
+              <div class="col-xs-4 w-25 px-1">
+                <div class="icon-big icon-users-block text-center">
+                  <fa-icon [icon]="faUsersSlash"></fa-icon>
+                </div>
+              </div>
+              <div class="col-xs-5 w-75">
+                <div class="numbers">
+                  <p class="ds-title">Cantidad usuarios bloqueados</p>
+                  {{ cantUsuarioBloqueados }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <hr />
+            <br />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-around por-categoria">
+      <div class="col-md-5">
+        <div class="grafico-encuestas-fecha">
+          <div class="card">
+            <h1 class="ds-title">Cantidad de encuestas publicadas por mes</h1>
+
+            <div class="ct-chart ct-chart-line"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card encuestas-por-categoria">
+          <div class="card-header w-100">
+            <h4 class="ds-title">Cantidad de Encuestas Publicadas por Categoria</h4>
+          </div>
+          <div class="card-content">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="table-responsive">
+                  <table class="table">
+                    <tbody>
+                      <tr *ngFor="let categoria of categorias; let i = index; trackBy: trackId">
+                        <td>{{ categoria.nombre }}</td>
+
+                        <td class="text-right">
+                          {{ encuestasPublicadasCategoria[i] }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card encuestas-por-categoria">
+          <div class="card-header w-100">
+            <h4 class="ds-title">Cantidad de Encuestas Finalizadas por Categoria</h4>
+          </div>
+          <div class="card-content">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="table-responsive">
+                  <table class="table">
+                    <tbody>
+                      <tr *ngFor="let categoria of categorias; let i = index; trackBy: trackId">
+                        <td>{{ categoria.nombre }}</td>
+
+                        <td class="text-right">
+                          {{ encuestasFinalzadasCategoria[i] }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-3 col-sm-6">
+        <div class="card card-circle-chart" data-background-color="blue" style="background-color: #88c5d6eb">
+          <div class="card-header text-center">
+            <h5 class="card-title ds-subtitle" style="color: #082463">Encuestas En Borrador</h5>
+          </div>
+          <div class="card-content">
+            <div id="surveyDraft" class="chart-circle">{{ encuestasBorrador }}<canvas height="160" width="160"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="card card-circle-chart" data-background-color="green" style="background-color: #67ceb6">
+          <div class="card-header text-center">
+            <h5 class="card-title ds-subtitle" style="color: #0a2922">Encuestas Publicadas</h5>
+          </div>
+          <div class="card-content">
+            <div id="surveyActive" class="chart-circle">{{ encuestasPublicadas }}<canvas height="160" width="160"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="card card-circle-chart" style="background-color: #de8e78">
+          <div class="card-header text-center">
+            <h5 class="card-title ds-subtitle" style="color: #671a04">Encuestas Finalizadas</h5>
+          </div>
+          <div class="card-content">
+            <div id="surveyFinished" class="chart-circle">{{ encuestasFinalizadas }}<canvas height="160" width="160"></canvas></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="card card-circle-chart" data-background-color="brown" style="background-color: #d6c1ab">
+          <div class="card-header text-center">
+            <h5 class="card-title ds-subtitle" style="color: #252422">Encuestas Completadas por Usuarios</h5>
+          </div>
+          <div class="card-content">
+            <div id="surveyCountCompletede" class="chart-circle">{{ encuestasCompletadas }}<canvas height="160" width="160"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid" [hidden]="reportForUsers">
+    <div class="row justify-content-around">
+      <div class="col-md-10">
+        <div class="card encuestas-por-usuario">
+          <div class="card-header w-100">
+            <h4 class="ds-title">Reporte de Encuestas Usuarios</h4>
+          </div>
+          <div class="card-content">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Usuario</th>
+                        <th></th>
+                        <th>Total de encuestas</th>
+                        <th>Encuestas en borrador</th>
+                        <th>Encuestas publicadas</th>
+                        <th>Encuestas finalizadas</th>
+                        <th>Encuestas completadas por usuario</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let usuario of usuarios; let j = index; trackBy: trackIdUsuario">
+                        <td>
+                          <div class="photo mb-2"><img src="../../../../content/profile_icons/C{{ usuario.iconoPerfil }}.png" /></div>
+                        </td>
+                        <td>{{ usuario.nombre }}</td>
+                        <td class="text-center">
+                          {{ encuestasUsuario[j] }}
+                        </td>
+                        <td class="text-center">
+                          {{ encuestasUsuarioBorrador[j] }}
+                        </td>
+                        <td class="text-center">
+                          {{ encuestasUsuarioPublicadas[j] }}
+                        </td>
+                        <td class="text-center">
+                          {{ encuestasUsuarioFinalizadas[j] }}
+                        </td>
+                        <td class="text-center">
+                          {{ encuestasUsuarioCompletadas[j] }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

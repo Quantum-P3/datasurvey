@@ -25,6 +25,12 @@ export const ADMIN_ROUTES: RouteInfo[] = [
 
   { path: '/pagina-principal', title: 'Inicio', type: 'link', icontype: 'nc-icon nc-world-2' },
   {
+    path: '/dashboard/admin',
+    title: 'Dashboard',
+    type: 'link',
+    icontype: 'nc-icon nc-chart-bar-32',
+  },
+  {
     path: '/encuesta',
     title: 'Encuestas',
     type: 'link',
@@ -59,27 +65,34 @@ export const ADMIN_ROUTES: RouteInfo[] = [
 export const USER_ROUTES: RouteInfo[] = [
   { path: '/pagina-principal', title: 'Inicio', type: 'link', icontype: 'nc-icon nc-world-2' },
   {
+    path: '/dashboard/user',
+    title: 'Reportes',
+    type: 'link',
+    icontype: 'nc-icon nc-chart-bar-32',
+  },
+  {
     path: '/encuesta',
     title: 'Encuestas',
     type: 'link',
-    icontype: 'nc-icon nc-paper',
+    icontype: 'nc-icoxn nc-paper',
   },
+  { path: '/tienda-plantilla', title: 'Tienda', type: 'link', icontype: 'nc-icon nc-shop' },
   // {
   //   path: '/tienda',
   //   title: 'Tienda',
   //   type: 'link',
   //   icontype: 'nc-icon nc-cart-simple',
   // },
-  // {
-  //   path: '/plantilla',
-  //   title: 'Plantillas',
-  //   type: 'link',
-  //   icontype: 'nc-icon nc-album-2',
-  // },
+  {
+    path: '/mis-plantillas',
+    title: 'Mis Plantillas',
+    type: 'link',
+    icontype: 'nc-icon nc-album-2',
+  },
   {
     path: '/colaboraciones',
     title: 'Colaboraciones',
     type: 'link',
-    icontype: 'nc-icon nc-world-2',
+    icontype: 'nc-icon nc-single-02',
   },
 ];

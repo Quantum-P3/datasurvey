@@ -41,6 +41,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import * as $ from 'jquery';
+import { EncuestaCompartirDialogComponent } from '../encuesta-compartir-dialog/encuesta-compartir-dialog.component';
 
 @Component({
   selector: 'jhi-encuesta',
@@ -176,6 +177,13 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       (res: HttpResponse<IEncuesta[]>) => {
         this.isLoading = false;
         const tmpEncuestas = res.body ?? [];
+
+        // Fix calificacion
+        tmpEncuestas.forEach(encuesta => {
+          const _calificacion = encuesta.calificacion;
+          encuesta.calificacion = Number(_calificacion?.toString().split('.')[0]);
+        });
+
         if (this.isAdmin()) {
           this.encuestas = tmpEncuestas.filter(e => e.estado !== EstadoEncuesta.DELETED);
 
@@ -417,7 +425,7 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       nombre: this.editForm.get(['nombre'])!.value,
       descripcion: this.editForm.get(['descripcion'])!.value,
       fechaCreacion: dayjs(now, DATE_TIME_FORMAT),
-      calificacion: 5,
+      calificacion: 5.1,
       acceso: this.editForm.get(['acceso'])!.value,
       contrasenna: undefined,
       estado: EstadoEncuesta.DRAFT,
@@ -491,12 +499,18 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
           document.getElementById('contextmenu-edit')!.style.display = 'block';
           document.getElementById('contextmenu-publish')!.style.display = 'block';
           document.getElementById('contextmenu-duplicate')!.style.display = 'block';
+          document.getElementById('contextmenu-share')!.style.display = 'none';
         } else {
           document.getElementById('contextmenu-edit')!.style.display = 'none';
           document.getElementById('contextmenu-publish')!.style.display = 'none';
           document.getElementById('contextmenu-duplicate')!.style.display = 'none';
+          document.getElementById('contextmenu-share')!.style.display = 'block';
         }
-        // document.getElementById('contextmenu-share')!.style.display = 'block';
+
+        if (this.selectedSurvey!.estado === 'FINISHED') {
+          document.getElementById('contextmenu-share')!.style.display = 'none';
+        }
+
         document.getElementById('contextmenu-create--separator')!.style.display = 'none';
       }
 
@@ -546,6 +560,18 @@ export class EncuestaComponent implements OnInit, AfterViewInit {
       descripcion: this.selectedSurvey!.descripcion,
       acceso: this.selectedSurvey!.acceso,
       categoria: this.selectedSurvey!.categoria,
+    });
+  }
+
+  compartir(): void {
+    const modalRef = this.modalService.open(EncuestaCompartirDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.encuesta = this.selectedSurvey;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'published') {
+        this.successPublished = true;
+        this.loadAll();
+      }
     });
   }
 }

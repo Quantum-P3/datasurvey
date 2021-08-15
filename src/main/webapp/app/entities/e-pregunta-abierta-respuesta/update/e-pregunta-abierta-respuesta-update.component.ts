@@ -81,12 +81,12 @@ export class EPreguntaAbiertaRespuestaUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: ePreguntaAbiertaRespuesta.id,
       respuesta: ePreguntaAbiertaRespuesta.respuesta,
-      ePreguntaAbierta: ePreguntaAbiertaRespuesta.ePreguntaAbierta,
+      ePreguntaAbierta: ePreguntaAbiertaRespuesta.epreguntaAbierta,
     });
 
     this.ePreguntaAbiertasSharedCollection = this.ePreguntaAbiertaService.addEPreguntaAbiertaToCollectionIfMissing(
       this.ePreguntaAbiertasSharedCollection,
-      ePreguntaAbiertaRespuesta.ePreguntaAbierta
+      ePreguntaAbiertaRespuesta.epreguntaAbierta
     );
   }
 
@@ -110,7 +110,7 @@ export class EPreguntaAbiertaRespuestaUpdateComponent implements OnInit {
       ...new EPreguntaAbiertaRespuesta(),
       id: this.editForm.get(['id'])!.value,
       respuesta: this.editForm.get(['respuesta'])!.value,
-      ePreguntaAbierta: this.editForm.get(['ePreguntaAbierta'])!.value,
+      epreguntaAbierta: this.editForm.get(['ePreguntaAbierta'])!.value,
     };
   }
 }

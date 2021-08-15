@@ -25,7 +25,36 @@
       </div>
     </div>
   </h2>
+  <form class="ds-form" *ngIf="isAdmin() && isAuthenticated()">
+    <div class="input-group">
+      <div class="ds-filter">
+        <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+        <input type="text" name="searchString" placeholder="Buscar por nombre..." [(ngModel)]="searchString" />
+      </div>
+      <div class="ds-filter">
+        <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+        <select name="estadoPlantilla" id="estadoPlantilla" [(ngModel)]="estadoPlantilla" style="width: 200px">
+          <option value="" selected="selected" disabled="disabled">Filtrar por estado</option>
+          <option value="">Todos Estados</option>
+          <option value="Draft">Borradores</option>
+          <option value="Active">En tienda</option>
+          <option value="Disabled">Desactivadas</option>
+        </select>
+      </div>
 
+      <!--<div class="col-3">
+          <div class="input-group-addon "><i class="glyphicon glyphicon-search"></i></div>
+          <select id="categoriaEncuesta"  name="categoriaEncuesta" [(ngModel)]="categoriaEncuesta">
+            <option [ngValue]="null" selected>Filtre por categoría</option>
+            <option
+              *ngFor="let categoriaOption of categoriasSharedCollection; trackBy: trackCategoriaById"
+              [ngValue]="categoriaOption.nombre"    >
+              {{ categoriaOption.nombre }}
+            </option>
+          </select>
+        </div>-->
+    </div>
+  </form>
   <!-- <jhi-alert-error></jhi-alert-error>
 
   <jhi-alert></jhi-alert> -->
@@ -35,11 +64,10 @@
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="plantillas && plantillas.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
+    <table class="ds-table table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.nombre">Nombre</span></th>
-          <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.descripcion">Descripcion</span></th>
           <!-- <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.fechaCreacion">Fecha Creacion</span></th> -->
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.fechaPublicacionTienda">Fecha Publicacion Tienda</span></th>
           <th scope="col"><span jhiTranslate="dataSurveyApp.plantilla.estado">Estado</span></th>
@@ -49,9 +77,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let plantilla of plantillas; trackBy: trackId" data-cy="entityTable">
+        <tr
+          *ngFor="let plantilla of plantillas | filter: 'nombre':searchString | filter: 'estado':estadoPlantilla; trackBy: trackId"
+          data-cy="entityTable"
+        >
           <td>{{ plantilla.nombre }}</td>
-          <td>{{ plantilla.descripcion }}</td>
           <!-- <td>{{ plantilla.fechaCreacion | formatMediumDatetime }}</td> -->
           <td *ngIf="plantilla.fechaPublicacionTienda">{{ plantilla.fechaPublicacionTienda | formatShortDatetime | titlecase }}</td>
           <td *ngIf="!plantilla.fechaPublicacionTienda">No establecida</td>
@@ -61,7 +91,7 @@
           <td>{{ plantilla.categoria?.nombre }}</td>
           <td class="text-right">
             <div class="btn-group">
-              <button
+              <!-- <button
                 type="submit"
                 [routerLink]="['/plantilla', plantilla.id, 'view']"
                 class="ds-btn ds-btn--secondary btn-sm"
@@ -69,8 +99,7 @@
               >
                 <fa-icon icon="eye"></fa-icon>
                 <span class="d-none d-md-inline">Vista previa</span>
-              </button>
-
+              </button> -->
               <button
                 type="submit"
                 [routerLink]="['/plantilla', plantilla.id, 'edit']"
@@ -79,7 +108,10 @@
               >
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>
-
+              <button type="submit" (click)="cambiarEstado(plantilla)" class="ds-btn btn-warning btn-sm" data-cy="entityDeleteButton">
+                <fa-icon [icon]="faExchangeAlt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="dataSurveyApp.plantilla.updated.buttonChangeEstado">Change status</span>
+              </button>
               <button type="submit" (click)="delete(plantilla)" class="ds-btn ds-btn--danger btn-sm" data-cy="entityDeleteButton">
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>

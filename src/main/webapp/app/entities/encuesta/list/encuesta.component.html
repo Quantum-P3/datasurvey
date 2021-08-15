@@ -40,10 +40,6 @@
     </button>
   </div>
 
-  <div class="alert alert-warning" id="no-result" *ngIf="encuestas?.length === 0">
-    <span jhiTranslate="dataSurveyApp.encuesta.home.notFound">No surveys found</span>
-  </div>
-
   <form class="ds-form">
     <div class="input-group">
       <div class="ds-filter">
@@ -83,8 +79,17 @@
     </div>
   </form>
 
+  <div class="ds-survey" id="entities" *ngIf="encuestas?.length === 0">
+    <div class="ds-survey--all-question-wrapper">
+      <ng-container class="">
+        <p class="ds-title text-center">No posee encuestas</p>
+        <p class="ds-subtitle text-center">Incie a explorar, colaborar y adquirir datos al crear encuestas mundialmente</p>
+      </ng-container>
+    </div>
+  </div>
+
   <!-- Lista de Encuestas del Usuario -->
-  <div class="ds-list" (contextmenu)="openContextMenu($event)" *ngIf="!isAdmin()">
+  <div class="ds-list" (contextmenu)="openContextMenu($event)" *ngIf="!isAdmin() && encuestas?.length !== 0">
     <!-- Context Menu -->
     <div class="ds-contextmenu ds-contextmenu--closed" id="contextmenu">
       <ul id="ds-context-menu__list">
@@ -115,9 +120,11 @@
               <fa-icon class="contextmenu__icon" [icon]="faUpload"></fa-icon>Publicar
             </button>
           </li>
-          <!-- <li>
-            <button type="button" id="contextmenu-share"><fa-icon class="contextmenu__icon" [icon]="faShareAlt"></fa-icon>Compartir</button>
-          </li> -->
+          <li>
+            <button type="button" id="contextmenu-share" (click)="compartir()">
+              <fa-icon class="contextmenu__icon" [icon]="faShareAlt"></fa-icon>Compartir
+            </button>
+          </li>
         </div>
         <div class="ds-contextmenu__divider" id="contextmenu-delete--separator">
           <li>
@@ -170,9 +177,11 @@
             style="animation-delay: 3s"
           ></div>
         </div>
-        <div class="entity-share">
-          <span><fa-icon [icon]="faShareAlt"></fa-icon></span>
-        </div>
+        <!-- <div class="entity-share" *ngIf="encuesta.estado == 'ACTIVE'">
+            <button type="button" id="contextmenu-share" (click)="compartir()">
+            <fa-icon class="contextmenu__icon" [icon]="faShareAlt"></fa-icon>
+          </button>
+        </div>-->
       </div>
 
       <div class="entity-body">
@@ -208,7 +217,7 @@
   </div>
 </div>
 <div class="table-responsive" id="entities" *ngIf="isAdmin() && encuestas && encuestas.length > 0">
-  <table class="table table-striped" aria-describedby="page-heading">
+  <table class="ds-table table table-striped" aria-describedby="page-heading">
     <thead>
       <tr>
         <th scope="col"><span jhiTranslate="dataSurveyApp.encuesta.nombre">Nombre</span></th>

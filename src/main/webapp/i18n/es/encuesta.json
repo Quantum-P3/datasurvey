@@ -34,7 +34,12 @@
       "ePreguntaAbierta": "Pregunta Abierta",
       "ePreguntaCerrada": "Pregunta Cerrada",
       "categoria": "Categoría",
-      "usuarioExtra": "Correo Usuario"
+      "usuarioExtra": "Correo Usuario",
+      "plantilla": "Plantilla",
+      "password": {
+        "title": "Contraseña Requerida",
+        "text": "Esta encuesta es privada, por lo que debe ingresar la contraseña"
+      }
     }
   }
 }

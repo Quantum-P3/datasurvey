@@ -43,7 +43,7 @@ describe('Component Tests', () => {
       it('Should call EPreguntaAbierta query and add missing value', () => {
         const ePreguntaAbiertaRespuesta: IEPreguntaAbiertaRespuesta = { id: 456 };
         const ePreguntaAbierta: IEPreguntaAbierta = { id: 35011 };
-        ePreguntaAbiertaRespuesta.ePreguntaAbierta = ePreguntaAbierta;
+        ePreguntaAbiertaRespuesta.epreguntaAbierta = ePreguntaAbierta;
 
         const ePreguntaAbiertaCollection: IEPreguntaAbierta[] = [{ id: 58318 }];
         jest.spyOn(ePreguntaAbiertaService, 'query').mockReturnValue(of(new HttpResponse({ body: ePreguntaAbiertaCollection })));
@@ -65,7 +65,7 @@ describe('Component Tests', () => {
       it('Should update editForm', () => {
         const ePreguntaAbiertaRespuesta: IEPreguntaAbiertaRespuesta = { id: 456 };
         const ePreguntaAbierta: IEPreguntaAbierta = { id: 40814 };
-        ePreguntaAbiertaRespuesta.ePreguntaAbierta = ePreguntaAbierta;
+        ePreguntaAbiertaRespuesta.epreguntaAbierta = ePreguntaAbierta;
 
         activatedRoute.data = of({ ePreguntaAbiertaRespuesta });
         comp.ngOnInit();

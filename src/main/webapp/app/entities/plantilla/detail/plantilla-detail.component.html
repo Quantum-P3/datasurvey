@@ -24,7 +24,7 @@
           <p class="ds-subtitle text-center">Inicie creando preguntas y opciones para su plantilla.</p>
         </ng-container>
 
-        <div class="ds-survey--question-wrapper card-plantilla lift" *ngFor="let pPregunta of pPreguntas; let i = index; trackBy: trackId">
+        <div class="ds-survey--question-wrapper card-plantilla" *ngFor="let pPregunta of pPreguntas; let i = index; trackBy: trackId">
           <div
             [attr.data-index]="pPregunta.id"
             [attr.data-tipo]="pPregunta.tipo"
@@ -76,7 +76,7 @@
               </ng-container>
             </ng-container>
             <div class="ds-survey--option ds-survey--option--base ds-survey--open-option" *ngIf="!pPregunta.tipo">
-              <textarea cols="30" rows="10" disabled></textarea>
+              <textarea class="ds-survey--textarea" cols="30" rows="10" disabled></textarea>
             </div>
           </div>
         </div>

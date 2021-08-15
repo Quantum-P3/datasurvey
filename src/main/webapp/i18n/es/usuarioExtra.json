@@ -27,7 +27,12 @@
       "correo": "Correo electrónico",
       "encuesta": "Encuesta",
       "usuarioEncuesta": "Usuario Encuesta",
-      "plantilla": "Plantilla"
+      "plantilla": "Plantilla",
+      "plantillas": {
+        "title": "Mis Plantillas",
+        "notFound": "No tiene plantillas compradas",
+        "crearEncuesta": "Crear encuesta"
+      }
     }
   }
 }
