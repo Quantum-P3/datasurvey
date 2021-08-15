@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import { jsPDF } from 'jspdf';
 import { exportAsExcelFile, exportAsExcelTable } from '../export/export_excel';
-import { generatePDFTableData, createPDFTableHeaders, generatePDFTable } from '../export/export_pdf';
+import { generatePDFTableData, createPDFTableHeaders, generatePDFTable, saveGeneratedPDF } from '../export/export_pdf';
 
 import { FacturaService } from '../../factura/service/factura.service';
 import { UsuarioExtraService } from '../../usuario-extra/service/usuario-extra.service';
@@ -313,7 +313,14 @@ export class DashboardAdminComponent implements OnInit {
       Cantidad de comentarios de retroalimentación
     */
 
-    const _sheets = ['reportes generales', 'enc. publicadas', 'enc. publicadas categoría', 'enc. finalizadas categoría'];
+    const _sheets = [
+      'usuarios generales',
+      'enc. publicadas',
+      'enc. publicadas categoría',
+      'enc. finalizadas categoría',
+      'encuestas generales',
+      'reporte de usuarios',
+    ];
 
     const _reporteUsuarios = [
       {
@@ -353,13 +360,44 @@ export class DashboardAdminComponent implements OnInit {
       _reporteCantidadEncuestasFinalizadasCategoria.push(_report);
     });
 
-    // exportAsExcelTable();
+    // this.encuestasPublicadas
+    // this.encuestasFinalizadas
+    // this.encuestasBorrador
+    // this.encuestasCompletadas
+    const _reporteEncuestasReportesGenerales = [
+      {
+        encuestas_borrador: this.encuestasBorrador,
+        encuestas_publicadas: this.encuestasPublicadas,
+        encuestas_finalizadas: this.encuestasFinalizadas,
+        encuestas_completadas: this.encuestasCompletadas,
+      },
+    ];
+
+    // this.encuestasUsuario;
+    // this.encuestasUsuarioPublicadas;
+    // this.encuestasUsuarioFinalizadas;
+    // this.encuestasUsuarioBorrador;
+    // this.encuestasUsuarioCompletadas;
+    // this.usuarios;
+    const _reporteEncuestasUsuarios: any[] = [];
+    this.usuarios!.forEach((user, index) => {
+      let _report: any = {};
+      _report['usuario_nombre'] = user.nombre;
+      _report['usuario_encuestas'] = this.encuestasUsuario[index];
+      _report['encuestas_borrador'] = this.encuestasUsuarioBorrador[index];
+      _report['encuestas_publicadas'] = this.encuestasUsuarioPublicadas[index];
+      _report['encuestas_finalizadas'] = this.encuestasUsuarioFinalizadas[index];
+      _report['encuestas_completadas_usuarios'] = this.encuestasUsuarioCompletadas[index];
+      _reporteEncuestasUsuarios.push(_report);
+    });
 
     const _excelFinalData = [
       _reporteUsuarios,
       _reporteEncuestasPublicadas,
       _reporteCantidadEncuestasPublicadasCategoria,
       _reporteCantidadEncuestasFinalizadasCategoria,
+      _reporteEncuestasReportesGenerales,
+      _reporteEncuestasUsuarios,
     ];
     const _fileName = 'reportes_datasurvey';
     exportAsExcelFile(_sheets, _excelFinalData, _fileName);
@@ -382,15 +420,115 @@ export class DashboardAdminComponent implements OnInit {
     */
 
     const doc = new jsPDF();
+    const _fileName = 'reportes_datasurvey';
+    let _docData, _headers, _docHeaders, _docTitle;
 
-    const _reporteUsuarios = [{ usuarios_activos: '100', usuarios_bloqueados: '50' }];
-    const _docData = generatePDFTableData(_reporteUsuarios);
+    // Usuarios Generales
+    const _reporteUsuarios = [
+      {
+        ganancias_plantillas: this.gananciasTotales!.toString(),
+        usuarios_activos: this.cantUsuarioActivos!.toString(),
+        usuarios_bloqueados: this.cantUsuarioBloqueados!.toString(),
+      },
+    ];
+    _docData = generatePDFTableData(_reporteUsuarios);
+    _headers = ['ganancias_plantillas', 'usuarios_activos', 'usuarios_bloqueados'];
+    _docHeaders = createPDFTableHeaders(_headers);
+    _docTitle = 'Reporte Usuarios Generales';
 
-    const _headers = ['usuarios_activos', 'usuarios_bloqueados'];
-    const _docHeaders = createPDFTableHeaders(_headers);
-    const _fileName = 'reporte_general';
-    const _docTitle = 'Reportes Generales de la Aplicación';
+    generatePDFTable(doc, _docData, _docHeaders, _docTitle);
+    doc.addPage('p');
 
-    generatePDFTable(doc, _docData, _docHeaders, _fileName, _docTitle);
+    // Encuestas Publicadas
+    const _reporteEncuestasPublicadas: any[] = [];
+    this.listaMesesAnnos.forEach((date: any, index) => {
+      let _report: any = {};
+      _report['fecha'] = date;
+      _report['cantidad'] = this.encuestasPublicadasMesAnno[index].toString();
+      _reporteEncuestasPublicadas.push(_report);
+    });
+    _docData = generatePDFTableData(_reporteEncuestasPublicadas);
+    _headers = ['fecha', 'cantidad'];
+    _docHeaders = createPDFTableHeaders(_headers);
+    _docTitle = 'Reporte Encuestas Publicadas';
+
+    generatePDFTable(doc, _docData, _docHeaders, _docTitle);
+    doc.addPage('p');
+
+    // Encuestas Publicadas
+    const _reporteCantidadEncuestasPublicadasCategoria: any[] = [];
+    this.categorias!.forEach((categoria: any, index) => {
+      let _report: any = {};
+      _report['categoria'] = categoria.nombre;
+      _report['cantidad'] = this.encuestasPublicadasCategoria[index].toString();
+      _reporteCantidadEncuestasPublicadasCategoria.push(_report);
+    });
+    _docData = generatePDFTableData(_reporteCantidadEncuestasPublicadasCategoria);
+    _headers = ['categoria', 'cantidad'];
+    _docHeaders = createPDFTableHeaders(_headers);
+    _docTitle = 'Reporte Encuestas Publicadas por Categoría';
+
+    generatePDFTable(doc, _docData, _docHeaders, _docTitle);
+    doc.addPage('p');
+
+    // Encuestas Publicadas
+    const _reporteCantidadEncuestasFinalizadasCategoria: any[] = [];
+    this.categorias!.forEach((categoria: any, index) => {
+      let _report: any = {};
+      _report['categoria'] = categoria.nombre;
+      _report['cantidad'] = this.encuestasFinalzadasCategoria[index].toString();
+      _reporteCantidadEncuestasFinalizadasCategoria.push(_report);
+    });
+    _docData = generatePDFTableData(_reporteCantidadEncuestasFinalizadasCategoria);
+    _headers = ['categoria', 'cantidad'];
+    _docHeaders = createPDFTableHeaders(_headers);
+    _docTitle = 'Reporte Encuestas Finalizadas por Categoría';
+
+    generatePDFTable(doc, _docData, _docHeaders, _docTitle);
+    doc.addPage('', 'l');
+
+    // Encuestas Generales
+    const _reporteEncuestasReportesGenerales = [
+      {
+        encuestas_borrador: this.encuestasBorrador.toString(),
+        encuestas_publicadas: this.encuestasPublicadas.toString(),
+        encuestas_finalizadas: this.encuestasFinalizadas.toString(),
+        encuestas_completadas: this.encuestasCompletadas.toString(),
+      },
+    ];
+    _docData = generatePDFTableData(_reporteEncuestasReportesGenerales);
+    _headers = ['encuestas_borrador', 'encuestas_publicadas', 'encuestas_finalizadas', 'encuestas_completadas'];
+    _docHeaders = createPDFTableHeaders(_headers);
+    _docTitle = 'Reporte Encuestas Generales';
+    generatePDFTable(doc, _docData, _docHeaders, _docTitle);
+    doc.addPage('', 'l');
+
+    // Usuarios
+    const _reporteEncuestasUsuarios: any[] = [];
+    this.usuarios!.forEach((user, index) => {
+      let _report: any = {};
+      _report['usuario_nombre'] = user.nombre;
+      _report['usuario_encuestas'] = this.encuestasUsuario[index].toString();
+      _report['encuestas_borrador'] = this.encuestasUsuarioBorrador[index].toString();
+      _report['encuestas_publicadas'] = this.encuestasUsuarioPublicadas[index].toString();
+      _report['encuestas_finalizadas'] = this.encuestasUsuarioFinalizadas[index].toString();
+      _report['encuestas_completadas_usuarios'] = this.encuestasUsuarioCompletadas[index].toString();
+      _reporteEncuestasUsuarios.push(_report);
+    });
+    _docData = generatePDFTableData(_reporteEncuestasUsuarios);
+    _headers = [
+      'usuario_nombre',
+      'usuario_encuestas',
+      'encuestas_borrador',
+      'encuestas_publicadas',
+      'encuestas_finalizadas',
+      'encuestas_completadas_usuarios',
+    ];
+    _docHeaders = createPDFTableHeaders(_headers);
+    _docTitle = 'Reporte de Usuarios';
+
+    generatePDFTable(doc, _docData, _docHeaders, _docTitle);
+
+    saveGeneratedPDF(doc, _fileName);
   }
 }
