@@ -9,9 +9,15 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { EncuestaPublishDialogComponent } from './encuesta-publish-dialog/encuesta-publish-dialog.component';
 import { EncuestaDeleteQuestionDialogComponent } from './encuesta-delete-question-dialog/encuesta-delete-question-dialog.component';
 import { EncuestaDeleteOptionDialogComponent } from './encuesta-delete-option-dialog/encuesta-delete-option-dialog.component';
+import { EncuestaCompartirDialogComponent } from './encuesta-compartir-dialog/encuesta-compartir-dialog.component';
+import { ShareButtonsModule } from 'ngx-sharebuttons/buttons';
+import { EncuestaCompleteComponent } from './complete/complete.component';
+import { EncuestaPasswordDialogComponent } from './encuesta-password-dialog/encuesta-password-dialog.component';
+import { EncuestaFinalizarDialogComponent } from './encuesta-finalizar-dialog/encuesta-finalizar-dialog.component';
+import { EncuestaDeleteColaboratorDialogComponent } from './encuesta-delete-colaborator-dialog/encuesta-delete-colaborator-dialog.component';
 
 @NgModule({
-  imports: [SharedModule, EncuestaRoutingModule, FontAwesomeModule],
+  imports: [SharedModule, EncuestaRoutingModule, FontAwesomeModule, ShareButtonsModule],
   declarations: [
     EncuestaComponent,
     EncuestaDetailComponent,
@@ -20,6 +26,11 @@ import { EncuestaDeleteOptionDialogComponent } from './encuesta-delete-option-di
     EncuestaPublishDialogComponent,
     EncuestaDeleteQuestionDialogComponent,
     EncuestaDeleteOptionDialogComponent,
+    EncuestaCompartirDialogComponent,
+    EncuestaCompleteComponent,
+    EncuestaPasswordDialogComponent,
+    EncuestaFinalizarDialogComponent,
+    EncuestaDeleteColaboratorDialogComponent,
   ],
   entryComponents: [EncuestaDeleteDialogComponent],
 })

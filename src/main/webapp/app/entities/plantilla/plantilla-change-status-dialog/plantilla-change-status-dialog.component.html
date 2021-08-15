@@ -1,0 +1,32 @@
+<form *ngIf="plantilla" class="ds-form" name="changeStatusForm" (ngSubmit)="confirmChangeStatus(plantilla)">
+  <div class="modal-body">
+    <p class="ds-title--small">Cambiar estado</p>
+    <p
+      *ngIf="plantilla.estado != 'DISABLED'"
+      class="ds-subtitle"
+      id="jhi-inactive-plantilla-heading"
+      jhiTranslate="dataSurveyApp.plantilla.desactivar.question"
+    >
+      Are you sure you want to delete this option?
+    </p>
+    <p
+      *ngIf="plantilla.estado == 'DISABLED'"
+      class="ds-subtitle"
+      id="jhi-active-plantilla-heading"
+      jhiTranslate="dataSurveyApp.plantilla.activar.question"
+    >
+      Are you sure you want to delete this option?
+    </p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    </button>
+
+    <button id="jhi-confirm-change-status-option" data-cy="entityConfirmChangeButton" type="submit" class="ds-btn btn-warning">
+      <fa-icon [icon]="faExchangeAlt"></fa-icon>
+      <span class="d-none d-md-inline" jhiTranslate="dataSurveyApp.plantilla.updated.buttonChangeEstado">Cambiar estado</span>
+    </button>
+  </div>
+</form>

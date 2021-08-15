@@ -130,7 +130,8 @@
       "enable": "Habilitar",
       "disable": "Deshabilitar",
       "toggleStatus": "Cambiar Estado",
-      "publish": "Publicar"
+      "publish": "Publicar",
+      "submit": "Ingresar"
     },
     "detail": {
       "field": "Campo",
@@ -141,7 +142,7 @@
       "status": "Confirmar cambio de estado"
     },
     "validation": {
-      "required": "Este campo es obligatorio.",
+      "required": "Este campo es obligatorio",
       "minlength": "Este campo requiere al menos {{min}} caracteres.",
       "maxlength": "Este campo no puede superar más de {{max}} caracteres.",
       "min": "Este campo debe ser mayor que {{min}}.",
@@ -151,7 +152,8 @@
       "pattern": "Este campo debe seguir el patrón {{pattern}}.",
       "number": "Este campo debe ser un número.",
       "integerNumber": "Este campo debe ser un número entero.",
-      "datetimelocal": "Este campo debe ser una fecha y hora."
+      "datetimelocal": "Este campo debe ser una fecha y hora.",
+      "minoigual": "Este campo debe ser mayor o igual que 0"
     },
     "publish": {
       "title": "Publicar encuesta",

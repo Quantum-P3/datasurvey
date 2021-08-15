@@ -5,7 +5,7 @@ import { IEncuesta } from 'app/entities/encuesta/encuesta.model';
 import { EncuestaService } from 'app/entities/encuesta/service/encuesta.service';
 import { EstadoCategoria } from 'app/entities/enumerations/estado-categoria.model';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 import { Categoria, ICategoria } from '../categoria.model';
 import { CategoriaService } from '../service/categoria.service';
@@ -42,7 +42,7 @@ export class CategoriaDeleteDialogComponent {
       this.encuestas!.forEach(encuesta => {
         if (encuesta.categoria != null && encuesta.categoria!.id === categoria.id) {
           encuesta.categoria = categoriaNula;
-          this.subscribeToSaveResponse(this.encuestaService.update(encuesta));
+          this.subscribeToSaveResponse(this.encuestaService.updateSurvey(encuesta));
         }
       });
       categoria.estado = EstadoCategoria.INACTIVE;

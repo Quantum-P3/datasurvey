@@ -1,0 +1,46 @@
+.ct-chart {
+  width: 100%;
+  height: 400px;
+  overflow-x: scroll;
+}
+.grafico-encuestas-fecha .card {
+  width: 100%;
+}
+
+.card .icon-big {
+  font-size: 3em;
+}
+
+.icon-success {
+  color: #00b88d;
+}
+
+.icon-users-active {
+  color: #018adf;
+}
+
+.icon-users-block {
+  color: #da1b2b;
+}
+
+.encuestas-por-categoria .table-responsive {
+  height: 300px;
+  max-height: 300px;
+}
+
+.por-categoria {
+  padding: 5% 0;
+}
+.encuestas-por-usuario .table-responsive {
+  height: 500px;
+  max-height: 500px;
+}
+
+.encuestas-por-usuario .photo {
+  width: 40px;
+  height: 40px;
+}
+
+.encuestas-por-usuario .photo img {
+  border-radius: 100%;
+}

@@ -22,6 +22,10 @@ export class UserService {
     return this.http.get<IUser[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
+  retrieveAllPublicUsers(): Observable<IUser[]> {
+    return this.http.get<IUser[]>(this.resourceUrl);
+  }
+
   addUserToCollectionIfMissing(userCollection: IUser[], ...usersToCheck: (IUser | null | undefined)[]): IUser[] {
     const users: IUser[] = usersToCheck.filter(isPresent);
     if (users.length > 0) {

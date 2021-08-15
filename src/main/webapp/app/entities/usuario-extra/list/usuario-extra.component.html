@@ -43,7 +43,7 @@
     </div>
   </form>
   <div class="table-responsive" id="entities" *ngIf="usuarioExtras && usuarioExtras.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
+    <table class="ds-table table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
           <th scope="col"><span jhiTranslate="dataSurveyApp.usuarioExtra.rol">Rol</span></th>
@@ -96,7 +96,7 @@
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
               </button> -->
 
-              <button type="submit" (click)="delete(usuarioExtra)" class="ds-btn ds-btn--danger" data-cy="entityDeleteButton">
+              <button type="submit" (click)="delete(usuarioExtra)" class="ds-btn ds-btn--toggle" data-cy="entityDeleteButton">
                 <fa-icon [icon]="faExchangeAlt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.toggleStatus">Toggle Status</span>
               </button>

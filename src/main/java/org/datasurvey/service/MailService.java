@@ -4,7 +4,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import org.datasurvey.domain.Factura;
 import org.datasurvey.domain.User;
+import org.datasurvey.domain.UsuarioEncuesta;
 import org.datasurvey.domain.UsuarioExtra;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,8 @@ public class MailService {
     private static final String USER = "user";
 
     private static final String CONTRASENNA = "contrasenna";
+
+    private static final String FACTURA = "factura";
 
     private static final String BASE_URL = "baseUrl";
 
@@ -112,6 +116,38 @@ public class MailService {
     }
 
     @Async
+    public void sendEmailFromTemplateUsuarioEncuesta(User user, UsuarioEncuesta usuarioEncuesta, String templateName, String titleKey) {
+        if (user.getEmail() == null) {
+            log.debug("Email doesn't exist for user '{}'", user.getLogin());
+            return;
+        }
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(USER, user);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        context.setVariable("colaborador", usuarioEncuesta);
+        String content = templateEngine.process(templateName, context);
+        String subject = messageSource.getMessage(titleKey, null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    @Async
+    public void sendEmailFromTemplateFactura(User user, Factura factura, String templateName, String titleKey) {
+        if (user.getEmail() == null) {
+            log.debug("Email doesn't exist for user '{}'", user.getLogin());
+            return;
+        }
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(USER, user);
+        context.setVariable(FACTURA, factura);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        String content = templateEngine.process(templateName, context);
+        String subject = messageSource.getMessage(titleKey, null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    @Async
     public void sendActivationEmail(User user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
@@ -163,5 +199,33 @@ public class MailService {
     public void sendEncuestaDeleted(UsuarioExtra user) {
         log.debug("Sending encuesta deletion notification mail to '{}'", user.getUser().getEmail());
         sendEmailFromTemplate(user.getUser(), "mail/encuestaDeletedEmail", "email.encuestaDeleted.title");
+    }
+
+    @Async
+    public void sendInvitationColaborator(UsuarioEncuesta user) {
+        log.debug("Sending encuesta invitation collaboration notification mail to '{}'", user.getUsuarioExtra().getUser().getEmail());
+        sendEmailFromTemplateUsuarioEncuesta(
+            user.getUsuarioExtra().getUser(),
+            user,
+            "mail/invitationColaboratorEmail",
+            "email.invitation.title"
+        );
+    }
+
+    @Async
+    public void sendNotifyDeleteColaborator(UsuarioEncuesta user) {
+        log.debug("Sending delete collaboration notification mail to '{}'", user.getUsuarioExtra().getUser().getEmail());
+        sendEmailFromTemplateUsuarioEncuesta(
+            user.getUsuarioExtra().getUser(),
+            user,
+            "mail/deleteColaboratorEmail",
+            "email.deleteColaborator.title"
+        );
+    }
+
+    @Async
+    public void sendReceiptUser(UsuarioExtra user, Factura factura) {
+        log.debug("Sending paypal receipt mail to '{}'", user.getUser().getEmail());
+        sendEmailFromTemplateFactura(user.getUser(), factura, "mail/facturaPayPalEmail", "email.receipt.title");
     }
 }

@@ -4,24 +4,39 @@
       "home": {
         "title": "Plantillas",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Plantilla",
-        "createOrEditLabel": "Crear o editar Plantilla",
-        "notFound": "Ningún Plantillas encontrado"
+        "createLabel": "Crear nueva plantilla",
+        "createOrEditLabel": "Crear o editar plantilla",
+        "notFound": "No se encontró ninguna plantilla"
       },
-      "created": "Un nuevo Plantilla ha sido creado con el identificador {{ param }}",
-      "updated": "Un Plantilla ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Plantilla ha sido eliminado con el identificador {{ param }}",
+      "created": "Una nueva plantilla ha sido creada con el identificador {{ param }}",
+      "updated": {
+        "detail": "Una plantilla ha sido actualizada con el identificador {{ param }}",
+        "buttonChangeEstado": "Cambiar estado"
+      },
+      "deleted": "Una plantilla ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Plantilla {{ id }}?"
+        "question": "¿Seguro que quiere eliminar esta plantilla?",
+        "deletefromstore": "¿Seguro que quiere eliminar esta plantilla de la tienda?"
+      },
+      "publish": {
+        "store": "¿Seguro que quiere publicar esta plantilla a la tienda?"
       },
       "detail": {
         "title": "Plantilla"
       },
+      "desactivar": {
+        "titulo": "Desactivar plantilla",
+        "question": "¿Seguro que quiere desactivar la plantilla?"
+      },
+      "activar": {
+        "titulo": "Activar plantilla",
+        "question": "¿Seguro que quiere activar la plantilla?. Esta será activada en estado de 'Borrador'"
+      },
       "id": "ID",
       "nombre": "Nombre",
-      "descripcion": "Descripcion",
-      "fechaCreacion": "Fecha Creacion",
-      "fechaPublicacionTienda": "Fecha Publicacion Tienda",
+      "descripcion": "Descripción",
+      "fechaCreacion": "Fecha Creación",
+      "fechaPublicacionTienda": "Fecha Publicación Tienda",
       "estado": "Estado",
       "precio": "Precio",
       "pPreguntaCerrada": "P Pregunta Cerrada",

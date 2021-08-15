@@ -88,7 +88,7 @@ export class UsuarioExtraUpdateComponent {
           login,
           email,
           password,
-          langKey: this.translateService.currentLang,
+          langKey: this.translateService.currentLang!,
           name,
           firstName,
           profileIcon: this.profileIcon,

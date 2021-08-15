@@ -1,0 +1,193 @@
+<div class="container-fluid" *ngIf="encuesta">
+  <div>
+    <h2 id="page-heading" data-cy="EPreguntaCerradaHeading">
+      <div class="d-flex align-items-center">
+        <p class="ds-title">Vista previa de {{ encuesta!.nombre }}</p>
+        &nbsp;&nbsp;<fa-icon class="ds-info--icon" [icon]="faQuestion" data-toggle="modal" data-target="#verParametros"></fa-icon>
+      </div>
+
+      <p class="ds-subtitle">Creada el día {{ encuesta!.fechaCreacion | formatShortDatetime | lowercase }}</p>
+      <div class="d-flex justify-content-end">
+        <button type="button" class="ds-btn ds-btn--secondary" (click)="previousState()">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+      </div>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="ePreguntas?.length === 0">
+      <span>No se encontraron preguntas</span>
+    </div>
+
+    <div class="ds-survey preview-survey" id="entities" *ngIf="ePreguntas && ePreguntas.length > 0">
+      <div class="ds-survey--all-question-wrapper col-8">
+        <div class="ds-survey--question-wrapper card-encuesta" *ngFor="let ePregunta of ePreguntas; let i = index; trackBy: trackId">
+          <div
+            [attr.data-index]="ePregunta.id"
+            [attr.data-tipo]="ePregunta.tipo"
+            [attr.data-opcional]="ePregunta.opcional"
+            class="ds-survey--question"
+          >
+            <div class="ds-survey--titulo">
+              <span class="ds-survey--titulo--name">{{ i + 1 }}. {{ ePregunta.nombre }}</span>
+            </div>
+            <div>
+              <span *ngIf="ePregunta.tipo === 'SINGLE'" class="ds-subtitle"
+                >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.SINGLE' | translate | lowercase }}
+                {{ ePregunta.opcional ? '(opcional)' : '' }}</span
+              >
+              <span *ngIf="ePregunta.tipo === 'MULTIPLE'" class="ds-subtitle"
+                >Pregunta de respuesta {{ 'dataSurveyApp.PreguntaCerradaTipo.MULTIPLE' | translate | lowercase }}
+                {{ ePregunta.opcional ? '(opcional)' : '' }}</span
+              >
+              <span *ngIf="!ePregunta.tipo" class="ds-subtitle"
+                >Pregunta de respuesta abierta {{ ePregunta.opcional ? '(opcional)' : '' }}</span
+              >
+            </div>
+            <ng-container *ngIf="ePregunta.tipo">
+              <ng-container *ngFor="let ePreguntaOpcion of ePreguntasOpciones; let j = index; trackBy: trackId">
+                <ng-container *ngFor="let ePreguntaOpcionFinal of ePreguntaOpcion">
+                  <ng-container *ngIf="ePregunta.id === ePreguntaOpcionFinal.epreguntaCerrada.id">
+                    <div
+                      class="ds-survey--option ds-survey--option--base ds-survey--closed-option can-delete"
+                      [attr.data-id]="ePreguntaOpcionFinal.id"
+                    >
+                      <div class="radio" *ngIf="ePregunta.tipo === 'SINGLE'">
+                        <input
+                          type="radio"
+                          (change)="onCheck(ePreguntaOpcionFinal)"
+                          [value]="ePreguntaOpcionFinal.id"
+                          style="border-radius: 3px"
+                          name="{{ 'radio' + ePregunta.id }}"
+                          id="{{ 'radio' + ePreguntaOpcionFinal.id }}"
+                        />
+                        <label for="{{ 'radio' + ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
+                      </div>
+                      <div class="checkbox" *ngIf="ePregunta.tipo === 'MULTIPLE'">
+                        <input
+                          (change)="toggleOption(ePreguntaOpcionFinal)"
+                          type="checkbox"
+                          style="border-radius: 3px"
+                          id="{{ 'checkbox' + ePreguntaOpcionFinal.id }}"
+                        />
+                        <label for="{{ 'checkbox' + ePreguntaOpcionFinal.id }}">{{ ePreguntaOpcionFinal.nombre }}</label>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+            <div class="ds-survey--option ds-survey--option--base ds-survey--open-option" *ngIf="!ePregunta.tipo">
+              <textarea class="ds-survey--textarea" id="{{ ePregunta.id }}" cols="33" rows="10"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="ds-survey--question-wrapper card-encuesta">
+          <div class="ds-survey--question">
+            <div class="ds-survey--rating">
+              <div class="ds-survey--titulo">
+                <span class="ds-survey--titulo--name">Calificación</span>
+              </div>
+              <div class="ds-survey--option ds-survey--option--base">
+                <fa-icon
+                  *ngFor="let starNumber of this.stars"
+                  id="{{ 'star-' + starNumber }}"
+                  class="entity-icon--star--off"
+                  [icon]="faStar"
+                  (click)="updateRating(starNumber)"
+                ></fa-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="ds-btn ds-btn--primary" (click)="finish()">Finalizar</button>
+      </div>
+      <div
+        class="modal fade ds-modal"
+        id="verParametros"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title" id="exampleModalLongTitle">Información de encuesta</h1>
+            </div>
+
+            <div class="modal-body">
+              <div>
+                <div class="mb-5">
+                  <p style="font-size: 1.2em" class="ds-subtitle">Cantidad de preguntas</p>
+                  <p>{{ ePreguntas?.length }}</p>
+                </div>
+
+                <div class="mb-5">
+                  <p class="ds-subtitle" jhiTranslate="dataSurveyApp.encuesta.acceso">Acceso</p>
+                  <p jhiTranslate="{{ 'dataSurveyApp.AccesoEncuesta.' + encuesta.acceso }}">{{ encuesta.acceso }}</p>
+                </div>
+
+                <div *ngIf="encuesta.acceso === 'PRIVATE'" class="mb-5">
+                  <p class="ds-subtitle">Contraseña</p>
+                  <p>{{ encuesta.contrasenna }}</p>
+                </div>
+
+                <div class="mb-5">
+                  <p class="ds-subtitle">Estado:</p>
+                  <p jhiTranslate="{{ 'dataSurveyApp.EstadoEncuesta.' + encuesta.estado }}">{{ encuesta.estado }}</p>
+                </div>
+
+                <div *ngIf="encuesta.categoria" class="mb-5">
+                  <p class="ds-subtitle">Categoría</p>
+                  <P> </P> {{ encuesta.categoria?.nombre }}
+                </div>
+
+                <div class="mb-5">
+                  <p class="ds-subtitle">Fecha de publicación</p>
+                  <P
+                    >{{
+                      encuesta.fechaPublicacion === undefined
+                        ? 'Sin publicar'
+                        : (encuesta.fechaPublicacion | formatShortDatetime | lowercase)
+                    }}
+                  </P>
+                </div>
+
+                <div class="mb-5">
+                  <p class="ds-subtitle">Fecha de finalización</p>
+                  <p>
+                    {{
+                      encuesta.fechaFinalizada === undefined
+                        ? 'Sin finalizar'
+                        : (encuesta.fechaFinalizada | formatShortDatetime | lowercase)
+                    }}
+                  </p>
+                </div>
+
+                <div class="mb-5">
+                  <p class="ds-subtitle">Calificación</p>
+                  <div>
+                    <fa-icon *ngFor="let i of [].constructor(this.avgCalificacion)" class="entity-icon--star" [icon]="faStar"></fa-icon
+                    ><fa-icon
+                      *ngFor="let i of [].constructor(5 - this.avgCalificacion)"
+                      class="entity-icon--star--off"
+                      [icon]="faStar"
+                    ></fa-icon>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button id="cancelBtnVerParametros" type="button" class="ds-btn ds-btn--secondary" data-dismiss="modal">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span>Volver</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -11,10 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import org.datasurvey.domain.EPreguntaAbierta;
-import org.datasurvey.domain.EPreguntaCerrada;
-import org.datasurvey.domain.EPreguntaCerradaOpcion;
-import org.datasurvey.domain.Encuesta;
+import org.datasurvey.domain.*;
 import org.datasurvey.domain.enumeration.AccesoEncuesta;
 import org.datasurvey.repository.EncuestaRepository;
 import org.datasurvey.service.*;
@@ -59,6 +56,14 @@ public class EncuestaResource {
 
     private final EPreguntaCerradaOpcionService ePreguntaCerradaOpcionService;
 
+    private final PlantillaService plantillaService;
+
+    private final PPreguntaCerradaService pPreguntaCerradaService;
+
+    private final PPreguntaAbiertaService pPreguntaAbiertaService;
+
+    private final PPreguntaCerradaOpcionService pPreguntaCerradaOpcionService;
+
     public EncuestaResource(
         EncuestaService encuestaService,
         EncuestaRepository encuestaRepository,
@@ -66,7 +71,11 @@ public class EncuestaResource {
         MailService mailService,
         EPreguntaCerradaService ePreguntaCerradaService,
         EPreguntaAbiertaService ePreguntaAbiertaService,
-        EPreguntaCerradaOpcionService ePreguntaCerradaOpcionService
+        EPreguntaCerradaOpcionService ePreguntaCerradaOpcionService,
+        PlantillaService plantillaService,
+        PPreguntaCerradaService pPreguntaCerradaService,
+        PPreguntaAbiertaService pPreguntaAbiertaService,
+        PPreguntaCerradaOpcionService pPreguntaCerradaOpcionService
     ) {
         this.encuestaService = encuestaService;
         this.encuestaRepository = encuestaRepository;
@@ -75,6 +84,10 @@ public class EncuestaResource {
         this.ePreguntaCerradaService = ePreguntaCerradaService;
         this.ePreguntaAbiertaService = ePreguntaAbiertaService;
         this.ePreguntaCerradaOpcionService = ePreguntaCerradaOpcionService;
+        this.plantillaService = plantillaService;
+        this.pPreguntaCerradaService = pPreguntaCerradaService;
+        this.pPreguntaAbiertaService = pPreguntaAbiertaService;
+        this.pPreguntaCerradaOpcionService = pPreguntaCerradaOpcionService;
     }
 
     /**
@@ -95,6 +108,78 @@ public class EncuestaResource {
             .created(new URI("/api/encuestas/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    @PostMapping("/encuestas/{plantillaId}")
+    public ResponseEntity<Encuesta> createEncuestaFromTemplate(
+        @Valid @RequestBody Encuesta encuesta,
+        @PathVariable(value = "plantillaId", required = false) final Long plantillaId
+    ) throws URISyntaxException {
+        log.debug("REST request to save Encuesta : {}", encuesta);
+        if (encuesta.getId() != null) {
+            throw new BadRequestAlertException("A new encuesta cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+
+        // Copy from survey template to survey
+        Optional<Plantilla> plantilla = plantillaService.findOne(plantillaId);
+
+        if (plantilla.isPresent()) {
+            encuesta.setNombre(plantilla.get().getNombre());
+            encuesta.setDescripcion(plantilla.get().getDescripcion());
+            encuesta.setCategoria(plantilla.get().getCategoria());
+
+            Encuesta encuestaCreated = encuestaService.save(encuesta);
+
+            // Preguntas cerradas
+            List<PPreguntaCerrada> preguntasCerradas = pPreguntaCerradaService.findAll();
+            for (PPreguntaCerrada pPreguntaCerrada : preguntasCerradas) {
+                if (pPreguntaCerrada.getPlantilla().getId().equals(plantillaId)) {
+                    EPreguntaCerrada newEPreguntaCerrada = new EPreguntaCerrada();
+                    newEPreguntaCerrada.setNombre(pPreguntaCerrada.getNombre());
+                    newEPreguntaCerrada.setTipo(pPreguntaCerrada.getTipo());
+                    newEPreguntaCerrada.setOpcional(pPreguntaCerrada.getOpcional());
+                    newEPreguntaCerrada.setOrden(pPreguntaCerrada.getOrden());
+                    newEPreguntaCerrada.setEncuesta(encuestaCreated);
+
+                    ePreguntaCerradaService.save(newEPreguntaCerrada);
+
+                    // Opciones de preguntas cerradas
+                    List<PPreguntaCerradaOpcion> opciones = pPreguntaCerradaOpcionService.findAll();
+                    for (PPreguntaCerradaOpcion pPreguntaCerradaOpcion : opciones) {
+                        if (pPreguntaCerradaOpcion.getPPreguntaCerrada().getId().equals(pPreguntaCerrada.getId())) {
+                            EPreguntaCerradaOpcion newEPreguntaCerradaOpcion = new EPreguntaCerradaOpcion();
+                            newEPreguntaCerradaOpcion.setNombre(pPreguntaCerradaOpcion.getNombre());
+                            newEPreguntaCerradaOpcion.setOrden(pPreguntaCerradaOpcion.getOrden());
+                            newEPreguntaCerradaOpcion.setCantidad(0);
+                            newEPreguntaCerradaOpcion.setEPreguntaCerrada(newEPreguntaCerrada);
+
+                            ePreguntaCerradaOpcionService.save(newEPreguntaCerradaOpcion);
+                        }
+                    }
+                }
+            }
+
+            // Preguntas abiertas
+            List<PPreguntaAbierta> preguntasAbiertas = pPreguntaAbiertaService.findAll();
+            for (PPreguntaAbierta pPreguntaAbierta : preguntasAbiertas) {
+                if (pPreguntaAbierta.getPlantilla().getId().equals(plantillaId)) {
+                    EPreguntaAbierta newEPreguntaAbierta = new EPreguntaAbierta();
+                    newEPreguntaAbierta.setNombre(pPreguntaAbierta.getNombre());
+                    newEPreguntaAbierta.setOpcional(pPreguntaAbierta.getOpcional());
+                    newEPreguntaAbierta.setOrden(pPreguntaAbierta.getOrden());
+                    newEPreguntaAbierta.setEncuesta(encuestaCreated);
+
+                    ePreguntaAbiertaService.save(newEPreguntaAbierta);
+                }
+            }
+
+            return ResponseEntity
+                .created(new URI("/api/encuestas/" + encuestaCreated.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, encuestaCreated.getId().toString()))
+                .body(encuestaCreated);
+        }
+
+        return ResponseEntity.ok().body(null);
     }
 
     /**
@@ -129,6 +214,31 @@ public class EncuestaResource {
         if (encuesta.getUsuarioExtra().getUser() != null) {
             mailService.sendEncuestaDeleted(encuesta.getUsuarioExtra());
         }
+
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, encuesta.getId().toString()))
+            .body(result);
+    }
+
+    @PutMapping("/encuestas/update/{id}")
+    public ResponseEntity<Encuesta> updateEncuestaReal(
+        @PathVariable(value = "id", required = false) final Long id,
+        @Valid @RequestBody Encuesta encuesta
+    ) throws URISyntaxException {
+        log.debug("REST request to update Encuesta : {}, {}", id, encuesta);
+        if (encuesta.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, encuesta.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!encuestaRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Encuesta result = encuestaService.save(encuesta);
 
         return ResponseEntity
             .ok()

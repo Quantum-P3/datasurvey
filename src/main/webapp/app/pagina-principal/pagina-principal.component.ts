@@ -15,6 +15,8 @@ import { Subject } from 'rxjs';
 
 import { faPollH, faCalendarAlt, faStar, faListAlt, faFileAlt } from '@fortawesome/free-solid-svg-icons';
 import { ICategoria } from '../entities/categoria/categoria.model';
+import { AccesoEncuesta } from 'app/entities/enumerations/acceso-encuesta.model';
+import { EncuestaPasswordDialogComponent } from 'app/entities/encuesta/encuesta-password-dialog/encuesta-password-dialog.component';
 
 @Component({
   selector: 'jhi-pagina-principal',
@@ -84,6 +86,13 @@ export class PaginaPrincipalComponent implements OnInit {
       (res: HttpResponse<IEncuesta[]>) => {
         this.isLoading = false;
         const tmpEncuestas = res.body ?? [];
+
+        // Fix calificacion
+        tmpEncuestas.forEach(encuesta => {
+          const _calificacion = encuesta.calificacion;
+          encuesta.calificacion = Number(_calificacion?.toString().split('.')[0]);
+        });
+
         this.encuestas = tmpEncuestas.filter(e => e.estado === 'ACTIVE' && e.acceso === 'PUBLIC');
       },
       () => {
@@ -106,7 +115,21 @@ export class PaginaPrincipalComponent implements OnInit {
     );
   }
 
-  trackId(index: number, item: IEncuesta): number {
+  trackId(_index: number, item: IEncuesta): number {
     return item.id!;
+  }
+
+  completeEncuesta(encuesta: IEncuesta): void {
+    this.router.navigate(['/encuesta', encuesta.id, 'complete']);
+  }
+
+  confirmPassword(encuesta: IEncuesta): void {
+    const modalRef = this.modalService.open(EncuestaPasswordDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.encuesta = encuesta;
+    modalRef.closed.subscribe(isValid => {
+      if (isValid) {
+        // Load the survey
+      }
+    });
   }
 }
