@@ -10,10 +10,12 @@
 
     <hr />
 
-    <h2 class="entity-body--row m-2">La plantilla ha comprar no tiene costo alguno</h2>
-    <button type="button" class="ds-btn btn-outline-success fc-center" data-dismiss="modal" (click)="freePurchase()">
-      <fa-icon [icon]="faCheck"></fa-icon>&nbsp;<span>Finalizar compra</span>
-    </button>
+    <div *ngIf="plantilla!.precio == 0">
+      <h2 class="entity-body--row m-2">La plantilla ha comprar no tiene costo alguno</h2>
+      <button type="button" class="ds-btn btn-outline-success fc-center" data-dismiss="modal" (click)="freePurchase()">
+        <fa-icon [icon]="faCheck"></fa-icon>&nbsp;<span>Finalizar compra</span>
+      </button>
+    </div>
 
     <ngx-paypal [config]="payPalConfig" *ngIf="plantilla!.precio != 0"></ngx-paypal>
   </div>

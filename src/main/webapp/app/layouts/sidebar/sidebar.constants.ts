@@ -66,7 +66,7 @@ export const USER_ROUTES: RouteInfo[] = [
   { path: '/pagina-principal', title: 'Inicio', type: 'link', icontype: 'nc-icon nc-world-2' },
   {
     path: '/dashboard/user',
-    title: 'Dashboard',
+    title: 'Reportes',
     type: 'link',
     icontype: 'nc-icon nc-chart-bar-32',
   },
@@ -74,7 +74,7 @@ export const USER_ROUTES: RouteInfo[] = [
     path: '/encuesta',
     title: 'Encuestas',
     type: 'link',
-    icontype: 'nc-icon nc-paper',
+    icontype: 'nc-icoxn nc-paper',
   },
   { path: '/tienda-plantilla', title: 'Tienda', type: 'link', icontype: 'nc-icon nc-shop' },
   // {
