@@ -12,6 +12,7 @@ import * as Chartist from 'chartist';
 import { finalize } from 'rxjs/operators';
 import { EPreguntaAbiertaRespuestaService } from '../../e-pregunta-abierta-respuesta/service/e-pregunta-abierta-respuesta.service';
 import { each } from 'chart.js/helpers';
+import { IEPreguntaAbiertaRespuesta } from '../../e-pregunta-abierta-respuesta/e-pregunta-abierta-respuesta.model';
 
 @Component({
   selector: 'jhi-dashboard-user',
@@ -37,12 +38,13 @@ export class DashboardUserComponent implements OnInit {
   duracion?: number = 0;
   ePreguntas?: any[];
   ePreguntasOpciones?: any[];
-  eRespuestaAbierta?: any[];
+  respuestaAbierta?: IEPreguntaAbiertaRespuesta[];
   isLoading = false;
   encuestas?: IEncuesta[];
   usuarioExtra: UsuarioExtra | null = null;
   account: Account | null = null;
   encuesta: IEncuesta | null = null;
+  preguntaId?: number = 0;
 
   constructor(
     protected encuestaService: EncuestaService,
@@ -159,17 +161,7 @@ export class DashboardUserComponent implements OnInit {
 
               debugger;
 
-              this.ePreguntas!.forEach(pregunta => {
-                debugger;
-                if (!pregunta.tipo) {
-                  this.resAbierta.find(pregunta.id).subscribe(res => {
-                    const respuesta = res.body ?? [];
-
-                    this.eRespuestaAbierta?.push(respuesta);
-                  });
-                }
-              });
-              //this.getOpenQuestionAnswers()
+              this.getOpenQuestionAnswers();
             },
             () => {
               this.isLoading = false;
@@ -196,14 +188,29 @@ export class DashboardUserComponent implements OnInit {
   }
 
   getOpenQuestionAnswers() {
-    debugger;
     this.ePreguntas!.forEach(pregunta => {
       debugger;
       if (!pregunta.tipo) {
-        this.resAbierta.find(pregunta.id).subscribe(res => {
-          const respuesta = res.body ?? [];
+        this.resAbierta.query().subscribe(res => {
+          debugger;
 
-          this.eRespuestaAbierta?.push(respuesta);
+          this.preguntaId = pregunta.id;
+
+          this.respuestaAbierta = res.body ?? [];
+          /* const respuesta = res.body ?? [];
+
+          respuesta.forEach( e => {
+            debugger
+
+
+            if (e.epreguntaAbierta?.id == pregunta.id){
+              this.respuestaAbierta?.push(e);
+            }
+            /!*debugger
+            this.eRespuestaAbierta?.push(respuesta.filter(e.ePreguntaAbierta?.id == pregunta.id));*!/
+          })
+*/
+          console.log(this.respuestaAbierta);
         });
       }
     });

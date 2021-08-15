@@ -39,7 +39,7 @@
 
     <div class="py-2" [hidden]="reportPreguntas">
       <h1>Detalles de la encuesta</h1>
-      <h2>En esta sección encontrará los reportes dcon respecto al contenido de las preguntas de su encuesta</h2>
+      <h2>En esta sección encontrará los reportes con respecto al contenido de las preguntas de su encuesta</h2>
     </div>
     <hr />
 
@@ -244,9 +244,16 @@
                     </ng-container>
                   </ng-container>
                 </ng-container>
-                <div class="ds-survey--option ds-survey--option--base ds-survey--open-option" *ngIf="!ePregunta.tipo">
-                  <div *ngFor="let res of eRespuestaAbierta">
-                    <textarea class="ds-survey--textarea" cols="33" rows="10"> {{ res }}</textarea>
+                <div *ngIf="!ePregunta.tipo">
+                  <div *ngFor="let res of respuestaAbierta">
+                    <!-- <ul>
+                      <li *ngIf="res.epreguntaAbierta?.id == preguntaId"> {{ res.respuesta }}</li>
+                    </ul>-->
+                    <!-- <textarea readonly class="ds-survey&#45;&#45;textarea" cols="33" rows="10" *ngIf="res.epreguntaAbierta?.id == preguntaId" > {{ res.respuesta }} </textarea>-->
+
+                    <div *ngIf="res.epreguntaAbierta?.id == preguntaId">
+                      <label> {{ '- ' + res.respuesta }}</label> <br />
+                    </div>
                   </div>
                 </div>
               </div>
