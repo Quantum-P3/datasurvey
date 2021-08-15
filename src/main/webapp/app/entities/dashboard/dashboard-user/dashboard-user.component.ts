@@ -49,6 +49,7 @@ export class DashboardUserComponent implements OnInit {
   usuarioExtra: UsuarioExtra | null = null;
   account: Account | null = null;
   encuesta: IEncuesta | null = null;
+  colaboracion: IEncuesta | null = null;
   preguntaId?: number = 0;
   usuarioEncuestas?: IUsuarioEncuesta[];
   colaboraciones?: IEncuesta[];
@@ -290,7 +291,7 @@ export class DashboardUserComponent implements OnInit {
       this.reportColaboracionPreguntas = false;
     }
 
-    this.encuesta = encuesta;
+    this.colaboracion = encuesta;
     debugger;
     this.isLoading = true;
     this.encuestaService
