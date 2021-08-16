@@ -377,10 +377,10 @@ export class DashboardUserComponent implements OnInit {
 
     if (!this.reportsGeneral) {
       const _sheets = [
-        'Cantidad de encuestas creadas',
-        'Cantidad de usuarios que han completado las encuestas',
-        'Cantidad de encuestas por estado',
-        'Cantidad de encuestas por acceso',
+        'Cantidad encuestas creadas',
+        'Cantidad usuarios encuestas',
+        'Cantidad encuestas por estado',
+        'Cantidad encuestas por acceso',
       ];
 
       const _reporteEncuestasCreadas = [{ total_encuestas: this.cantEncuestas }];
@@ -412,7 +412,9 @@ export class DashboardUserComponent implements OnInit {
       const _fileName = 'reportes_generales_encuestas_datasurvey';
       let _docData, _headers, _docHeaders, _docTitle;
 
-      const _reporteEncuestasCreadas = [{ total_encuestas: this.cantEncuestas }];
+      debugger;
+      const _reporteEncuestasCreadas = [{ total_encuestas_creadas: this.cantEncuestas!.toString() }];
+      debugger;
 
       _docData = generatePDFTableData(_reporteEncuestasCreadas);
       _headers = ['total_encuestas_creadas'];
@@ -422,7 +424,7 @@ export class DashboardUserComponent implements OnInit {
       generatePDFTable(doc, _docData, _docHeaders, _docTitle);
       doc.addPage('p');
 
-      const _reporteUsuariosCompletadas = [{ total_usuarios: this.cantPersonas }];
+      const _reporteUsuariosCompletadas = [{ total_usuarios_completados: this.cantPersonas.toString() }];
       _docData = generatePDFTableData(_reporteUsuariosCompletadas);
       _headers = ['total_usuarios_completados'];
       _docHeaders = createPDFTableHeaders(_headers);
@@ -432,19 +434,23 @@ export class DashboardUserComponent implements OnInit {
       doc.addPage('p');
 
       const _reporteEncuestasEstado = [
-        { total_borrador: this.cantPersonas, total_activas: this.cantActivas, total_finalizadas: this.cantFinalizadas },
+        {
+          total_borrador: this.cantPersonas.toString(),
+          total_activas: this.cantActivas.toString(),
+          total_finalizadas: this.cantFinalizadas.toString(),
+        },
       ];
       _docData = generatePDFTableData(_reporteEncuestasEstado);
-      _headers = ['total_encuestas_estado'];
+      _headers = ['total_borrador', 'total_activas', 'total_finalizadas'];
       _docHeaders = createPDFTableHeaders(_headers);
       _docTitle = 'Reporte General Cantidad Encuestas Por Estado';
 
       generatePDFTable(doc, _docData, _docHeaders, _docTitle);
       doc.addPage('p');
 
-      const _reporteEncuestasAcceso = [{ total_publicas: this.cantPublicas, total_privadas: this.cantPrivadas }];
+      const _reporteEncuestasAcceso = [{ total_publicas: this.cantPublicas.toString(), total_privadas: this.cantPrivadas.toString() }];
       _docData = generatePDFTableData(_reporteEncuestasAcceso);
-      _headers = ['total_encuestas_acceso '];
+      _headers = ['total_publicas', 'total_privadas'];
       _docHeaders = createPDFTableHeaders(_headers);
       _docTitle = 'Reporte General Cantidad Encuestas Por Acceso';
 
