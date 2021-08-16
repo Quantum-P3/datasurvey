@@ -15,6 +15,9 @@ import { finalize } from 'rxjs/operators';
 import { EPreguntaAbiertaRespuestaService } from '../../e-pregunta-abierta-respuesta/service/e-pregunta-abierta-respuesta.service';
 import { IEPreguntaAbiertaRespuesta } from '../../e-pregunta-abierta-respuesta/e-pregunta-abierta-respuesta.model';
 import { IUsuarioEncuesta } from '../../usuario-encuesta/usuario-encuesta.model';
+import { exportAsExcelFile } from '../export/export_excel';
+import { jsPDF } from 'jspdf';
+import { createPDFTableHeaders, generatePDFTable, generatePDFTableData, saveGeneratedPDF } from '../export/export_pdf';
 
 @Component({
   selector: 'jhi-dashboard-user',
@@ -364,7 +367,91 @@ export class DashboardUserComponent implements OnInit {
     });
   }
 
-  exportReportesGeneralesUserExcel(): void {}
+  exportReportesGeneralesUserExcel(): void {
+    /*REPORTES GENERALES:
+     *Cantidad de encuestas creadas
+     * cantidad de personas que han completado las encuestas
+     *Cantidad de encuestas por estado
+     * Cantidad de encuestas por acceso
+     * */
 
-  exportReportesGeneralesUserPDF(): void {}
+    if (!this.reportsGeneral) {
+      const _sheets = [
+        'Cantidad de encuestas creadas',
+        'Cantidad de usuarios que han completado las encuestas',
+        'Cantidad de encuestas por estado',
+        'Cantidad de encuestas por acceso',
+      ];
+
+      const _reporteEncuestasCreadas = [{ total_encuestas: this.cantEncuestas }];
+
+      const _reporteUsuariosCompletadas = [{ total_usuarios: this.cantPersonas }];
+
+      const _reporteEncuestasEstado = [
+        { total_borrador: this.cantPersonas, total_activas: this.cantActivas, total_finalizadas: this.cantFinalizadas },
+      ];
+
+      const _reporteEncuestasAcceso = [{ total_publicas: this.cantPublicas, total_privadas: this.cantPrivadas }];
+
+      const _excelFinalData = [_reporteEncuestasCreadas, _reporteUsuariosCompletadas, _reporteEncuestasEstado, _reporteEncuestasAcceso];
+      const _fileName = 'reportes_generales_encuestas_DataSurvey';
+      exportAsExcelFile(_sheets, _excelFinalData, _fileName);
+    }
+  }
+
+  exportReportesGeneralesUserPDF(): void {
+    /*REPORTES GENERALES:
+     *Cantidad de encuestas creadas
+     * cantidad de personas que han completado las encuestas
+     *Cantidad de encuestas por estado
+     * Cantidad de encuestas por acceso
+     * */
+
+    if (!this.reportsGeneral) {
+      const doc = new jsPDF();
+      const _fileName = 'reportes_generales_encuestas_datasurvey';
+      let _docData, _headers, _docHeaders, _docTitle;
+
+      const _reporteEncuestasCreadas = [{ total_encuestas: this.cantEncuestas }];
+
+      _docData = generatePDFTableData(_reporteEncuestasCreadas);
+      _headers = ['total_encuestas_creadas'];
+      _docHeaders = createPDFTableHeaders(_headers);
+      _docTitle = 'Reporte General Cantidad Encuestas Creadas';
+
+      generatePDFTable(doc, _docData, _docHeaders, _docTitle);
+      doc.addPage('p');
+
+      const _reporteUsuariosCompletadas = [{ total_usuarios: this.cantPersonas }];
+      _docData = generatePDFTableData(_reporteUsuariosCompletadas);
+      _headers = ['total_usuarios_completados'];
+      _docHeaders = createPDFTableHeaders(_headers);
+      _docTitle = 'Reporte General Cantidad Usuarios';
+
+      generatePDFTable(doc, _docData, _docHeaders, _docTitle);
+      doc.addPage('p');
+
+      const _reporteEncuestasEstado = [
+        { total_borrador: this.cantPersonas, total_activas: this.cantActivas, total_finalizadas: this.cantFinalizadas },
+      ];
+      _docData = generatePDFTableData(_reporteEncuestasEstado);
+      _headers = ['total_encuestas_estado'];
+      _docHeaders = createPDFTableHeaders(_headers);
+      _docTitle = 'Reporte General Cantidad Encuestas Por Estado';
+
+      generatePDFTable(doc, _docData, _docHeaders, _docTitle);
+      doc.addPage('p');
+
+      const _reporteEncuestasAcceso = [{ total_publicas: this.cantPublicas, total_privadas: this.cantPrivadas }];
+      _docData = generatePDFTableData(_reporteEncuestasAcceso);
+      _headers = ['total_encuestas_acceso '];
+      _docHeaders = createPDFTableHeaders(_headers);
+      _docTitle = 'Reporte General Cantidad Encuestas Por Acceso';
+
+      generatePDFTable(doc, _docData, _docHeaders, _docTitle);
+      doc.addPage('p');
+
+      saveGeneratedPDF(doc, _fileName);
+    }
+  }
 }
