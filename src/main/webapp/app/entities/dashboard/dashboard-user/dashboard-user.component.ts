@@ -363,4 +363,8 @@ export class DashboardUserComponent implements OnInit {
       }
     });
   }
+
+  exportReportesGeneralesUserExcel(): void {}
+
+  exportReportesGeneralesUserPDF(): void {}
 }
