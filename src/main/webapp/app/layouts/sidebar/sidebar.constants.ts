@@ -26,7 +26,7 @@ export const ADMIN_ROUTES: RouteInfo[] = [
   { path: '/pagina-principal', title: 'Inicio', type: 'link', icontype: 'nc-icon nc-world-2' },
   {
     path: '/dashboard/admin',
-    title: 'Dashboard',
+    title: 'Reportes',
     type: 'link',
     icontype: 'nc-icon nc-chart-bar-32',
   },

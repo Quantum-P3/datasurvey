@@ -58,6 +58,7 @@ export class DashboardUserComponent implements OnInit {
   ePreguntasOpcionesColaboracion?: any[];
   respuestaAbiertaColaboracion?: IEPreguntaAbiertaRespuesta[];
   preguntaIdColaboracion?: number = 0;
+  duracionArray?: number[] | null = null;
 
   constructor(
     protected encuestaService: EncuestaService,
@@ -126,21 +127,31 @@ export class DashboardUserComponent implements OnInit {
         this.cantPrivadas = tmpEncuestas.filter(
           e => e.acceso === 'PRIVATE' && e.usuarioExtra?.id === this.usuarioExtra?.id && e.estado !== 'DELETED'
         ).length;
+        let cantidadCompletadas: number = 0;
+        tmpEncuestas
+          .filter(e => e.estado === 'ACTIVE')
+          .forEach(e => {
+            const _contadorCompletadas = e.calificacion;
+            cantidadCompletadas = cantidadCompletadas + (Number(_contadorCompletadas?.toString().split('.')[1]) - 1);
+          });
+        this.cantPersonas = cantidadCompletadas;
 
         tmpEncuestas.forEach(encuesta => {
           const _calificacion = encuesta.calificacion;
           encuesta.calificacion = Number(_calificacion?.toString().split('.')[0]);
 
-          if (encuesta.fechaFinalizada == null) {
+          /* if (encuesta.fechaFinalizada == null) {
             this.duracion = -1;
+            this.duracionArray?.push(this.duracion);
           } else {
             this.duracion = encuesta.fechaPublicacion?.diff(encuesta.fechaFinalizada!, 'days');
-          }
+            this.duracionArray?.push(this.duracion!);
+          }*/
         });
 
-        this.cantPersonas = tmpEncuestas.filter(
+        /*this.cantPersonas = tmpEncuestas.filter(
           e => e.calificacion && e.usuarioExtra?.id === this.usuarioExtra?.id && e.estado !== 'DELETED'
-        ).length;
+        ).length;*/
         //cantidad de personas que han completado la encuesta
 
         this.loadFirstChart();

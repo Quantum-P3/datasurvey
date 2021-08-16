@@ -169,22 +169,22 @@
               </div>
               <div class="text-xs text-gray-500">
                 <div class="entity-body">
-                  <div class="entity-body--row m-2">
-                    <span class="mt-2" *ngIf="duracion! > 0"
-                      ><fa-icon class="entity-icon--access" [icon]="faCalendarAlt"></fa-icon> Duración: &nbsp;&nbsp;&nbsp;&nbsp;{{
-                        duracion
+                  <!--<div class="entity-body&#45;&#45;row m-2" *ngFor="let d of duracionArray">
+                    <span class="mt-2" *ngIf="d! > 0"
+                      ><fa-icon class="entity-icon&#45;&#45;access" [icon]="faCalendarAlt"></fa-icon> Duración: &nbsp;&nbsp;&nbsp;&nbsp;{{
+                        d
                       }}</span
                     >
-                    <span class="mt-2" *ngIf="duracion! == 0"
-                      ><fa-icon class="entity-icon--access" [icon]="faCalendarAlt"></fa-icon> Duración: &nbsp;&nbsp;&nbsp;&nbsp;Un día o
+                    <span class="mt-2" *ngIf="d! == 0"
+                      ><fa-icon class="entity-icon&#45;&#45;access" [icon]="faCalendarAlt"></fa-icon> Duración: &nbsp;&nbsp;&nbsp;&nbsp;Un día o
                       menos</span
                     >
 
-                    <span class="mt-2" *ngIf="duracion! == -1"
-                      ><fa-icon class="entity-icon--access" [icon]="faCalendarAlt"></fa-icon> Duración: &nbsp;&nbsp;&nbsp;&nbsp;No ha
+                    <span class="mt-2" *ngIf="d! == -1"
+                      ><fa-icon class="entity-icon&#45;&#45;access" [icon]="faCalendarAlt"></fa-icon> Duración: &nbsp;&nbsp;&nbsp;&nbsp;No ha
                       finalizado</span
                     >
-                  </div>
+                  </div>-->
 
                   <div class="entity-body--row m-2">
                     <p>Calificación:</p>
@@ -287,7 +287,7 @@
                     </ul>-->
                     <!-- <textarea readonly class="ds-survey&#45;&#45;textarea" cols="33" rows="10" *ngIf="res.epreguntaAbierta?.id == preguntaId" > {{ res.respuesta }} </textarea>-->
 
-                    <div *ngIf="res.epreguntaAbierta?.id == preguntaId">
+                    <div *ngIf="res.epreguntaAbierta?.id == ePregunta.id">
                       <label> {{ '- ' + res.respuesta }}</label> <br />
                     </div>
                   </div>
@@ -453,7 +453,7 @@
                     </ul>-->
                     <!-- <textarea readonly class="ds-survey&#45;&#45;textarea" cols="33" rows="10" *ngIf="res.epreguntaAbierta?.id == preguntaId" > {{ res.respuesta }} </textarea>-->
 
-                    <div *ngIf="res.epreguntaAbierta?.id == preguntaIdColaboracion">
+                    <div *ngIf="res.epreguntaAbierta?.id == ePregunta.id">
                       <label> {{ '- ' + res.respuesta }}</label> <br />
                     </div>
                   </div>
