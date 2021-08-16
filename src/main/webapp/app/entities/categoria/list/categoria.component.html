@@ -33,8 +33,13 @@
     </button>
   </div>
 
-  <div class="alert alert-warning" id="no-result" *ngIf="categorias?.length === 0">
-    <span jhiTranslate="dataSurveyApp.categoria.home.notFound">No categorias found</span>
+  <div class="ds-survey" id="entities" *ngIf="categorias?.length === 0">
+    <div class="ds-survey--all-question-wrapper">
+      <ng-container class="">
+        <p class="ds-title text-center">No existen categorías</p>
+        <p class="ds-subtitle text-center">Inicie creando categorías para identificar las encuestas de los usuarios</p>
+      </ng-container>
+    </div>
   </div>
 
   <div class="table-responsive" id="entities" *ngIf="categorias && categorias.length > 0">
