@@ -81,10 +81,13 @@ public class EPreguntaCerradaOpcionResource {
     }
 
     @PostMapping("/e-pregunta-cerrada-opcions/count/{id}")
-    public ResponseEntity<EPreguntaCerradaOpcion> updateOpcionCount(@PathVariable(value = "id", required = true) final Long id) {
-        EPreguntaCerradaOpcion updatedOpcion = getEPreguntaCerradaOpcion(id).getBody();
-        int cantidad = updatedOpcion.getCantidad();
-        updatedOpcion.setCantidad(cantidad += 1);
+    public ResponseEntity<EPreguntaCerradaOpcion> updateOpcionCount(@PathVariable(value = "id", required = false) final Long id) {
+        System.out.println(id);
+        EPreguntaCerradaOpcion updatedOpcion = ePreguntaCerradaOpcionService.findOne(id).get();
+        System.out.println(updatedOpcion);
+        int cantidad = updatedOpcion.getCantidad() + 1;
+        updatedOpcion.setCantidad(cantidad);
+        this.ePreguntaCerradaOpcionService.partialUpdate(updatedOpcion);
         return ResponseEntity.ok(updatedOpcion);
     }
 
