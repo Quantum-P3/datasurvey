@@ -196,7 +196,7 @@ export class EncuestaCompleteComponent implements OnInit {
     if (this.calificacion !== 0) {
       const newSumCalificacion = this.sumCalificacion + this.calificacion;
       const newCantidadCalificacion = this.cantidadCalificaciones + 1;
-      const newAvgCalificacion = newSumCalificacion / newCantidadCalificacion;
+      const newAvgCalificacion = Math.round(newSumCalificacion / newCantidadCalificacion);
       const newRating = this.joinRatingValues(newAvgCalificacion, newCantidadCalificacion);
       this.encuesta!.calificacion = Number(newRating);
       this.encuestaService.updateSurvey(this.encuesta!);
