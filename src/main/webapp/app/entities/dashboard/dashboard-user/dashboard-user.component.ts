@@ -458,6 +458,9 @@ export class DashboardUserComponent implements OnInit {
       doc.addPage('p');
 
       saveGeneratedPDF(doc, _fileName);
+    } else {
+      /*REPORTES POR ENCUESTA:
+       * */
     }
   }
 }
