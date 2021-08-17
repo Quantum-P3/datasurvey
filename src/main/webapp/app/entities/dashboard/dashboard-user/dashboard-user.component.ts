@@ -396,6 +396,32 @@ export class DashboardUserComponent implements OnInit {
       const _excelFinalData = [_reporteEncuestasCreadas, _reporteUsuariosCompletadas, _reporteEncuestasEstado, _reporteEncuestasAcceso];
       const _fileName = 'reportes_generales_encuestas_DataSurvey';
       exportAsExcelFile(_sheets, _excelFinalData, _fileName);
+    } else if (!this.reportPreguntas) {
+      /*REPORTES POR ENCUESTA:
+       * Nombre encuesta
+       * categoria encuesta
+       * calificacion encuesta
+       *
+       * preguntas:
+       * contenido/ cantidad*/
+
+      const _sheets = ['Datos de encuesta', 'Contenido de preguntas'];
+
+      const _reporteDatosEncuesta = [
+        {
+          nombre_encuesta: this.encuesta?.nombre,
+          categoria_encuesta: this.encuesta?.categoria,
+          calificacion_encuesta: this.encuesta?.calificacion,
+        },
+      ];
+
+      const _reporteDaetallePreguntas = [
+        {
+          nombre_encuesta: this.encuesta?.nombre,
+          categoria_encuesta: this.encuesta?.categoria,
+          calificacion_encuesta: this.encuesta?.calificacion,
+        },
+      ];
     }
   }
 
@@ -460,7 +486,12 @@ export class DashboardUserComponent implements OnInit {
       saveGeneratedPDF(doc, _fileName);
     } else {
       /*REPORTES POR ENCUESTA:
-       * */
+       * Nombre encuesta
+       * categoria encuesta
+       * calificacion encuesta
+       *
+       * preguntas:
+       * contenido/ cantidad*/
     }
   }
 }
