@@ -74,7 +74,7 @@ export const USER_ROUTES: RouteInfo[] = [
     path: '/encuesta',
     title: 'Encuestas',
     type: 'link',
-    icontype: 'nc-icoxn nc-paper',
+    icontype: 'nc-icon nc-paper',
   },
   { path: '/tienda-plantilla', title: 'Tienda', type: 'link', icontype: 'nc-icon nc-shop' },
   // {
