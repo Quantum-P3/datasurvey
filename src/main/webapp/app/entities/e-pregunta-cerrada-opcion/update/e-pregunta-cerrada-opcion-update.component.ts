@@ -85,12 +85,12 @@ export class EPreguntaCerradaOpcionUpdateComponent implements OnInit {
       nombre: ePreguntaCerradaOpcion.nombre,
       orden: ePreguntaCerradaOpcion.orden,
       cantidad: ePreguntaCerradaOpcion.cantidad,
-      ePreguntaCerrada: ePreguntaCerradaOpcion.ePreguntaCerrada,
+      ePreguntaCerrada: ePreguntaCerradaOpcion.epreguntaCerrada,
     });
 
     this.ePreguntaCerradasSharedCollection = this.ePreguntaCerradaService.addEPreguntaCerradaToCollectionIfMissing(
       this.ePreguntaCerradasSharedCollection,
-      ePreguntaCerradaOpcion.ePreguntaCerrada
+      ePreguntaCerradaOpcion.epreguntaCerrada
     );
   }
 
@@ -116,7 +116,7 @@ export class EPreguntaCerradaOpcionUpdateComponent implements OnInit {
       nombre: this.editForm.get(['nombre'])!.value,
       orden: this.editForm.get(['orden'])!.value,
       cantidad: this.editForm.get(['cantidad'])!.value,
-      ePreguntaCerrada: this.editForm.get(['ePreguntaCerrada'])!.value,
+      epreguntaCerrada: this.editForm.get(['ePreguntaCerrada'])!.value,
     };
   }
 }
