@@ -43,10 +43,7 @@ public class UsuarioEncuesta implements Serializable {
     private UsuarioExtra usuarioExtra;
 
     @ManyToOne
-    @JsonIgnoreProperties(
-        value = { "usuarioEncuestas", "ePreguntaAbiertas", "ePreguntaCerradas", "categoria", "usuarioExtra" },
-        allowSetters = true
-    )
+    @JsonIgnoreProperties(value = { "usuarioEncuestas", "usuarioExtra" }, allowSetters = true)
     private Encuesta encuesta;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
