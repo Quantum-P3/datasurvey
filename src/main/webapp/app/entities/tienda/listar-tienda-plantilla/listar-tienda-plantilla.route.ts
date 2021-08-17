@@ -5,6 +5,6 @@ export const TIENDA_PLANTILLA_ROUTE: Route = {
   path: 'tienda-plantilla',
   component: ListarTiendaPlantillaComponent,
   data: {
-    pageTitle: 'tiendaPlantilla.title',
+    pageTitle: 'dataSurveyApp.tiendaPlantilla.title',
   },
 };
