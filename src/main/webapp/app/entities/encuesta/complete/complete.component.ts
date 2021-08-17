@@ -190,10 +190,11 @@ export class EncuestaCompleteComponent implements OnInit {
   }
 
   finish(): void {
-    this.updateEncuestaRating();
+    this.updateClosedOptionsCount();
     this.getOpenQuestionAnswers();
     this.registerOpenQuestionAnswers();
-    this.updateClosedOptionsCount();
+    this.updateEncuestaRating();
+
     this.previousState();
   }
 
@@ -204,26 +205,37 @@ export class EncuestaCompleteComponent implements OnInit {
       const newAvgCalificacion = Math.round(newSumCalificacion / newCantidadCalificacion);
       const newRating = Number(this.joinRatingValues(newAvgCalificacion, newCantidadCalificacion));
       this.encuesta!.calificacion = newRating;
-      this.encuestaService.updateSurvey(this.encuesta!);
+      this.encuestaService.updateSurvey(this.encuesta!).subscribe(() => {
+        console.log('success');
+      });
     }
   }
 
   updateClosedOptionsCount() {
+    debugger;
     for (let key in this.selectedSingleOptions) {
-      this.ePreguntaCerradaOpcionService.updateCount(this.selectedSingleOptions[key]);
+      this.ePreguntaCerradaOpcionService.updateCount(this.selectedSingleOptions[key]).subscribe(() => {
+        console.log('success');
+      });
     }
     this.selectedMultiOptions.forEach((option: any) => {
-      this.ePreguntaCerradaOpcionService.updateCount(option);
+      this.ePreguntaCerradaOpcionService.updateCount(option).subscribe(() => {
+        console.log('success');
+      });
     });
   }
 
   registerOpenQuestionAnswers() {
+    debugger;
     for (let id in this.selectedOpenOptions) {
       let pregunta = this.ePreguntas!.find(p => {
         return p.id == id;
       });
+      debugger;
       let newRespuesta = new EPreguntaAbiertaRespuesta(0, this.selectedOpenOptions[id], pregunta);
-      this.ePreguntaAbiertaRespuestaService.create(newRespuesta);
+      this.ePreguntaAbiertaRespuestaService.create(newRespuesta).subscribe(() => {
+        console.log('success');
+      });
     }
   }
 

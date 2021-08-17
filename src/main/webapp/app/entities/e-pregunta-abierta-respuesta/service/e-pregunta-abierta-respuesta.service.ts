@@ -17,6 +17,7 @@ export class EPreguntaAbiertaRespuestaService {
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   create(ePreguntaAbiertaRespuesta: IEPreguntaAbiertaRespuesta): Observable<EntityResponseType> {
+    debugger;
     return this.http.post<IEPreguntaAbiertaRespuesta>(this.resourceUrl, ePreguntaAbiertaRespuesta, { observe: 'response' });
   }
 

@@ -80,7 +80,7 @@ public class EPreguntaCerradaOpcionResource {
             .body(result);
     }
 
-    @PostMapping("/e-pregunta-cerrada-opcions/count/{id}")
+    @PutMapping("/e-pregunta-cerrada-opcions/count/{id}")
     public ResponseEntity<EPreguntaCerradaOpcion> updateOpcionCount(@PathVariable(value = "id", required = false) final Long id) {
         System.out.println(id);
         EPreguntaCerradaOpcion updatedOpcion = ePreguntaCerradaOpcionService.findOne(id).get();
