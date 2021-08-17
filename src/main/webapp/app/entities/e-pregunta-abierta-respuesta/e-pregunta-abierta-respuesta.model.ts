@@ -7,7 +7,7 @@ export interface IEPreguntaAbiertaRespuesta {
 }
 
 export class EPreguntaAbiertaRespuesta implements IEPreguntaAbiertaRespuesta {
-  constructor(public id?: number, public respuesta?: string, public epreguntaAbierta?: IEPreguntaAbierta | null) {}
+  constructor(public respuesta?: string, public epreguntaAbierta?: IEPreguntaAbierta | null) {}
 }
 
 export function getEPreguntaAbiertaRespuestaIdentifier(ePreguntaAbiertaRespuesta: IEPreguntaAbiertaRespuesta): number | undefined {

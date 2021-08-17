@@ -232,7 +232,13 @@ export class EncuestaCompleteComponent implements OnInit {
         return p.id == id;
       });
       debugger;
-      let newRespuesta = new EPreguntaAbiertaRespuesta(0, this.selectedOpenOptions[id], pregunta);
+      /*
+
+      let newRespuesta = new EPreguntaAbiertaRespuesta(this.selectedOpenOptions[id], pregunta);
+      this.subscribeToSaveResponse(this.ePreguntaAbiertaRespuestaService.create(newRespuesta));
+*/
+
+      let newRespuesta = new EPreguntaAbiertaRespuesta(this.selectedOpenOptions[id], pregunta);
       this.ePreguntaAbiertaRespuestaService.create(newRespuesta).subscribe(() => {
         console.log('success');
       });
