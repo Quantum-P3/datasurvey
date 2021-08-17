@@ -16,7 +16,8 @@ export class EPreguntaCerradaOpcionService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  updateCount(id: any) {
+  updateCount(id: number) {
+    debugger;
     return this.http.post(`${this.resourceUrl}/count/${id}`, id, { observe: 'response' });
   }
 

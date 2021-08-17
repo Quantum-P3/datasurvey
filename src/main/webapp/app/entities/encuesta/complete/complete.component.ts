@@ -20,6 +20,7 @@ import { PreguntaCerradaTipo } from 'app/entities/enumerations/pregunta-cerrada-
 import { EPreguntaAbiertaRespuesta } from 'app/entities/e-pregunta-abierta-respuesta/e-pregunta-abierta-respuesta.model';
 import { Observable } from 'rxjs/internal/Observable';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { EstadoEncuesta } from 'app/entities/enumerations/estado-encuesta.model';
 
 @Component({
   selector: 'jhi-complete',
@@ -67,6 +68,9 @@ export class EncuestaCompleteComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ encuesta }) => {
       if (encuesta) {
         this.encuesta = encuesta;
+        if (this.encuesta!.estado !== EstadoEncuesta.ACTIVE) {
+          this.previousState();
+        }
         this.avgCalificacion = parseInt(this.encuesta!.calificacion!.toString().split('.')[0]);
         this.cantidadCalificaciones = parseInt(this.encuesta!.calificacion!.toString().split('.')[1]);
         this.sumCalificacion = this.avgCalificacion * this.cantidadCalificaciones;
@@ -190,6 +194,7 @@ export class EncuestaCompleteComponent implements OnInit {
     this.getOpenQuestionAnswers();
     this.registerOpenQuestionAnswers();
     this.updateClosedOptionsCount();
+    this.previousState();
   }
 
   updateEncuestaRating() {
