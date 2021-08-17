@@ -44,7 +44,6 @@ const encuestaRoute: Routes = [
     resolve: {
       encuesta: EncuestaRoutingResolveService,
     },
-    canActivate: [UserRouteAccessService],
   },
 ];
 
