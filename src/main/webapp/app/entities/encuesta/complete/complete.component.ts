@@ -76,7 +76,6 @@ export class EncuestaCompleteComponent implements OnInit {
         this.sumCalificacion = this.avgCalificacion * this.cantidadCalificaciones;
       }
       this.verifyPassword();
-      this.loadAll();
     });
     for (let pregunta of this.ePreguntas!) {
       if (pregunta.tipo && pregunta.tipo === PreguntaCerradaTipo.SINGLE) {
@@ -87,6 +86,7 @@ export class EncuestaCompleteComponent implements OnInit {
 
   verifyPassword(): void {
     if (this.encuesta!.acceso === AccesoEncuesta.PUBLIC) {
+      this.loadAll();
       this.isLocked = false;
     } else {
       const modalRef = this.modalService.open(EncuestaPasswordDialogComponent, { size: 'lg', backdrop: 'static' });
@@ -95,6 +95,8 @@ export class EncuestaCompleteComponent implements OnInit {
         this.isLocked = reason != 'success';
         if (this.isLocked) {
           this.previousState();
+        } else {
+          this.loadAll();
         }
       });
     }

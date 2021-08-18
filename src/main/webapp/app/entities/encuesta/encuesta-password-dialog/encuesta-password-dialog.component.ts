@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { IEncuesta } from '../encuesta.model';
 
@@ -9,21 +8,16 @@ import { IEncuesta } from '../encuesta.model';
   styleUrls: ['./encuesta-password-dialog.component.scss'],
 })
 export class EncuestaPasswordDialogComponent implements OnInit {
-  passwordForm = this.fb.group({
-    password: [null, [Validators.required]],
-  });
   encuesta?: IEncuesta;
   isWrong?: boolean;
   passwordInput?: string;
 
-  constructor(protected activeModal: NgbActiveModal, protected fb: FormBuilder) {}
+  constructor(protected activeModal: NgbActiveModal) {}
 
   ngOnInit(): void {}
 
   submitPassword() {
-    const password = this.passwordForm.get(['password'])!.value;
-
-    if (this.passwordForm.valid && password === this.encuesta!.contrasenna) {
+    if (this.passwordInput != undefined && this.passwordInput === this.encuesta!.contrasenna) {
       this.activeModal.close('success');
     } else {
       this.isWrong = true;
