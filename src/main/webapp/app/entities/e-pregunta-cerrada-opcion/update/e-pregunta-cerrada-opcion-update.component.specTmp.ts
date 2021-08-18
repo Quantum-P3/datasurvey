@@ -43,7 +43,7 @@ describe('Component Tests', () => {
       it('Should call EPreguntaCerrada query and add missing value', () => {
         const ePreguntaCerradaOpcion: IEPreguntaCerradaOpcion = { id: 456 };
         const ePreguntaCerrada: IEPreguntaCerrada = { id: 2192 };
-        ePreguntaCerradaOpcion.ePreguntaCerrada = ePreguntaCerrada;
+        ePreguntaCerradaOpcion.epreguntaCerrada = ePreguntaCerrada;
 
         const ePreguntaCerradaCollection: IEPreguntaCerrada[] = [{ id: 89287 }];
         jest.spyOn(ePreguntaCerradaService, 'query').mockReturnValue(of(new HttpResponse({ body: ePreguntaCerradaCollection })));
@@ -65,7 +65,7 @@ describe('Component Tests', () => {
       it('Should update editForm', () => {
         const ePreguntaCerradaOpcion: IEPreguntaCerradaOpcion = { id: 456 };
         const ePreguntaCerrada: IEPreguntaCerrada = { id: 64500 };
-        ePreguntaCerradaOpcion.ePreguntaCerrada = ePreguntaCerrada;
+        ePreguntaCerradaOpcion.epreguntaCerrada = ePreguntaCerrada;
 
         activatedRoute.data = of({ ePreguntaCerradaOpcion });
         comp.ngOnInit();

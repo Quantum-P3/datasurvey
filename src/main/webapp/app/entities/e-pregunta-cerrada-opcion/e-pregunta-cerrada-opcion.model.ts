@@ -5,7 +5,7 @@ export interface IEPreguntaCerradaOpcion {
   nombre?: string;
   orden?: number;
   cantidad?: number;
-  ePreguntaCerrada?: IEPreguntaCerrada | null;
+  epreguntaCerrada?: IEPreguntaCerrada | null;
 }
 
 export class EPreguntaCerradaOpcion implements IEPreguntaCerradaOpcion {
@@ -14,7 +14,7 @@ export class EPreguntaCerradaOpcion implements IEPreguntaCerradaOpcion {
     public nombre?: string,
     public orden?: number,
     public cantidad?: number,
-    public ePreguntaCerrada?: IEPreguntaCerrada | null
+    public epreguntaCerrada?: IEPreguntaCerrada | null
   ) {}
 }
 
