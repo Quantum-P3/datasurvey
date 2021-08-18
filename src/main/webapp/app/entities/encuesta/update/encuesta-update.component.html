@@ -58,7 +58,7 @@
         [disabled]="isLoading"
         data-toggle="modal"
         data-target="#crearPregunta"
-        *ngIf="encuesta!.estado !== 'FINISHED' && (isAutor() || isEscritor())"
+        *ngIf="encuesta!.estado !== 'ACTIVE' && encuesta!.estado !== 'FINISHED' && (isAutor() || isEscritor())"
       >
         <fa-icon icon="sync" [icon]="faPlus"></fa-icon>&nbsp;&nbsp;<span>Crear pregunta</span>
       </button>
