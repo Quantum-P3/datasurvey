@@ -2,11 +2,11 @@
   <div>
     <h2 id="page-heading" data-cy="EPreguntaCerradaHeading">
       <div class="d-flex align-items-center">
-        <p class="ds-title">Vista previa de {{ encuesta!.nombre }}</p>
-        &nbsp;&nbsp;<fa-icon class="ds-info--icon" [icon]="faQuestion" data-toggle="modal" data-target="#verParametros"></fa-icon>
+        <p class="ds-title">Encuesta: {{ encuesta!.nombre }}</p>
+        <!-- &nbsp;&nbsp;<fa-icon class="ds-info&#45;&#45;icon" [icon]="faQuestion" data-toggle="modal" data-target="#verParametros"></fa-icon>-->
       </div>
 
-      <p class="ds-subtitle">Creada el día {{ encuesta!.fechaCreacion | formatShortDatetime | lowercase }}</p>
+      <p class="ds-subtitle">Fecha de inicio: {{ encuesta!.fechaPublicacion | formatShortDatetime | lowercase }}</p>
       <div class="d-flex justify-content-end">
         <button type="button" class="ds-btn ds-btn--secondary" (click)="previousState()">
           <fa-icon icon="arrow-left"></fa-icon>&nbsp;&nbsp;<span jhiTranslate="entity.action.back">Back</span>
