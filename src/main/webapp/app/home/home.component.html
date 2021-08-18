@@ -3,7 +3,7 @@
     <div class="container-fluid navbar navbar-marketing navbar-expand-lg bg-white navbar-light">
       <div class="container px-5 py-4">
         <a class="text-dark" routerLink="login"
-          ><img src="src/main/webapp/content/img_datasurvey/datasurvey-logo-text-black.svg" width="300" alt=""
+          ><img src="./../../content/img_datasurvey/datasurvey-logo-text-black.svg" width="300" alt=""
         /></a>
 
         <div class="col-6" style="text-align: end">
@@ -135,20 +135,22 @@
                       ></fa-icon>
                     </div>
                     <div class="entity-body--row m-2">
-                      <button class="ds-btn btn-card"><fa-icon [icon]="faPollH"></fa-icon>&nbsp;&nbsp;Completar encuesta</button>
+                      <button class="ds-btn btn-card" routerLink="pagina-principal" routerLinkActive="router-link-active">
+                        <fa-icon [icon]="faPollH"></fa-icon>&nbsp;&nbsp;Ver más encuestas
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="row">
+          <!-- <div class="row">
             <div class="col">
               <a routerLink="#">
                 <button class="ds-btn ds-btn--primary fw-500 ms-lg-4 mb-4">Ver todas las encuestas</button>
               </a>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

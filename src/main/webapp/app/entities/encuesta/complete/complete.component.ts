@@ -20,6 +20,7 @@ import { PreguntaCerradaTipo } from 'app/entities/enumerations/pregunta-cerrada-
 import { EPreguntaAbiertaRespuesta } from 'app/entities/e-pregunta-abierta-respuesta/e-pregunta-abierta-respuesta.model';
 import { Observable } from 'rxjs/internal/Observable';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { EstadoEncuesta } from 'app/entities/enumerations/estado-encuesta.model';
 
 @Component({
   selector: 'jhi-complete',
@@ -67,6 +68,9 @@ export class EncuestaCompleteComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ encuesta }) => {
       if (encuesta) {
         this.encuesta = encuesta;
+        if (this.encuesta!.estado !== EstadoEncuesta.ACTIVE) {
+          this.previousState();
+        }
         this.avgCalificacion = parseInt(this.encuesta!.calificacion!.toString().split('.')[0]);
         this.cantidadCalificaciones = parseInt(this.encuesta!.calificacion!.toString().split('.')[1]);
         this.sumCalificacion = this.avgCalificacion * this.cantidadCalificaciones;
@@ -186,39 +190,58 @@ export class EncuestaCompleteComponent implements OnInit {
   }
 
   finish(): void {
-    this.updateEncuestaRating();
+    this.updateClosedOptionsCount();
     this.getOpenQuestionAnswers();
     this.registerOpenQuestionAnswers();
-    this.updateClosedOptionsCount();
+    this.updateEncuestaRating();
+
+    this.previousState();
   }
 
   updateEncuestaRating() {
     if (this.calificacion !== 0) {
       const newSumCalificacion = this.sumCalificacion + this.calificacion;
       const newCantidadCalificacion = this.cantidadCalificaciones + 1;
-      const newAvgCalificacion = newSumCalificacion / newCantidadCalificacion;
-      const newRating = this.joinRatingValues(newAvgCalificacion, newCantidadCalificacion);
-      this.encuesta!.calificacion = Number(newRating);
-      this.encuestaService.updateSurvey(this.encuesta!);
+      const newAvgCalificacion = Math.round(newSumCalificacion / newCantidadCalificacion);
+      const newRating = Number(this.joinRatingValues(newAvgCalificacion, newCantidadCalificacion));
+      this.encuesta!.calificacion = newRating;
+      this.encuestaService.updateSurvey(this.encuesta!).subscribe(() => {
+        console.log('success');
+      });
     }
   }
 
   updateClosedOptionsCount() {
+    debugger;
     for (let key in this.selectedSingleOptions) {
-      this.ePreguntaCerradaOpcionService.updateCount(this.selectedSingleOptions[key]);
+      this.ePreguntaCerradaOpcionService.updateCount(this.selectedSingleOptions[key]).subscribe(() => {
+        console.log('success');
+      });
     }
     this.selectedMultiOptions.forEach((option: any) => {
-      this.ePreguntaCerradaOpcionService.updateCount(option);
+      this.ePreguntaCerradaOpcionService.updateCount(option).subscribe(() => {
+        console.log('success');
+      });
     });
   }
 
   registerOpenQuestionAnswers() {
+    debugger;
     for (let id in this.selectedOpenOptions) {
       let pregunta = this.ePreguntas!.find(p => {
         return p.id == id;
       });
-      let newRespuesta = new EPreguntaAbiertaRespuesta(0, this.selectedOpenOptions[id], pregunta);
-      this.ePreguntaAbiertaRespuestaService.create(newRespuesta);
+      debugger;
+      /*
+
+      let newRespuesta = new EPreguntaAbiertaRespuesta(this.selectedOpenOptions[id], pregunta);
+      this.subscribeToSaveResponse(this.ePreguntaAbiertaRespuestaService.create(newRespuesta));
+*/
+
+      let newRespuesta = new EPreguntaAbiertaRespuesta(this.selectedOpenOptions[id], pregunta);
+      this.ePreguntaAbiertaRespuestaService.create(newRespuesta).subscribe(() => {
+        console.log('success');
+      });
     }
   }
 

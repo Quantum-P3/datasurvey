@@ -396,6 +396,59 @@ export class DashboardUserComponent implements OnInit {
       const _excelFinalData = [_reporteEncuestasCreadas, _reporteUsuariosCompletadas, _reporteEncuestasEstado, _reporteEncuestasAcceso];
       const _fileName = 'reportes_generales_encuestas_DataSurvey';
       exportAsExcelFile(_sheets, _excelFinalData, _fileName);
+    } else if (!this.reportPreguntas) {
+      /*REPORTES POR ENCUESTA:
+       * Nombre encuesta
+       * categoria encuesta
+       * calificacion encuesta
+       *
+       * preguntas:
+       * contenido/ cantidad*/
+
+      const _sheets = ['Datos de encuesta', 'Contenido de preguntas cerradas', 'Contenido de preguntas abiertas'];
+
+      const _reporteDatosEncuesta = [
+        {
+          nombre_encuesta: this.encuesta?.nombre,
+          categoria_encuesta: this.encuesta?.categoria?.nombre,
+          calificacion_encuesta: this.encuesta?.calificacion,
+        },
+      ];
+
+      const _reporteContenidoPreguntasCerradas: any[] = [];
+      const _reporteContenidoPreguntasAbiertas: any[] = [];
+
+      this.ePreguntas!.forEach((pregunta: any, index) => {
+        debugger;
+        let _report: any = {};
+        let _reportAbierta: any = {};
+
+        if (!pregunta.tipo) {
+          this.respuestaAbierta!.forEach((respuesta: any) => {
+            if (respuesta.epreguntaAbierta?.id == pregunta.id) {
+              // _reportAbierta['pregunta_abierta'] = pregunta.nombre;
+              _reportAbierta['contenido'] = respuesta.respuesta;
+              _reporteContenidoPreguntasAbiertas.push(_reportAbierta);
+            }
+          });
+        } else {
+          debugger;
+
+          this.ePreguntasOpciones!.forEach((respuesta: any, index) => {
+            console.log(respuesta.epreguntaCerrada);
+
+            if (respuesta[index].epreguntaCerrada.id == pregunta.id) {
+              _report['opcion_pregunta'] = respuesta[index].nombre;
+              _report['cantidad'] = respuesta[index].cantidad;
+              _reporteContenidoPreguntasCerradas.push(_report);
+            }
+          });
+        }
+      });
+
+      const _excelFinalData = [_reporteDatosEncuesta, _reporteContenidoPreguntasCerradas, _reporteContenidoPreguntasAbiertas];
+      const _fileName = 'reportes_detalle_encuesta_datasurvey';
+      exportAsExcelFile(_sheets, _excelFinalData, _fileName);
     }
   }
 
@@ -456,6 +509,83 @@ export class DashboardUserComponent implements OnInit {
 
       generatePDFTable(doc, _docData, _docHeaders, _docTitle);
       doc.addPage('p');
+
+      saveGeneratedPDF(doc, _fileName);
+    } else {
+      /*REPORTES POR ENCUESTA:
+       * Nombre encuesta
+       * categoria encuesta
+       * calificacion encuesta
+       *
+       * preguntas:
+       * contenido/ cantidad*/
+
+      const doc = new jsPDF();
+      const _fileName = 'reportes_detalles_encuestas_datasurvey';
+      let _docData, _headers, _docHeaders, _docTitle;
+
+      const _reporteDatosEncuesta = [
+        {
+          nombre_encuesta: this.encuesta?.nombre,
+          categoria_encuesta: this.encuesta?.categoria?.nombre,
+          calificacion_encuesta: this.encuesta?.calificacion!.toString(),
+        },
+      ];
+
+      _docData = generatePDFTableData(_reporteDatosEncuesta);
+      _headers = ['nombre_encuesta', 'categoria_encuesta', 'calificacion_encuesta'];
+      _docHeaders = createPDFTableHeaders(_headers);
+      _docTitle = 'Reporte Detalle Encuesta';
+
+      generatePDFTable(doc, _docData, _docHeaders, _docTitle);
+      doc.addPage('l');
+
+      const _reporteContenidoPreguntasCerradas: any[] = [];
+      const _reporteContenidoPreguntasAbiertas: any[] = [];
+
+      this.ePreguntas!.forEach((pregunta: any, index) => {
+        debugger;
+        let _report: any = {};
+        let _reportAbierta: any = {};
+
+        if (!pregunta.tipo) {
+          this.respuestaAbierta!.forEach((respuesta: any) => {
+            if (respuesta.epreguntaAbierta?.id == pregunta.id) {
+              _reportAbierta['pregunta_abierta'] = 'Contenido';
+              _reportAbierta['contenido'] = respuesta.respuesta;
+              _reporteContenidoPreguntasAbiertas.push(_reportAbierta);
+            }
+          });
+        } else {
+          debugger;
+
+          this.ePreguntasOpciones!.forEach((respuesta: any, index) => {
+            console.log(respuesta.epreguntaCerrada);
+
+            if (respuesta[index].epreguntaCerrada.id == pregunta.id) {
+              _report['opcion_pregunta'] = respuesta[index].nombre;
+              _report['cantidad'] = respuesta[index].cantidad.toString();
+              _reporteContenidoPreguntasCerradas.push(_report);
+            }
+          });
+        }
+      });
+
+      _docData = generatePDFTableData(_reporteContenidoPreguntasCerradas);
+      _headers = ['opcion_pregunta', 'cantidad'];
+      _docHeaders = createPDFTableHeaders(_headers);
+      _docTitle = 'Reporte de Cantidad Seleccion Opciones Cerradas';
+
+      generatePDFTable(doc, _docData, _docHeaders, _docTitle);
+      doc.addPage('l');
+
+      _docData = generatePDFTableData(_reporteContenidoPreguntasAbiertas);
+      _headers = ['pregunta_abierta', 'contenido'];
+      _docHeaders = createPDFTableHeaders(_headers);
+      _docTitle = 'Reporte Respuesta Pregunta Abierta';
+
+      generatePDFTable(doc, _docData, _docHeaders, _docTitle);
+      doc.addPage('l');
 
       saveGeneratedPDF(doc, _fileName);
     }

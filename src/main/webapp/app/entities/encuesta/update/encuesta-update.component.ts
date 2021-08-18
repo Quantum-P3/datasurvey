@@ -376,7 +376,7 @@ export class EncuestaUpdateComponent implements OnInit, AfterViewChecked {
       nombre: this.editForm.get(['nombre'])!.value,
       orden: 10,
       cantidad: 0,
-      ePreguntaCerrada: this.selectedQuestionToCreateOption,
+      epreguntaCerrada: this.selectedQuestionToCreateOption,
     };
   }
 

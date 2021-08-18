@@ -16,8 +16,9 @@ export class EPreguntaCerradaOpcionService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  updateCount(id: any) {
-    return this.http.post(`${this.resourceUrl}/count/${id}`, id, { observe: 'response' });
+  updateCount(id: number) {
+    debugger;
+    return this.http.put(`${this.resourceUrl}/count/${id}`, id, { observe: 'response' });
   }
 
   create(ePreguntaCerradaOpcion: IEPreguntaCerradaOpcion, preguntaId?: number): Observable<EntityResponseType> {
