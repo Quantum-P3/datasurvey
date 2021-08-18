@@ -75,12 +75,8 @@ export class EncuestaCompleteComponent implements OnInit {
         this.cantidadCalificaciones = parseInt(this.encuesta!.calificacion!.toString().split('.')[1]);
         this.sumCalificacion = this.avgCalificacion * this.cantidadCalificaciones;
       }
-      this.isLocked = this.verifyPassword();
-      if (this.isLocked) {
-        this.previousState();
-      } else {
-        this.loadAll();
-      }
+      this.verifyPassword();
+      this.loadAll();
     });
     for (let pregunta of this.ePreguntas!) {
       if (pregunta.tipo && pregunta.tipo === PreguntaCerradaTipo.SINGLE) {
@@ -89,17 +85,19 @@ export class EncuestaCompleteComponent implements OnInit {
     }
   }
 
-  verifyPassword(): boolean {
+  verifyPassword(): void {
     if (this.encuesta!.acceso === AccesoEncuesta.PUBLIC) {
-      return false;
+      this.isLocked = false;
     } else {
       const modalRef = this.modalService.open(EncuestaPasswordDialogComponent, { size: 'lg', backdrop: 'static' });
       modalRef.componentInstance.encuesta = this.encuesta;
       modalRef.closed.subscribe(reason => {
-        return reason === 'success';
+        this.isLocked = reason != 'success';
+        if (this.isLocked) {
+          this.previousState();
+        }
       });
     }
-    return true;
   }
 
   ngAfterViewChecked(): void {
@@ -194,7 +192,6 @@ export class EncuestaCompleteComponent implements OnInit {
     this.getOpenQuestionAnswers();
     this.registerOpenQuestionAnswers();
     this.updateEncuestaRating();
-
     this.previousState();
   }
 
